@@ -4,7 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.SignatureGenerationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.yeoman.nmpcaport.SpringApplicationContext;
 import net.yeoman.nmpcaport.io.request.UserLoginRequestModel;
+import net.yeoman.nmpcaport.services.UserService;
+import net.yeoman.nmpcaport.shared.dto.UserDto;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -61,13 +64,16 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String userName = ((User) auth.getPrincipal()).getUsername();
 
         Algorithm algorithm = Algorithm.HMAC512(SecurityConstants.getTokenSecret());
-
         String token = JWT.create()
                 .withSubject(userName)
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .sign(algorithm);
 
+        UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
+        UserDto userDto = userService.getUser(userName);
+
         response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+        response.addHeader("UserID", userDto.getUserId());
 
 
     }
