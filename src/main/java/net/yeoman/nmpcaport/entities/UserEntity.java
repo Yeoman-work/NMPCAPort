@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.entities;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
@@ -37,7 +38,7 @@ public class UserEntity implements Serializable {
 
     private String emailVerificationToken;
 
-    @NotBlank(message = "required")
+    @NotNull(message = "required")
     private Boolean emailVerificationStatus = false;
 
 

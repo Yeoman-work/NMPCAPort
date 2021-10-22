@@ -1,6 +1,6 @@
 package net.yeoman.nmpcaport.io.response;
 
-public class UserDetailsResponse {
+public class UserDetailsResponseModel {
 
     private String userId;
     private String firstName;
