@@ -21,6 +21,8 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto user) {
 
         UserEntity userEntity = new ModelMapper().map(user, UserEntity.class);
+
+        if(this.userRepository.existsByEmail(user.getEmail())) throw new RuntimeException("Record exist");
         userEntity.setEncryptedPassword("asdasvecerc");
         userEntity.setUserId("testToken");
         userEntity.setEmailVerificationStatus(false);
@@ -31,4 +33,6 @@ public class UserServiceImpl implements UserService {
 
         return returnValue;
     }
+
+
 }

@@ -17,6 +17,7 @@ public class UserEntity implements Serializable {
     private Long id;
 
     @NotBlank(message = "required")
+    @Column(unique = true)
     private String userId;
 
     @NotBlank(message = "required")
@@ -30,6 +31,7 @@ public class UserEntity implements Serializable {
 
     @NotBlank(message = "required")
     @Email(message = "enter a valid email")
+    @Column(unique = true)
     private String email;
 
     @NotBlank(message = "required")
