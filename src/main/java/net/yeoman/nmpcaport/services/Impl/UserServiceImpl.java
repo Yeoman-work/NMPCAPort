@@ -42,17 +42,45 @@ public class UserServiceImpl implements UserService {
 
         UserEntity storedUser = userRepository.save(userEntity);
 
-        UserDto returnValue = new ModelMapper().map(storedUser, UserDto.class);
+        return new ModelMapper().map(storedUser, UserDto.class);
 
-        return returnValue;
+
     }
 
     @Override
-    public UserDto getUser(String email) {
-        if(!this.userRepository.existsByEmail(email)) throw new UsernameNotFoundException(email);
-        UserEntity userEntity = userRepository.findByEmail(email);
-        UserDto returnValue = new ModelMapper().map(userEntity, UserDto.class);
-        return returnValue;
+    public UserDto getUser(String userId) {
+
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if(userEntity == null) throw new UsernameNotFoundException(userId);
+
+        return  new ModelMapper().map(userEntity, UserDto.class);
+
+    }
+
+    @Override
+    public UserDto updateUser(UserDto user, String userId) {
+
+        UserEntity userEntity = this.userRepository.findByUserId(userId);
+        if(!user.getFirstName().equals(userEntity.getFirstName())){
+            userEntity.setFirstName(user.getFirstName());
+        }
+        if(!user.getLastName().equals(userEntity.getLastName())){
+            userEntity.setLastName(user.getLastName());
+        }
+
+        UserEntity storedUser = this.userRepository.save(userEntity);
+
+        return new ModelMapper().map(storedUser, UserDto.class);
+    }
+
+    @Override
+    public UserDto deleteUser(String userId) {
+
+        UserEntity userEntity = this.userRepository.findByUserId(userId);
+
+        this.userRepository.delete(userEntity);
+
+        return new ModelMapper().map(userEntity, UserDto.class);
     }
 
 

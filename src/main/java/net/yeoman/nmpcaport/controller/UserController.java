@@ -1,14 +1,18 @@
 package net.yeoman.nmpcaport.controller;
 
+import net.yeoman.nmpcaport.entities.UserEntity;
 import net.yeoman.nmpcaport.io.request.UserDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.UserDetailsResponseModel;
 import net.yeoman.nmpcaport.services.Impl.UserServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.UserDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.awt.*;
 
 @RestController
 @RequestMapping("/users")
@@ -17,36 +21,43 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping
-    public String getUser(){
+    @GetMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public UserDetailsResponseModel getUser(@PathVariable("userId") String userId){
 
+        UserDto userDto = this.userService.getUser(userId);
 
-        return "inside get user";
+        return new ModelMapper().map(userDto, UserDetailsResponseModel.class);
     }
 
-    @PostMapping
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+                  produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public UserDetailsResponseModel createUser(@RequestBody UserDetailsRequestModel userDetails){
-
-        ModelMapper modelMapper = new ModelMapper();
 
         UserDto userDto = new ModelMapper().map(userDetails, UserDto.class);
 
         UserDto newUser =  this.userService.createUser(userDto);
 
-        UserDetailsResponseModel returnValue = new ModelMapper().map(newUser, UserDetailsResponseModel.class);
+        return new ModelMapper().map(newUser, UserDetailsResponseModel.class);
 
-        return returnValue;
     }
 
-    @PutMapping
-    public String updateUser(){
+    @PutMapping( path = "/{userId}",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+                                      produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public UserDetailsResponseModel updateUser(@PathVariable("userId") String userId, @RequestBody UserDetailsRequestModel userDetails){
 
-        return "update User";
+        UserDto updatedUser = new ModelMapper().map(userDetails, UserDto.class);
+
+        UserDto storedUser = this.userService.updateUser(new ModelMapper().map(userDetails, UserDto.class), userId);
+
+        return new ModelMapper().map(storedUser, UserDetailsResponseModel.class);
+
     }
 
-    @DeleteMapping
-    public String deleteUser(){
+    @DeleteMapping("/{userId}")
+    public UserDetailsResponseModel deleteUser(@PathVariable("userId") String userId){
 
-        return "delete Users";
+        UserDto userDto = this.userService.deleteUser(userId);
+
+        return  new ModelMapper().map(userDto, UserDetailsResponseModel.class);
     }
 }
