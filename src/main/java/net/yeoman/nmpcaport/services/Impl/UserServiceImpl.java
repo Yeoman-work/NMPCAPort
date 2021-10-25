@@ -7,6 +7,7 @@ import net.yeoman.nmpcaport.shared.dto.UserDto;
 
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,13 +49,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUser(String userId) {
+    public UserDto getUser(String email){
 
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if(userEntity == null) throw  new UsernameNotFoundException(email);
+
+        UserDto returnValue = new UserDto();
+        BeanUtils.copyProperties(userEntity, returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public UserDto getUserByUserId(String userId) {
+
+        UserDto returnValue = new UserDto();
         UserEntity userEntity = userRepository.findByUserId(userId);
-        if(userEntity == null) throw new UsernameNotFoundException(userId);
 
-        return  new ModelMapper().map(userEntity, UserDto.class);
+        if(userEntity == null) throw new UsernameNotFoundException("User with ID: " + userId + " notFound");
 
+        BeanUtils.copyProperties(userEntity, returnValue);
+
+        return returnValue;
     }
 
     @Override
@@ -87,8 +103,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = this.userRepository.findByEmail(email);
+        System.out.println("up in here");
 
-        if(!this.userRepository.existsByEmail(email)) throw new UsernameNotFoundException(email);
+        if(userEntity == null) throw new UsernameNotFoundException(email);
 
         return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
     }
