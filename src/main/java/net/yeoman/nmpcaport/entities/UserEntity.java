@@ -7,10 +7,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class UserEntity implements Serializable {
+
+    private static final long serialVersionUID = -128727207048747504L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +51,13 @@ public class UserEntity implements Serializable {
     private Date createdAt;
     private Date updatedAt;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "usersNetworkingGroups",
+            joinColumns = @JoinColumn(name = "user_entity_id" ),
+            inverseJoinColumns = @JoinColumn(name = "networking_group_entity_id")
+    )
+    private List<NetworkingGroupEntity> networkingGroupEntities;
 
     @PrePersist
     protected void onCreate(){
@@ -107,15 +117,16 @@ public class UserEntity implements Serializable {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName.trim().toLowerCase();
     }
+
 
     public String getLastName() {
         return lastName;
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName.trim().toLowerCase();
     }
 
     public String getEmail() {
@@ -123,7 +134,7 @@ public class UserEntity implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.trim().toLowerCase();
     }
 
     public String getEncryptedPassword() {
@@ -165,4 +176,13 @@ public class UserEntity implements Serializable {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public List<NetworkingGroupEntity> getNetworkingGroups() {
+        return networkingGroupEntities;
+    }
+
+    public void setNetworkingGroups(List<NetworkingGroupEntity> networkingGroupEntities) {
+        this.networkingGroupEntities = networkingGroupEntities;
+    }
+
 }

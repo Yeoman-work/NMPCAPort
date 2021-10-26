@@ -1,18 +1,13 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.entities.UserEntity;
 import net.yeoman.nmpcaport.io.request.UserDetailsRequestModel;
-import net.yeoman.nmpcaport.io.response.UserDetailsResponseModel;
+import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 import net.yeoman.nmpcaport.services.Impl.UserServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.UserDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.*;
 
 @RestController
 @RequestMapping("/users")
@@ -24,7 +19,7 @@ public class UserController {
     @GetMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public UserDetailsResponseModel getUser(@PathVariable("userId") String userId){
 
-        UserDto userDto = this.userService.getUser(userId);
+        UserDto userDto = this.userService.getUserByUserId(userId);
 
         return new ModelMapper().map(userDto, UserDetailsResponseModel.class);
     }

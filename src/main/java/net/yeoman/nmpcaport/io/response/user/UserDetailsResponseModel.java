@@ -1,4 +1,4 @@
-package net.yeoman.nmpcaport.io.response;
+package net.yeoman.nmpcaport.io.response.user;
 
 public class UserDetailsResponseModel {
 

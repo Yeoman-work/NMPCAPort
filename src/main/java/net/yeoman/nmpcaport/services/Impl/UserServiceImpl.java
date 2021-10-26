@@ -45,7 +45,6 @@ public class UserServiceImpl implements UserService {
 
         return new ModelMapper().map(storedUser, UserDto.class);
 
-
     }
 
     @Override
@@ -61,17 +60,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserByUserId(String userId) {
-
+    public UserDto getUserByUserId(String userID) {
         UserDto returnValue = new UserDto();
-        UserEntity userEntity = userRepository.findByUserId(userId);
+        UserEntity userEntity = userRepository.findByUserId(userID);
 
-        if(userEntity == null) throw new UsernameNotFoundException("User with ID: " + userId + " notFound");
+        if(userEntity == null) throw new UsernameNotFoundException("User with ID: " + userID + " notFound");
 
         BeanUtils.copyProperties(userEntity, returnValue);
 
         return returnValue;
     }
+
 
     @Override
     public UserDto updateUser(UserDto user, String userId) {
