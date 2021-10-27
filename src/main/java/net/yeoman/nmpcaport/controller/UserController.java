@@ -1,6 +1,6 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.io.request.UserDetailsRequestModel;
+import net.yeoman.nmpcaport.io.request.user.UserDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 import net.yeoman.nmpcaport.services.Impl.UserServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.UserDto;

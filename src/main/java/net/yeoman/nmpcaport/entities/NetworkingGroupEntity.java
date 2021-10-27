@@ -41,6 +41,14 @@ public class NetworkingGroupEntity implements Serializable {
     )
     private List<UserEntity> users;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "contactsNetworkingGroups",
+            joinColumns = @JoinColumn(name = "networking_group_entity_id"),
+            inverseJoinColumns = @JoinColumn(name = "contact_entity_id")
+    )
+    public List<ContactEntity> contacts;
+
     @PrePersist
     protected void onCreate(){
 
@@ -120,5 +128,13 @@ public class NetworkingGroupEntity implements Serializable {
 
     public void setUsers(List<UserEntity> users) {
         this.users = users;
+    }
+
+    public List<ContactEntity> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<ContactEntity> contacts) {
+        this.contacts = contacts;
     }
 }

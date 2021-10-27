@@ -1,6 +1,6 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.io.request.NetworkingGroupRequestModel;
+import net.yeoman.nmpcaport.io.request.networkingGroup.NetworkingGroupRequestModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 import net.yeoman.nmpcaport.services.Impl.NetworkingGroupServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.NetworkingGroupDto;
@@ -53,9 +53,9 @@ public class NetworkingGroupController {
         return new ModelMapper().map(storedNetworkingGrp, NetworkingGroupResponseModel.class);
     }
 
-    @DeleteMapping
-    public String deleteNetworkingGroup(){
+    @DeleteMapping(path = "/{networkingGroupId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public NetworkingGroupResponseModel deleteNetworkingGroup(@PathVariable("networkingGroupId") String networkingGroupId){
 
-        return "inside delete networking group";
+        return this.networkingGroupService.deleteNetworkingGroup(networkingGroupId);
     }
 }

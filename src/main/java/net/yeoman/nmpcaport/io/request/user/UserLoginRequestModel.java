@@ -1,4 +1,4 @@
-package net.yeoman.nmpcaport.io.request;
+package net.yeoman.nmpcaport.io.request.user;
 
 public class UserLoginRequestModel {
 

@@ -1,7 +1,5 @@
 package net.yeoman.nmpcaport.services;
 
-import net.yeoman.nmpcaport.entities.UserEntity;
-import net.yeoman.nmpcaport.io.request.UserLoginRequestModel;
 import net.yeoman.nmpcaport.shared.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

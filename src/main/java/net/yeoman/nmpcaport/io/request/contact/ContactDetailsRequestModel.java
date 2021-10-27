@@ -1,11 +1,23 @@
-package net.yeoman.nmpcaport.io.request;
+package net.yeoman.nmpcaport.io.request.contact;
 
-public class UserDetailsRequestModel {
+import java.util.List;
 
+public class ContactDetailsRequestModel {
+
+    private String title;
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
+    private List<String> networkingGroupIds;
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -31,11 +43,12 @@ public class UserDetailsRequestModel {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public List<String> getNetworkingGroupIds() {
+        return networkingGroupIds;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNetworkingGroupIds(List<String> networkingGroupIds) {
+        this.networkingGroupIds = networkingGroupIds;
     }
+
 }

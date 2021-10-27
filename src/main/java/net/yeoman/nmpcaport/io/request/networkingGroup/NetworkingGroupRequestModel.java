@@ -1,4 +1,4 @@
-package net.yeoman.nmpcaport.io.request;
+package net.yeoman.nmpcaport.io.request.networkingGroup;
 
 import net.yeoman.nmpcaport.entities.UserEntity;
 

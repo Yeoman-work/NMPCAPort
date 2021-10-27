@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.services.Impl;
 import net.bytebuddy.matcher.StringMatcher;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
 import net.yeoman.nmpcaport.entities.UserEntity;
+import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 import net.yeoman.nmpcaport.repositories.NetworkingGroupRepository;
 import net.yeoman.nmpcaport.repositories.UserRepository;
@@ -30,6 +31,8 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
     private Utils utils;
 
 
+
+
     public List<UserDetailsResponseModel> addUsersToNetworkingGroup(NetworkingGroupDto netGrpDto){
         List<UserDetailsResponseModel> returnValue = new ArrayList<>();
 
@@ -55,6 +58,8 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
         return returnValue;
     }
+
+
 
 
 
@@ -96,6 +101,7 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
         return new ModelMapper().map(storedGroup, NetworkingGroupDto.class);
     }
 
+    
     @Override
     public NetworkingGroupDto updateNetworkingGroup(NetworkingGroupDto networkingGroup, String networkingGroupId) {
 
@@ -127,8 +133,27 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
         return networkingGroupDto;
     }
 
+
+
     @Override
-    public NetworkingGroupDto deleteNetworkingGroup(NetworkingGroupDto networkingGroupDto) {
-        return null;
+    public NetworkingGroupResponseModel deleteNetworkingGroup(String networkingGroupId) {
+
+
+        NetworkingGroupEntity networkingGroupEntity = this.networkingGroupRepository.findByNetworkingGroupId(networkingGroupId);
+
+        NetworkingGroupDto networkingGroupDto = new ModelMapper().map(networkingGroupEntity, NetworkingGroupDto.class);
+
+        this.networkingGroupRepository.delete(networkingGroupEntity);
+
+        return new ModelMapper().map(networkingGroupDto, NetworkingGroupResponseModel.class);
     }
+
+    
+    @Override
+    public NetworkingGroupEntity networkGroupEntityByNetworkingGroupId(String netGrpId) {
+
+        return this.networkingGroupRepository.findByNetworkingGroupId(netGrpId);
+    }
+
+
 }

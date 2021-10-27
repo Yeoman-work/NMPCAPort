@@ -2,10 +2,9 @@ package net.yeoman.nmpcaport.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.SignatureGenerationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.yeoman.nmpcaport.SpringApplicationContext;
-import net.yeoman.nmpcaport.io.request.UserLoginRequestModel;
+import net.yeoman.nmpcaport.io.request.user.UserLoginRequestModel;
 import net.yeoman.nmpcaport.services.UserService;
 import net.yeoman.nmpcaport.shared.dto.UserDto;
 import org.springframework.security.authentication.AuthenticationManager;

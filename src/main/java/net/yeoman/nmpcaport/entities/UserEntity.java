@@ -59,6 +59,10 @@ public class UserEntity implements Serializable {
     )
     private List<NetworkingGroupEntity> networkingGroupEntities;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "health_center_entity_id")
+    HealthCenterEntity healthCenter;
+
     @PrePersist
     protected void onCreate(){
 
@@ -185,4 +189,19 @@ public class UserEntity implements Serializable {
         this.networkingGroupEntities = networkingGroupEntities;
     }
 
+    public List<NetworkingGroupEntity> getNetworkingGroupEntities() {
+        return networkingGroupEntities;
+    }
+
+    public void setNetworkingGroupEntities(List<NetworkingGroupEntity> networkingGroupEntities) {
+        this.networkingGroupEntities = networkingGroupEntities;
+    }
+
+    public HealthCenterEntity getHealthCenter() {
+        return healthCenter;
+    }
+
+    public void setHealthCenter(HealthCenterEntity healthCenter) {
+        this.healthCenter = healthCenter;
+    }
 }
