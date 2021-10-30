@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.io.response.contact;
 
 import java.util.List;
 
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 
 public class ContactResponseModel {
@@ -11,7 +12,10 @@ public class ContactResponseModel {
     private String firstName;
     private String lastName;
     private String email;
+    private String createdAt;
+    private String updatedAt;
     private List<NetworkingGroupResponseModel> networkingGroupResponse;
+    private HealthCenterNestedResponseModel healthCenterNestedResponseModel;
 
 
     public String getContactId() {
@@ -62,7 +66,27 @@ public class ContactResponseModel {
 		this.networkingGroupResponse = networkingGroupResponse;
 	}
 
+    public String getCreatedAt() {
+        return createdAt;
+    }
 
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
-    
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public HealthCenterNestedResponseModel getHealthCenterNestedResponseModel() {
+        return healthCenterNestedResponseModel;
+    }
+
+    public void setHealthCenterNestedResponseModel(HealthCenterNestedResponseModel healthCenterNestedResponseModel) {
+        this.healthCenterNestedResponseModel = healthCenterNestedResponseModel;
+    }
 }

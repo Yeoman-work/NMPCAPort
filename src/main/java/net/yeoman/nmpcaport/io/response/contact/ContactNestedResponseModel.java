@@ -1,16 +1,22 @@
-package net.yeoman.nmpcaport.io.request.contact;
+package net.yeoman.nmpcaport.io.response.contact;
 
-import java.util.List;
+public class ContactNestedResponseModel {
 
-public class ContactDetailsRequestModel {
-
+    private String contactId;
     private String title;
     private String firstName;
     private String lastName;
     private String email;
-    private List<String> networkingGroupIds;
-    private String healthCenterId;
+    private String createdAt;
+    private String updatedAt;
 
+    public String getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
+    }
 
     public String getTitle() {
         return title;
@@ -44,19 +50,19 @@ public class ContactDetailsRequestModel {
         this.email = email;
     }
 
-    public List<String> getNetworkingGroupIds() {
-        return networkingGroupIds;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setNetworkingGroupIds(List<String> networkingGroupIds) {
-        this.networkingGroupIds = networkingGroupIds;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public String getHealthCenterId() {
-        return healthCenterId;
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setHealthCenterId(String healthCenterId) {
-        this.healthCenterId = healthCenterId;
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

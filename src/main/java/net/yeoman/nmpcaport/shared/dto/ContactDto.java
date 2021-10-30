@@ -1,6 +1,8 @@
 package net.yeoman.nmpcaport.shared.dto;
 
+import net.yeoman.nmpcaport.entities.HealthCenterEntity;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 
@@ -17,6 +19,9 @@ public class ContactDto {
     private String createdAt;
     private String updatedAt;
     private List<String> networkingGroupIds;
+    private String healthCenterId;
+    private HealthCenterNestedResponseModel healthCenterNestedResponse;
+    private HealthCenterEntity healthCenter;
     private List<NetworkingGroupEntity> networkingGroups;
     private List<NetworkingGroupResponseModel> networkingGroupResponse;
 
@@ -107,5 +112,29 @@ public class ContactDto {
 
     public void setNetworkingGroupResponse(List<NetworkingGroupResponseModel> networkingGroupResponse) {
         this.networkingGroupResponse = networkingGroupResponse;
+    }
+
+    public HealthCenterNestedResponseModel getHealthCenterNestedResponse() {
+        return healthCenterNestedResponse;
+    }
+
+    public void setHealthCenterNestedResponse(HealthCenterNestedResponseModel healthCenterNestedResponse) {
+        this.healthCenterNestedResponse = healthCenterNestedResponse;
+    }
+
+    public HealthCenterEntity getHealthCenter() {
+        return healthCenter;
+    }
+
+    public void setHealthCenter(HealthCenterEntity healthCenter) {
+        this.healthCenter = healthCenter;
+    }
+
+    public String getHealthCenterId() {
+        return healthCenterId;
+    }
+
+    public void setHealthCenterId(String healthCenterId) {
+        this.healthCenterId = healthCenterId;
     }
 }

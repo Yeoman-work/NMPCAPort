@@ -10,6 +10,7 @@ public class NetworkingGroupRequestModel {
     private String description;
     private List<String> userIds;
 
+
     public String getName() {
         return name;
     }

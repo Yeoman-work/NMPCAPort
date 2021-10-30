@@ -98,6 +98,12 @@ public class UserServiceImpl implements UserService {
         return new ModelMapper().map(userEntity, UserDto.class);
     }
 
+    @Override
+    public UserEntity getUserEntity(String userId) {
+
+        return this.userRepository.findByUserId(userId);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -108,4 +114,6 @@ public class UserServiceImpl implements UserService {
 
         return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
     }
+
+
 }

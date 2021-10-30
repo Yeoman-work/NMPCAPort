@@ -2,6 +2,9 @@ package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.entities.UserEntity;
+import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
+import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
 import java.util.List;
 
@@ -16,6 +19,9 @@ public class HealthCenterDto {
     List<String> userIds;
     List<String> contactIds;
     List<String> siteIds;
+    List<ContactResponseModel> contactResponseList;
+    List<ContactNestedResponseModel> contactNestedResponseList;
+    List<UserDetailsResponseModel> userDetailsResponseList;
     List<UserEntity> users;
     List<ContactEntity> contacts;
 
@@ -105,5 +111,29 @@ public class HealthCenterDto {
 
     public void setContacts(List<ContactEntity> contacts) {
         this.contacts = contacts;
+    }
+
+    public List<ContactResponseModel> getContactResponseList() {
+        return contactResponseList;
+    }
+
+    public void setContactResponseList(List<ContactResponseModel> contactResponseList) {
+        this.contactResponseList = contactResponseList;
+    }
+
+    public List<UserDetailsResponseModel> getUserDetailsResponseList() {
+        return userDetailsResponseList;
+    }
+
+    public void setUserDetailsResponseList(List<UserDetailsResponseModel> userDetailsResponseList) {
+        this.userDetailsResponseList = userDetailsResponseList;
+    }
+
+    public List<ContactNestedResponseModel> getContactNestedResponseList() {
+        return contactNestedResponseList;
+    }
+
+    public void setContactNestedResponseList(List<ContactNestedResponseModel> contactNestedResponseList) {
+        this.contactNestedResponseList = contactNestedResponseList;
     }
 }

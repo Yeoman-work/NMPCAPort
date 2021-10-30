@@ -61,7 +61,7 @@ public class UserEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "health_center_entity_id")
-    HealthCenterEntity healthCenter;
+    private HealthCenterEntity healthCenter;
 
     @PrePersist
     protected void onCreate(){

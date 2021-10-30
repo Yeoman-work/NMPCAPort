@@ -56,8 +56,9 @@ public class HealthCenterEntity implements Serializable {
     public HealthCenterEntity() {
     }
 
-    public HealthCenterEntity(Long id, String name, String nameAbbr, Date createdAt, Date updatedAt, List<UserEntity> users, List<ContactEntity> contacts) {
+    public HealthCenterEntity(Long id, String healthCenterId, String name, String nameAbbr, Date createdAt, Date updatedAt, List<UserEntity> users, List<ContactEntity> contacts) {
         this.id = id;
+        this.healthCenterId = healthCenterId;
         this.name = name;
         this.nameAbbr = nameAbbr;
         this.createdAt = createdAt;
@@ -72,6 +73,14 @@ public class HealthCenterEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getHealthCenterId() {
+        return healthCenterId;
+    }
+
+    public void setHealthCenterId(String healthCenterId) {
+        this.healthCenterId = healthCenterId;
     }
 
     public String getName() {

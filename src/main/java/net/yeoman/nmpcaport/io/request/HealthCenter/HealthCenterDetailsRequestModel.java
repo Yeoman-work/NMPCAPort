@@ -10,6 +10,7 @@ public class HealthCenterDetailsRequestModel {
     private List<String> contactIds;
     private List<String> userIds;
 
+
     public String getName() {
         return name;
     }
@@ -49,4 +50,8 @@ public class HealthCenterDetailsRequestModel {
     public void setUserIds(List<String> userIds) {
         this.userIds = userIds;
     }
+
+
+
+
 }
