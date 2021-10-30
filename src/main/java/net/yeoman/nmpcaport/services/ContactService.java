@@ -11,4 +11,5 @@ public interface ContactService {
     ContactDto deleteContact(String contactId);
     ContactDto nestedNetworkingGroups(ContactDto contactDto);
     ContactEntity getContactEntity(String contactId);
+    void saveContact(ContactEntity contact);
 }

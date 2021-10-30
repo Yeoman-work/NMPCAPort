@@ -60,7 +60,13 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactEntity getContactEntity(String contactId) {
-        return null;
+
+        return this.contactRepository.findByContactId(contactId);
+    }
+
+    @Override
+    public void saveContact(ContactEntity contact) {
+         this.contactRepository.save(contact);
     }
 
 
@@ -193,6 +199,8 @@ public class ContactServiceImpl implements ContactService {
 
     	return nestedNetworkingGroups(new ModelMapper().map(updatedContact, ContactDto.class));
     }
+
+
 
 
 

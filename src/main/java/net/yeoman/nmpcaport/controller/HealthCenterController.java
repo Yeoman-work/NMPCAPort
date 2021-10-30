@@ -15,10 +15,10 @@ public class HealthCenterController {
     @Autowired
     private HealthCenterServiceImpl healthCenterService;
 
-    @GetMapping
-    public String getHealthCenter(){
+    @GetMapping(path = "/{healthCenterId}")
+    public HealthCenterResponseModel getHealthCenter(@PathVariable("healthCenterId") String healthCenterId){
 
-        return "inside get healthCenter";
+        return new ModelMapper().map(this.healthCenterService.getHealthCenter(healthCenterId), HealthCenterResponseModel.class);
     }
 
     @PostMapping

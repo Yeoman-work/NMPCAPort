@@ -136,4 +136,5 @@ public class HealthCenterDto {
     public void setContactNestedResponseList(List<ContactNestedResponseModel> contactNestedResponseList) {
         this.contactNestedResponseList = contactNestedResponseList;
     }
+
 }

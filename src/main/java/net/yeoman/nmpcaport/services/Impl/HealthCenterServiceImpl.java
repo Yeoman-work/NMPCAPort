@@ -41,7 +41,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         HealthCenterDto healthCenterDto = new ModelMapper().map(healthCenterEntity, HealthCenterDto.class);
 
-        if(healthCenterDto.getUsers().size() > 0){
+        if(healthCenterDto.getUsers() != null){
 
             List<UserDetailsResponseModel> userResponseList = new ArrayList<>();
 
@@ -53,7 +53,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
             healthCenterDto.setUserDetailsResponseList(userResponseList);
         }
 
-        if(healthCenterDto.getContacts().size() > 0){
+        if(healthCenterDto.getContacts() != null){
 
             List<ContactNestedResponseModel> contactNestedResponseList = new ArrayList<>();
 
@@ -75,57 +75,74 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         healthCenterEntity.setHealthCenterId(utils.generateRandomID());
 
-        if(healthCenterDto.getUserIds() != null){
-            List<UserEntity> userEntities = new ArrayList<>();
+        HealthCenterEntity newHealthCenter = this.healthCenterRepository.save(healthCenterEntity);
 
+
+
+        if(healthCenterDto.getUserIds() != null){
+
+            List<UserEntity> users = new ArrayList<>();
             for(String userId: healthCenterDto.getUserIds()){
 
-                userEntities.add(this.userService.getUserEntity(userId));
+                UserEntity user = this.userService.getUserEntity(userId);
+
+                user.setHealthCenter(newHealthCenter);
+
+                this.userService.saveUser(user);
+
+                users.add(user);
             }
 
-            healthCenterEntity.setUsers(userEntities);
+            healthCenterDto.setUsers(users);
+
         }
 
         if(healthCenterDto.getContactIds() != null){
 
             List<ContactEntity> contacts = new ArrayList<>();
-
             for(String contactId: healthCenterDto.getContactIds()){
 
-                contacts.add(this.contactService.getContactEntity(contactId));
-            }
+                ContactEntity contact = this.contactService.getContactEntity(contactId);
 
-            healthCenterEntity.setContacts(contacts);
+                contact.setHealthCenter(newHealthCenter);
+
+                this.contactService.saveContact(contact);
+
+                contacts.add(contact);
+
+            }
+            healthCenterDto.setContacts(contacts);
         }
 
-        HealthCenterEntity storedHealthCenter = this.healthCenterRepository.save(healthCenterEntity);
 
-        HealthCenterResponseModel savedHealthCenter = new ModelMapper().map(storedHealthCenter, HealthCenterResponseModel.class);
+        HealthCenterResponseModel healthCenterResponse = new ModelMapper().map(healthCenterEntity, HealthCenterResponseModel.class);
 
-        if(storedHealthCenter.getContacts() != null){
+        if(healthCenterDto.getContacts() != null){
+
             List<ContactNestedResponseModel> contacts = new ArrayList<>();
-            for(ContactEntity contact: storedHealthCenter.getContacts()){
+
+            for(ContactEntity contact: healthCenterDto.getContacts()){
 
                 contacts.add(new ModelMapper().map(contact, ContactNestedResponseModel.class));
             }
 
-            savedHealthCenter.setContactNestedResponseList(contacts);
+            healthCenterResponse.setContactNestedResponseList(contacts);
 
         }
 
-        if(storedHealthCenter.getUsers() != null){
+        if(healthCenterDto.getUsers() != null){
 
             List<UserDetailsResponseModel> users = new ArrayList<>();
 
-            for(UserEntity user: storedHealthCenter.getUsers()){
+            for(UserEntity user: healthCenterDto.getUsers()){
 
                 users.add(new ModelMapper().map(user, UserDetailsResponseModel.class));
             }
 
-            savedHealthCenter.setUserDetailsResponseList(users);
+            healthCenterResponse.setUserDetailsResponseList(users);
         }
 
-        return new ModelMapper().map(savedHealthCenter, HealthCenterResponseModel.class);
+        return healthCenterResponse;
     }
 
     @Override
