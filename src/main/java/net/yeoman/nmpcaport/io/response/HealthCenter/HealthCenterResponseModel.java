@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.io.response.HealthCenter;
 
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
 import java.util.Date;
@@ -13,6 +14,7 @@ public class HealthCenterResponseModel {
     private String nameAbbr;
     private List<UserDetailsResponseModel> userDetailsResponseList;
     private List<ContactNestedResponseModel> contactNestedResponseList;
+    private List<SiteDetailsResponse> siteResponse;
     private String createdAt;
     private String updatedAt;
 
@@ -70,5 +72,13 @@ public class HealthCenterResponseModel {
 
     public void setContactNestedResponseList(List<ContactNestedResponseModel> contactNestedResponseList) {
         this.contactNestedResponseList = contactNestedResponseList;
+    }
+
+    public List<SiteDetailsResponse> getSiteResponse() {
+        return siteResponse;
+    }
+
+    public void setSiteResponse(List<SiteDetailsResponse> siteResponse) {
+        this.siteResponse = siteResponse;
     }
 }

@@ -1,9 +1,12 @@
 package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.ContactEntity;
+import net.yeoman.nmpcaport.entities.HealthCenterEntity;
+import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.entities.UserEntity;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
+import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
 import java.util.List;
@@ -22,6 +25,8 @@ public class HealthCenterDto {
     List<ContactResponseModel> contactResponseList;
     List<ContactNestedResponseModel> contactNestedResponseList;
     List<UserDetailsResponseModel> userDetailsResponseList;
+    List<SiteDetailsResponse> siteResponse;
+    List<SiteEntity> sites;
     List<UserEntity> users;
     List<ContactEntity> contacts;
 
@@ -137,4 +142,19 @@ public class HealthCenterDto {
         this.contactNestedResponseList = contactNestedResponseList;
     }
 
+    public List<SiteEntity> getSites() {
+        return sites;
+    }
+
+    public void setSites(List<SiteEntity> sites) {
+        this.sites = sites;
+    }
+
+    public List<SiteDetailsResponse> getSiteResponse() {
+        return siteResponse;
+    }
+
+    public void setSiteResponse(List<SiteDetailsResponse> siteResponse) {
+        this.siteResponse = siteResponse;
+    }
 }

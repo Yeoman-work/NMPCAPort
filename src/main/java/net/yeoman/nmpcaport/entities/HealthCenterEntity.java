@@ -40,6 +40,10 @@ public class HealthCenterEntity implements Serializable {
     @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<ContactEntity> contacts;
 
+    @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<SiteEntity> sites;
+
+
     @PrePersist
     protected void onCreate(){
 
@@ -56,7 +60,15 @@ public class HealthCenterEntity implements Serializable {
     public HealthCenterEntity() {
     }
 
-    public HealthCenterEntity(Long id, String healthCenterId, String name, String nameAbbr, Date createdAt, Date updatedAt, List<UserEntity> users, List<ContactEntity> contacts) {
+    public HealthCenterEntity(Long id,
+                              String healthCenterId,
+                              String name,
+                              String nameAbbr,
+                              Date createdAt,
+                              Date updatedAt,
+                              List<UserEntity> users,
+                              List<ContactEntity> contacts,
+                              List<SiteEntity> sites) {
         this.id = id;
         this.healthCenterId = healthCenterId;
         this.name = name;
@@ -65,6 +77,7 @@ public class HealthCenterEntity implements Serializable {
         this.updatedAt = updatedAt;
         this.users = users;
         this.contacts = contacts;
+        this.sites = sites;
     }
 
     public Long getId() {
@@ -130,4 +143,13 @@ public class HealthCenterEntity implements Serializable {
     public void setContacts(List<ContactEntity> contacts) {
         this.contacts = contacts;
     }
+
+    public List<SiteEntity> getSites() {
+        return sites;
+    }
+
+    public void setSites(List<SiteEntity> sites) {
+        this.sites = sites;
+    }
+
 }

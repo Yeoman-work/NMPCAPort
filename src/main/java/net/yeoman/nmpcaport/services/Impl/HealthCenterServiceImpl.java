@@ -2,10 +2,15 @@ package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.entities.HealthCenterEntity;
+import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.entities.UserEntity;
+import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
+import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.repositories.HealthCenterRepository;
 import net.yeoman.nmpcaport.repositories.UserRepository;
 import net.yeoman.nmpcaport.services.HealthCenterService;
@@ -63,6 +68,25 @@ public class HealthCenterServiceImpl implements HealthCenterService {
             }
 
             healthCenterDto.setContactNestedResponseList(contactNestedResponseList);
+        }
+
+        if(healthCenterDto.getSites() != null){
+
+            List<SiteDetailsResponse> siteDetails = new ArrayList<>();
+
+            for(SiteEntity site: healthCenterDto.getSites()){
+
+                SiteDetailsResponse siteResponse = new ModelMapper().map(site, SiteDetailsResponse.class);
+
+                siteResponse.setCityResponse(new ModelMapper().map(site.getCity(), CityResponse.class));
+                siteResponse.setCountyResponse(new ModelMapper().map(site.getCounty(), CountyResponse.class));
+                siteResponse.setZipCodeResponse(new ModelMapper().map(site.getZipCode(), ZipCodeResponse.class));
+                siteResponse.setHealthCenterResponse(new ModelMapper().map(site.getHealthCenter(), HealthCenterResponseModel.class));
+
+                siteDetails.add(siteResponse);
+            }
+
+            healthCenterDto.setSiteResponse(siteDetails);
         }
 
         return healthCenterDto;
@@ -145,6 +169,8 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return healthCenterResponse;
     }
 
+
+
     @Override
     public HealthCenterDto updateHealthCenter(String healthCenterId, HealthCenterDto healthCenterDto) {
         return null;
@@ -153,5 +179,11 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     @Override
     public HealthCenterDto deleteHealthCenter(String healthCenterId) {
         return null;
+    }
+
+    @Override
+    public HealthCenterEntity getHealthCenterEntity(String healthCenterId) {
+
+        return this.healthCenterRepository.findByHealthCenterId(healthCenterId);
     }
 }
