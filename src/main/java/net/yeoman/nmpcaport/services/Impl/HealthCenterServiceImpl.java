@@ -5,6 +5,7 @@ import net.yeoman.nmpcaport.entities.HealthCenterEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.entities.UserEntity;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
@@ -81,7 +82,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
                 siteResponse.setCityResponse(new ModelMapper().map(site.getCity(), CityResponse.class));
                 siteResponse.setCountyResponse(new ModelMapper().map(site.getCounty(), CountyResponse.class));
                 siteResponse.setZipCodeResponse(new ModelMapper().map(site.getZipCode(), ZipCodeResponse.class));
-                siteResponse.setHealthCenterResponse(new ModelMapper().map(site.getHealthCenter(), HealthCenterResponseModel.class));
+                siteResponse.setHealthCenterResponse(new ModelMapper().map(site.getHealthCenter(), HealthCenterNestedResponseModel.class));
 
                 siteDetails.add(siteResponse);
             }

@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "sites")
@@ -59,6 +60,18 @@ public class SiteEntity implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "zip_code_entity_id")
     private ZipCodeEntity zipCode;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "senate_district_entity_id")
+    private SenateDistrictEntity senateDistrict;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "sites_services",
+            joinColumns = @JoinColumn(name = "site_entity_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_entity_id")
+    )
+    private List<ServiceEntity> services;
 
     public SiteEntity() {
     }
@@ -167,5 +180,19 @@ public class SiteEntity implements Serializable {
         this.zipCode = zipCode;
     }
 
+    public List<ServiceEntity> getServices() {
+        return services;
+    }
 
+    public void setServices(List<ServiceEntity> services) {
+        this.services = services;
+    }
+
+    public SenateDistrictEntity getSenateDistrict() {
+        return senateDistrict;
+    }
+
+    public void setSenateDistrict(SenateDistrictEntity senateDistrict) {
+        this.senateDistrict = senateDistrict;
+    }
 }

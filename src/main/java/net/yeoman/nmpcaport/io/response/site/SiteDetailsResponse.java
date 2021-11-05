@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.io.response.site;
 
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
@@ -14,7 +15,7 @@ public class SiteDetailsResponse {
     private CountyResponse countyResponse;
     private CityResponse cityResponse;
     private ZipCodeResponse zipCodeResponse;
-    private HealthCenterResponseModel healthCenterResponse;
+    private HealthCenterNestedResponseModel healthCenterResponse;
 
     public String getSiteId() {
         return siteId;
@@ -72,11 +73,11 @@ public class SiteDetailsResponse {
         this.zipCodeResponse = zipCodeResponse;
     }
 
-    public HealthCenterResponseModel getHealthCenterResponse() {
+    public HealthCenterNestedResponseModel getHealthCenterResponse() {
         return healthCenterResponse;
     }
 
-    public void setHealthCenterResponse(HealthCenterResponseModel healthCenterResponse) {
+    public void setHealthCenterResponse(HealthCenterNestedResponseModel healthCenterResponse) {
         this.healthCenterResponse = healthCenterResponse;
     }
 }
