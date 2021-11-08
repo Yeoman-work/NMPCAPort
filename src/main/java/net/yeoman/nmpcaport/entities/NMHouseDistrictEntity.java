@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "NMHouseDistricts")
@@ -42,6 +43,15 @@ public class NMHouseDistrictEntity implements Serializable {
     protected void onUpdate(){
 
         this.updatedAt = new Date();
+    }
+
+    @OneToMany(mappedBy = "nmHouseDistrict", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SiteEntity> sites;
+
+    @OneToOne(mappedBy = "nmHouseDistrict", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private StateRepEntity stateRep;
+
+    public NMHouseDistrictEntity() {
     }
 
     public Long getId() {
@@ -100,4 +110,19 @@ public class NMHouseDistrictEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public StateRepEntity getStateRep() {
+        return stateRep;
+    }
+
+    public void setStateRep(StateRepEntity stateRep) {
+        this.stateRep = stateRep;
+    }
+
+    public List<SiteEntity> getSites() {
+        return sites;
+    }
+
+    public void setSites(List<SiteEntity> sites) {
+        this.sites = sites;
+    }
 }

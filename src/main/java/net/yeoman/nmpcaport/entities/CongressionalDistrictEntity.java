@@ -47,7 +47,26 @@ public class CongressionalDistrictEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
+    @OneToOne(mappedBy = "district", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private CongressionalRepEntity rep;
+
     public CongressionalDistrictEntity() {
+    }
+
+
+    public CongressionalDistrictEntity(Long id,
+                                       String congressionalDistrictId,
+                                       String name, String map,
+                                       LocalDate nextElection,
+                                       Date createdAt,
+                                       Date updatedAt) {
+        this.id = id;
+        this.congressionalDistrictId = congressionalDistrictId;
+        this.name = name;
+        this.map = map;
+        this.nextElection = nextElection;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {

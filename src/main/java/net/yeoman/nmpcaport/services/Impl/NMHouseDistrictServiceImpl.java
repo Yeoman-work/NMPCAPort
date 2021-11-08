@@ -56,4 +56,12 @@ public class NMHouseDistrictServiceImpl implements NMHouseDistrictService {
     public NMHouseDistrictDto deleteNMHouseDistrict(String nmHouseDistrictId) {
         return null;
     }
+
+    @Override
+    public NMHouseDistrictEntity findNMHouseDistrictEntity(String nmHouseDistrictId) {
+
+        return this.nmHouseDistrictRepository.findByHouseDistrictId(nmHouseDistrictId);
+    }
+
+
 }

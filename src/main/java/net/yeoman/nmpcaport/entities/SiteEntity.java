@@ -62,6 +62,10 @@ public class SiteEntity implements Serializable {
     private ZipCodeEntity zipCode;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "n_m_house_district_entity_id")
+    private NMHouseDistrictEntity nmHouseDistrict;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "senate_district_entity_id")
     private SenateDistrictEntity senateDistrict;
 
@@ -194,5 +198,13 @@ public class SiteEntity implements Serializable {
 
     public void setSenateDistrict(SenateDistrictEntity senateDistrict) {
         this.senateDistrict = senateDistrict;
+    }
+
+    public NMHouseDistrictEntity getNmHouseDistrict() {
+        return nmHouseDistrict;
+    }
+
+    public void setNmHouseDistrict(NMHouseDistrictEntity nmHouseDistrict) {
+        this.nmHouseDistrict = nmHouseDistrict;
     }
 }

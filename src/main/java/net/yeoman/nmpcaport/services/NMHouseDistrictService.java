@@ -9,4 +9,5 @@ public interface NMHouseDistrictService {
     public NMHouseDistrictDto createNMHouseDistrict(NMHouseDistrictDto nmHouseDistrictDto);
     public NMHouseDistrictDto updatedNMHouseDistrict(String nmHouseDistrictId, NMHouseDistrictDto nmHouseDistrictDto);
     public NMHouseDistrictDto deleteNMHouseDistrict(String nmHouseDistrictId);
+    public NMHouseDistrictEntity findNMHouseDistrictEntity(String nmHouseDistrictId);
 }

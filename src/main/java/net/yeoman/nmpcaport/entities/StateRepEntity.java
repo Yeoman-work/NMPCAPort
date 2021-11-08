@@ -1,26 +1,24 @@
 package net.yeoman.nmpcaport.entities;
 
-import org.springframework.stereotype.Controller;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "stateSenators")
-public class StateSenatorEntity implements Serializable {
+@Table(name="stateReps")
+public class StateRepEntity implements Serializable {
 
-    private static final long serialVersionUID = 657089847650751807L;
+    private static final long serialVersionUID = -5353765383313897869L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String stateSenatorId;
+    @NotBlank(message = "required")
+    private String stateRepId;
 
 
     @NotBlank(message = "required")
@@ -33,6 +31,7 @@ public class StateSenatorEntity implements Serializable {
 
     @Size(max = 150, message = "must be 150 characters or less")
     @Email(message = "please enter a valid email")
+    @Column(unique = true)
     private String email;
 
     @Size(min=5, max = 250)
@@ -55,24 +54,17 @@ public class StateSenatorEntity implements Serializable {
     }
 
     @PreUpdate
-    protected void onUpdate(){
+    protected void onUpdate() {
 
         this.updatedAt = new Date();
+
     }
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "senate_district_entity_id")
-    private SenateDistrictEntity senateDistrict;
+    @JoinColumn(name = "nm_house_district_entity_id")
+    private NMHouseDistrictEntity nmHouseDistrict;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "nmSenatorsCommittees",
-            joinColumns = @JoinColumn(name = "state_senator_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "n_m_senate_committee_entity_id")
-    )
-    private List<NMSenateCommitteeEntity> committees;
-
-    public StateSenatorEntity() {
+    public StateRepEntity() {
     }
 
     public Long getId() {
@@ -83,12 +75,12 @@ public class StateSenatorEntity implements Serializable {
         this.id = id;
     }
 
-    public String getStateSenatorId() {
-        return stateSenatorId;
+    public String getStateRepId() {
+        return stateRepId;
     }
 
-    public void setStateSenatorId(String stateSenatorId) {
-        this.stateSenatorId = stateSenatorId;
+    public void setStateRepId(String stateRepId) {
+        this.stateRepId = stateRepId;
     }
 
     public String getFirstName() {
@@ -112,7 +104,7 @@ public class StateSenatorEntity implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email.trim();
+        this.email = email;
     }
 
     public String getPicture() {
@@ -155,19 +147,11 @@ public class StateSenatorEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public SenateDistrictEntity getSenateDistrict() {
-        return senateDistrict;
+    public NMHouseDistrictEntity getNmHouseDistrict() {
+        return nmHouseDistrict;
     }
 
-    public void setSenateDistrict(SenateDistrictEntity senateDistrict) {
-        this.senateDistrict = senateDistrict;
-    }
-
-    public List<NMSenateCommitteeEntity> getCommittees() {
-        return committees;
-    }
-
-    public void setCommittees(List<NMSenateCommitteeEntity> committees) {
-        this.committees = committees;
+    public void setNmHouseDistrict(NMHouseDistrictEntity nmHouseDistrict) {
+        this.nmHouseDistrict = nmHouseDistrict;
     }
 }
