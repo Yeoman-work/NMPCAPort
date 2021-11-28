@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
+
 public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
-
     @GetMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public UserDetailsResponseModel getUser(@PathVariable("userId") String userId){
 
@@ -23,6 +23,7 @@ public class UserController {
 
         return new ModelMapper().map(userDto, UserDetailsResponseModel.class);
     }
+
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
                   produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
