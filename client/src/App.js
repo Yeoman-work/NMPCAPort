@@ -1,6 +1,7 @@
 import './App.css';
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import LoginView from "./views/LoginView";
+import RegistrationView from "./views/RegistrationView";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path={'/yeoman'}>
+                    <Route path={'register'} element={<RegistrationView/>}/>
                     <Route path={'login'} element={<LoginView/>}/>
                 </Route>
             </Routes>
