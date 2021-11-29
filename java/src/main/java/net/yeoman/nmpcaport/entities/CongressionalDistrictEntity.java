@@ -50,6 +50,10 @@ public class CongressionalDistrictEntity implements Serializable {
     @OneToOne(mappedBy = "district", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private CongressionalRepEntity rep;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "health_center_entity_id")
+    private HealthCenterEntity healthCenter;
+
     public CongressionalDistrictEntity() {
     }
 
@@ -123,5 +127,21 @@ public class CongressionalDistrictEntity implements Serializable {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public CongressionalRepEntity getRep() {
+        return rep;
+    }
+
+    public void setRep(CongressionalRepEntity rep) {
+        this.rep = rep;
+    }
+
+    public HealthCenterEntity getHealthCenter() {
+        return healthCenter;
+    }
+
+    public void setHealthCenter(HealthCenterEntity healthCenter) {
+        this.healthCenter = healthCenter;
     }
 }

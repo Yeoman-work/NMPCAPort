@@ -1,5 +1,7 @@
 package net.yeoman.nmpcaport.entities;
 
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -35,13 +37,22 @@ public class HealthCenterEntity implements Serializable {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<UserEntity> users;
+    private List<UserEntity> users;
 
     @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<ContactEntity> contacts;
+    private List<ContactEntity> contacts;
 
     @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<SiteEntity> sites;
+    private List<SiteEntity> sites;
+
+    @OneToMany(mappedBy= "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SenateDistrictEntity> senateDistrictEntities;
+
+    @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<NMHouseDistrictEntity> nmHouseDistrictsEntities;
+
+    @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CongressionalDistrictEntity> congressionalDistrictEntities;
 
 
     @PrePersist
@@ -152,4 +163,27 @@ public class HealthCenterEntity implements Serializable {
         this.sites = sites;
     }
 
+    public List<SenateDistrictEntity> getSenateDistrictEntities() {
+        return senateDistrictEntities;
+    }
+
+    public void setSenateDistrictEntities(List<SenateDistrictEntity> senateDistrictEntities) {
+        this.senateDistrictEntities = senateDistrictEntities;
+    }
+
+    public List<NMHouseDistrictEntity> getNmHouseDistrictsEntities() {
+        return nmHouseDistrictsEntities;
+    }
+
+    public void setNmHouseDistrictsEntities(List<NMHouseDistrictEntity> nmHouseDistrictsEntities) {
+        this.nmHouseDistrictsEntities = nmHouseDistrictsEntities;
+    }
+
+    public List<CongressionalDistrictEntity> getCongressionalDistrictEntities() {
+        return congressionalDistrictEntities;
+    }
+
+    public void setCongressionalDistrictEntities(List<CongressionalDistrictEntity> congressionalDistrictEntities) {
+        this.congressionalDistrictEntities = congressionalDistrictEntities;
+    }
 }

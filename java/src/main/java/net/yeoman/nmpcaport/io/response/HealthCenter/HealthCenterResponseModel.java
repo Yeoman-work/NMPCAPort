@@ -1,6 +1,12 @@
 package net.yeoman.nmpcaport.io.response.HealthCenter;
 
+import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
+import net.yeoman.nmpcaport.io.response.CongressionalRepResponse.CongressionalRepResponse;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
+import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
@@ -14,7 +20,10 @@ public class HealthCenterResponseModel {
     private String nameAbbr;
     private List<UserDetailsResponseModel> userDetailsResponseList;
     private List<ContactNestedResponseModel> contactNestedResponseList;
-    private List<SiteDetailsResponse> siteResponse;
+    private List<SiteDetailsNestedResponse> siteDetailsNestedResponse;
+    private List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponsesList;
+    private List<SenateDistrictResponseModel> senateDistrictResponseList;
+    private List<CongressionalDistrictResponse> congressionalRepResponseList;
     private String createdAt;
     private String updatedAt;
 
@@ -74,11 +83,35 @@ public class HealthCenterResponseModel {
         this.contactNestedResponseList = contactNestedResponseList;
     }
 
-    public List<SiteDetailsResponse> getSiteResponse() {
-        return siteResponse;
+    public List<SiteDetailsNestedResponse> getSiteDetailsNestedResponse() {
+        return siteDetailsNestedResponse;
     }
 
-    public void setSiteResponse(List<SiteDetailsResponse> siteResponse) {
-        this.siteResponse = siteResponse;
+    public void setSiteDetailsNestedResponse(List<SiteDetailsNestedResponse> siteDetailsNestedResponse) {
+        this.siteDetailsNestedResponse = siteDetailsNestedResponse;
+    }
+
+    public List<NMHouseDistrictNestedResponse> getNmHouseDistrictNestedResponsesList() {
+        return nmHouseDistrictNestedResponsesList;
+    }
+
+    public void setNmHouseDistrictNestedResponsesList(List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponsesList) {
+        this.nmHouseDistrictNestedResponsesList = nmHouseDistrictNestedResponsesList;
+    }
+
+    public List<SenateDistrictResponseModel> getSenateDistrictResponseList() {
+        return senateDistrictResponseList;
+    }
+
+    public void setSenateDistrictResponseList(List<SenateDistrictResponseModel> senateDistrictResponseList) {
+        this.senateDistrictResponseList = senateDistrictResponseList;
+    }
+
+    public List<CongressionalDistrictResponse> getCongressionalRepResponseList() {
+        return congressionalRepResponseList;
+    }
+
+    public void setCongressionalRepResponseList(List<CongressionalDistrictResponse> congressionalRepResponseList) {
+        this.congressionalRepResponseList = congressionalRepResponseList;
     }
 }

@@ -51,6 +51,10 @@ public class NMHouseDistrictEntity implements Serializable {
     @OneToOne(mappedBy = "nmHouseDistrict", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private StateRepEntity stateRep;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="health_center_entity_id")
+    private HealthCenterEntity healthCenter;
+
     public NMHouseDistrictEntity() {
     }
 
@@ -124,5 +128,13 @@ public class NMHouseDistrictEntity implements Serializable {
 
     public void setSites(List<SiteEntity> sites) {
         this.sites = sites;
+    }
+
+    public HealthCenterEntity getHealthCenter() {
+        return healthCenter;
+    }
+
+    public void setHealthCenter(HealthCenterEntity healthCenter) {
+        this.healthCenter = healthCenter;
     }
 }
