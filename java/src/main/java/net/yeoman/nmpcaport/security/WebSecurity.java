@@ -59,11 +59,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         return filter;
     }
 
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
-//                .allowedHeaders("Authorization");
-//    }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){

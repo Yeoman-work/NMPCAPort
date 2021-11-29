@@ -1,10 +1,11 @@
 import React, {useState} from "react";
+import {useNavigate} from "react-router";
 import axios from "axios";
 import RegistrationForm from "../components/RegistrationForm";
 
 
 const RegistrationView = props =>{
-
+    const navigate = useNavigate();
     const [registration, setRegistration] = useState({
         email: '',
         firstName: '',
@@ -18,10 +19,13 @@ const RegistrationView = props =>{
 
         try{
 
-            const registrationResponse = await axios.post('http://localhost:8080/users', registration)
+            const registrationResponse = await axios.post('http://localhost:8080/users', registration,{
+                responseType: "json"
+            })
 
-            console.log(registrationResponse);
 
+            console.log(registrationResponse.data);
+            navigate('/yeoman/login');
 
         }catch(error){
 
