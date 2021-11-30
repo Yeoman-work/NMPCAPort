@@ -28,6 +28,8 @@ public class CityServiceImpl implements CityService {
         return this.cityRepository.findAll();
     }
 
+
+
     @Override
     public CityEntity findCity(String cityId) {
 
@@ -73,6 +75,21 @@ public class CityServiceImpl implements CityService {
         CityEntity storedCity = this.cityRepository.save(cityEntity);
 
         return new ModelMapper().map(storedCity, CityDto.class);
+    }
+
+    @Override
+    public List<CityResponse> allCities() {
+        List<CityResponse> returnValue = new ArrayList<>();
+
+        List<CityEntity> cities = this.cityRepository.findAll();
+
+        for(CityEntity city: cities){
+
+            returnValue.add(new ModelMapper().map(city, CityResponse.class));
+
+        }
+
+        return returnValue;
     }
 
 

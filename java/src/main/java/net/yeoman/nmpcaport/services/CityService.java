@@ -18,4 +18,6 @@ public interface CityService {
     public List<CityResponse> createCitiesFromList(List<String> cityName);
 
     public CityDto updateCity(String cityId, CityDto cityDto);
+
+    public List<CityResponse> allCities();
 }

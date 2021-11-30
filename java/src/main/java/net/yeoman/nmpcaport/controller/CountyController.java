@@ -5,10 +5,7 @@ import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.repositories.CountyRepository;
 import net.yeoman.nmpcaport.services.Impl.CountyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +20,11 @@ public class CountyController {
     public List<CountyResponse> createCountiesOnMass(@RequestBody CountyRequestList countyRequestList){
 
         return this.countyService.createCounties(countyRequestList.getNames());
+    }
+
+    @GetMapping
+    public List<CountyResponse> getAllCounties(){
+
+        return this.countyService.countyResponse();
     }
 }

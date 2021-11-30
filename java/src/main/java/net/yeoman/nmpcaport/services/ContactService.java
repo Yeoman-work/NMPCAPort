@@ -1,7 +1,10 @@
 package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.ContactEntity;
+import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
+
+import java.util.List;
 
 public interface ContactService {
 
@@ -12,4 +15,5 @@ public interface ContactService {
     ContactDto nestedNetworkingGroups(ContactDto contactDto);
     ContactEntity getContactEntity(String contactId);
     void saveContact(ContactEntity contact);
+    List<ContactResponseModel> getAllContacts();
 }

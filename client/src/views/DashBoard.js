@@ -1,14 +1,44 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Header from "../components/Header";
+import HealthCenterList from "../components/HealthCenterList";
 
 
 const DashBoard = props =>{
+
+    const [healthCenters, setHealthCenters] = useState([]);
+
+
+    useEffect(()=>{
+
+        (async ()=>{
+            try{
+
+                const healthCentersResponse = await axios.get('http://localhost:8080/healthCenters', {
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    }
+                })
+
+                setHealthCenters(healthCentersResponse.data);
+
+            }catch(error){
+
+                console.log(error);
+
+            }
+
+        })()
+
+
+    }, [])
 
 
 
     return(
         <div>
-
+            <Header/>
+            <HealthCenterList healthCenters={healthCenters} setHealthCenters={setHealthCenters}/>
         </div>
     )
 }

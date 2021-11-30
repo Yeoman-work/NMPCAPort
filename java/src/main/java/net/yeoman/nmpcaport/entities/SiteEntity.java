@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 @Table(name = "sites")
@@ -24,6 +25,9 @@ public class SiteEntity implements Serializable {
     @NotBlank(message = "required")
     @Column(unique = true)
     private String name;
+
+    @NotBlank(message = "required")
+    private String streetAddress;
 
     @Column(updatable = false)
     private Date createdAt;
@@ -134,6 +138,14 @@ public class SiteEntity implements Serializable {
 
     public void setName(String name) {
         this.name = name.trim().toLowerCase();
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress.trim().toLowerCase();
     }
 
     public Date getCreatedAt() {

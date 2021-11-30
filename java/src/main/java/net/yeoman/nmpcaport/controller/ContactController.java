@@ -17,7 +17,9 @@ import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.services.Impl.ContactServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
 
-@RestController
+import java.util.List;
+
+ @RestController
 @RequestMapping("/contacts")
 public class ContactController {
 
@@ -29,6 +31,12 @@ public class ContactController {
     public ContactResponseModel getContact(@PathVariable("contactId") String contactId){
 
     	return new ModelMapper().map(this.contactService.getContact(contactId), ContactResponseModel.class);
+    }
+
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public List<ContactResponseModel> getAllContacts(){
+
+        return this.contactService.getAllContacts();
     }
 
     @PostMapping(consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},

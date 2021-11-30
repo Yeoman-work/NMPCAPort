@@ -24,7 +24,7 @@ public class CountyServiceImpl implements CountyService {
 
     @Override
     public List<CountyEntity> findAll() {
-        return null;
+        return this.countyRepository.findAll();
     }
 
     @Override
@@ -57,6 +57,20 @@ public class CountyServiceImpl implements CountyService {
             }
         }
         return counties;
+    }
+
+    @Override
+    public List<CountyResponse> countyResponse() {
+        List<CountyResponse> returnValue = new ArrayList<>();
+
+        List<CountyEntity> counties =this.countyRepository.findAll();
+
+        for(CountyEntity county: counties){
+
+            returnValue.add(new ModelMapper().map(county, CountyResponse.class));
+        }
+
+        return returnValue;
     }
 
 

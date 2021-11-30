@@ -7,6 +7,7 @@ import net.yeoman.nmpcaport.services.Impl.CityServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.CityDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,12 @@ public class CityController {
 
     @Autowired
     private CityServiceImpl cityService;
+
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public List<CityResponse> getAllCities(){
+
+        return this.cityService.allCities();
+    }
 
     @PostMapping
     public List<CityResponse> createCity(@RequestBody CityRequestList cityRequestList){

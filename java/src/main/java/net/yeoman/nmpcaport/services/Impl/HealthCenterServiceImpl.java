@@ -19,6 +19,9 @@ import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -186,5 +189,29 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     public HealthCenterEntity getHealthCenterEntity(String healthCenterId) {
 
         return this.healthCenterRepository.findByHealthCenterId(healthCenterId);
+    }
+
+    @Override
+    public List<HealthCenterDto> getHealthCenters(int page, int limit) {
+
+        List<HealthCenterDto> returnValue = new ArrayList<>();
+
+        if(page > 0) page -=1;
+
+        Pageable pageableRequest = PageRequest.of(page, limit);
+
+        Page<HealthCenterEntity> healthCenterPage = this.healthCenterRepository.findAll(pageableRequest);
+
+        List<HealthCenterEntity> healthCenters = healthCenterPage.getContent();
+
+        for(HealthCenterEntity healthCenter: healthCenters){
+
+            HealthCenterDto healthCenterDto = new HealthCenterDto();
+
+
+            returnValue.add(new ModelMapper().map(healthCenter, HealthCenterDto.class));
+        }
+
+        return returnValue;
     }
 }

@@ -5,6 +5,7 @@ import net.yeoman.nmpcaport.entities.HealthCenterEntity;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 import net.yeoman.nmpcaport.repositories.ContactRepository;
 import net.yeoman.nmpcaport.services.ContactService;
@@ -67,6 +68,22 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public void saveContact(ContactEntity contact) {
          this.contactRepository.save(contact);
+    }
+
+    @Override
+    public List<ContactResponseModel> getAllContacts() {
+        List<ContactResponseModel> returnValue = new ArrayList<>();
+
+        List<ContactEntity> contacts = this.contactRepository.findAll();
+
+        for(ContactEntity contact: contacts){
+
+            ContactDto contactDto = new ModelMapper().map(contact, ContactDto.class);
+
+            returnValue.add(new ModelMapper().map(contactDto, ContactResponseModel.class));
+        }
+
+        return returnValue;
     }
 
 

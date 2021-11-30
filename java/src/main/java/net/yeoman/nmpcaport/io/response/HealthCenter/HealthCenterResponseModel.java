@@ -21,9 +21,9 @@ public class HealthCenterResponseModel {
     private List<UserDetailsResponseModel> userDetailsResponseList;
     private List<ContactNestedResponseModel> contactNestedResponseList;
     private List<SiteDetailsNestedResponse> siteDetailsNestedResponse;
-    private List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponsesList;
+    private List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponseList;
     private List<SenateDistrictResponseModel> senateDistrictResponseList;
-    private List<CongressionalDistrictResponse> congressionalRepResponseList;
+    private List<CongressionalDistrictResponse> congressionalDistrictResponseList;
     private String createdAt;
     private String updatedAt;
 
@@ -91,12 +91,12 @@ public class HealthCenterResponseModel {
         this.siteDetailsNestedResponse = siteDetailsNestedResponse;
     }
 
-    public List<NMHouseDistrictNestedResponse> getNmHouseDistrictNestedResponsesList() {
-        return nmHouseDistrictNestedResponsesList;
+    public List<NMHouseDistrictNestedResponse> getNmHouseDistrictNestedResponseList() {
+        return nmHouseDistrictNestedResponseList;
     }
 
-    public void setNmHouseDistrictNestedResponsesList(List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponsesList) {
-        this.nmHouseDistrictNestedResponsesList = nmHouseDistrictNestedResponsesList;
+    public void setNmHouseDistrictNestedResponseList(List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponseList) {
+        this.nmHouseDistrictNestedResponseList = nmHouseDistrictNestedResponseList;
     }
 
     public List<SenateDistrictResponseModel> getSenateDistrictResponseList() {
@@ -107,11 +107,11 @@ public class HealthCenterResponseModel {
         this.senateDistrictResponseList = senateDistrictResponseList;
     }
 
-    public List<CongressionalDistrictResponse> getCongressionalRepResponseList() {
-        return congressionalRepResponseList;
+    public List<CongressionalDistrictResponse> getCongressionalDistrictResponseList() {
+        return congressionalDistrictResponseList;
     }
 
-    public void setCongressionalRepResponseList(List<CongressionalDistrictResponse> congressionalRepResponseList) {
-        this.congressionalRepResponseList = congressionalRepResponseList;
+    public void setCongressionalDistrictResponseList(List<CongressionalDistrictResponse> congressionalDistrictResponseList) {
+        this.congressionalDistrictResponseList = congressionalDistrictResponseList;
     }
 }

@@ -26,7 +26,7 @@ const LoginView = (props) =>{
 
             localStorage.setItem('token', loginResponse.headers.authorization);
 
-            navigate('')
+            navigate('/yeoman/dashboard')
 
 
         }catch(error){

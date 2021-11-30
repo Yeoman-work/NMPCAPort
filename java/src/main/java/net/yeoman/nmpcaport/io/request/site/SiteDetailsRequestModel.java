@@ -8,6 +8,7 @@ import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 public class SiteDetailsRequestModel {
 
     private String name;
+    private String streetAddress;
     private String cityId;
     private String countyId;
     private String zipCodeId;
@@ -19,6 +20,14 @@ public class SiteDetailsRequestModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 
     public String getCityId() {
@@ -52,4 +61,6 @@ public class SiteDetailsRequestModel {
     public void setHealthCenterId(String healthCenterId) {
         this.healthCenterId = healthCenterId;
     }
+
+
 }

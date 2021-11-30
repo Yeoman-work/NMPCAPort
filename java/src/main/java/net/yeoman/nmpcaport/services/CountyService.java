@@ -12,5 +12,6 @@ public interface CountyService {
     public CountyEntity findCountyEntity(String countyId);
     public ContactDto findCountyById(String countyId);
     public List<CountyResponse> createCounties(List<String> countiesList);
+    public List<CountyResponse> countyResponse();
 
 }
