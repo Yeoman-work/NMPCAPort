@@ -8,6 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/nmHouseDistricts")
 public class NMHouseDistrictController {
@@ -21,6 +24,20 @@ public class NMHouseDistrictController {
         NMHouseDistrictDto nmHouseDistrictDto = this.nmHouseDistrictService.getNMHouseDistrict(houseDistrictId);
 
         return new ModelMapper().map(nmHouseDistrictDto, NMHouseDistrictResponse.class);
+    }
+
+    @GetMapping
+    public List<NMHouseDistrictResponse> getAllHouseDistricts(){
+        List<NMHouseDistrictResponse> returnValue = new ArrayList<>();
+
+        List<NMHouseDistrictDto> nmHouseDistrictDtoList = this.nmHouseDistrictService.getAllNMHouseDistrictResponses();
+
+        for(NMHouseDistrictDto district: nmHouseDistrictDtoList){
+
+            returnValue.add(new ModelMapper().map(district, NMHouseDistrictResponse.class));
+        }
+
+        return returnValue;
     }
 
     @PostMapping

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/congressionalDistricts")
 public class CongressionalDistrictController {
@@ -18,10 +21,24 @@ public class CongressionalDistrictController {
     private CongressionalDistrictServiceImpl congressionalDistrictService;
 
 
-    @GetMapping
-    public String getCongressionalDistrict(String congressionalDistrictId){
+    @GetMapping("/{congressionalDistrictId}")
+    public String getCongressionalDistrict(@PathVariable("congressionalDistrictId") String congressionalDistrictId){
 
         return "inside get congressional district";
+    }
+
+    @GetMapping
+    public List<CongressionalDistrictResponse> getAllCongressionalDistrictResponses(){
+        List<CongressionalDistrictResponse> returnValue = new ArrayList<>();
+
+        List<CongressionalDistrictDto> congressionalDistrictDtoList = this.congressionalDistrictService.findAllCongressionalDistricts();
+
+        for(CongressionalDistrictDto district: congressionalDistrictDtoList){
+
+            returnValue.add(new ModelMapper().map(district, CongressionalDistrictResponse.class));
+        }
+
+        return returnValue;
     }
 
 

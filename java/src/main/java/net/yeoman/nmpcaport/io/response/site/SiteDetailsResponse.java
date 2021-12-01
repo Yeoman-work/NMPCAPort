@@ -4,6 +4,10 @@ import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
 public class SiteDetailsResponse {
@@ -16,6 +20,9 @@ public class SiteDetailsResponse {
     private CityResponse cityResponse;
     private ZipCodeResponse zipCodeResponse;
     private HealthCenterNestedResponseModel healthCenterResponse;
+    private NMHouseDistrictResponse houseDistrictResponse;
+    private SenateDistrictResponseModel senateDistrictResponseModel;
+    private CongressionalDistrictResponse congressionalDistrictResponse;
 
     public String getSiteId() {
         return siteId;
@@ -79,5 +86,29 @@ public class SiteDetailsResponse {
 
     public void setHealthCenterResponse(HealthCenterNestedResponseModel healthCenterResponse) {
         this.healthCenterResponse = healthCenterResponse;
+    }
+
+    public NMHouseDistrictResponse getHouseDistrictResponse() {
+        return houseDistrictResponse;
+    }
+
+    public void setHouseDistrictResponse(NMHouseDistrictResponse houseDistrictResponse) {
+        this.houseDistrictResponse = houseDistrictResponse;
+    }
+
+    public SenateDistrictResponseModel getSenateDistrictResponseModel() {
+        return senateDistrictResponseModel;
+    }
+
+    public void setSenateDistrictResponseModel(SenateDistrictResponseModel senateDistrictResponseModel) {
+        this.senateDistrictResponseModel = senateDistrictResponseModel;
+    }
+
+    public CongressionalDistrictResponse getCongressionalDistrictResponse() {
+        return congressionalDistrictResponse;
+    }
+
+    public void setCongressionalDistrictResponse(CongressionalDistrictResponse congressionalDistrictResponse) {
+        this.congressionalDistrictResponse = congressionalDistrictResponse;
     }
 }

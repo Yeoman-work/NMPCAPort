@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SenateDistrictServiceImpl implements SenateDistrictService {
@@ -84,5 +86,18 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
     public SenateDistrictEntity findSenateDistrictEntity(String senateDistrictId){
 
         return this.senateDistrictRepository.findBySenateDistrictId(senateDistrictId);
+    }
+
+    @Override
+    public List<SenateDistrictDto> getAllSenateDistricts() {
+        List<SenateDistrictDto> returnValue = new ArrayList<>();
+        List<SenateDistrictEntity> senateDistrictEntities = this.senateDistrictRepository.findAll();
+
+        for(SenateDistrictEntity district: senateDistrictEntities){
+
+            returnValue.add(new ModelMapper().map(district, SenateDistrictDto.class));
+        }
+
+        return returnValue;
     }
 }

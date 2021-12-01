@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CityServiceImpl implements CityService {
 
@@ -81,7 +84,9 @@ public class CityServiceImpl implements CityService {
     public List<CityResponse> allCities() {
         List<CityResponse> returnValue = new ArrayList<>();
 
-        List<CityEntity> cities = this.cityRepository.findAll();
+        List<CityEntity> cities = this.cityRepository.findAll().stream()
+                .sorted(Comparator.comparing(CityEntity::getName))
+                .collect(Collectors.toList());
 
         for(CityEntity city: cities){
 

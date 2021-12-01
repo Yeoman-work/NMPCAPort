@@ -11,6 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class NMHouseDistrictServiceImpl implements NMHouseDistrictService {
 
@@ -61,6 +64,21 @@ public class NMHouseDistrictServiceImpl implements NMHouseDistrictService {
     public NMHouseDistrictEntity findNMHouseDistrictEntity(String nmHouseDistrictId) {
 
         return this.nmHouseDistrictRepository.findByHouseDistrictId(nmHouseDistrictId);
+    }
+
+    @Override
+    public List<NMHouseDistrictDto> getAllNMHouseDistrictResponses() {
+
+        List<NMHouseDistrictDto> returnValue = new ArrayList<>();
+
+        List<NMHouseDistrictEntity> allDistricts = this.nmHouseDistrictRepository.findAll();
+
+        for(NMHouseDistrictEntity district: allDistricts){
+
+            returnValue.add(new ModelMapper().map(district, NMHouseDistrictDto.class));
+        }
+
+        return returnValue;
     }
 
 

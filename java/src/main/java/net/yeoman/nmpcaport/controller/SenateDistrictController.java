@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/senateDistricts")
 public class SenateDistrictController {
@@ -23,6 +26,20 @@ public class SenateDistrictController {
         SenateDistrictDto senateDistrictDto = this.senateDistrictService.getDistrict(districtId);
 
         return new ModelMapper().map(senateDistrictDto, SenateDistrictResponseModel.class);
+    }
+
+    @GetMapping
+    public List<SenateDistrictResponseModel> getAllSenateDistrictResponses(){
+        List<SenateDistrictResponseModel> returnValue = new ArrayList<>();
+
+        List<SenateDistrictDto> districtDtoList = this.senateDistrictService.getAllSenateDistricts();
+
+        for(SenateDistrictDto district: districtDtoList){
+
+            returnValue.add(new ModelMapper().map(district, SenateDistrictResponseModel.class));
+        }
+
+        return returnValue;
     }
 
     @PostMapping

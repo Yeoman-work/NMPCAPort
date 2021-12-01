@@ -11,6 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CongressionalDistrictServiceImpl implements CongressionalDistrictService {
 
@@ -23,7 +26,6 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
 
     @Override
     public CongressionalDistrictDto getCongressionalDistrict(String congressionalDistrictId) {
-
         return null;
     }
 
@@ -53,5 +55,18 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
     @Override
     public CongressionalDistrictDto deleteCongressionalDistrict(String congressionalDistrictId) {
         return null;
+    }
+
+    @Override
+    public List<CongressionalDistrictDto> findAllCongressionalDistricts(){
+        List<CongressionalDistrictDto> returnValue = new ArrayList<>();
+
+        List<CongressionalDistrictEntity> congressionalDistrictEntities = this.congressionalDistrictRepository.findAll();
+
+        for(CongressionalDistrictEntity district: congressionalDistrictEntities){
+
+            returnValue.add(new ModelMapper().map(district, CongressionalDistrictDto.class));
+        }
+        return returnValue;
     }
 }

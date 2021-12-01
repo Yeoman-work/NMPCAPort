@@ -13,6 +13,9 @@ public class SiteDetailsRequestModel {
     private String countyId;
     private String zipCodeId;
     private String healthCenterId;
+    private String nmHouseDistrictId;
+    private String senateDistrictId;
+    private String congressionalDistrictId;
 
     public String getName() {
         return name;
@@ -62,5 +65,27 @@ public class SiteDetailsRequestModel {
         this.healthCenterId = healthCenterId;
     }
 
+    public String getNmHouseDistrictId() {
+        return nmHouseDistrictId;
+    }
 
+    public void setNmHouseDistrictId(String nmHouseDistrictId) {
+        this.nmHouseDistrictId = nmHouseDistrictId;
+    }
+
+    public String getSenateDistrictId() {
+        return senateDistrictId;
+    }
+
+    public void setSenateDistrictId(String senateDistrictId) {
+        this.senateDistrictId = senateDistrictId;
+    }
+
+    public String getCongressionalDistrictId() {
+        return congressionalDistrictId;
+    }
+
+    public void setCongressionalDistrictId(String congressionalDistrictId) {
+        this.congressionalDistrictId = congressionalDistrictId;
+    }
 }

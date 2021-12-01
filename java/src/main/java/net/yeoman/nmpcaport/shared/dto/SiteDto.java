@@ -1,12 +1,12 @@
 package net.yeoman.nmpcaport.shared.dto;
 
-import net.yeoman.nmpcaport.entities.CityEntity;
-import net.yeoman.nmpcaport.entities.CountyEntity;
-import net.yeoman.nmpcaport.entities.HealthCenterEntity;
-import net.yeoman.nmpcaport.entities.ZipCodeEntity;
+import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
 public class SiteDto {
@@ -28,6 +28,12 @@ public class SiteDto {
     private ZipCodeEntity zipCode;
     private String createdAt;
     private String updatedAt;
+    private NMHouseDistrictEntity nmHouseDistrictEntity;
+    private SenateDistrictEntity senateDistrictEntity;
+    private CongressionalDistrictEntity congressionalDistrict;
+    private NMHouseDistrictResponse nmHouseDistrictResponse;
+    private SenateDistrictResponseModel senateDistrictResponseModel;
+    private CongressionalDistrictResponse congressionalDistrictResponse;
 
     public Long getId() {
         return id;
@@ -163,5 +169,53 @@ public class SiteDto {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public NMHouseDistrictEntity getNmHouseDistrictEntity() {
+        return nmHouseDistrictEntity;
+    }
+
+    public void setNmHouseDistrictEntity(NMHouseDistrictEntity nmHouseDistrictEntity) {
+        this.nmHouseDistrictEntity = nmHouseDistrictEntity;
+    }
+
+    public SenateDistrictEntity getSenateDistrictEntity() {
+        return senateDistrictEntity;
+    }
+
+    public void setSenateDistrictEntity(SenateDistrictEntity senateDistrictEntity) {
+        this.senateDistrictEntity = senateDistrictEntity;
+    }
+
+    public CongressionalDistrictEntity getCongressionalDistrict() {
+        return congressionalDistrict;
+    }
+
+    public void setCongressionalDistrict(CongressionalDistrictEntity congressionalDistrict) {
+        this.congressionalDistrict = congressionalDistrict;
+    }
+
+    public NMHouseDistrictResponse getNmHouseDistrictResponse() {
+        return nmHouseDistrictResponse;
+    }
+
+    public void setNmHouseDistrictResponse(NMHouseDistrictResponse nmHouseDistrictResponse) {
+        this.nmHouseDistrictResponse = nmHouseDistrictResponse;
+    }
+
+    public SenateDistrictResponseModel getSenateDistrictResponseModel() {
+        return senateDistrictResponseModel;
+    }
+
+    public void setSenateDistrictResponseModel(SenateDistrictResponseModel senateDistrictResponseModel) {
+        this.senateDistrictResponseModel = senateDistrictResponseModel;
+    }
+
+    public CongressionalDistrictResponse getCongressionalDistrictResponse() {
+        return congressionalDistrictResponse;
+    }
+
+    public void setCongressionalDistrictResponse(CongressionalDistrictResponse congressionalDistrictResponse) {
+        this.congressionalDistrictResponse = congressionalDistrictResponse;
     }
 }
