@@ -55,7 +55,28 @@ public class ServiceEntity implements Serializable {
     public ServiceEntity() {
     }
 
+    public ServiceEntity(Long id, String serviceId, String name, String abbr) {
+        this.id = id;
+        this.serviceId = serviceId;
+        this.name = name;
+        this.abbr = abbr;
+    }
 
+    public ServiceEntity(Long id,
+                         String serviceId,
+                         String name,
+                         String abbr,
+                         Date createdAt,
+                         Date updatedAt,
+                         List<SiteEntity> sites) {
+        this.id = id;
+        this.serviceId = serviceId;
+        this.name = name;
+        this.abbr = abbr;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.sites = sites;
+    }
 
     public Long getId() {
         return id;

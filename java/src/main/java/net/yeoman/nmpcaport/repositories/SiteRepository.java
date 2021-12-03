@@ -10,4 +10,5 @@ public interface SiteRepository extends CrudRepository<SiteEntity, Long> {
     List<SiteEntity> findAll();
 
     SiteEntity findBySiteId(String siteId);
+
 }

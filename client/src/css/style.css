@@ -1,0 +1,12 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.heightFullPage{
+    height: 1050px;
+}
+
+.height500{
+    height: 500px;
+}

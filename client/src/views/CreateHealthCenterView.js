@@ -4,11 +4,18 @@ import axios from "axios";
 import HealthCenterForm from "../components/HealthCenterForm";
 import Header from "../components/Header";
 import SiteForm from "../components/SiteForm";
-
+import AddAnotherSite from "../components/AddAnotheSite";
+import '../css/style.css'
 
 
 const CreateHealthCenterView = props =>{
     const navigate = useNavigate();
+    const [healthCenterResponse, setHealthCenterResponse] = useState({
+        name: '',
+        nameAbbr: '',
+        siteDetailsNestedResponse: [],
+
+    })
     const [healthCenterInfo, setHealthCenterInfo] = useState({
 
 
@@ -23,13 +30,14 @@ const CreateHealthCenterView = props =>{
         newSite:{
             name: ''.trim().toLowerCase(),
             streetAddress: ''.trim().toLowerCase(),
-            cityId: {},
-            countyId: {},
-            zipCodeId: {},
-            healthCenterId: {},
-            nmHouseDistrictId: {},
-            senateDistrictId: {},
-            congressionalDistrictId: {},
+            city: {id: '', name: ''},
+            county: {id: '', name: ''},
+            zipCode: {id: '', name: ''},
+            healthCenter: {id: '', name: ''},
+            nmHouseDistrict: {id: '', name: ''},
+            senateDistrict:{id: '', name: ''},
+            congressionalDistrict: {id: '', name: ''},
+            services: {id: '', name: ''}
         },
 
         nmHouseDistricts: [],
@@ -135,6 +143,21 @@ const CreateHealthCenterView = props =>{
 
             try{
 
+                
+
+            }catch(error){
+
+
+            }
+        })()
+    })
+
+    useEffect(()=>{
+
+        (async ()=>{
+
+            try{
+
                 const contactsResponse = await axios.get('http://localhost:8080/contacts', {
 
                     headers:{
@@ -183,6 +206,7 @@ const CreateHealthCenterView = props =>{
 
                 healthCareResponseObj['zipCodes'] = zipCodesResponse.data;
 
+
                 setHealthCenterInfo(healthCareResponseObj);
 
             }catch(error){
@@ -226,8 +250,38 @@ const CreateHealthCenterView = props =>{
     }
 
 
+    const saveHealthCenter = async (e) =>{
+        e.preventDefault();
+
+        let healthCenterInfoObj = {...healthCenterInfo};
+
+
+
+        try{
+
+            const savedHealthCenterResponse = await axios.post('http://localhost:8080/', {
+                name: healthCenterInfoObj.name,
+                nameAbbr: healthCenterInfoObj.nameAbbr
+            },{
+
+            })
+
+            const healthCenterId = savedHealthCenterResponse.data.healthCenterId;
+
+
+
+
+        }catch(error){
+
+
+
+        }
+
+    }
+
+
     return(
-        <div>
+        <div className={'heightFullPage align-middle'}>
             <Header/>
             {
                 healthCenterInfo.healthCenterProcess === 0?
@@ -236,7 +290,11 @@ const CreateHealthCenterView = props =>{
             }
             {
                 healthCenterInfo.healthCenterProcess === 1?
-                    <SiteForm healthCenterInfo={healthCenterInfo} setHealthCenterInfo={setHealthCenterInfo} formProgression={healthcareFormProgression}/>
+                    <div  className={'d-inline-flex m-auto'}>
+                        <AddAnotherSite healthCenterInfo={healthCenterInfo} setHealthCenterInfo={setHealthCenterInfo}/>
+                        <SiteForm healthCenterInfo={healthCenterInfo} setHealthCenterInfo={setHealthCenterInfo} formProgression={healthcareFormProgression}/>
+                    </div>
+
                     : null
             }
             {

@@ -1,12 +1,20 @@
 package net.yeoman.nmpcaport.controller;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.yeoman.nmpcaport.io.request.service.ServiceDetailsRequestModel;
+import net.yeoman.nmpcaport.io.request.service.ServiceRequestListModel;
 import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.services.Impl.ServiceServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.ServiceDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/services")
@@ -31,6 +39,24 @@ public class ServiceController {
 
         return new ModelMapper().map(serviceDto, ServiceResponse.class);
     }
+
+    @PostMapping(value = "/bulkServices", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+                                             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public List<ServiceResponse> createServicesBulk(@RequestBody ServiceRequestListModel serviceRequestListModel){
+            List<ServiceDto> serviceDtoConversionList = new ArrayList<>();
+            List<ServiceResponse> returnValue = new ArrayList<>();
+
+
+             serviceDtoConversionList = this.serviceImpl.createServiceBulk(serviceRequestListModel);
+
+             for(ServiceDto serviceDto: serviceDtoConversionList){
+
+                 returnValue.add(new ModelMapper().map(serviceDto, ServiceResponse.class));
+             }
+
+             return returnValue;
+    }
+
 
     @PutMapping
     public String updateService(){

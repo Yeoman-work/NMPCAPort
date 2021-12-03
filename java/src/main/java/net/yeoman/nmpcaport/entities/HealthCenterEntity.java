@@ -54,6 +54,13 @@ public class HealthCenterEntity implements Serializable {
     @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CongressionalDistrictEntity> congressionalDistrictEntities;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "fundsHealthCenters",
+            joinColumns = @JoinColumn(name = "health_center_entity_id"),
+            inverseJoinColumns = @JoinColumn(name = "fund_entity_id")
+    )
+    private List<FundEntity> fundEntities;
 
     @PrePersist
     protected void onCreate(){
@@ -185,5 +192,13 @@ public class HealthCenterEntity implements Serializable {
 
     public void setCongressionalDistrictEntities(List<CongressionalDistrictEntity> congressionalDistrictEntities) {
         this.congressionalDistrictEntities = congressionalDistrictEntities;
+    }
+
+    public List<FundEntity> getFundEntities() {
+        return fundEntities;
+    }
+
+    public void setFundEntities(List<FundEntity> fundEntities) {
+        this.fundEntities = fundEntities;
     }
 }

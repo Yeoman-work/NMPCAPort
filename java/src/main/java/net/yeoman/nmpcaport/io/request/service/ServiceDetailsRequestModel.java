@@ -5,7 +5,7 @@ import java.util.List;
 public class ServiceDetailsRequestModel {
 
     private String name;
-    private String ABBR;
+    private String abbr;
     private List<String> siteIdentifier;
     private String createdAt;
     private String updatedAt;
@@ -18,12 +18,12 @@ public class ServiceDetailsRequestModel {
         this.name = name;
     }
 
-    public String getABBR() {
-        return ABBR;
+    public String getAbbr() {
+        return abbr;
     }
 
-    public void setABBR(String ABBR) {
-        this.ABBR = ABBR.trim().toLowerCase();
+    public void setAbbr(String abbr) {
+        this.abbr = abbr;
     }
 
     public String getCreatedAt() {

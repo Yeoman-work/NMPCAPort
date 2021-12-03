@@ -73,13 +73,21 @@ public class SiteEntity implements Serializable {
     @JoinColumn(name = "senate_district_entity_id")
     private SenateDistrictEntity senateDistrict;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "sites_services",
             joinColumns = @JoinColumn(name = "site_entity_id"),
             inverseJoinColumns = @JoinColumn(name = "service_entity_id")
     )
     private List<ServiceEntity> services;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "fundsSites",
+            joinColumns = @JoinColumn(name = "site_entity_id"),
+            inverseJoinColumns = @JoinColumn(name = "fund_entity_id")
+    )
+    private List<FundEntity> fundEntities;
 
     public SiteEntity() {
     }
@@ -146,6 +154,14 @@ public class SiteEntity implements Serializable {
 
     public void setStreetAddress(String streetAddress) {
         this.streetAddress = streetAddress.trim().toLowerCase();
+    }
+
+    public List<FundEntity> getFundEntities() {
+        return fundEntities;
+    }
+
+    public void setFundEntities(List<FundEntity> fundEntities) {
+        this.fundEntities = fundEntities;
     }
 
     public Date getCreatedAt() {

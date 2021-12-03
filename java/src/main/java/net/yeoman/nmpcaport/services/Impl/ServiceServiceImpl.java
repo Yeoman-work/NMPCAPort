@@ -1,7 +1,10 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.yeoman.nmpcaport.entities.ServiceEntity;
 import net.yeoman.nmpcaport.io.request.service.ServiceDetailsRequestModel;
+import net.yeoman.nmpcaport.io.request.service.ServiceRequestListModel;
 import net.yeoman.nmpcaport.repositories.ServiceRepository;
 import net.yeoman.nmpcaport.services.ServiceService;
 import net.yeoman.nmpcaport.shared.dto.ServiceDto;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,8 +50,42 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
 
+
+
     @Override
     public ServiceDto deleteUser(String serviceId) {
         return null;
     }
+
+    @Override
+    public List<ServiceDto> createServiceBulk(ServiceRequestListModel serviceDetailsRequestModelList) {
+        List<ServiceDto> converted = new ArrayList<>();
+        List<ServiceEntity> serviceEntities = new ArrayList<>();
+
+        for(ServiceDetailsRequestModel service: serviceDetailsRequestModelList.getServiceRequestList()){
+
+
+            converted.add(new ModelMapper().map(service, ServiceDto.class));
+        }
+
+        for(ServiceDto serviceDto: converted ){
+
+            serviceEntities.add(new ModelMapper().map(serviceDto, ServiceEntity.class));
+        }
+
+        converted.clear();
+
+        for(ServiceEntity serviceEntity: serviceEntities){
+
+            serviceEntity.setServiceId(utils.generateRandomID());
+            ServiceEntity service = this.serviceRepository.save(serviceEntity);
+
+            converted.add(new ModelMapper().map(service, ServiceDto.class));
+        }
+
+        return converted;
+
+    }
+
+
 }

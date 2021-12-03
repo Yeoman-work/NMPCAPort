@@ -9,7 +9,7 @@ public class ServiceDto {
     private Long id;
     private String serviceId;
     private String name;
-    private String ABBR;
+    private String abbr;
     private String createdAt;
     private String updatedAt;
     private List<String> siteIdentifier;
@@ -39,12 +39,12 @@ public class ServiceDto {
         this.name = name;
     }
 
-    public String getABBR() {
-        return ABBR;
+    public String getAbbr() {
+        return abbr;
     }
 
-    public void setABBR(String ABBR) {
-        this.ABBR = ABBR;
+    public void setAbbr(String abbr) {
+        this.abbr = abbr;
     }
 
     public String getCreatedAt() {
