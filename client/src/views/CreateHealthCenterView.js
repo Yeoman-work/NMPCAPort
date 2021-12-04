@@ -18,19 +18,26 @@ import SiteListComponent from "../components/SiteListComponent";
 function healthCenterReducer(healthCenterState, action){
 
     switch(action.type){
-        case HEALTH_CARE_FIELDS.NAME:
-            console.log({...healthCenterState, name: action.payload})
-            return {...healthCenterState, name: action.payload};
+        case (HEALTH_CARE_FIELDS.NAME):
+            return produce(healthCenterState, draft=>{
+                draft.name = action.payload;
+            })
 
         case HEALTH_CARE_FIELDS.NAME_ABBR:
-            console.log({...healthCenterState, nameAbbr: action.payload})
-            return {...healthCenterState, nameAbbr: action.payload}
+            return produce(healthCenterState, draft=>{
+                draft.nameAbbr = action.payload;
+            })
 
         case HEALTH_CARE_FIELDS.CONTACT_IDS:
-            return {...healthCenterState, contactIds: action.value}
+
+            return produce(healthCenterState, draft=>{
+                draft.contactIds.push(action.payload);
+            })
 
         case HEALTH_CARE_FIELDS.USER_IDS:
-            return {...healthCenterState, userIds: action.value }
+            return produce(healthCenterState, draft=>{
+                draft.contactIds.push(action.payload);
+            })
 
         default:
             return healthCenterState;
@@ -40,36 +47,14 @@ function healthCenterReducer(healthCenterState, action){
 const siteReducer = (siteState, action)=>{
 
     switch(action.type){
-        case SITE_FIELDS.NAME:
+
+
+        default:
+            const field = action.type;
             console.log(siteState);
             return produce(siteState, draft=>{
-                draft.name = action.payload;
-            })
 
-        case SITE_FIELDS.STREET_ADDRESS:
-            console.log(siteState);
-            return produce(siteState, draft=>{
-                draft.streetAddress = action.payload;
-            })
-
-        case SITE_FIELDS.CITY:
-            return produce(siteState, draft=>{
-                draft.city = action.payload;
-            })
-
-        case SITE_FIELDS.COUNTY:
-            return produce(siteState, draft=>{
-                draft.county = action.payload;
-            })
-
-        case SITE_FIELDS.ZIP_CODE:
-            return produce(siteState, draft=>{
-                draft.zipCode = action.payload;
-            })
-
-        case SITE_FIELDS.HEALTH_CENTER:
-            return produce(siteState, draft=>{
-                draft.healthCenter = action.payload;
+                draft[field] = action.payload;
             })
 
     }
