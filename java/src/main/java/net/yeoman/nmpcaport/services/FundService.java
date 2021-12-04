@@ -11,5 +11,6 @@ public interface FundService {
     public FundDto createFund(FundDto fundDto);
     public FundDto updateFund(FundDto fundDto, String fundId);
     public FundDto deleteFund(String fundId);
+    public List<FundDto> getAllFunding();
     public List<FundDto> createFundBulk(FundRequestListModel fundRequestListModel);
 }

@@ -27,8 +27,17 @@ public class ServiceServiceImpl implements ServiceService {
     private Utils utils;
 
     @Override
-    public List<ServiceDto> allService() {
-        return null;
+    public List<ServiceDto> allServices() {
+        List<ServiceDto> returnValue = new ArrayList<>();
+
+        List<ServiceEntity> serviceEntityList = this.serviceRepository.findAll();
+
+        for(ServiceEntity serviceEntity: serviceEntityList){
+
+            returnValue.add(new ModelMapper().map(serviceEntity, ServiceDto.class));
+        }
+
+        return returnValue;
     }
 
     @Override

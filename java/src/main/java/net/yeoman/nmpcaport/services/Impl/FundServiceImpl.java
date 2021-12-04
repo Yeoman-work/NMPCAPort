@@ -72,8 +72,23 @@ public class FundServiceImpl implements FundService {
     }
 
     @Override
+    public List<FundDto> getAllFunding() {
+
+        List<FundDto> returnValue = new ArrayList<>();
+        List<FundEntity> fundEntityList = this.fundRepository.findAll();
+
+        for(FundEntity fundEntity: fundEntityList){
+
+            returnValue.add(new ModelMapper().map(fundEntity, FundDto.class));
+        }
+
+        return returnValue;
+    }
+
+    @Override
     public List<FundDto> createFundBulk(FundRequestListModel fundRequestListModel) {
         List<FundDto> fundDtoList = new ArrayList<>();
+
         for(FundRequestModel fund: fundRequestListModel.getFundRequestModelList()){
 
             FundEntity fundEntity = new ModelMapper().map(fund, FundEntity.class);

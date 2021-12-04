@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("funds")
+@RequestMapping("/funds")
 public class FundController {
 
     @Autowired
@@ -30,18 +30,37 @@ public class FundController {
         return new ModelMapper().map(fundDto, FundResponseModel.class);
     }
 
+    @GetMapping
+    public List<FundResponseModel> getAllFunding(){
+        List<FundResponseModel> returnValue = new ArrayList<>();
+        List<FundDto> fundDtoList = this.fundService.getAllFunding();
+
+        for(FundDto fund: fundDtoList){
+
+            returnValue.add(new ModelMapper().map(fund, FundResponseModel.class));
+        }
+
+        return returnValue;
+    }
+
     @PostMapping
-    public FundDto createFund(FundRequestModel fundRequestModel){
+    public FundDto createFund(@RequestBody FundRequestModel fundRequestModel){
 
         return  this.fundService.createFund(new ModelMapper().map(fundRequestModel, FundDto.class));
     }
 
 
     @PostMapping("/bulk")
-    public List<FundDto> createFundsBulk(FundRequestListModel fundRequestListModel){
+    public List<FundResponseModel> createFundsBulk(@RequestBody FundRequestListModel fundRequestListModel){
+        List<FundResponseModel> returnValue = new ArrayList<>();
+        List<FundDto> fundDtoList = this.fundService.createFundBulk(fundRequestListModel);
 
+        for(FundDto fund: fundDtoList){
 
-        return this.fundService.createFundBulk(fundRequestListModel);
+            returnValue.add(new ModelMapper().map(fund, FundResponseModel.class));
+        }
+
+        return returnValue;
 
     }
 

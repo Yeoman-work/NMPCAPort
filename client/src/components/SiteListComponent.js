@@ -2,19 +2,22 @@ import React from "react";
 
 
 
-const AddAnotherSite = props =>{
+const SiteListComponent = props =>{
 
-    const {healthCenterInfo} = props
+    const {
+           healthCenterName,
+           siteListing
+    } = props;
 
     return(
         <div className={'d-inline-block'}>
 
-                <h4>{healthCenterInfo.newHealthCenter.name}</h4>
+                <h4>{healthCenterName}</h4>
 
                 <h5>Sites</h5>
                 <div className={' overflow-auto height500'}>
                     {
-                        healthCenterInfo.newSites.map((site, index)=>{
+                        siteListing.map((site, index)=>{
 
                             return(
                                 <div>
@@ -38,4 +41,4 @@ const AddAnotherSite = props =>{
     )
 }
 
-export default AddAnotherSite
+export default SiteListComponent

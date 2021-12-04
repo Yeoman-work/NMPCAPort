@@ -31,6 +31,18 @@ public class ServiceController {
         return new ModelMapper().map(serviceDto, ServiceResponse.class);
     }
 
+    @GetMapping
+    public List<ServiceResponse> getAllService(){
+        List<ServiceResponse> returnValue = new ArrayList<>();
+        List<ServiceDto> serviceDtoList = this.serviceImpl.allServices();
+
+        for(ServiceDto serviceDto: serviceDtoList){
+
+            returnValue.add(new ModelMapper().map(serviceDto, ServiceResponse.class));
+        }
+        return returnValue;
+    }
+
     @PostMapping
     public ServiceResponse createService(@RequestBody ServiceDetailsRequestModel serviceDetails){
 
