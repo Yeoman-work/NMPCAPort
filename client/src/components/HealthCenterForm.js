@@ -12,7 +12,7 @@ const HealthCenterForm = props =>{
         formDataFields
         } = props;
 
-
+   console.log(formDataState)
     return(
 
         <form className={'w-50 m-auto'}>

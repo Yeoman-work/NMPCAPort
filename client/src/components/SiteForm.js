@@ -14,6 +14,18 @@ const SiteForm = props =>{
           formDataFields
    } = props;
 
+   const InList = (List, id) =>{
+       let isPresent = false;
+
+       for(let item of List){
+
+           if(item['id'] === id){
+               isPresent = true;
+           }
+       }
+
+       return isPresent;
+   }
 
 
 // Site form component adds Site to a state list until saved to DB
@@ -47,7 +59,7 @@ const SiteForm = props =>{
                             <label>City</label>
                             <select className={'form-control'}
                                     name={siteDataFields.CITY}
-                                    value={siteState.city.id}
+                                    value={siteState.city.id + '/' + siteState.city.name}
                                     onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})} >
                                 <option>Choose a City</option>
                                 {
@@ -55,7 +67,7 @@ const SiteForm = props =>{
                                         formData.cities.map(({name, cityId}, index)=>{
 
                                             return(
-                                                <option key={index} value={cityId}>{name}</option>
+                                                <option key={index} value={cityId + '/' + name}>{name}</option>
                                             )
                                         })
                                         : null
@@ -67,7 +79,7 @@ const SiteForm = props =>{
                                 <label>County</label>
                                 <select className={'form-control'}
                                         name={siteDataFields.COUNTY}
-                                        value={siteState.county.id}
+                                        value={siteState.county.id + '/' + siteState.county.name}
                                         onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}>
                                     <option>Choose a County</option>
                                     {
@@ -75,7 +87,7 @@ const SiteForm = props =>{
                                             formData.counties.map(({countyId, name}, index)=>{
 
                                                 return(
-                                                    <option key={index} value={countyId}>{name}</option>
+                                                    <option key={index} value={countyId + '/' + name}>{name}</option>
                                                 )
                                             })
                                             : null
@@ -86,7 +98,7 @@ const SiteForm = props =>{
                                 <label>Zip Code</label>
                                 <select name={siteDataFields.ZIP_CODE}
                                         className={'form-control'}
-                                        value={siteState.zipCode.id}
+                                        value={siteState.zipCode.id + '/' + siteState.zipCode.name}
                                         onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}>
                                     <option>Select a zip Code</option>
                                     {
@@ -94,7 +106,7 @@ const SiteForm = props =>{
                                             formData.zipCodes.map(({zipCodeId, name}, index)=>{
 
                                                 return(
-                                                    <option key={index} value={zipCodeId}>{name}</option>
+                                                    <option key={index} value={zipCodeId + '/' + name}>{name}</option>
                                                 )
                                             })
                                             : null
@@ -102,49 +114,55 @@ const SiteForm = props =>{
                                 </select>
                             </div>
                         </div>
-                        <div className={'row'}>
-                            <div className={'col'}>
-                                <label>Service</label>
+                        <div className={'row mb-2 p-3'}>
+                            <div className={'col overflow-auto'}>
+                                <label>Service</label><br/>
                                 {
                                     formData?
                                         formData.services.map(({serviceId, name}, index)=>{
 
                                             return(
-                                                <label for={serviceId}> <input type="checkbox"
-                                                                      itemID={serviceId}
-                                                                      name={siteDataFields.SERVICES}
-                                                                      className={'form-control'}
-                                                                      value={serviceId}
-                                                                      onChange={(e)=>dispatchSite({type: e.target.name,
-                                                                                                             payload: {id : e.target.value, name: name}})}
-                                                />{name}</label>
+                                                    <div key={index} className={'d-flex justify-content-start'}>
+
+                                                        <label htmlFor={serviceId}>
+                                                            <input type="checkbox"
+                                                                   itemID={serviceId}
+                                                                   name={siteDataFields.SERVICES}
+                                                                   className={'form-check-input me-2'}
+                                                                   checked={InList(siteState.services, serviceId)}
+                                                                   value={serviceId}
+                                                                   onChange={(e)=>dispatchSite({type: e.target.name,
+                                                                       payload: {target : e.target, name: name}})}
+                                                            />
+                                                            {name}</label>
+                                                    </div>
                                             )
                                         })
                                         : null
                                 }
 
                             </div>
-                            <div className={'col'}>
+                            <div className={'col overflow-auto'}>
                                 <label>Funding</label>
                                 {
                                     formData?
                                         formData.funding.map(({ name, fundId }, index)=>{
                                            
                                             return(
-
-                                                <label htmlFor={fundId}>
-                                                    <input
-                                                        type="checkbox"
-                                                        className={'btn-check'}
-                                                        name={siteDataFields.FUNDING}
-                                                        value={fundId}
-                                                        itemID={fundId}
-                                                        autoComplete={'off'}
-                                                        onChange={(e)=>dispatchSite({type: e.target.name,
-                                                                                                               payload: {id: e.target.id, name: name}})}
-                                                    />
-                                                    {name}
-                                                </label>
+                                                <div key={index} className={'d-flex justify-content-start'}>
+                                                    <label htmlFor={fundId}>
+                                                        <input
+                                                            type="checkbox"
+                                                            name={siteDataFields.FUNDING}
+                                                            className={'form-check-input me-2'}
+                                                            checked={InList(siteState.funding, fundId)}
+                                                            value={fundId}
+                                                            itemID={fundId}
+                                                            onChange={(e)=>dispatchSite({type: e.target.name,
+                                                                payload: {target: e.target , name: name}})}
+                                                        />
+                                                        {name}</label>
+                                                </div>
                                             )
                                         })
                                         : null
