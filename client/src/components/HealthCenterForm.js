@@ -5,14 +5,11 @@ import React from "react";
 
 const HealthCenterForm = props =>{
     const {healthCenterState,
-        dispatchHealthCenter,
-        healthCareFields,
-        formDataState,
-        dispatchFormData,
-        formDataFields
+            healthCareFields,
+            dispatchHealthCenter
         } = props;
 
-   console.log(formDataState)
+
     return(
 
         <form className={'w-50 m-auto'}>
@@ -22,7 +19,7 @@ const HealthCenterForm = props =>{
                     <label>HealthCenter Name</label>
                     <input type="text"
                            value={healthCenterState.name}
-                           name={healthCareFields.NAME}
+                           name={healthCareFields.HEALTH_CENTER_NAME}
                            className={'form-control'}
                            onChange={(e)=>dispatchHealthCenter({type: e.target.name, payload: e.target.value})}
                     />
@@ -31,7 +28,7 @@ const HealthCenterForm = props =>{
                     <label>Name Abbreviation</label>
                     <input type="text"
                            value={healthCenterState.nameAbbr}
-                           name={healthCareFields.NAME_ABBR}
+                           name={healthCareFields.HEALTH_CENTER_ABBR}
                            className={'form-control'}
                            onChange={(e)=>dispatchHealthCenter({type: e.target.name, payload: e.target.value})}
                     />
@@ -74,8 +71,8 @@ const HealthCenterForm = props =>{
                     }
                 </div>
             </div>
-                              <button onClick={(e)=>dispatchFormData({type: formDataFields.FORM_DECREMENT})}>Back</button>
-                              <button onClick={(e)=>dispatchFormData({type: formDataFields.FORM_INCREMENT})}>Next</button>
+                              <button onClick={(e)=>dispatchHealthCenter({type: healthCareFields.FORM_DECREMENT})}>Back</button>
+                              <button onClick={(e)=>dispatchHealthCenter({type: healthCareFields.FORM_INCREMENT})}>Next</button>
 
 
 

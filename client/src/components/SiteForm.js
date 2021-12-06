@@ -9,9 +9,7 @@ const SiteForm = props =>{
    const {siteState,
           siteDataFields,
           dispatchSite,
-          dispatchFormData,
-          formData,
-          formDataFields
+          formData
    } = props;
 
    const InList = (List, id) =>{
@@ -29,7 +27,8 @@ const SiteForm = props =>{
 
 
 // Site form component adds Site to a state list until saved to DB
-
+    console.log(formData.county_list);
+   console.log(('look above'))
     return(
         <div className={'w-50 m-auto d-inline-block'}>
             <div className={'align-top'}>
@@ -40,7 +39,7 @@ const SiteForm = props =>{
                             <input type="text"
                                    className={'form-control w-50 m-auto'}
                                    value={siteState.name}
-                                   name={siteDataFields.NAME}
+                                   name={siteDataFields.SITE_NAME}
                                    onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}
                             />
                         </div>
@@ -64,7 +63,7 @@ const SiteForm = props =>{
                                 <option>Choose a City</option>
                                 {
                                     formData?
-                                        formData.cities.map(({name, cityId}, index)=>{
+                                        formData.city_list .map(({name, cityId}, index)=>{
 
                                             return(
                                                 <option key={index} value={cityId + '/' + name}>{name}</option>
@@ -83,8 +82,9 @@ const SiteForm = props =>{
                                         onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}>
                                     <option>Choose a County</option>
                                     {
+
                                         formData?
-                                            formData.counties.map(({countyId, name}, index)=>{
+                                            formData.county_list.map(({countyId, name}, index)=>{
 
                                                 return(
                                                     <option key={index} value={countyId + '/' + name}>{name}</option>
@@ -103,7 +103,7 @@ const SiteForm = props =>{
                                     <option>Select a zip Code</option>
                                     {
                                         formData?
-                                            formData.zipCodes.map(({zipCodeId, name}, index)=>{
+                                            formData.zipCode_list.map(({zipCodeId, name}, index)=>{
 
                                                 return(
                                                     <option key={index} value={zipCodeId + '/' + name}>{name}</option>
@@ -119,7 +119,7 @@ const SiteForm = props =>{
                                 <label>Service</label><br/>
                                 {
                                     formData?
-                                        formData.services.map(({serviceId, name}, index)=>{
+                                        formData.service_list.map(({serviceId, name}, index)=>{
 
                                             return(
                                                     <div key={index} className={'d-flex justify-content-start'}>
@@ -127,7 +127,7 @@ const SiteForm = props =>{
                                                         <label htmlFor={serviceId}>
                                                             <input type="checkbox"
                                                                    itemID={serviceId}
-                                                                   name={siteDataFields.SERVICES}
+                                                                   name={siteDataFields.SITE_SERVICES}
                                                                    className={'form-check-input me-2'}
                                                                    checked={InList(siteState.services, serviceId)}
                                                                    value={serviceId}
@@ -146,14 +146,14 @@ const SiteForm = props =>{
                                 <label>Funding</label>
                                 {
                                     formData?
-                                        formData.funding.map(({ name, fundId }, index)=>{
-                                           
+                                        formData.funding_list.map(({ name, fundId }, index)=>{
+
                                             return(
                                                 <div key={index} className={'d-flex justify-content-start'}>
                                                     <label htmlFor={fundId}>
                                                         <input
                                                             type="checkbox"
-                                                            name={siteDataFields.FUNDING}
+                                                            name={siteDataFields.SITE_FUNDING}
                                                             className={'form-check-input me-2'}
                                                             checked={InList(siteState.funding, fundId)}
                                                             value={fundId}
@@ -173,7 +173,7 @@ const SiteForm = props =>{
                             <div className={'col'}>
                                 <label> NM House district</label>
                                 <select name={'nmHouseDistrictId'}
-                                        value={siteState.nmHouseDistrict.id}
+                                        value={siteState.NM_HOUSE_DISTRICT}
                                         className={'form-control'}
                                         onChange={(e)=>dispatchSite({type: e.target.name,
                                                                                         payload: e.target.value})}
@@ -181,7 +181,7 @@ const SiteForm = props =>{
                                     <option>Choose a District</option>
                                     {
                                         formData?
-                                            formData.nmHouseDistricts.map(({houseDistrictId, name}, index)=>{
+                                            formData.nmHouse_districts.map(({houseDistrictId, name}, index)=>{
 
                                                 return(
                                                     <option key={index} value={{houseDistrictId} + '/' + {name}}>{name}</option>
@@ -193,14 +193,14 @@ const SiteForm = props =>{
                             </div>
                             <div className={'col'}>
                                 <label>Senate District</label>
-                                <select name={'senateDistrictId'}
+                                <select name={siteDataFields.SENATE_DISTRICT}
                                         className={'form-control'}
                                         onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}
                                 >
                                     <option >Choose a Senate District</option>
                                     {
                                         formData?
-                                            formData.senateDistricts.map(({senateDistrictId, name}, index)=>{
+                                            formData.senate_districts.map(({senateDistrictId, name}, index)=>{
 
                                                 return(
                                                     <option key={index} value={{senateDistrictId} + '/' + {name}}>{name}</option>
@@ -212,14 +212,14 @@ const SiteForm = props =>{
                             </div>
                             <div className={'col'}>
                                 <label>Congressional District</label>
-                                <select name={'congressionalDistrictId'}
+                                <select name={siteDataFields.CONGRESSIONAL_DISTRICT}
                                         className={'form-control'}
                                         onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}
                                 >
                                     <option>Choose a district</option>
                                     {
                                         formData?
-                                            formData.congressionalDistricts.map(({congressionalDistrictId, name}, index)=>{
+                                            formData.congressional_districts.map(({congressionalDistrictId, name}, index)=>{
 
                                                 return(
                                                     <option key={index} value={{congressionalDistrictId} + '/' + {name}}>{name}</option>
@@ -231,10 +231,10 @@ const SiteForm = props =>{
                             </div>
                         </div>
                     </div>
-                    <button onClick={(e)=>dispatchFormData({type: formDataFields.FORM_DECREMENT})}>Back</button>
-                    <button onClick={(e)=>dispatchFormData({type: formDataFields.FORM_INCREMENT})}>Add Another Site</button>
-                    <button>Finish</button>
                 </form>
+                <button onClick={(e)=>dispatchSite({type: siteDataFields.FORM_DECREMENT})}>Back</button>
+                <button onClick={(e)=>dispatchSite({type: siteDataFields.NEW_SITE_LIST, payload: {...siteState}, option: e })}>Add Another Site</button>
+                <button>Finish</button>
             </div>
         </div>
 

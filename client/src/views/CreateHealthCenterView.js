@@ -17,91 +17,81 @@ import SiteListComponent from "../components/SiteListComponent";
 function healthCenterReducer(healthCenterState, action){
 
     switch(action.type){
-        case (HEALTH_CARE_FIELDS.NAME):
-            console.log(healthCenterState)
+        case HEALTH_CENTER_FIELDS.HEALTH_CENTER_NAME:
+            console.log(action.payload)
             return produce(healthCenterState, draft=>{
-                draft[HEALTH_CARE_FIELDS.NAME] = action.payload;
+                draft.healthCenter.name = action.payload;
             })
 
-        case HEALTH_CARE_FIELDS.NAME_ABBR:
+        case HEALTH_CENTER_FIELDS.HEALTH_CENTER_ABBR:
+            console.log(action.payload)
             return produce(healthCenterState, draft=>{
-                draft[HEALTH_CARE_FIELDS.NAME_ABBR] = action.payload;
+                draft.healthCenter.nameAbbr = action.payload;
             })
 
-        case HEALTH_CARE_FIELDS.CONTACT_IDS:
-
+        case HEALTH_CENTER_FIELDS.CONTACTS:
             return produce(healthCenterState, draft=>{
-                draft[HEALTH_CARE_FIELDS.CONTACT_IDS].push(action.payload);
+                draft.healthCenter.contacts = [...healthCenterState, ...action.payload]
             })
-
-        case HEALTH_CARE_FIELDS.USER_IDS:
+        case HEALTH_CENTER_FIELDS.USERS:
             return produce(healthCenterState, draft=>{
-                draft[HEALTH_CARE_FIELDS.USER_IDS].push(action.payload);
+                draft.users = [...healthCenterState, ...action.payload];
             })
 
-        default:
-            return healthCenterState;
-    }
-}
-
-const siteReducer = (siteState, action)=>{
-    console.log(siteState);
-    switch(action.type){
-
-        case SITE_FIELDS.NAME:
-            return produce(siteState, draft =>{
-                draft[SITE_FIELDS.NAME] = action.payload;
+        case HEALTH_CENTER_FIELDS.SITE_NAME:
+            return produce(healthCenterState, draft =>{
+                draft.site.name = action.payload;
             })
 
-        case SITE_FIELDS.STREET_ADDRESS:
-            return produce(siteState, draft =>{
+        case HEALTH_CENTER_FIELDS.STREET_ADDRESS:
+            return produce(healthCenterState, draft =>{
                 draft.streetAddress = action.payload;
             })
 
-        case SITE_FIELDS.CITY:
+        case HEALTH_CENTER_FIELDS.CITY:
             const cityString = action.payload.split('/');
             const cityObj = {
                 id: cityString[0],
                 name: cityString[1]
             }
-            return produce(siteState, draft=>{
+            return produce(healthCenterState, draft=>{
                 draft.city = cityObj;
             })
 
-        case SITE_FIELDS.COUNTY:
+        case HEALTH_CENTER_FIELDS.COUNTY:
             const countyString = action.payload.split('/');
             const countyObj = {
                 id: countyString[0],
                 name: countyString[1]
             }
-            return produce(siteState, draft=>{
+            return produce(healthCenterState, draft=>{
                 draft.county = countyObj;
             })
 
-        case SITE_FIELDS.ZIP_CODE:
+        case HEALTH_CENTER_FIELDS.ZIP_CODE:
             const zipCodeString = action.payload.split('/')
             const zipCodeObj ={
                 id: zipCodeString[0],
                 name: zipCodeString[1]
             }
-            return produce(siteState, draft=>{
+            return produce(healthCenterState, draft=>{
                 draft.zipCode = zipCodeObj;
             })
 
-        case SITE_FIELDS.FUNDING:
+        case HEALTH_CENTER_FIELDS.SITE_FUNDING:
             const fundingObj = {
                 id: action.payload.target.value,
                 name: action.payload.name
             }
             console.log(fundingObj);
             if(action.payload.target.checked){
-                return produce(siteState, draft=>{
-                    draft.funding = [...siteState.funding, fundingObj]
+                return produce(healthCenterState, draft=>{
+                    draft.funding = [...healthCenterState.funding, fundingObj]
                 })
             }
 
             if(!action.payload.target.checked){
-                const funding = siteState.funding;
+                const funding = healthCenterState.site.funding;
                 console.log(funding)
                 let newArray = [];
                 for(let i = 0; i < funding.length; i++){
@@ -109,176 +99,179 @@ const siteReducer = (siteState, action)=>{
                         newArray.push(funding[i]);
                     }
                 }
-
-                return produce(siteState, draft=>{
-                    draft.funding = [...newArray];
+                return produce(healthCenterState, draft=>{
+                    draft.site.funding = [...draft.site.funding, ...newArray];
                 })
             }
 
-        case SITE_FIELDS.SERVICES:
+        case HEALTH_CENTER_FIELDS.SITE_SERVICES:
             const serviceObj = {
                 id: action.payload.target.value,
                 name: action.payload.name
             }
             if(action.payload.target.checked){
-                return produce(siteState, draft=>{
-                    draft.services = [...siteState.services, serviceObj];
+                return produce(healthCenterState, draft=>{
+                    draft.site.services = [...healthCenterState.site.services, serviceObj];
                 })
             }
             if(!action.payload.target.checked){
-                const services = siteState.services;
+                const services = healthCenterState.site.services;
                 let newArray = [];
                 for(let i = 0; i < services.length; i++){
                     if(services[i].id !== serviceObj.id){
                         newArray.push(services[i]);
                     }
                 }
-                return produce(siteState, draft=>{
-                    draft.services = [...newArray];
+                return produce(healthCenterState, draft=>{
+                    draft.site.services = [...newArray];
                 })
 
             }
 
-        case SITE_FIELDS.HEALTH_CENTER:
-            return produce(siteState, draft=>{
-                draft[SITE_FIELDS.HEALTH_CENTER] = action.payload;
+        case HEALTH_CENTER_FIELDS.PARENT_HEALTH_CENTER:
+            return produce(healthCenterState, draft=>{
+                draft.healthCenter = action.payload;
             })
 
-        default:
-            return siteState;
+        case HEALTH_CENTER_FIELDS.FORM_INCREMENT:
 
-    }
-}
-
-const formDataReducer = (formDataState, action)=>{
-
-    switch(action.type){
-        case FORM_DATA_FIELDS.FORM_INCREMENT:
-            console.log(action.type);
-            return produce(formDataState, draft =>{
-                draft.healthCenterProcess += 1
+            return produce(healthCenterState, draft =>{
+                draft.formData.healthCenterProcess += 1
             });
 
-        case FORM_DATA_FIELDS.FORM_DECREMENT > 0:
-                return produce(formDataState, draft =>{
-                    draft.healthCenterProcess -= 1;
+        case HEALTH_CENTER_FIELDS.FORM_DECREMENT:
+
+            if(healthCenterState.formData.healthCenterProcess > 0){
+
+                return produce(healthCenterState, draft =>{
+                    draft.formData.healthCenterProcess -= 1;
                 });
-        case FORM_DATA_FIELDS.CITIES:
-            console.log(formDataState);
-            return produce(formDataState, draft=>{
-                draft[FORM_DATA_FIELDS.CITIES] = [...action.payload];
+            }else{
+                return produce(healthCenterState, draft =>{
+
+                    draft.formData.healthCenterProcess = 0;
+                })
+            }
+
+        case HEALTH_CENTER_FIELDS.CITY_LIST:
+
+            return produce(healthCenterState, draft=>{
+                draft.formData.city_list = [...action.payload];
             })
 
-        case FORM_DATA_FIELDS.SERVICES:
-            console.log('service')
-            return produce(formDataState, draft=>{
-                draft[FORM_DATA_FIELDS.SERVICES] = [...formDataState[FORM_DATA_FIELDS.SERVICES],...action.payload];
-            })
-        case FORM_DATA_FIELDS.FUNDING:
-            return produce(formDataState, draft=>{
-                draft[FORM_DATA_FIELDS.FUNDING] = [...action.payload];
+        case HEALTH_CENTER_FIELDS.SERVICE_LIST:
+
+            return produce(healthCenterState, draft=>{
+                draft.formData.service_list = [...healthCenterState.formData.service_list,...action.payload];
             })
 
-        case FORM_DATA_FIELDS.COUNTIES:
-            return produce(formDataState, draft=>{
-                draft[FORM_DATA_FIELDS.COUNTIES] = [...action.payload];
+        case HEALTH_CENTER_FIELDS.FUNDING_LIST:
+            return produce(healthCenterState, draft=>{
+                draft.formData.funding_list = [...healthCenterState.formData.funding_list,...action.payload];
             })
 
-        case FORM_DATA_FIELDS.NEW_SITES:
-            return  produce(formDataState, draft=>{
-                draft[FORM_DATA_FIELDS.NEW_SITES].push(action.payload);
+        case HEALTH_CENTER_FIELDS.COUNTY_LIST:
+            console.log(action.payload)
+            return produce(healthCenterState, draft=>{
+                draft.formData.county_list = [healthCenterState.formData.county_list, ...action.payload];
             })
-        case FORM_DATA_FIELDS.ZIP_CODES:
-            return produce(formDataState, draft=>{
-                draft[FORM_DATA_FIELDS.ZIP_CODES] = [...action.payload];
+
+        case HEALTH_CENTER_FIELDS.NEW_SITE_LIST:
+
+            console.log(action.payload);
+            produce(healthCenterState, draft=>{
+
+                draft.formData.newSites_list = [...healthCenterState.formData.newSites_list, action.payload]
+            })
+
+        case HEALTH_CENTER_FIELDS.ZIP_CODE_LIST:
+            return produce(healthCenterState, draft=>{
+                draft.formData.zipCode_list = [...healthCenterState.formData.zipCode_list, ...action.payload];
             })
 
         default:
-            console.log('ere');
-
+            return healthCenterState;
     }
 }
 
-const HEALTH_CARE_FIELDS ={
 
-    NAME: 'name',
-    NAME_ABBR: 'nameAbbr',
-    CONTACT_IDS: 'contactIds',
-    USER_IDS: 'userIds'
+const HEALTH_CENTER_FIELDS ={
 
-}
-
-const SITE_FIELDS={
-
-    NAME: 'name',
+    HEALTH_CENTER_NAME: 'healthCenterName',
+    HEALTH_CENTER_ABBR: 'healthCenterAbbr',
+    CONTACTS: 'contacts',
+    USERS: 'users',
+    SITE_NAME: 'siteName',
     STREET_ADDRESS: 'streetAddress',
     CITY: 'city',
     COUNTY: 'county',
     ZIP_CODE: 'zipCode',
-    HEALTH_CENTER: 'healthCenter',
-    SERVICES : 'SERVICES',
-    FUNDING: 'funding',
-    ID: 'id'
-}
+    PARENT_HEALTH_CENTER: '',
+    SITE_SERVICES : 'SERVICES',
+    SITE_FUNDING: 'funding',
+    NM_HOUSE_DISTRICT: 'nmHouseDistrict',
+    SENATE_DISTRICT: 'senateDistrict',
+    CONGRESSIONAL_DISTRICT: 'congressionalDistricts',
+    FORM_DATA_SERVICES : 'services',
+    FUNDING_LIST: 'fundList',
+    SERVICE_LIST: 'serviceList',
+    NM_HOUSE_DISTRICT_LIST: 'nmHouseDistricts',
+    SENATE_DISTRICT_LIST: 'senateDistricts',
+    CONGRESSIONAL_DISTRICT_LIST: 'congressionalDistricts',
+    COUNTY_LIST: 'county_list',
+    CITY_LIST : 'cities',
+    ZIP_CODE_LIST: 'zipCodes',
+    NEW_SITE_LIST: 'newSites',
+    CONTACT_LIST: 'contact_list',
+    USER_LIST: 'user_list',
+    FORM_INCREMENT: 'increment',
+    FORM_DECREMENT: 'decrement'
 
-const FORM_DATA_FIELDS={
-
-    SERVICES : 'services',
-    FUNDING: 'funding',
-    NM_HOUSE_DISTRICTS: 'nmHouseDistricts',
-    SENATE_DISTRICTS: 'senateDistricts',
-    CONGRESSIONAL_DISTRICTS: 'congressionalDistricts',
-    COUNTIES: 'counties',
-    CITIES : 'cities',
-    ZIP_CODES: 'zipCodes',
-    NEW_SITES: 'newSites',
-    ADDED_CONTACTS: 'addContacts',
-    CONTACTS: 'contacts',
-    FORM_INCREMENT: 0,
-    FORM_DECREMENT: 0
 }
 
 const CreateHealthCenterView = props =>{
     const navigate = useNavigate();
 
-    const [healthCenterState, dispatchHealthCenter] = useReducer(healthCenterReducer, {
+    const [healthCenterInfo, dispatchHealthCenterInfo] = useReducer(healthCenterReducer, {
 
+        healthCenter:{
             name: ''.trim().toLowerCase(),
             nameAbbr: ''.trim().toLowerCase(),
-            contactIds: [],
-            userIds: []
-        });
+            contacts: [],
+            users: []
+        },
 
-    const [siteState, dispatchSite] = useReducer(siteReducer, {
+        site:{
+            name: ''.trim().toLowerCase(),
+            streetAddress: ''.trim().toLowerCase(),
+            city: {id: '', name: ''},
+            county: {id: '', name: ''},
+            zipCode: {id: '', name: ''},
+            healthCenter: {id: '', name: ''},
+            nmHouseDistrict: {id: '', name: ''},
+            senateDistrict:{id: '', name: ''},
+            congressionalDistrict: {id: '', name: ''},
+            services: [],
+            funding:  []
+        },
 
-        name: ''.trim().toLowerCase(),
-        streetAddress: ''.trim().toLowerCase(),
-        city: {id: '', name: ''},
-        county: {id: '', name: ''},
-        zipCode: {id: '', name: ''},
-        healthCenter: {id: '', name: ''},
-        nmHouseDistrict: {id: '', name: ''},
-        senateDistrict:{id: '', name: ''},
-        congressionalDistrict: {id: '', name: ''},
-        services: [],
-        funding:  []
-    });
+        formData:{
+            service_list : [],
+            funding_list: [],
+            nmHouse_districts: [],
+            senate_districts: [],
+            congressional_districts: [],
+            county_list: [],
+            city_list : [],
+            zipCode_list: [],
+            newSites_list: [],
+            contact_list: [],
+            user_list: [],
+            healthCenterProcess: 0
+        }
 
-    const [formDataState, dispatchFormData] = useReducer(formDataReducer ,{
+});
 
-        services : [],
-        funding: [],
-        nmHouseDistricts: [],
-        senateDistricts: [],
-        congressionalDistricts: [],
-        counties: [],
-        cities : [],
-        zipCodes: [],
-        newSites: [],
-        addedContacts: [],
-        contacts: [],
-        healthCenterProcess: 0
-    });
 
     useEffect(()=>{
 
@@ -293,7 +286,7 @@ const CreateHealthCenterView = props =>{
                     }
                 })
 
-                dispatchFormData({type: FORM_DATA_FIELDS.SERVICES, payload: [...service.data]})
+                dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.SERVICE_LIST, payload: [...service.data]})
 
 
             }catch(error){
@@ -321,7 +314,7 @@ const CreateHealthCenterView = props =>{
                     }
                 })
 
-                dispatchFormData({type: FORM_DATA_FIELDS.CITIES, payload: [...cities.data]})
+                dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.CITY_LIST, payload: [...cities.data]})
 
             }catch(error){
                 console.log(error);
@@ -343,7 +336,7 @@ const CreateHealthCenterView = props =>{
                     }
                 })
 
-                dispatchFormData({type: FORM_DATA_FIELDS.ZIP_CODES, payload: [...zipCodes.data]})
+                dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.ZIP_CODE_LIST, payload: [...zipCodes.data]})
 
             }catch(error){
 
@@ -366,7 +359,7 @@ const CreateHealthCenterView = props =>{
                     }
                 })
 
-                dispatchFormData({type: FORM_DATA_FIELDS.COUNTIES, payload: [...counties.data]})
+                dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.COUNTY_LIST, payload: [...counties.data]})
 
 
             }catch(error){
@@ -391,7 +384,7 @@ const CreateHealthCenterView = props =>{
                 })
 
                 console.log(funding.data);
-                dispatchFormData({type: FORM_DATA_FIELDS.FUNDING, payload: [...funding.data]})
+                dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.FUNDING_LIST, payload: [...funding.data]})
 
             }catch(error){
                 console.log(error);
@@ -438,30 +431,28 @@ const CreateHealthCenterView = props =>{
             <Header/>
 
             {
-                formDataState.healthCenterProcess === 0?
+               healthCenterInfo.formData.healthCenterProcess === 0?
                     <HealthCenterForm
-                        healthCenterState={healthCenterState}
-                        dispatchHealthCenter={dispatchHealthCenter}
-                        formDataState={formDataState}
-                        dispatchFormData={dispatchFormData}
-                        formDataFields = {FORM_DATA_FIELDS}
-                        healthCareFields={HEALTH_CARE_FIELDS}
+                        healthCenterState={healthCenterInfo.healthCenter}
+                        dispatchHealthCenter={dispatchHealthCenterInfo}
+                        userList={healthCenterInfo.formData.user_list}
+                        contact={healthCenterInfo.formData.contact_list}
+                        healthCareFields={HEALTH_CENTER_FIELDS}
                     />
                     : null
             }
             {
-                formDataState.healthCenterProcess === 1?
+                healthCenterInfo.formData.healthCenterProcess === 1?
                     <div  className={'d-inline-flex m-auto'}>
                         <SiteListComponent
-                            healthCenterName={healthCenterState.name}
-                            siteListing={formDataState.newSites}
+                            healthCenterName={healthCenterInfo.healthCenter.name}
+                            siteListing={healthCenterInfo.formData.newSites_list}
                         />
                         <SiteForm
-                            siteState={siteState}
-                            siteDataFields={SITE_FIELDS}
-                            dispatchSite={dispatchSite}
-                            formData={formDataState}
-                            formDataFields={FORM_DATA_FIELDS}
+                            siteState={healthCenterInfo.site}
+                            siteDataFields={HEALTH_CENTER_FIELDS}
+                            dispatchSite={dispatchHealthCenterInfo}
+                            formData={healthCenterInfo.formData}
                         />
                     </div>
                     : null
