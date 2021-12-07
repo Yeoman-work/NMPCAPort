@@ -1,6 +1,5 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeRequestList;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.services.Impl.ZipCodeServiceImpl;

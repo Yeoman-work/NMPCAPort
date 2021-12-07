@@ -5,6 +5,8 @@ import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
+import java.util.List;
+
 public class SiteDetailsRequestModel {
 
     private String name;
@@ -16,6 +18,8 @@ public class SiteDetailsRequestModel {
     private String nmHouseDistrictId;
     private String senateDistrictId;
     private String congressionalDistrictId;
+    private List<String> fundIds;
+    private List<String> serviceIds;
 
     public String getName() {
         return name;
@@ -87,5 +91,21 @@ public class SiteDetailsRequestModel {
 
     public void setCongressionalDistrictId(String congressionalDistrictId) {
         this.congressionalDistrictId = congressionalDistrictId;
+    }
+
+    public List<String> getFundIds() {
+        return fundIds;
+    }
+
+    public void setFundIds(List<String> fundIds) {
+        this.fundIds = fundIds;
+    }
+
+    public List<String> getServiceIds() {
+        return serviceIds;
+    }
+
+    public void setServiceIds(List<String> serviceIds) {
+        this.serviceIds = serviceIds;
     }
 }

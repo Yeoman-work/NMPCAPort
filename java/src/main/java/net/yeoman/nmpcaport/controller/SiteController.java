@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.controller;
 
+import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestListModel;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
@@ -37,8 +38,20 @@ public class SiteController {
     }
 
     @PostMapping("/bulkSiteCreation")
-    public List<SiteDetailsNestedResponse> createSites(@RequestBody List<SiteDetailsRequestModel> siteDetailsRequestModels){
+    public List<SiteDetailsNestedResponse> createSites(@RequestBody SiteDetailsRequestListModel siteDetailsRequestListModel){
         List<SiteDetailsNestedResponse> returnValue = new ArrayList<>();
+        List<SiteDto> serviceInput = new ArrayList<>();
+
+        for(SiteDetailsRequestModel site: siteDetailsRequestListModel.getSiteDetailsRequestModelList()){
+            serviceInput.add(new ModelMapper().map(site, SiteDto.class));
+        }
+
+        List<SiteDto> siteDtoList = this.siteService.createSiteBulk(serviceInput);
+
+        for(SiteDto site: siteDtoList){
+            returnValue.add(new ModelMapper().map(site, SiteDetailsNestedResponse.class));
+        }
+
         return returnValue;
     }
 

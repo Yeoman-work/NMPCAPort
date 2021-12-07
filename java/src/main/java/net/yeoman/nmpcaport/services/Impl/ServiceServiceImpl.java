@@ -96,5 +96,11 @@ public class ServiceServiceImpl implements ServiceService {
 
     }
 
+    @Override
+    public ServiceEntity getServiceEntity(String serviceId) {
+
+        return this.serviceRepository.findByServiceId(serviceId);
+    }
+
 
 }

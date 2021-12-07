@@ -9,6 +9,7 @@ public class SiteDetailsNestedResponse {
 
     private String siteId;
     private String name;
+    private String streetAddress;
     private String createdAt;
     private String updatedAt;
     private CountyResponse countyResponse;
@@ -29,6 +30,14 @@ public class SiteDetailsNestedResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 
     public String getCreatedAt() {

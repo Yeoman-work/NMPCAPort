@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services;
 
+import net.yeoman.nmpcaport.entities.ServiceEntity;
 import net.yeoman.nmpcaport.io.request.service.ServiceDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.service.ServiceRequestListModel;
 import net.yeoman.nmpcaport.shared.dto.ServiceDto;
@@ -17,4 +18,6 @@ public interface ServiceService {
     public ServiceDto deleteUser(String serviceId);
 
     public List<ServiceDto> createServiceBulk(ServiceRequestListModel serviceRequestList);
+
+    public ServiceEntity getServiceEntity(String serviceId);
 }

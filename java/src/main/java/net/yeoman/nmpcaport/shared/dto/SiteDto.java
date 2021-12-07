@@ -9,15 +9,23 @@ import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
+import java.util.List;
+
 public class SiteDto {
 
     private Long id;
     private String siteId;
     private String name;
+    private String streetAddress;
     private String cityId;
     private String countyId;
     private String zipCodeId;
     private String healthCenterId;
+    private String nmHouseDistrictId;
+    private String senateDistrictId;
+    private String congressionalDistrictId;
+    private List<String> fundIds;
+    private List<String> serviceIds;
     private CityResponse cityResponse;
     private CityEntity city;
     private CountyResponse countyResponse;
@@ -26,6 +34,8 @@ public class SiteDto {
     private HealthCenterEntity healthCenter;
     private ZipCodeResponse zipCodeResponse;
     private ZipCodeEntity zipCode;
+    private String fundId;
+    private String serviceId;
     private String createdAt;
     private String updatedAt;
     private NMHouseDistrictEntity nmHouseDistrictEntity;
@@ -57,6 +67,14 @@ public class SiteDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 
     public String getCityId() {
@@ -217,5 +235,61 @@ public class SiteDto {
 
     public void setCongressionalDistrictResponse(CongressionalDistrictResponse congressionalDistrictResponse) {
         this.congressionalDistrictResponse = congressionalDistrictResponse;
+    }
+
+    public String getFundId() {
+        return fundId;
+    }
+
+    public void setFundId(String fundId) {
+        this.fundId = fundId;
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public String getNmHouseDistrictId() {
+        return nmHouseDistrictId;
+    }
+
+    public void setNmHouseDistrictId(String nmHouseDistrictId) {
+        this.nmHouseDistrictId = nmHouseDistrictId;
+    }
+
+    public String getSenateDistrictId() {
+        return senateDistrictId;
+    }
+
+    public void setSenateDistrictId(String senateDistrictId) {
+        this.senateDistrictId = senateDistrictId;
+    }
+
+    public String getCongressionalDistrictId() {
+        return congressionalDistrictId;
+    }
+
+    public void setCongressionalDistrictId(String congressionalDistrictId) {
+        this.congressionalDistrictId = congressionalDistrictId;
+    }
+
+    public List<String> getFundIds() {
+        return fundIds;
+    }
+
+    public void setFundIds(List<String> fundIds) {
+        this.fundIds = fundIds;
+    }
+
+    public List<String> getServiceIds() {
+        return serviceIds;
+    }
+
+    public void setServiceIds(List<String> serviceIds) {
+        this.serviceIds = serviceIds;
     }
 }

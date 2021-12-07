@@ -72,6 +72,12 @@ public class FundServiceImpl implements FundService {
     }
 
     @Override
+    public FundEntity getFundEntity(String fundId) {
+
+        return this.fundRepository.findByFundId(fundId);
+    }
+
+    @Override
     public List<FundDto> getAllFunding() {
 
         List<FundDto> returnValue = new ArrayList<>();
@@ -103,4 +109,7 @@ public class FundServiceImpl implements FundService {
 
         return fundDtoList;
     }
+
+
+
 }

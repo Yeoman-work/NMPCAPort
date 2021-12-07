@@ -6,6 +6,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name ="congressionalDistricts")
@@ -49,6 +50,9 @@ public class CongressionalDistrictEntity implements Serializable {
 
     @OneToOne(mappedBy = "district", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private CongressionalRepEntity rep;
+
+    @OneToMany(mappedBy = "congressionalDistrictEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    List<SiteEntity> sites;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "health_center_entity_id")

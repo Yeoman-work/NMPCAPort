@@ -27,8 +27,7 @@ const SiteForm = props =>{
 
 
 // Site form component adds Site to a state list until saved to DB
-    console.log(formData.county_list);
-   console.log(('look above'))
+
     return(
         <div className={'w-50 m-auto d-inline-block'}>
             <div className={'align-top'}>

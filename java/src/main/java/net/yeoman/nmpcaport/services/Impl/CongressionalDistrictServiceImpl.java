@@ -69,4 +69,9 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
         }
         return returnValue;
     }
+
+    public CongressionalDistrictEntity getCongressionalDistrictEntity(String congressionalId){
+
+        return this.congressionalDistrictRepository.findByCongressionalDistrictId(congressionalId);
+    }
 }

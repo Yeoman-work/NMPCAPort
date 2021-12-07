@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -24,9 +25,11 @@ public class SiteEntity implements Serializable {
 
     @NotBlank(message = "required")
     @Column(unique = true)
+    @Size(min = 3, max = 50, message = "must be between 3 and 50 characters")
     private String name;
 
     @NotBlank(message = "required")
+    @Size(min=5, max=100, message = "must be between 5 and 100 characters" )
     private String streetAddress;
 
     @Column(updatable = false)
@@ -72,6 +75,10 @@ public class SiteEntity implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "senate_district_entity_id")
     private SenateDistrictEntity senateDistrict;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "congressional_district_id")
+    private CongressionalDistrictEntity congressionalDistrictEntity;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -234,5 +241,13 @@ public class SiteEntity implements Serializable {
 
     public void setNmHouseDistrict(NMHouseDistrictEntity nmHouseDistrict) {
         this.nmHouseDistrict = nmHouseDistrict;
+    }
+
+    public CongressionalDistrictEntity getCongressionalDistrictEntity() {
+        return congressionalDistrictEntity;
+    }
+
+    public void setCongressionalDistrictEntity(CongressionalDistrictEntity congressionalDistrictEntity) {
+        this.congressionalDistrictEntity = congressionalDistrictEntity;
     }
 }
