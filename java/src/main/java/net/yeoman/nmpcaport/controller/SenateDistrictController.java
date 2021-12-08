@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.senateDistrict.SenateDistrictDetailsRequest;
+import net.yeoman.nmpcaport.io.request.senateDistrict.SenateDistrictDetailsRequestList;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.services.Impl.SenateDistrictServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.SenateDistrictDto;
@@ -48,6 +49,27 @@ public class SenateDistrictController {
         SenateDistrictDto senateDistrictDto = this.senateDistrictService.createDistrict(new ModelMapper().map(senateDistrict, SenateDistrictDto.class));
 
         return new ModelMapper().map(senateDistrictDto, SenateDistrictResponseModel.class);
+    }
+
+    @PostMapping(path = {"/bulk"})
+    public List<SenateDistrictResponseModel> createSenateDistrictBulk(@RequestBody SenateDistrictDetailsRequestList senateDistrictDetailsRequestList){
+        List<SenateDistrictDto> serviceInput = new ArrayList<>();
+        List<SenateDistrictResponseModel> returnValue = new ArrayList<>();
+
+        for(SenateDistrictDetailsRequest district: senateDistrictDetailsRequestList.getSenateDistrictDetailsRequests()){
+
+            serviceInput.add(new ModelMapper().map(district, SenateDistrictDto.class));
+
+        }
+
+        List<SenateDistrictDto> createdDistricts =  this.senateDistrictService.createBulkSenateDistrict(serviceInput);
+
+        for(SenateDistrictDto senateDistrictDto: createdDistricts){
+
+            returnValue.add(new ModelMapper().map(senateDistrictDto, SenateDistrictResponseModel.class));
+        }
+
+        return returnValue;
     }
 
     @PutMapping

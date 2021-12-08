@@ -52,7 +52,7 @@ public class ServiceController {
         return new ModelMapper().map(serviceDto, ServiceResponse.class);
     }
 
-    @PostMapping(value = "/bulkServices", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+    @PostMapping(value = "/bulk", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
                                              produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<ServiceResponse> createServicesBulk(@RequestBody ServiceRequestListModel serviceRequestListModel){
             List<ServiceDto> serviceDtoConversionList = new ArrayList<>();

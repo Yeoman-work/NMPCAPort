@@ -6,6 +6,7 @@ import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorResponse;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public class SenateDistrictDto {
@@ -13,8 +14,8 @@ public class SenateDistrictDto {
     private Long id;
     private String senateDistrictId;
     private String name;
-    private String createdAt;
-    private String updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
     private String map;
     private LocalDate electionDate;
     private List<String> siteIdentifiers;
@@ -46,19 +47,19 @@ public class SenateDistrictDto {
         this.name = name;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 

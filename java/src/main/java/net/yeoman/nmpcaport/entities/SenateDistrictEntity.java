@@ -55,9 +55,13 @@ public class SenateDistrictEntity implements Serializable {
     @OneToOne(mappedBy = "senateDistrict", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private StateSenatorEntity stateSenator;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "health_center_entity_id")
-    private HealthCenterEntity healthCenter;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "health_centers_senate_districts",
+            joinColumns = @JoinColumn(name = "senate_district_entity_id"),
+            inverseJoinColumns = @JoinColumn(name = "health_center_entity_id")
+    )
+    private List<HealthCenterEntity> healthCenterEntities;
 
     public SenateDistrictEntity() {
     }
@@ -153,11 +157,11 @@ public class SenateDistrictEntity implements Serializable {
         this.stateSenator = stateSenator;
     }
 
-    public HealthCenterEntity getHealthCenter() {
-        return healthCenter;
+    public List<HealthCenterEntity> getHealthCenterEntities() {
+        return healthCenterEntities;
     }
 
-    public void setHealthCenter(HealthCenterEntity healthCenter) {
-        this.healthCenter = healthCenter;
+    public void setHealthCenterEntities(List<HealthCenterEntity> healthCenterEntities) {
+        this.healthCenterEntities = healthCenterEntities;
     }
 }

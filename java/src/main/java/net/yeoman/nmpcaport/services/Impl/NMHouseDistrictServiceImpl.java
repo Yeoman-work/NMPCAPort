@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.services.Impl;
 import net.yeoman.nmpcaport.entities.NMHouseDistrictEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.NMHouseDistrictServiceException;
+import net.yeoman.nmpcaport.io.request.nmHouseDistrict.NMHouseDistrictDetailsRequestList;
 import net.yeoman.nmpcaport.repositories.NMHouseDistrictRepository;
 import net.yeoman.nmpcaport.services.NMHouseDistrictService;
 import net.yeoman.nmpcaport.shared.dto.NMHouseDistrictDto;
@@ -58,6 +59,25 @@ public class NMHouseDistrictServiceImpl implements NMHouseDistrictService {
     @Override
     public NMHouseDistrictDto deleteNMHouseDistrict(String nmHouseDistrictId) {
         return null;
+    }
+
+    @Override
+    public List<NMHouseDistrictDto> bulkCreateHouseDistrict(List<NMHouseDistrictDto> nmHouseDistrictDtoList) {
+
+        List<NMHouseDistrictDto> returnValue = new ArrayList<>();
+        for(NMHouseDistrictDto nmHouseDistrictDto: nmHouseDistrictDtoList){
+
+            NMHouseDistrictEntity nmHouseDistrictEntity = new ModelMapper().map(nmHouseDistrictDto, NMHouseDistrictEntity.class);
+
+            nmHouseDistrictEntity.setHouseDistrictId(utils.generateRandomID());
+
+            NMHouseDistrictEntity saveNMHouseDistrict = this.nmHouseDistrictRepository.save(nmHouseDistrictEntity);
+
+            returnValue.add(new ModelMapper().map(saveNMHouseDistrict, NMHouseDistrictDto.class));
+
+        }
+
+        return returnValue;
     }
 
     @Override

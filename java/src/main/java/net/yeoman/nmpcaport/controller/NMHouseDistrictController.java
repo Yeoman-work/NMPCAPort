@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.nmHouseDistrict.NMHouseDistrictDetailsRequest;
+import net.yeoman.nmpcaport.io.request.nmHouseDistrict.NMHouseDistrictDetailsRequestList;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
 import net.yeoman.nmpcaport.services.Impl.NMHouseDistrictServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.NMHouseDistrictDto;
@@ -46,6 +47,29 @@ public class NMHouseDistrictController {
         NMHouseDistrictDto houseDistrictDto = this.nmHouseDistrictService.createNMHouseDistrict(new ModelMapper().map(houseDistrictDetails, NMHouseDistrictDto.class));
 
         return new ModelMapper().map(houseDistrictDto, NMHouseDistrictResponse.class);
+    }
+
+
+    @PostMapping("/bulk")
+    public List<NMHouseDistrictResponse> bulkCreateNMHouseDistrict(@RequestBody NMHouseDistrictDetailsRequestList houseDistrictDetailsRequestList){
+
+        List<NMHouseDistrictDto> serviceInput = new ArrayList<>();
+        List<NMHouseDistrictResponse> returnValue = new ArrayList<>();
+
+        for (NMHouseDistrictDetailsRequest district: houseDistrictDetailsRequestList.getNmHouseDistrictDetailsRequestList()){
+
+            serviceInput.add(new ModelMapper().map(district, NMHouseDistrictDto.class));
+
+        }
+
+        List<NMHouseDistrictDto> savedDistricts = this.nmHouseDistrictService.bulkCreateHouseDistrict(serviceInput);
+
+        for(NMHouseDistrictDto nmHouseDistrictDto: savedDistricts){
+
+            returnValue.add(new ModelMapper().map(nmHouseDistrictDto, NMHouseDistrictResponse.class));
+        }
+
+        return returnValue;
     }
 
     @PutMapping

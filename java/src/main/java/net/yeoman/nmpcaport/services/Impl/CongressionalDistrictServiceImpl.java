@@ -48,6 +48,23 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
     }
 
     @Override
+    public List<CongressionalDistrictDto> bulkCreateCongressionalDistrict(List<CongressionalDistrictDto> congressionalDistrictDtoList) {
+        List<CongressionalDistrictDto> returnValue = new ArrayList<>();
+
+        for(CongressionalDistrictDto congressionalDistrictDto: congressionalDistrictDtoList){
+
+            CongressionalDistrictEntity congressionalDistrictEntity = new ModelMapper().map(congressionalDistrictDto, CongressionalDistrictEntity.class);
+            congressionalDistrictEntity.setCongressionalDistrictId(utils.generateRandomID());
+
+            CongressionalDistrictEntity savedDistrict = this.congressionalDistrictRepository.save(congressionalDistrictEntity);
+
+            returnValue.add(new ModelMapper().map(savedDistrict, CongressionalDistrictDto.class));
+        }
+
+        return returnValue;
+    }
+
+    @Override
     public CongressionalDistrictDto updateCongressionalDistrict(String congressionalDistrictId, CongressionalDistrictDto congressionalDistrictDto) {
         return null;
     }

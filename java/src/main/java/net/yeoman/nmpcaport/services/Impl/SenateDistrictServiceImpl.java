@@ -1,6 +1,8 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
+import net.yeoman.nmpcaport.io.request.senateDistrict.SenateDistrictDetailsRequestList;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorResponse;
 import net.yeoman.nmpcaport.repositories.SenateDistrictRepository;
@@ -96,6 +98,23 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
         for(SenateDistrictEntity district: senateDistrictEntities){
 
             returnValue.add(new ModelMapper().map(district, SenateDistrictDto.class));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public List<SenateDistrictDto> createBulkSenateDistrict(List<SenateDistrictDto> senateDistrictDtoList) {
+        List<SenateDistrictDto> returnValue = new ArrayList<>();
+
+        for(SenateDistrictDto senateDistrictDto: senateDistrictDtoList){
+
+            SenateDistrictEntity preSaveEntity = new ModelMapper().map(senateDistrictDto, SenateDistrictEntity.class);
+
+            preSaveEntity.setSenateDistrictId(utils.generateRandomID());
+            SenateDistrictEntity savedEntity = this.senateDistrictRepository.save(preSaveEntity);
+
+            returnValue.add(new ModelMapper().map(savedEntity, SenateDistrictDto.class));
         }
 
         return returnValue;

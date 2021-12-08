@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.congressionalDistrict.CongressionalDistrictDetailsRequest;
+import net.yeoman.nmpcaport.io.request.congressionalDistrict.CongressionalDistrictDetailsResponseList;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.services.Impl.CongressionalDistrictServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.CongressionalDistrictDto;
@@ -49,6 +50,25 @@ public class CongressionalDistrictController {
 
 
         return new ModelMapper().map(congressionalDistrictDto, CongressionalDistrictResponse.class);
+    }
+
+    @PostMapping(path="/bulk")
+    public List<CongressionalDistrictResponse> bulkCreateCongressionalDistrict(@RequestBody CongressionalDistrictDetailsResponseList congressionalDistrictDetailsResponseList){
+        List<CongressionalDistrictDto> serviceInput = new ArrayList<>();
+        List<CongressionalDistrictResponse> returnValue = new ArrayList<>();
+
+        for(CongressionalDistrictResponse district: congressionalDistrictDetailsResponseList.getCongressionalDistrictResponseList()){
+
+            serviceInput.add(new ModelMapper().map(district, CongressionalDistrictDto.class));
+        }
+
+        List<CongressionalDistrictDto> savedDistricts = this.congressionalDistrictService.bulkCreateCongressionalDistrict(serviceInput);
+
+        for(CongressionalDistrictDto congressionalDistrictDto: savedDistricts){
+            returnValue.add(new ModelMapper().map(savedDistricts, CongressionalDistrictResponse.class));
+        }
+
+        return returnValue;
     }
 
     @PutMapping

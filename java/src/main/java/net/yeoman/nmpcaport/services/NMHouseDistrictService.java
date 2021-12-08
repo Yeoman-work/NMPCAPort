@@ -11,6 +11,7 @@ public interface NMHouseDistrictService {
     public NMHouseDistrictDto createNMHouseDistrict(NMHouseDistrictDto nmHouseDistrictDto);
     public NMHouseDistrictDto updatedNMHouseDistrict(String nmHouseDistrictId, NMHouseDistrictDto nmHouseDistrictDto);
     public NMHouseDistrictDto deleteNMHouseDistrict(String nmHouseDistrictId);
+    public List<NMHouseDistrictDto> bulkCreateHouseDistrict(List<NMHouseDistrictDto> nmHouseDistrictDtoList);
     public NMHouseDistrictEntity findNMHouseDistrictEntity(String nmHouseDistrictId);
     public List<NMHouseDistrictDto> getAllNMHouseDistrictResponses();
 }
