@@ -9,7 +9,8 @@ const SiteForm = props =>{
    const {siteState,
           siteDataFields,
           dispatchSite,
-          formData
+          formData,
+          healthCenterHandler
    } = props;
 
    const InList = (List, id) =>{
@@ -23,6 +24,107 @@ const SiteForm = props =>{
        }
 
        return isPresent;
+   }
+
+   const canSubmit = (siteState, formData) =>{
+
+       let disable = true;
+
+
+       if(siteState.name.length >= 3 && siteState.name.length <= 50){
+           if(siteState.streetAddress.length >= 5 && siteState.streetAddress.length <= 100 ){
+               if(formData.city_list) {
+
+                   for (let city of formData.city_list) {
+
+                       if (city.cityId === siteState.city.id) {
+
+                           if(formData.county_list){
+
+                               for(let county of formData.county_list){
+                                   console.log('this is it')
+                                   if(county.countyId === siteState.county.id){
+
+                                       if(formData.zipCode_list){
+
+                                           for(let zipCode of formData.zipCode_list){
+
+                                               if(zipCode.zipCodeId === siteState.zipCode.id){
+                                                   disable = false
+                                                   break;
+                                               }
+                                           }
+
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+
+       }else{
+
+           disable = true;
+       }
+
+       // if(siteState.streetAddress.length >= 5 && siteState.streetAddress.length <= 100 ){
+       //
+       //     isValid = false;
+       //
+       // }else{
+       //
+       //     isValid = true;
+       // }
+
+       // if(formData.city_list){
+       //
+       //     for(let city of formData.city_list){
+       //
+       //         if(city.cityId === siteState.city.id){
+       //
+       //             isValid = false;
+       //             break;
+       //         }
+       //     }
+       // }else{
+       //
+       //     isValid = true;
+       // }
+
+       // if(formData.county_list){
+       //
+       //     for(let county of formData.county_list){
+       //
+       //         if(county.countyId === siteState.county.id){
+       //             isValid = false;
+       //             break;
+       //         }
+       //     }
+       //
+       // }else{
+       //
+       //     isValid = true;
+       // }
+
+       // if(formData.zipCode_list){
+       //
+       //     for(let zipCode of formData.zipCode_list){
+       //
+       //         if(zipCode.zipCodeId === siteState.zipCode.id){
+       //             isValid = false;
+       //             break;
+       //         }
+       //     }
+       //
+       // }else{
+       //
+       //     isValid = true;
+       // }
+
+
+       return disable;
    }
 
 
@@ -128,7 +230,7 @@ const SiteForm = props =>{
                                                                    itemID={serviceId}
                                                                    name={siteDataFields.SITE_SERVICES}
                                                                    className={'form-check-input me-2'}
-                                                                   checked={InList(siteState.services, serviceId)}
+                                                                   checked={InList(siteState.service, serviceId)}
                                                                    value={serviceId}
                                                                    onChange={(e)=>dispatchSite({type: e.target.name,
                                                                        payload: {target : e.target, name: name}})}
@@ -171,8 +273,8 @@ const SiteForm = props =>{
                         <div className={'row'}>
                             <div className={'col'}>
                                 <label> NM House district</label>
-                                <select name={'nmHouseDistrictId'}
-                                        value={siteState.NM_HOUSE_DISTRICT}
+                                <select name={siteDataFields.NM_HOUSE_DISTRICT}
+                                        value={siteState.nmHouseDistrict.id + '/' + siteState.nmHouseDistrict.name}
                                         className={'form-control'}
                                         onChange={(e)=>dispatchSite({type: e.target.name,
                                                                                         payload: e.target.value})}
@@ -183,7 +285,7 @@ const SiteForm = props =>{
                                             formData.nmHouse_districts.map(({houseDistrictId, name}, index)=>{
 
                                                 return(
-                                                    <option key={index} value={{houseDistrictId} + '/' + {name}}>{name}</option>
+                                                    <option key={index} value={houseDistrictId + '/' + name}>{name}</option>
                                                 )
                                             })
                                             : null
@@ -194,6 +296,7 @@ const SiteForm = props =>{
                                 <label>Senate District</label>
                                 <select name={siteDataFields.SENATE_DISTRICT}
                                         className={'form-control'}
+                                        value={siteState.senateDistrict.id + '/' + siteState.senateDistrict.name}
                                         onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}
                                 >
                                     <option >Choose a Senate District</option>
@@ -202,7 +305,7 @@ const SiteForm = props =>{
                                             formData.senate_districts.map(({senateDistrictId, name}, index)=>{
 
                                                 return(
-                                                    <option key={index} value={{senateDistrictId} + '/' + {name}}>{name}</option>
+                                                    <option key={index} value={senateDistrictId + '/' + name}>{name}</option>
                                                 )
                                             })
                                             : null
@@ -213,6 +316,7 @@ const SiteForm = props =>{
                                 <label>Congressional District</label>
                                 <select name={siteDataFields.CONGRESSIONAL_DISTRICT}
                                         className={'form-control'}
+                                        value={siteState.congressionalDistrict.id + '/' + siteState.congressionalDistrict.name}
                                         onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}
                                 >
                                     <option>Choose a district</option>
@@ -221,7 +325,7 @@ const SiteForm = props =>{
                                             formData.congressional_districts.map(({congressionalDistrictId, name}, index)=>{
 
                                                 return(
-                                                    <option key={index} value={{congressionalDistrictId} + '/' + {name}}>{name}</option>
+                                                    <option key={index} value={congressionalDistrictId + '/' + name}>{name}</option>
                                                 )
                                             })
                                             : null
@@ -232,8 +336,8 @@ const SiteForm = props =>{
                     </div>
                 </form>
                 <button onClick={(e)=>dispatchSite({type: siteDataFields.FORM_DECREMENT})}>Back</button>
-                <button onClick={(e)=>dispatchSite({type: siteDataFields.NEW_SITE_LIST, payload: {...siteState}, option: e })}>Add Another Site</button>
-                <button>Finish</button>
+                <button disabled={canSubmit(siteState, formData)} onClick={(e)=>dispatchSite({type: siteDataFields.NEW_SITE_LIST, payload: {...siteState}, option: e })}>Add Another Site</button>
+                <button disabled={canSubmit(siteState, formData)} onClick={(e)=>healthCenterHandler(e)}>Finish</button>
             </div>
         </div>
 

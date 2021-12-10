@@ -25,11 +25,11 @@ public class SiteEntity implements Serializable {
 
     @NotBlank(message = "required")
     @Column(unique = true)
-    @Size(min = 3, max = 50, message = "must be between 3 and 50 characters")
+    @Size(min = 3, max = 25, message = "must be between 3 and 50 characters")
     private String name;
 
     @NotBlank(message = "required")
-    @Size(min=5, max=100, message = "must be between 5 and 100 characters" )
+    @Size(min=5, max=50, message = "must be between 5 and 100 characters" )
     private String streetAddress;
 
     @Column(updatable = false)

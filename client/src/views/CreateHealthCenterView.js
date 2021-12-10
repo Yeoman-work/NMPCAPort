@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useReducer} from "react";
+import React, {useEffect, useReducer} from "react";
 import {useNavigate} from 'react-router'
 import axios from "axios";
 import produce from "immer";
@@ -7,7 +7,7 @@ import Header from "../components/Header";
 import SiteForm from "../components/SiteForm";
 import '../css/style.css'
 import SiteListComponent from "../components/SiteListComponent";
-
+const {characters}= require('../helper/generalFunctions')
 
 
 
@@ -23,22 +23,22 @@ const clearSiteData ={
         nmHouseDistrict: {id: '', name: ''},
         senateDistrict:{id: '', name: ''},
         congressionalDistrict: {id: '', name: ''},
-        services: [],
+        service: [],
         funding:  []
     },
 
     siteJson:{
         name: ''.trim().toLowerCase(),
         streetAddress: ''.trim().toLowerCase(),
-        cityId: '',
-        countyId: '',
-        zipCodeId: '',
-        healthCenterId: '',
-        nmHouseDistrictId: '',
-        senateDistrictId: '',
-        congressionalDistrictId: '',
-        fundIds : [],
-        serviceIds: [],
+        city: '',
+        county: '',
+        zipCode: '',
+        healthCenter: '',
+        nmHouseDistrict: '',
+        senateDistrict: '',
+        congressionalDistrict: '',
+        fund: [],
+        service: [],
     }
 
 
@@ -49,17 +49,26 @@ function healthCenterReducer(healthCenterState, action){
 
     switch(action.type){
         case HEALTH_CENTER_FIELDS.HEALTH_CENTER_NAME:
-            if(action.payload.length <= 50 ){
-                return produce(healthCenterState, draft=>{
-                    draft.healthCenter.name = action.payload;
-                })
+
+            const healthCenterString = action.payload;
+
+            if(healthCenterString.length <= 50 ){
+
+                if( healthCenterString.length === 0 || characters.includes(healthCenterString[healthCenterString.length - 1])){
+
+                    return produce(healthCenterState, draft=>{
+                        draft.healthCenter.name = action.payload;
+                    })
+                }else{
+                    return healthCenterState;
+                }
             }else{
 
                 return healthCenterState;
             }
 
         case HEALTH_CENTER_FIELDS.HEALTH_CENTER_ABBR:
-            console.log(action.payload)
+
             if(action.payload.length <= 8){
 
                 return produce(healthCenterState, draft=>{
@@ -74,36 +83,48 @@ function healthCenterReducer(healthCenterState, action){
 
 
         case HEALTH_CENTER_FIELDS.CONTACTS:
+
             return produce(healthCenterState, draft=>{
                 draft.healthCenter.contacts = [...healthCenterState, ...action.payload]
             })
+
         case HEALTH_CENTER_FIELDS.USERS:
             return produce(healthCenterState, draft=>{
                 draft.users = [...healthCenterState, ...action.payload];
             })
 
         case HEALTH_CENTER_FIELDS.SITE_NAME:
+
+            const name = action.payload;
+
             if(action.payload.length <= 25 ){
-                const name = action.payload
-                console.log(healthCenterState)
-                return produce(healthCenterState, draft =>{
-                    draft.siteJson.name = name;
-                    draft.site.name = name;
-                })
+                if( name.length === 0 ||characters.includes(name[name.length - 1])){
+                    return produce(healthCenterState, draft =>{
+                        draft.siteJson.name = name;
+                        draft.site.name = name;
+                    })
+                }else{
+
+                    return healthCenterState;
+                }
+
             }else{
 
                 return healthCenterState;
             }
 
-
         case HEALTH_CENTER_FIELDS.STREET_ADDRESS:
+            const streetAddress = action.payload;
             if(action.payload.length <= 50){
-                const address = action.payload;
-                console.log('meets requirements')
-                return produce(healthCenterState, draft =>{
-                    draft.siteJson.streetAddress = address;
-                    draft.site.streetAddress = address;
-                })
+                if(streetAddress.length === 0 || characters.includes(streetAddress[streetAddress.length - 1])){
+                    console.log(streetAddress[streetAddress.length - 1]);
+                    return produce(healthCenterState, draft =>{
+                        draft.siteJson.streetAddress = streetAddress;
+                        draft.site.streetAddress = streetAddress;
+                    })
+                }else{
+                    return healthCenterState;
+                }
             }else{
                 return healthCenterState;
             }
@@ -117,7 +138,7 @@ function healthCenterReducer(healthCenterState, action){
                 name: cityString[1]
             }
             return produce(healthCenterState, draft=>{
-                draft.siteJson.cityId = cityString[0];
+                draft.siteJson.city = cityString[0];
                 draft.site.city = cityObj;
             })
 
@@ -128,22 +149,24 @@ function healthCenterReducer(healthCenterState, action){
                 name: countyString[1]
             }
             return produce(healthCenterState, draft=>{
-                draft.siteJson.countyId = countyString[0];
+                draft.siteJson.county = countyString[0];
                 draft.site.county = countyObj;
             })
 
         case HEALTH_CENTER_FIELDS.ZIP_CODE:
+            console.log(action.payload)
             const zipCodeString = action.payload.split('/')
             const zipCodeObj ={
                 id: zipCodeString[0],
                 name: zipCodeString[1]
             }
             return produce(healthCenterState, draft=>{
-                draft.siteJson.zipCodeId = zipCodeString[0];
+                draft.siteJson.zipCode = zipCodeString[0];
                 draft.site.zipCode = zipCodeObj;
             })
 
         case HEALTH_CENTER_FIELDS.SITE_FUNDING:
+
             const fundingObj = {
                 id: action.payload.target.value,
                 name: action.payload.name
@@ -151,14 +174,14 @@ function healthCenterReducer(healthCenterState, action){
             console.log(fundingObj);
             if(action.payload.target.checked){
                 return produce(healthCenterState, draft=>{
-                    draft.siteJson.fundIds = [...healthCenterState.siteJson.fundIds, fundingObj.id]
+                    draft.siteJson.fund = [...healthCenterState.siteJson.fund, fundingObj.id]
                     draft.site.funding = [...healthCenterState.site.funding, fundingObj]
                 })
             }
 
             if(!action.payload.target.checked){
                 const funding = healthCenterState.site.funding;
-                //console.log(funding)
+
                 let newArray = [];
                 let newArrayIds = [];
                 for(let i = 0; i < funding.length; i++){
@@ -172,6 +195,7 @@ function healthCenterReducer(healthCenterState, action){
                     draft.site.funding = [...newArray];
                 })
             }
+            break;
 
         case HEALTH_CENTER_FIELDS.SITE_SERVICES:
             const serviceObj = {
@@ -180,12 +204,12 @@ function healthCenterReducer(healthCenterState, action){
             }
             if(action.payload.target.checked){
                 return produce(healthCenterState, draft=>{
-                    draft.siteJson.serviceIds = [...healthCenterState.siteJson.serviceIds, serviceObj.id]
-                    draft.site.services = [...healthCenterState.site.services, serviceObj];
+                    draft.siteJson.service = [...healthCenterState.siteJson.service, serviceObj.id]
+                    draft.site.service = [...healthCenterState.site.service, serviceObj];
                 })
             }
             if(!action.payload.target.checked){
-                const services = healthCenterState.site.services;
+                const services = healthCenterState.site.service;
                 let newArray = [];
                 let newArrayIds = [];
                 for(let i = 0; i < services.length; i++){
@@ -196,19 +220,55 @@ function healthCenterReducer(healthCenterState, action){
                 }
 
                 return produce(healthCenterState, draft=>{
-                    draft.siteJson.serviceIds = [newArrayIds];
-                    draft.site.services = [...newArray];
+                    draft.siteJson.service = [newArrayIds];
+                    draft.site.service = [...newArray];
                 })
 
             }
+            break;
 
         case HEALTH_CENTER_FIELDS.PARENT_HEALTH_CENTER:
             return produce(healthCenterState, draft=>{
                 draft.site.healthCenter = action.payload;
             })
 
-        case HEALTH_CENTER_FIELDS.FORM_INCREMENT:
+        case HEALTH_CENTER_FIELDS.CONGRESSIONAL_DISTRICT:
+            const congressionalDistrictString = action.payload.split('/');
+            const congressionalDistrictObj = {
+                id: congressionalDistrictString[0],
+                name: congressionalDistrictString[1]
+            }
+            return produce(healthCenterState, draft=>{
+                draft.siteJson.congressionalDistrict = congressionalDistrictObj.id;
+                draft.site.congressionalDistrict = {...congressionalDistrictObj};
+            })
 
+        case HEALTH_CENTER_FIELDS.NM_HOUSE_DISTRICT:
+            console.log(action.type)
+            console.log(action.payload)
+            const nmHouseDistrictString = action.payload.split('/');
+            const nmHouseDistrictObj = {
+                id: nmHouseDistrictString[0],
+                name: nmHouseDistrictString[1]
+            }
+            return produce(healthCenterState, draft=>{
+                draft.siteJson.nmHouseDistrict = nmHouseDistrictObj.id;
+                draft.site.nmHouseDistrict = {...nmHouseDistrictObj}
+            })
+
+        case HEALTH_CENTER_FIELDS.SENATE_DISTRICT:
+            const senateDistrictString = action.payload.split('/');
+            const senateDistrictObj ={
+                id: senateDistrictString[0],
+                name: senateDistrictString[1]
+            }
+            return produce(healthCenterState, draft=>{
+                draft.siteJson.senateDistrict = senateDistrictObj.id;
+                draft.site.senateDistrict = {...senateDistrictObj};
+            })
+
+
+        case HEALTH_CENTER_FIELDS.FORM_INCREMENT:
             return produce(healthCenterState, draft =>{
                 draft.formData.healthCenterProcess += 1
             });
@@ -252,11 +312,13 @@ function healthCenterReducer(healthCenterState, action){
 
         case HEALTH_CENTER_FIELDS.NEW_SITE_LIST:
 
-            console.log(action.payload);
+
             return produce(healthCenterState, draft=>{
                 draft.formData.newSiteFormat = [...healthCenterState.formData.newSiteFormat, healthCenterState.siteJson];
                 draft.formData.newSites_list = [...healthCenterState.formData.newSites_list, action.payload];
                 draft.site = {...clearSiteData.site};
+                draft.siteJson = {...clearSiteData.siteJson}
+                console.log(healthCenterState);
                 //draft.siteJson = {...clearSiteData.siteJson};
             })
 
@@ -268,19 +330,24 @@ function healthCenterReducer(healthCenterState, action){
         case HEALTH_CENTER_FIELDS.REMOVE_CLINIC:
             console.log(action.payload);
             return produce(healthCenterState, draft=>{
-                //draft.formData.newSiteFormat = draft.formData.newSiteFormat.splice(action.payload, 0);
+                draft.formData.newSiteFormat.splice(action.payload, 1);
                 draft.formData.newSites_list.splice(action.payload, 1);
             })
 
         case HEALTH_CENTER_FIELDS.SENATE_DISTRICT_LIST:
-            console.log('here');
             return produce(healthCenterState,draft=>{
                 draft.formData.senate_districts = [...action.payload]
             });
 
         case HEALTH_CENTER_FIELDS.CONGRESSIONAL_DISTRICT_LIST:
+            console.log('here')
             return produce(healthCenterState, draft=>{
                 draft.formData.congressional_districts = [...action.payload]
+            })
+
+        case HEALTH_CENTER_FIELDS.NM_HOUSE_DISTRICT_LIST:
+            return produce(healthCenterState, draft=>{
+                draft.formData.nmHouse_districts = [...action.payload]
             })
 
         default:
@@ -305,7 +372,7 @@ const HEALTH_CENTER_FIELDS ={
     SITE_FUNDING: 'funding',
     NM_HOUSE_DISTRICT: 'nmHouseDistrict',
     SENATE_DISTRICT: 'senateDistrict',
-    CONGRESSIONAL_DISTRICT: 'congressionalDistricts',
+    CONGRESSIONAL_DISTRICT: 'congressionalDistrict',
     FORM_DATA_SERVICES : 'services',
     FUNDING_LIST: 'fundList',
     SERVICE_LIST: 'serviceList',
@@ -347,22 +414,22 @@ const CreateHealthCenterView = props =>{
             nmHouseDistrict: {id: '', name: ''},
             senateDistrict:{id: '', name: ''},
             congressionalDistrict: {id: '', name: ''},
-            services: [],
+            service: [],
             funding:  []
         },
 
         siteJson:{
           name: ''.trim().toLowerCase(),
           streetAddress: ''.trim().toLowerCase(),
-          cityId: '',
-          countyId: '',
-          zipCodeId: '',
-          healthCenterId: '',
-          nmHouseDistrictId: '',
-          senateDistrictId: '',
-          congressionalDistrictId: '',
-          fundIds : [],
-          serviceIds: [],
+          city: '',
+          county: '',
+          zipCode: '',
+          healthCenter: '',
+          nmHouseDistrict: '',
+          senateDistrict: '',
+          congressionalDistrict: '',
+          fund : [],
+          service: [],
         },
 
         formData:{
@@ -406,15 +473,6 @@ const CreateHealthCenterView = props =>{
                 dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.SERVICE_LIST, payload: [...service.data]})
 
                 console.log('get this thing')
-                const senateDistrict = await axios.get('http://localhost:8080/senateDistricts/',{
-
-                    headers:{
-                        Authorization: localStorage.getItem('token')
-                    }
-
-                })
-
-                dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.SENATE_DISTRICT_LIST, payload: [...senateDistrict.data]})
 
 
             }catch(error){
@@ -540,6 +598,24 @@ const CreateHealthCenterView = props =>{
 
                 dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.SENATE_DISTRICT_LIST, payload: [...senateDistrict.data]})
 
+                const nmHouseDistrict = await axios.get('http://localhost:8080/nmHouseDistricts/',{
+
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    }
+                })
+
+                dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.NM_HOUSE_DISTRICT_LIST, payload: [...nmHouseDistrict.data]})
+
+                const congressionalDistrict = await axios.get('http://localhost:8080/congressionalDistricts',{
+
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    }
+                })
+
+                dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.CONGRESSIONAL_DISTRICT_LIST, payload: [...congressionalDistrict.data]})
+
             }catch(error){
 
                 console.log(error.response);
@@ -549,6 +625,7 @@ const CreateHealthCenterView = props =>{
     }, [])
 
 
+
     const healthCenterHandler = async (e) =>{
 
         e.preventDefault()
@@ -556,19 +633,35 @@ const CreateHealthCenterView = props =>{
 
         try{
 
-            const healthCenterResponse = await axios.post('http://localhost:8080/contacts', {
+
+            const healthCenterResponse = await axios.post('http://localhost:8080/healthCenters', healthCenterInfo.healthCenter,{
 
                 headers:{
                     Authorization: localStorage.getItem('token')
                 }
             } )
 
-            navigate('/yeoman/organizations/')
+            const healthCenterId = healthCenterResponse.data.healthCenterId;
+
+            const siteDetailsRequestModelList = [...healthCenterInfo.formData.newSiteFormat];
+
+            console.log(siteDetailsRequestModelList);
+            console.log(healthCenterId);
+            const siteResponse = await axios.post('http://localhost:8080/sites/bulk/'+ healthCenterId, {siteDetailsRequestModelList},{
+
+                headers:{
+                    Authorization: localStorage.getItem('token')
+                }
+
+            })
+
+            console.log(siteResponse.data);
+            //navigate('/yeoman/organizations/')
 
 
         }catch(error){
 
-            console.log(error);
+            console.log(error.response);
 
         }
 
@@ -607,6 +700,7 @@ const CreateHealthCenterView = props =>{
                             siteDataFields={HEALTH_CENTER_FIELDS}
                             dispatchSite={dispatchHealthCenterInfo}
                             formData={healthCenterInfo.formData}
+                            healthCenterHandler={healthCenterHandler}
                         />
                     </div>
                     : null

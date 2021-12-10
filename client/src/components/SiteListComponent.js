@@ -38,7 +38,7 @@ const SiteListComponent = props =>{
                                     <span className={'fw-bold me-1'}>Service(s):</span>
                                     <ul>
                                         {
-                                            site.services.map(({name}, index)=>{
+                                            site.service.map(({name}, index)=>{
 
                                                 return(
                                                     <li key={index}>{name}</li>
