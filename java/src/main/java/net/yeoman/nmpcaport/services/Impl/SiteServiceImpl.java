@@ -63,23 +63,7 @@ public class SiteServiceImpl implements SiteService {
         return new ModelMapper().map(siteEntity, SiteDto.class);
     }
 
-    @Override
-    public SiteDto createSite(SiteDetailsRequestModel site) {
 
-        SiteDto siteDto = convertFromRequestToDto(site);
-
-        siteDto.setSiteId(utils.generateRandomID());
-        siteDto.setCityResponse(new ModelMapper().map(siteDto.getCity(), CityResponse.class));
-        siteDto.setCountyResponse(new ModelMapper().map(siteDto.getCounty(), CountyResponse.class));
-        siteDto.setZipCodeResponse(new ModelMapper().map(siteDto.getZipCode(), ZipCodeResponse.class));
-        siteDto.setHealthCenterResponse(new ModelMapper().map(siteDto.getHealthCenter(), HealthCenterResponseModel.class));
-
-        SiteEntity siteEntity = new ModelMapper().map(siteDto, SiteEntity.class);
-
-        this.siteRepository.save(siteEntity);
-
-        return  siteDto;
-    }
 
 
 
@@ -98,83 +82,80 @@ public class SiteServiceImpl implements SiteService {
 
     }
 
-    @Override
-    public SiteDto convertFromRequestToDto(SiteDetailsRequestModel siteRequest) {
 
-        SiteDto siteDto = new SiteDto();
-
-        siteDto.setName(siteRequest.getName());
-
-        if(siteRequest.getCityId() != null){
-
-            siteDto.setCity(this.cityService.findCity(siteRequest.getCityId()));
-        }
-
-        if(siteRequest.getCountyId() != null){
-
-            siteDto.setCounty(this.countyService.findCountyEntity(siteRequest.getCountyId()));
-        }
-
-        if(siteRequest.getZipCodeId() != null){
-
-            siteDto.setZipCode(this.zipCodeService.getZipCodeEntity(siteRequest.getZipCodeId()));
-        }
-
-        if(siteRequest.getHealthCenterId() != null){
-
-            siteDto.setHealthCenter(this.healthCenterService.getHealthCenterEntity(siteRequest.getHealthCenterId()));
-        }
-
-
-        return siteDto;
-    }
 
     @Override
-    public List<SiteDto> createSiteBulk(List<SiteDto> siteDtoList) {
+    public List<SiteDto> createSiteBulk(List<SiteDto> siteDtoList, String healthCenterId) {
+
+
+        //return value list
         List<SiteDto> returnValue = new ArrayList<>();
-        List<SiteEntity> savedSites = new ArrayList<>();
+
+        //list of service from all sites
         List<ServiceEntity> serviceEntitiesList = new ArrayList<>();
+
+        //list of Entities from all sites
         List<FundEntity> fundEntityList = new ArrayList<>();
+
+        //get healthCenter
+        HealthCenterEntity healthCenterEntity = this.healthCenterService.getHealthCenterEntity(healthCenterId);
+
+        // check if health center is null, if so throw error
+        if(healthCenterEntity == null) throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
 
         //gather all services
         for(SiteDto site: siteDtoList){
-
-            for(String serviceId: site.getServiceIds()){
-
+            //loop through service ids
+            for(String serviceId: site.getService()){
+                //get service from db
                 ServiceEntity service = this.serviceService.getServiceEntity(serviceId);
-
+                //if service is null throw error
                 if(service == null) throw new ServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
+                //if service not in array
                 if(!serviceEntitiesList.contains(service)){
-
+                    //add to array
                     serviceEntitiesList.add(service);
                 }
             }
         }
 
-        //gather all funds
+        //gather all funds from data transfer objects
         for(SiteDto site: siteDtoList){
 
-            for(String fundId: site.getFundIds()){
-
+            // loop through fund ids
+            for(String fundId: site.getFund()){
+                //get fund from db
                 FundEntity fundEntity = this.fundService.getFundEntity(fundId);
-
+                //if fund is null throw error
                 if(fundEntity == null) throw new FundServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
+                //if fund not in array
                 if(!fundEntityList.contains(fundEntity)){
 
+                    //add to array
                     fundEntityList.add(fundEntity);
                 }
             }
         }
 
+        //add services to healthCenter
+        healthCenterEntity.setServiceEntities(serviceEntitiesList);
 
+        //add funds to health center
+        healthCenterEntity.setFundEntities(fundEntityList);
+
+
+        //cycle throw list of unsaved site data transfer objects
         for(SiteDto site: siteDtoList){
 
+            //convert the data transfer object into Site Entity
             SiteEntity siteEntity = new ModelMapper().map(site, SiteEntity.class);
 
+            //generate site Id
+            siteEntity.setSiteId(utils.generateRandomID());
             //get county
-            CountyEntity countyEntity = this.countyService.findCountyEntity(site.getCountyId());
+            CountyEntity countyEntity = this.countyService.findCountyEntity(site.getCounty());
 
             // check if county is null throw error
             if(countyEntity == null) throw new CountyServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
@@ -183,7 +164,7 @@ public class SiteServiceImpl implements SiteService {
             siteEntity.setCounty(countyEntity);
 
             //get city
-            CityEntity cityEntity = this.cityService.findCity(site.getCityId());
+            CityEntity cityEntity = this.cityService.findCity(site.getCity());
 
             //check if county is null and throw error
             if(cityEntity == null) throw new CityServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
@@ -192,29 +173,23 @@ public class SiteServiceImpl implements SiteService {
             siteEntity.setCity(cityEntity);
 
             //get zipcode for site
-            ZipCodeEntity zipCodeEntity = this.zipCodeService.getZipCodeEntity(site.getZipCodeId());
+            ZipCodeEntity zipCodeEntity = this.zipCodeService.getZipCodeEntity(site.getZipCode());
 
             // check if zip code is null if so throw error
             if(zipCodeEntity == null) throw new ZipCodeServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
             //set zip code for site
-            siteEntity.setZipCode(this.zipCodeService.getZipCodeEntity(site.getZipCodeId()));
-
-            //get healthCenter
-            HealthCenterEntity healthCenterEntity = this.healthCenterService.getHealthCenterEntity(site.getHealthCenterId());
-
-            // check if health center is null, if so throw error
-            if(healthCenterEntity == null) throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            siteEntity.setZipCode(this.zipCodeService.getZipCodeEntity(site.getZipCode()));
 
             //set health center for site
             siteEntity.setHealthCenter(healthCenterEntity);
 
             // senate district field is not required
             // check for senate district id
-            if(!site.getSenateDistrictId().isEmpty()){
+            if(!site.getSenateDistrict().isEmpty()){
 
                 //get senate district
-                SenateDistrictEntity senateDistrictEntity = this.senateDistrictService.findSenateDistrictEntity(site.getSenateDistrictId());
+                SenateDistrictEntity senateDistrictEntity = this.senateDistrictService.findSenateDistrictEntity(site.getSenateDistrict());
 
                 //check if senate district is null, if so throw error
                 if(senateDistrictEntity == null) throw new SenateDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
@@ -224,10 +199,10 @@ public class SiteServiceImpl implements SiteService {
             }
             //field not required
             // check for house district id
-            if(!site.getNmHouseDistrictId().isEmpty()){
+            if(!site.getNmHouseDistrict().isEmpty()){
 
                 //get nmHouseDistrict
-                NMHouseDistrictEntity nmHouseDistrictEntity = this.nmHouseDistrictService.findNMHouseDistrictEntity(site.getNmHouseDistrictId());
+                NMHouseDistrictEntity nmHouseDistrictEntity = this.nmHouseDistrictService.findNMHouseDistrictEntity(site.getNmHouseDistrict());
 
                 //check if house district is null, if so throw error
                 if(nmHouseDistrictEntity == null) throw new NMHouseDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
@@ -238,10 +213,10 @@ public class SiteServiceImpl implements SiteService {
 
             //field is not required
             // check for congressional district
-            if(!site.getCongressionalDistrictId().isEmpty()){
+            if(!site.getCongressionalDistrict().isEmpty()){
 
                 //get congressional district
-                CongressionalDistrictEntity congressionalDistrictEntity = this.congressionalDistrictService.getCongressionalDistrictEntity(site.getCongressionalDistrictId());
+                CongressionalDistrictEntity congressionalDistrictEntity = this.congressionalDistrictService.getCongressionalDistrictEntity(site.getCongressionalDistrict());
 
                 //check if congressional district is null if so throw error
                 if(congressionalDistrictEntity == null) throw new CongressionalDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
@@ -251,9 +226,10 @@ public class SiteServiceImpl implements SiteService {
 
             }
             //assigns fund to the site entity
-            if(site.getFundIds().size() > 0){
+            if(site.getFund().size() > 0){
+                //gather funds into array
                 List<FundEntity> fundingEntities = siteEntity.getFundEntities();
-                for(String fundId: site.getFundIds()){
+                for(String fundId: site.getFund()){
 
                     for(FundEntity fundEntity: fundEntityList){
 
@@ -266,13 +242,14 @@ public class SiteServiceImpl implements SiteService {
                     }
 
                 }
+                //add fund array to site entity
                 siteEntity.setFundEntities(fundingEntities);
             }
 
             //assigns service to all entities;
-            if(site.getServiceIds().size() > 0){
+            if(site.getService().size() > 0){
                 List<ServiceEntity> serviceEntities = siteEntity.getServices();
-                for(String serviceId: site.getServiceIds()){
+                for(String serviceId: site.getService()){
 
                     for(ServiceEntity serviceEntity: serviceEntitiesList){
 
@@ -286,17 +263,19 @@ public class SiteServiceImpl implements SiteService {
                     }
                 }
 
+                //add services array to site entity
                 siteEntity.setServices(serviceEntities);
             }
 
+            //save site entity to the db
             SiteEntity savedSiteEntity = this.siteRepository.save(siteEntity);
 
-            savedSites.add(savedSiteEntity);
+            //check if record was saved if not throw error
+            if(savedSiteEntity == null) throw new SiteServiceException(ErrorMessages.FAILED_TO_SAVE_RECORD.getErrorMessage());
 
-        }
+            //convert saved value and save to return arrayList
+            returnValue.add( new ModelMapper().map(savedSiteEntity, SiteDto.class));
 
-        for(SiteEntity site: savedSites){
-            returnValue.add(new ModelMapper().map(site, SiteDto.class));
         }
 
         return returnValue;

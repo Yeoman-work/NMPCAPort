@@ -9,6 +9,7 @@ public enum ErrorMessages {
     AUTHENTICATION_FAILED("Authentication failed"),
     COULD_NOT_UPDATE_RECORD("Could not update record"),
     COULD_NOT_DELETE_RECORD("Could not delete record"),
+    FAILED_TO_SAVE_RECORD("Failed to save records"),
     Email_ADDRESS_NOT_VERIFIED("Email address could not be verified"),
     DISTRICT_NOT_VALID("Not a valid district");
 

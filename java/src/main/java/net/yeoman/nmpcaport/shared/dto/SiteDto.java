@@ -14,36 +14,35 @@ import java.util.List;
 public class SiteDto {
 
     private Long id;
-    private String siteId;
+    private String site_identifier;
     private String name;
     private String streetAddress;
-    private String cityId;
-    private String countyId;
-    private String zipCodeId;
-    private String healthCenterId;
-    private String nmHouseDistrictId;
-    private String senateDistrictId;
-    private String congressionalDistrictId;
-    private List<String> fundIds;
-    private List<String> serviceIds;
+    private String city;
+    private String county;
+    private String zipCode;
+    private String healthCenter;
+    private String nmHouseDistrict;
+    private String senateDistrict;
+    private String congressionalDistrict;
+    private List<String> fund;
+    private List<String> service;
     private CityResponse cityResponse;
-    private CityEntity city;
+    private CityEntity cityEntity;
     private CountyResponse countyResponse;
-    private CountyEntity county;
+    private CountyEntity countyEntity;
     private HealthCenterResponseModel healthCenterResponse;
-    private HealthCenterEntity healthCenter;
+    private HealthCenterEntity healthCenterEntity;
     private ZipCodeResponse zipCodeResponse;
-    private ZipCodeEntity zipCode;
-    private String fundId;
-    private String serviceId;
+    private ZipCodeEntity zipCodeEntity;
     private String createdAt;
     private String updatedAt;
     private NMHouseDistrictEntity nmHouseDistrictEntity;
     private SenateDistrictEntity senateDistrictEntity;
-    private CongressionalDistrictEntity congressionalDistrict;
+    private CongressionalDistrictEntity congressionalDistrictEntity;
     private NMHouseDistrictResponse nmHouseDistrictResponse;
     private SenateDistrictResponseModel senateDistrictResponseModel;
     private CongressionalDistrictResponse congressionalDistrictResponse;
+
 
     public Long getId() {
         return id;
@@ -53,12 +52,12 @@ public class SiteDto {
         this.id = id;
     }
 
-    public String getSiteId() {
-        return siteId;
+    public String getSite_identifier() {
+        return site_identifier;
     }
 
-    public void setSiteId(String siteId) {
-        this.siteId = siteId;
+    public void setSite_identifier(String site_identifier) {
+        this.site_identifier = site_identifier;
     }
 
     public String getName() {
@@ -77,36 +76,76 @@ public class SiteDto {
         this.streetAddress = streetAddress;
     }
 
-    public String getCityId() {
-        return cityId;
+    public String getCity() {
+        return city;
     }
 
-    public void setCityId(String cityId) {
-        this.cityId = cityId;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getCountyId() {
-        return countyId;
+    public String getCounty() {
+        return county;
     }
 
-    public void setCountyId(String countyId) {
-        this.countyId = countyId;
+    public void setCounty(String county) {
+        this.county = county;
     }
 
-    public String getZipCodeId() {
-        return zipCodeId;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setZipCodeId(String zipCodeId) {
-        this.zipCodeId = zipCodeId;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
-    public String getHealthCenterId() {
-        return healthCenterId;
+    public String getHealthCenter() {
+        return healthCenter;
     }
 
-    public void setHealthCenterId(String healthCenterId) {
-        this.healthCenterId = healthCenterId;
+    public void setHealthCenter(String healthCenter) {
+        this.healthCenter = healthCenter;
+    }
+
+    public String getNmHouseDistrict() {
+        return nmHouseDistrict;
+    }
+
+    public void setNmHouseDistrict(String nmHouseDistrict) {
+        this.nmHouseDistrict = nmHouseDistrict;
+    }
+
+    public String getSenateDistrict() {
+        return senateDistrict;
+    }
+
+    public void setSenateDistrict(String senateDistrict) {
+        this.senateDistrict = senateDistrict;
+    }
+
+    public String getCongressionalDistrict() {
+        return congressionalDistrict;
+    }
+
+    public void setCongressionalDistrict(String congressionalDistrict) {
+        this.congressionalDistrict = congressionalDistrict;
+    }
+
+    public List<String> getFund() {
+        return fund;
+    }
+
+    public void setFund(List<String> fund) {
+        this.fund = fund;
+    }
+
+    public List<String> getService() {
+        return service;
+    }
+
+    public void setService(List<String> service) {
+        this.service = service;
     }
 
     public CityResponse getCityResponse() {
@@ -117,12 +156,12 @@ public class SiteDto {
         this.cityResponse = cityResponse;
     }
 
-    public CityEntity getCity() {
-        return city;
+    public CityEntity getCityEntity() {
+        return cityEntity;
     }
 
-    public void setCity(CityEntity city) {
-        this.city = city;
+    public void setCityEntity(CityEntity cityEntity) {
+        this.cityEntity = cityEntity;
     }
 
     public CountyResponse getCountyResponse() {
@@ -133,12 +172,12 @@ public class SiteDto {
         this.countyResponse = countyResponse;
     }
 
-    public CountyEntity getCounty() {
-        return county;
+    public CountyEntity getCountyEntity() {
+        return countyEntity;
     }
 
-    public void setCounty(CountyEntity county) {
-        this.county = county;
+    public void setCountyEntity(CountyEntity countyEntity) {
+        this.countyEntity = countyEntity;
     }
 
     public HealthCenterResponseModel getHealthCenterResponse() {
@@ -149,12 +188,12 @@ public class SiteDto {
         this.healthCenterResponse = healthCenterResponse;
     }
 
-    public HealthCenterEntity getHealthCenter() {
-        return healthCenter;
+    public HealthCenterEntity getHealthCenterEntity() {
+        return healthCenterEntity;
     }
 
-    public void setHealthCenter(HealthCenterEntity healthCenter) {
-        this.healthCenter = healthCenter;
+    public void setHealthCenterEntity(HealthCenterEntity healthCenterEntity) {
+        this.healthCenterEntity = healthCenterEntity;
     }
 
     public ZipCodeResponse getZipCodeResponse() {
@@ -165,12 +204,12 @@ public class SiteDto {
         this.zipCodeResponse = zipCodeResponse;
     }
 
-    public ZipCodeEntity getZipCode() {
-        return zipCode;
+    public ZipCodeEntity getZipCodeEntity() {
+        return zipCodeEntity;
     }
 
-    public void setZipCode(ZipCodeEntity zipCode) {
-        this.zipCode = zipCode;
+    public void setZipCodeEntity(ZipCodeEntity zipCodeEntity) {
+        this.zipCodeEntity = zipCodeEntity;
     }
 
     public String getCreatedAt() {
@@ -205,12 +244,12 @@ public class SiteDto {
         this.senateDistrictEntity = senateDistrictEntity;
     }
 
-    public CongressionalDistrictEntity getCongressionalDistrict() {
-        return congressionalDistrict;
+    public CongressionalDistrictEntity getCongressionalDistrictEntity() {
+        return congressionalDistrictEntity;
     }
 
-    public void setCongressionalDistrict(CongressionalDistrictEntity congressionalDistrict) {
-        this.congressionalDistrict = congressionalDistrict;
+    public void setCongressionalDistrictEntity(CongressionalDistrictEntity congressionalDistrictEntity) {
+        this.congressionalDistrictEntity = congressionalDistrictEntity;
     }
 
     public NMHouseDistrictResponse getNmHouseDistrictResponse() {
@@ -235,61 +274,5 @@ public class SiteDto {
 
     public void setCongressionalDistrictResponse(CongressionalDistrictResponse congressionalDistrictResponse) {
         this.congressionalDistrictResponse = congressionalDistrictResponse;
-    }
-
-    public String getFundId() {
-        return fundId;
-    }
-
-    public void setFundId(String fundId) {
-        this.fundId = fundId;
-    }
-
-    public String getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(String serviceId) {
-        this.serviceId = serviceId;
-    }
-
-    public String getNmHouseDistrictId() {
-        return nmHouseDistrictId;
-    }
-
-    public void setNmHouseDistrictId(String nmHouseDistrictId) {
-        this.nmHouseDistrictId = nmHouseDistrictId;
-    }
-
-    public String getSenateDistrictId() {
-        return senateDistrictId;
-    }
-
-    public void setSenateDistrictId(String senateDistrictId) {
-        this.senateDistrictId = senateDistrictId;
-    }
-
-    public String getCongressionalDistrictId() {
-        return congressionalDistrictId;
-    }
-
-    public void setCongressionalDistrictId(String congressionalDistrictId) {
-        this.congressionalDistrictId = congressionalDistrictId;
-    }
-
-    public List<String> getFundIds() {
-        return fundIds;
-    }
-
-    public void setFundIds(List<String> fundIds) {
-        this.fundIds = fundIds;
-    }
-
-    public List<String> getServiceIds() {
-        return serviceIds;
-    }
-
-    public void setServiceIds(List<String> serviceIds) {
-        this.serviceIds = serviceIds;
     }
 }

@@ -52,6 +52,14 @@ public class ServiceEntity implements Serializable {
     )
     private List<SiteEntity> sites;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name="service_healthCenter",
+            joinColumns = @JoinColumn(name = "service_entity_id"),
+            inverseJoinColumns = @JoinColumn(name = "health_center_entity_id")
+    )
+    private List<HealthCenterEntity> healthCenterEntities;
+
     public ServiceEntity() {
     }
 
@@ -132,5 +140,13 @@ public class ServiceEntity implements Serializable {
 
     public void setSites(List<SiteEntity> sites) {
         this.sites = sites;
+    }
+
+    public List<HealthCenterEntity> getHealthCenterEntities() {
+        return healthCenterEntities;
+    }
+
+    public void setHealthCenterEntities(List<HealthCenterEntity> healthCenterEntities) {
+        this.healthCenterEntities = healthCenterEntities;
     }
 }

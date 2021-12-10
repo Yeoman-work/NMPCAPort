@@ -10,11 +10,9 @@ import java.util.List;
 public interface SiteService {
 
     public SiteDto getSite(String siteId);
-    public SiteDto createSite(SiteDetailsRequestModel site);
     public SiteDto updatedSite(SiteDto site);
     public SiteEntity getSiteEntity(String siteId);
     public void deleteSite(String siteId);
-    public SiteDto convertFromRequestToDto(SiteDetailsRequestModel siteRequest);
-    public List<SiteDto> createSiteBulk(List<SiteDto> siteDtoList);
+    public List<SiteDto> createSiteBulk(List<SiteDto> siteDtoList, String healthCenterId);
 
 }

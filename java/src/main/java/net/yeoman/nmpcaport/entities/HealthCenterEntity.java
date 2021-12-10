@@ -66,6 +66,14 @@ public class HealthCenterEntity implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
+            name = "service_healthCenter",
+            joinColumns = @JoinColumn(name = "health_center_entity_id"),
+            inverseJoinColumns = @JoinColumn(name="service_entity_id")
+    )
+    private List<ServiceEntity> serviceEntities;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
             name = "health_centers_senate_districts",
             joinColumns = @JoinColumn(name = "health_center_entity_id"),
             inverseJoinColumns = @JoinColumn(name = "senate_district_entity_id")
@@ -212,5 +220,11 @@ public class HealthCenterEntity implements Serializable {
         this.fundEntities = fundEntities;
     }
 
+    public List<ServiceEntity> getServiceEntities() {
+        return serviceEntities;
+    }
 
+    public void setServiceEntities(List<ServiceEntity> serviceEntities) {
+        this.serviceEntities = serviceEntities;
+    }
 }

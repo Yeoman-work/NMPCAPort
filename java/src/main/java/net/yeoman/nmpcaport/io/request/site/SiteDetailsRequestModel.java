@@ -11,15 +11,15 @@ public class SiteDetailsRequestModel {
 
     private String name;
     private String streetAddress;
-    private String cityId;
-    private String countyId;
-    private String zipCodeId;
-    private String healthCenterId;
-    private String nmHouseDistrictId;
-    private String senateDistrictId;
-    private String congressionalDistrictId;
-    private List<String> fundIds;
-    private List<String> serviceIds;
+    private String city;
+    private String county;
+    private String zipCode;
+    private String healthCenter;
+    private String nmHouseDistrict;
+    private String senateDistrict;
+    private String congressionalDistrict;
+    private List<String> fund;
+    private List<String> service;
 
     public String getName() {
         return name;
@@ -37,75 +37,75 @@ public class SiteDetailsRequestModel {
         this.streetAddress = streetAddress;
     }
 
-    public String getCityId() {
-        return cityId;
+    public String getCity() {
+        return city;
     }
 
-    public void setCityId(String cityId) {
-        this.cityId = cityId;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getCountyId() {
-        return countyId;
+    public String getCounty() {
+        return county;
     }
 
-    public void setCountyId(String countyId) {
-        this.countyId = countyId;
+    public void setCounty(String county) {
+        this.county = county;
     }
 
-    public String getZipCodeId() {
-        return zipCodeId;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setZipCodeId(String zipCodeId) {
-        this.zipCodeId = zipCodeId;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
-    public String getHealthCenterId() {
-        return healthCenterId;
+    public String getHealthCenter() {
+        return healthCenter;
     }
 
-    public void setHealthCenterId(String healthCenterId) {
-        this.healthCenterId = healthCenterId;
+    public void setHealthCenter(String healthCenter) {
+        this.healthCenter = healthCenter;
     }
 
-    public String getNmHouseDistrictId() {
-        return nmHouseDistrictId;
+    public String getNmHouseDistrict() {
+        return nmHouseDistrict;
     }
 
-    public void setNmHouseDistrictId(String nmHouseDistrictId) {
-        this.nmHouseDistrictId = nmHouseDistrictId;
+    public void setNmHouseDistrict(String nmHouseDistrict) {
+        this.nmHouseDistrict = nmHouseDistrict;
     }
 
-    public String getSenateDistrictId() {
-        return senateDistrictId;
+    public String getSenateDistrict() {
+        return senateDistrict;
     }
 
-    public void setSenateDistrictId(String senateDistrictId) {
-        this.senateDistrictId = senateDistrictId;
+    public void setSenateDistrict(String senateDistrict) {
+        this.senateDistrict = senateDistrict;
     }
 
-    public String getCongressionalDistrictId() {
-        return congressionalDistrictId;
+    public String getCongressionalDistrict() {
+        return congressionalDistrict;
     }
 
-    public void setCongressionalDistrictId(String congressionalDistrictId) {
-        this.congressionalDistrictId = congressionalDistrictId;
+    public void setCongressionalDistrict(String congressionalDistrict) {
+        this.congressionalDistrict = congressionalDistrict;
     }
 
-    public List<String> getFundIds() {
-        return fundIds;
+    public List<String> getFund() {
+        return fund;
     }
 
-    public void setFundIds(List<String> fundIds) {
-        this.fundIds = fundIds;
+    public void setFund(List<String> fund) {
+        this.fund = fund;
     }
 
-    public List<String> getServiceIds() {
-        return serviceIds;
+    public List<String> getService() {
+        return service;
     }
 
-    public void setServiceIds(List<String> serviceIds) {
-        this.serviceIds = serviceIds;
+    public void setService(List<String> service) {
+        this.service = service;
     }
 }

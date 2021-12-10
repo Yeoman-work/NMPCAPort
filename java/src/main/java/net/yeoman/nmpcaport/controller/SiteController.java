@@ -27,18 +27,18 @@ public class SiteController {
         return "inside get site";
     }
 
-    @PostMapping
-    public SiteDetailsResponse createSite(@RequestBody SiteDetailsRequestModel siteDetails){
+//    @PostMapping
+//    public SiteDetailsResponse createSite(@RequestBody SiteDetailsRequestModel siteDetails){
+//
+//
+//        SiteDto savedSiteDto = this.siteService.createSite(siteDetails);
+//
+//
+//        return new ModelMapper().map(savedSiteDto, SiteDetailsResponse.class);
+//    }
 
-
-        SiteDto savedSiteDto = this.siteService.createSite(siteDetails);
-
-
-        return new ModelMapper().map(savedSiteDto, SiteDetailsResponse.class);
-    }
-
-    @PostMapping("/bulkSiteCreation")
-    public List<SiteDetailsNestedResponse> createSites(@RequestBody SiteDetailsRequestListModel siteDetailsRequestListModel){
+    @PostMapping("/bulk/{healthCenterId}")
+    public List<SiteDetailsNestedResponse> createSitesWithOutId(@PathVariable("healthCenterId") String healthCenterId, @RequestBody SiteDetailsRequestListModel siteDetailsRequestListModel){
         List<SiteDetailsNestedResponse> returnValue = new ArrayList<>();
         List<SiteDto> serviceInput = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class SiteController {
             serviceInput.add(new ModelMapper().map(site, SiteDto.class));
         }
 
-        List<SiteDto> siteDtoList = this.siteService.createSiteBulk(serviceInput);
+        List<SiteDto> siteDtoList = this.siteService.createSiteBulk(serviceInput, healthCenterId);
 
         for(SiteDto site: siteDtoList){
             returnValue.add(new ModelMapper().map(site, SiteDetailsNestedResponse.class));
