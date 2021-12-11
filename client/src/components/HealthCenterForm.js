@@ -1,5 +1,5 @@
 import React from "react";
-
+const { characters } = require('../helper/generalFunctions')
 
 
 
@@ -8,6 +8,19 @@ const HealthCenterForm = props =>{
             healthCareFields,
             dispatchHealthCenter
         } = props;
+
+
+    const nextButton = (healthCenterState) =>{
+        let disable = true;
+
+        if(healthCenterState.name.length >= 4 && healthCenterState.name.length <= 50){
+            if(healthCenterState.nameAbbr.length >= 3 && healthCenterState.nameAbbr.length <= 8 ){
+                disable = false;
+            }
+        }
+
+        return disable;
+    }
 
 
     return(
@@ -72,7 +85,7 @@ const HealthCenterForm = props =>{
                 </div>
             </div>
                               <button onClick={(e)=>dispatchHealthCenter({type: healthCareFields.FORM_DECREMENT})}>Back</button>
-                              <button onClick={(e)=>dispatchHealthCenter({type: healthCareFields.FORM_INCREMENT})}>Next</button>
+                              <button disabled={nextButton(healthCenterState)} onClick={(e)=>dispatchHealthCenter({type: healthCareFields.FORM_INCREMENT})}>Next</button>
 
 
 

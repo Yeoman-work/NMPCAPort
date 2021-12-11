@@ -1,14 +1,17 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.entities.ContactEntity;
-import net.yeoman.nmpcaport.entities.HealthCenterEntity;
-import net.yeoman.nmpcaport.entities.SiteEntity;
-import net.yeoman.nmpcaport.entities.UserEntity;
+import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.exception.HealthCenterServiceException;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
+import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
@@ -16,6 +19,7 @@ import net.yeoman.nmpcaport.repositories.HealthCenterRepository;
 import net.yeoman.nmpcaport.repositories.UserRepository;
 import net.yeoman.nmpcaport.services.HealthCenterService;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
+import net.yeoman.nmpcaport.shared.dto.SiteDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,7 +181,22 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
     @Override
     public HealthCenterDto updateHealthCenter(String healthCenterId, HealthCenterDto healthCenterDto) {
-        return null;
+
+        //get record
+        HealthCenterEntity healthCenterEntity = this.healthCenterRepository.findByHealthCenterId(healthCenterId);
+
+        //health center entity null throw error
+        if(healthCenterEntity == null) throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        if(!healthCenterEntity.getName().equals(healthCenterDto.getName())){
+            healthCenterEntity.setName(healthCenterDto.getName());
+        }
+
+        if(!healthCenterEntity.getNameAbbr().equals(healthCenterDto.getNameAbbr())){
+            healthCenterEntity.setNameAbbr(healthCenterDto.getNameAbbr());
+        }
+
+        return new ModelMapper().map(healthCenterEntity, HealthCenterDto.class);
     }
 
     @Override
@@ -189,6 +208,12 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     public HealthCenterEntity getHealthCenterEntity(String healthCenterId) {
 
         return this.healthCenterRepository.findByHealthCenterId(healthCenterId);
+    }
+
+    @Override
+    public HealthCenterEntity savedHealthCenterEntity(HealthCenterEntity healthCenterEntity) {
+
+        return this.healthCenterRepository.save(healthCenterEntity);
     }
 
     @Override
@@ -204,12 +229,59 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         List<HealthCenterEntity> healthCenters = healthCenterPage.getContent();
 
+
+
         for(HealthCenterEntity healthCenter: healthCenters){
 
-            HealthCenterDto healthCenterDto = new HealthCenterDto();
+            HealthCenterDto healthCenterDto = new ModelMapper().map(healthCenter, HealthCenterDto.class);
 
+            if(healthCenter.getCongressionalDistrictEntities().size() > 0){
+                List<CongressionalDistrictResponse> districtResponses = new ArrayList<>();
 
-            returnValue.add(new ModelMapper().map(healthCenter, HealthCenterDto.class));
+                for(CongressionalDistrictEntity congressionalDistrict: healthCenter.getCongressionalDistrictEntities()){
+
+                    districtResponses.add(new ModelMapper().map(congressionalDistrict, CongressionalDistrictResponse.class));
+
+                }
+
+                healthCenterDto.setCongressionalDistrictResponseList(districtResponses);
+            }
+
+            if(healthCenter.getNmHouseDistrictsEntities().size() > 0){
+                List<NMHouseDistrictNestedResponse> districtNestedResponses = new ArrayList<>();
+
+                for(NMHouseDistrictEntity houseDistrict: healthCenter.getNmHouseDistrictsEntities()){
+
+                    districtNestedResponses.add(new ModelMapper().map(houseDistrict, NMHouseDistrictNestedResponse.class));
+                }
+
+                healthCenterDto.setNmHouseDistrictNestedResponses(districtNestedResponses);
+            }
+
+            if(healthCenter.getSenateDistrictEntities().size()> 0){
+                List<SenateDistrictResponseModel> districtResponseModelList = new ArrayList<>();
+
+                for(SenateDistrictEntity senateDistrict: healthCenter.getSenateDistrictEntities()){
+
+                    districtResponseModelList.add(new ModelMapper().map(senateDistrict, SenateDistrictResponseModel.class));
+                }
+
+                healthCenterDto.setSenateDistrictResponseModelList(districtResponseModelList);
+            }
+
+            if(healthCenter.getSites().size() > 0){
+
+                List<SiteDetailsNestedResponse> siteDetailsNestedResponses = new ArrayList<>();
+
+                for(SiteEntity site: healthCenter.getSites()){
+
+                    siteDetailsNestedResponses.add(new ModelMapper().map(site, SiteDetailsNestedResponse.class));
+                }
+
+                healthCenterDto.setSiteDetailsNestedResponseList(siteDetailsNestedResponses);
+            }
+
+            returnValue.add(healthCenterDto);
         }
 
         return returnValue;

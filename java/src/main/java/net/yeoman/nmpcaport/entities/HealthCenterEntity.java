@@ -45,7 +45,13 @@ public class HealthCenterEntity implements Serializable {
     @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SiteEntity> sites;
 
-    @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "health_center_nm_house_district",
+            joinColumns = @JoinColumn(name = "health_center_entity_id"),
+            inverseJoinColumns = @JoinColumn(name = "n_m_house_district_entity_id")
+
+    )
     private List<NMHouseDistrictEntity> nmHouseDistrictsEntities;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -78,7 +84,7 @@ public class HealthCenterEntity implements Serializable {
             joinColumns = @JoinColumn(name = "health_center_entity_id"),
             inverseJoinColumns = @JoinColumn(name = "senate_district_entity_id")
     )
-    List<SenateDistrictEntity> senateDistrictEntities;
+    private List<SenateDistrictEntity> senateDistrictEntities;
 
     @PrePersist
     protected void onCreate(){
@@ -227,4 +233,6 @@ public class HealthCenterEntity implements Serializable {
     public void setServiceEntities(List<ServiceEntity> serviceEntities) {
         this.serviceEntities = serviceEntities;
     }
+
+
 }

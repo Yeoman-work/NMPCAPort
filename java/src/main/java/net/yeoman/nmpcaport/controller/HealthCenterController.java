@@ -1,6 +1,9 @@
 package net.yeoman.nmpcaport.controller;
 
+import net.yeoman.nmpcaport.entities.HealthCenterEntity;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseBaseModel;
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseFull;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.services.Impl.HealthCenterServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
@@ -20,25 +23,24 @@ public class HealthCenterController {
     private HealthCenterServiceImpl healthCenterService;
 
     @GetMapping(path = "/{healthCenterId}")
-    public HealthCenterResponseModel getHealthCenter(@PathVariable("healthCenterId") String healthCenterId){
+    public HealthCenterEntity getHealthCenter(@PathVariable("healthCenterId") String healthCenterId){
 
-        return new ModelMapper().map(this.healthCenterService.getHealthCenter(healthCenterId), HealthCenterResponseModel.class);
+        //return new ModelMapper().map(this.healthCenterService.getHealthCenter(healthCenterId), HealthCenterResponseModel.class);
+        return this.healthCenterService.getHealthCenterEntity(healthCenterId);
     }
 
     @GetMapping
-    public List<HealthCenterResponseModel> getHealthCenters(@RequestParam(value ="page", defaultValue = "0") int page,
-                                                            @RequestParam(value= "limit", defaultValue = "25") int limit){
+    public List<HealthCenterResponseFull> getHealthCenters(@RequestParam(value ="page", defaultValue = "0") int page,
+                                                           @RequestParam(value= "limit", defaultValue = "25") int limit){
 
-        List<HealthCenterResponseModel> healthCenterResponseModelList = new ArrayList<>();
+        List<HealthCenterResponseFull> healthCenterResponseModelList = new ArrayList<>();
 
         List<HealthCenterDto> healthCenters = healthCenterService.getHealthCenters(page, limit);
 
 
         for(HealthCenterDto healthCenter: healthCenters){
 
-
-
-            healthCenterResponseModelList.add(new ModelMapper().map(healthCenter, HealthCenterResponseModel.class));
+            healthCenterResponseModelList.add(new ModelMapper().map(healthCenter, HealthCenterResponseFull.class));
         }
 
         return healthCenterResponseModelList;

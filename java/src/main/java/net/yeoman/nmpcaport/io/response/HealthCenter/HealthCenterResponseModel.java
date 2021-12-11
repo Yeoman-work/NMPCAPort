@@ -24,8 +24,8 @@ public class HealthCenterResponseModel {
     private List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponseList;
     private List<SenateDistrictResponseModel> senateDistrictResponseList;
     private List<CongressionalDistrictResponse> congressionalDistrictResponseList;
-    private String createdAt;
-    private String updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
 
     public String getHealthCenterId() {
         return healthCenterId;
@@ -51,19 +51,19 @@ public class HealthCenterResponseModel {
         this.nameAbbr = nameAbbr;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 

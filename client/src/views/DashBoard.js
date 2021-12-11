@@ -19,7 +19,7 @@ const DashBoard = props =>{
                         Authorization: localStorage.getItem('token')
                     }
                 })
-
+                console.log(healthCentersResponse.data);
                 setHealthCenters(healthCentersResponse.data);
 
             }catch(error){

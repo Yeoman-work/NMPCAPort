@@ -9,6 +9,7 @@ import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.repositories.SiteRepository;
+import net.yeoman.nmpcaport.services.CongressionalRepService;
 import net.yeoman.nmpcaport.services.HealthCenterService;
 import net.yeoman.nmpcaport.services.SiteService;
 import net.yeoman.nmpcaport.shared.dto.SiteDto;
@@ -97,11 +98,67 @@ public class SiteServiceImpl implements SiteService {
         //list of Entities from all sites
         List<FundEntity> fundEntityList = new ArrayList<>();
 
+        //get all congressional districts
+        List<String> congressionalDistrictIdList = new ArrayList<>();
+        List<CongressionalDistrictEntity> congressionalDistrictEntities = new ArrayList<>();
+
+        //get all senate district sites
+        List<String> senateDistrictIdList = new ArrayList<>();
+        List<SenateDistrictEntity> senateDistrictEntities = new ArrayList<>();
+
+        //get all state house districts
+        List<String> houseDistrictIdList = new ArrayList<>();
+        List<NMHouseDistrictEntity> nmHouseDistrictEntities = new ArrayList<>();
+
         //get healthCenter
         HealthCenterEntity healthCenterEntity = this.healthCenterService.getHealthCenterEntity(healthCenterId);
 
         // check if health center is null, if so throw error
         if(healthCenterEntity == null) throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        //gather all districts
+        for(SiteDto site: siteDtoList) {
+            // get all congressional districts
+            if(!congressionalDistrictIdList.contains(site.getCongressionalDistrict())) {
+
+                //congressional district
+                CongressionalDistrictEntity congressionalDistrict = this.congressionalDistrictService.getCongressionalDistrictEntity(site.getCongressionalDistrict());
+
+                if(congressionalDistrict == null) throw new CongressionalDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+                congressionalDistrictEntities.add(congressionalDistrict);
+                congressionalDistrictIdList.add(site.getCongressionalDistrict());
+            }
+
+            //get all senate districts
+            if(!senateDistrictIdList.contains(site.getSenateDistrict())){
+
+                SenateDistrictEntity senateDistrict = this.senateDistrictService.findSenateDistrictEntity(site.getSenateDistrict());
+
+                if(senateDistrict == null) throw new SenateDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+                senateDistrictEntities.add(senateDistrict);
+                senateDistrictIdList.add(site.getSenateDistrict());
+            }
+            //get all house districts
+            if(!houseDistrictIdList.contains(site.getNmHouseDistrict())){
+
+                NMHouseDistrictEntity nmHouseDistrict = this.nmHouseDistrictService.findNMHouseDistrictEntity(site.getNmHouseDistrict());
+
+                if(nmHouseDistrict == null) throw new NMHouseDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+                nmHouseDistrictEntities.add(nmHouseDistrict);
+                houseDistrictIdList.contains(site.getNmHouseDistrict());
+            }
+        }
+
+        healthCenterEntity.setCongressionalDistrictEntities(congressionalDistrictEntities);
+        healthCenterEntity.setSenateDistrictEntities(senateDistrictEntities);
+        healthCenterEntity.setNmHouseDistrictsEntities(nmHouseDistrictEntities);
+        healthCenterEntity.setFundEntities(fundEntityList);
+        healthCenterEntity.setServiceEntities(serviceEntitiesList);
+
+
 
 
         //gather all services
@@ -272,6 +329,8 @@ public class SiteServiceImpl implements SiteService {
 
             //check if record was saved if not throw error
             if(savedSiteEntity == null) throw new SiteServiceException(ErrorMessages.FAILED_TO_SAVE_RECORD.getErrorMessage());
+
+            HealthCenterEntity savedHealthCenter = this.healthCenterService.savedHealthCenterEntity(healthCenterEntity);
 
             //convert saved value and save to return arrayList
             returnValue.add( new ModelMapper().map(savedSiteEntity, SiteDto.class));

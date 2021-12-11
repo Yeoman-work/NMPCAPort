@@ -26,7 +26,7 @@ const SiteForm = props =>{
        return isPresent;
    }
 
-   const canSubmit = (siteState, formData) =>{
+   const addSite = (siteState, formData) =>{
 
        let disable = true;
 
@@ -69,60 +69,19 @@ const SiteForm = props =>{
            disable = true;
        }
 
-       // if(siteState.streetAddress.length >= 5 && siteState.streetAddress.length <= 100 ){
-       //
-       //     isValid = false;
-       //
-       // }else{
-       //
-       //     isValid = true;
-       // }
+       return disable;
+   }
 
-       // if(formData.city_list){
-       //
-       //     for(let city of formData.city_list){
-       //
-       //         if(city.cityId === siteState.city.id){
-       //
-       //             isValid = false;
-       //             break;
-       //         }
-       //     }
-       // }else{
-       //
-       //     isValid = true;
-       // }
+   const saveHealthCenter = (formData) =>{
+       let disable = true;
+       const siteList = formData.newSiteFormat.length;
 
-       // if(formData.county_list){
-       //
-       //     for(let county of formData.county_list){
-       //
-       //         if(county.countyId === siteState.county.id){
-       //             isValid = false;
-       //             break;
-       //         }
-       //     }
-       //
-       // }else{
-       //
-       //     isValid = true;
-       // }
 
-       // if(formData.zipCode_list){
-       //
-       //     for(let zipCode of formData.zipCode_list){
-       //
-       //         if(zipCode.zipCodeId === siteState.zipCode.id){
-       //             isValid = false;
-       //             break;
-       //         }
-       //     }
-       //
-       // }else{
-       //
-       //     isValid = true;
-       // }
+       if(siteList > 0) {
 
+           disable = false;
+
+       }
 
        return disable;
    }
@@ -336,8 +295,8 @@ const SiteForm = props =>{
                     </div>
                 </form>
                 <button onClick={(e)=>dispatchSite({type: siteDataFields.FORM_DECREMENT})}>Back</button>
-                <button disabled={canSubmit(siteState, formData)} onClick={(e)=>dispatchSite({type: siteDataFields.NEW_SITE_LIST, payload: {...siteState}, option: e })}>Add Another Site</button>
-                <button disabled={canSubmit(siteState, formData)} onClick={(e)=>healthCenterHandler(e)}>Finish</button>
+                <button disabled={addSite(siteState, formData)} onClick={(e)=>dispatchSite({type: siteDataFields.NEW_SITE_LIST, payload: {...siteState}, option: e })}>Add Another Site</button>
+                <button disabled={saveHealthCenter(formData)} onClick={(e)=>healthCenterHandler(e)}>Finish</button>
             </div>
         </div>
 

@@ -13,6 +13,7 @@ public interface HealthCenterService {
     public HealthCenterDto updateHealthCenter(String healthCenterId, HealthCenterDto healthCenterDto);
     public HealthCenterDto deleteHealthCenter(String healthCenterId);
     public HealthCenterEntity getHealthCenterEntity(String healthCenterId);
+    public HealthCenterEntity savedHealthCenterEntity(HealthCenterEntity healthCenterEntity);
     public List<HealthCenterDto> getHealthCenters(int page, int limit);
 
 

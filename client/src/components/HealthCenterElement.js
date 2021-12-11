@@ -9,66 +9,44 @@ const HealthCenterElement = props =>{
 
     return(
 
-        <div className={'row'}>
+        <div className={'row m-auto'}>
             <div className={'col'}>
                 <h3>{healthCenter.name} ({healthCenter.nameAbbr})</h3>
-                <h6 className={'align-bottom'}>Updated: {dateAndTime(healthCenter.updatedAt)}</h6>
+                <h6 className={'align-bottom'}>Updated: {healthCenter.updatedAt? dateAndTime(healthCenter.updatedAt): dateAndTime(healthCenter.createdAt)}</h6>
             </div>
             <div className={'col overflow-auto'}>
                 <h4>Locations:</h4>
-                <ul>
-                    {
-                        healthCenter.siteDetailsNestedResponse.map((site, index)=>{
+                {/*<ul>*/}
+                {/*    {*/}
+                {/*        healthCenter.map((site, index)=>{*/}
 
 
-                            return(
-                                <li key={index}>{site.name}</li>
-                            )
-                        })
-                    }
+                {/*            return(*/}
+                {/*                <li key={index}>{site.name}</li>*/}
+                {/*            )*/}
+                {/*        })*/}
+                {/*    }*/}
 
-                </ul>
+                {/*</ul>*/}
             </div>
             <div className={'overflow-auto col'}>
-                <h4>NM House District</h4>
-                <ul>
-                    {
-                        healthCenter.nmHouseDistrictNestedResponseList.map((district, index)=>{
+                <h4>District</h4>
+                <h6><strong>NM House District:</strong> </h6>
+                <h6><strong>NM Senate District:</strong> </h6>
+                <h6><strong>Congressional District:</strong> </h6>
+                {/*<ul>*/}
+                {/*    {*/}
+                {/*        healthCenter.nmHouseDistrictNestedResponseList.map((district, index)=>{*/}
 
 
-                            return(
-                                <li key={index}>{district.name}</li>
-                            )
-                        })
-                    }
-                </ul>
+                {/*            return(*/}
+                {/*                <li key={index}>{district.name}</li>*/}
+                {/*            )*/}
+                {/*        })*/}
+                {/*    }*/}
+                {/*</ul>*/}
             </div>
-            <div className={'col overflow-auto'}>
-                <h4>Senate Districts</h4>
-                <ul>
-                    {
-                        healthCenter.senateDistrictResponseList.map((district, index)=>{
 
-                            return(
-                                <li key={index}>{district.name}</li>
-                            )
-                        })
-                    }
-                </ul>
-            </div>
-            <div className={'col overflow-auto'}>
-                <ul>
-                    {
-                        healthCenter.congressionalDistrictResponseList.map((district, index)=>{
-
-
-                            return(
-                                <li key={index}>{district.name}</li>
-                            )
-                        })
-                    }
-                </ul>
-            </div>
         </div>
     )
 }

@@ -14,7 +14,7 @@ public class SenateDistrictResponseModel {
     private LocalDate electionDate;
     private Date createdAt;
     private Date updatedAt;
-    private StateSenatorNestedResponse stateSenatorNestedResponse;
+
 
     public String getSenateDistrictId() {
         return senateDistrictId;
@@ -54,19 +54,10 @@ public class SenateDistrictResponseModel {
         this.updatedAt = updatedAt;
     }
 
-    public StateSenatorNestedResponse getStateSenatorNestedResponse() {
-        return stateSenatorNestedResponse;
-    }
-
-    public void setStateSenatorNestedResponse(StateSenatorNestedResponse stateSenatorNestedResponse) {
-        this.stateSenatorNestedResponse = stateSenatorNestedResponse;
-    }
 
     public void setMap(String map) {
         this.map = map;
     }
-
-
 
     public LocalDate getElectionDate() {
         return electionDate;
