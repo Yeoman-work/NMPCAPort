@@ -36,7 +36,7 @@ const DashBoard = props =>{
 
 
     return(
-        <div>
+        <div className={'container-fluid m-auto align-items-center'}>
             <Header/>
             <HealthCenterList healthCenters={healthCenters} setHealthCenters={setHealthCenters}/>
         </div>

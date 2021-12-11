@@ -1,5 +1,6 @@
 import React from "react";
-import { NavLink } from 'react-router-dom'
+import { FaRegHospital } from "react-icons/fa"
+import {Link, NavLink} from 'react-router-dom'
 import HealthCenterElement from "./HealthCenterElement";
 const {dateAndTime} = require('../helper/generalFunctions')
 
@@ -12,7 +13,12 @@ const HealthCenterList = props =>{
     return(
 
 
-        <div>
+        <div className={'m-auto container'}>
+            <div className={''}>
+                <h1 className={'d-inline-block mt-5 mb-5 pb-4 pt-4'}>Health Centers</h1>
+                <h4 className={'ms-2 d-inline-block'}><Link to={'/yeoman/healthCenters/addHealthCenter'}><FaRegHospital/></Link></h4>
+            </div>
+
             {
                 healthCenters.length > 0?
                     healthCenters.map((healthCenter, index)=>{
@@ -25,8 +31,8 @@ const HealthCenterList = props =>{
                         )
                     })
                     :
-                    <div className={'text-primary'}>
-                        <h4 className={'text-primary'}>No Organizations Listed <NavLink to={'/yeoman/healthCenters/addHealthCenter'}>Click here to add an Organizations</NavLink></h4>
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
                     </div>
             }
         </div>

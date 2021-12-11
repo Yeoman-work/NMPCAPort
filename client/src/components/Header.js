@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 
 const Header = props =>{
@@ -6,21 +7,23 @@ const Header = props =>{
 
 
     return(
-        <div>
+        <div className={'text-end'}>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <div className="container-fluid">
-                    <a className="navbar-brand" href="/">Navbar</a>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
+                <div className="container-fluid ms-auto">
+                    <Link className="navbar-brand me-auto" to={'/yeoman/dashboard'} >Yeoman's Work</Link>
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+
                     <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                        <div className="navbar-nav">
-                            <a className="nav-link active" aria-current="page" href="/">Home</a>
-                            <a className="nav-link" href="/">Features</a>
-                            <a className="nav-link" href="/">Pricing</a>
-                            <a className="nav-link disabled" href="/" tabIndex="-1" aria-disabled="true">Disabled</a>
+                        <div className="navbar-nav ms-auto">
+
+                            <Link className="nav-link active" aria-current="page" to={'/yeoman/dashboard'}>Health Centers</Link>
+                            <Link className="nav-link" to={'/'}>Contacts</Link>
+                            <Link className="nav-link" to={'/'}>Government</Link>
+                            <Link className="nav-link disabled" to={'/'} tabIndex="-1" aria-disabled="true">Disabled</Link>
                         </div>
                     </div>
                 </div>
