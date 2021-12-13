@@ -43,50 +43,50 @@ const HealthCenterElement = props =>{
                                 <h6>House</h6>
                                 <ul className={'w-25 m-auto'}>
                                     {
-                                        healthCenter?
-                                            healthCenter.nmHouseDistrictNestedResponses.map((district, index)=>{
-
-
-                                                return(
-                                                    <li key={index}>{district.name}</li>
-                                                )
-                                            })
-
-                                            : null
+                                        // healthCenter?
+                                        //     healthCenter.nmHouseDistrictNestedResponses.map((district, index)=>{
+                                        //
+                                        //
+                                        //         return(
+                                        //             <li key={index}>{district.name}</li>
+                                        //         )
+                                        //     })
+                                        //
+                                        //     : null
                                     }
                                 </ul>
                             </div>
                             <div className={'col'}>
                                 <h6>Senate</h6>
                                 <ul className={'w-25 m-auto'}>
-                                    {
-                                        healthCenter?
-                                            healthCenter.senateDistrictResponseModelList.map((district, index)=>{
+                                    {/*{*/}
+                                    {/*    healthCenter?*/}
+                                    {/*        healthCenter.senateDistrictResponseModelList.map((district, index)=>{*/}
 
 
-                                                return(
-                                                    <li key={index}>{district.name}</li>
-                                                )
-                                            })
+                                    {/*            return(*/}
+                                    {/*                <li key={index}>{district.name}</li>*/}
+                                    {/*            )*/}
+                                    {/*        })*/}
 
-                                            : null
-                                    }
+                                    {/*        : null*/}
+                                    {/*}*/}
                                 </ul>
                             </div>
                             <div className={'col'}>
                                 <h6>Congressional</h6>
                                 <ul className={'w-25 m-auto'}>
                                     {
-                                        healthCenter?
-                                            healthCenter.senateDistrictResponseModelList.map((district, index)=>{
-
-
-                                                return(
-                                                    <li key={index}>{district.name}</li>
-                                                )
-                                            })
-
-                                            : null
+                                        // healthCenter?
+                                        //     healthCenter.senateDistrictResponseModelList.map((district, index)=>{
+                                        //
+                                        //
+                                        //         return(
+                                        //             <li key={index}>{district.name}</li>
+                                        //         )
+                                        //     })
+                                        //
+                                        //     : null
                                     }
                                 </ul>
                             </div>

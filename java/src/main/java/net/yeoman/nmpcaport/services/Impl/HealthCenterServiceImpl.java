@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -237,7 +238,12 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
                 for(SiteEntity site: healthCenter.getSites()){
 
-                    siteDetailsNestedResponses.add(new ModelMapper().map(site, SiteDetailsNestedResponse.class));
+                    SiteDetailsNestedResponse siteDetailsNestedResponse = new ModelMapper().map(site, SiteDetailsNestedResponse.class);
+
+                    siteDetailsNestedResponse.setCityResponse(new ModelMapper().map(site.getCity(), CityResponse.class));
+                    siteDetailsNestedResponse.setCountyResponse(new ModelMapper().map(site.getCounty(), CountyResponse.class));
+                    siteDetailsNestedResponse.setZipCodeResponse(new ModelMapper().map(site.getZipCode(), ZipCodeResponse.class));
+
                 }
 
                 healthCenterDto.setSiteDetailsNestedResponseList(siteDetailsNestedResponses);

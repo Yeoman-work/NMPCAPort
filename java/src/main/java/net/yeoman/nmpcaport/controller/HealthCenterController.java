@@ -23,10 +23,10 @@ public class HealthCenterController {
     private HealthCenterServiceImpl healthCenterService;
 
     @GetMapping(path = "/{healthCenterId}")
-    public HealthCenterEntity getHealthCenter(@PathVariable("healthCenterId") String healthCenterId){
+    public HealthCenterResponseModel getHealthCenter(@PathVariable("healthCenterId") String healthCenterId){
 
-        //return new ModelMapper().map(this.healthCenterService.getHealthCenter(healthCenterId), HealthCenterResponseModel.class);
-        return this.healthCenterService.getHealthCenterEntity(healthCenterId);
+        return new ModelMapper().map(this.healthCenterService.getHealthCenter(healthCenterId), HealthCenterResponseModel.class);
+        //return this.healthCenterService.getHealthCenterEntity(healthCenterId);
     }
 
     @GetMapping
