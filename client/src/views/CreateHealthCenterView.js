@@ -94,7 +94,7 @@ function healthCenterReducer(healthCenterState, action){
             })
 
         case HEALTH_CENTER_FIELDS.SITE_NAME:
-
+            console.log(healthCenterState);
             const name = action.payload;
 
             if(action.payload.length <= 25 ){
@@ -206,6 +206,7 @@ function healthCenterReducer(healthCenterState, action){
                 return produce(healthCenterState, draft=>{
                     draft.siteJson.service = [...healthCenterState.siteJson.service, serviceObj.id]
                     draft.site.service = [...healthCenterState.site.service, serviceObj];
+                    console.log(healthCenterState.siteJson)
                 })
             }
             if(!action.payload.target.checked){
@@ -220,8 +221,9 @@ function healthCenterReducer(healthCenterState, action){
                 }
 
                 return produce(healthCenterState, draft=>{
-                    draft.siteJson.service = [newArrayIds];
+                    draft.siteJson.service = [...newArrayIds];
                     draft.site.service = [...newArray];
+                    console.log(healthCenterState.siteJson)
                 })
 
             }
@@ -678,6 +680,7 @@ const CreateHealthCenterView = props =>{
             {
                healthCenterInfo.formData.healthCenterProcess === 0?
                     <HealthCenterForm
+                        formLabel={'Create Health Center'}
                         healthCenterState={healthCenterInfo.healthCenter}
                         dispatchHealthCenter={dispatchHealthCenterInfo}
                         userList={healthCenterInfo.formData.user_list}

@@ -1,5 +1,8 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -49,18 +52,14 @@ public class CongressionalDistrictEntity implements Serializable {
     }
 
     @OneToOne(mappedBy = "district", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private CongressionalRepEntity rep;
 
     @OneToMany(mappedBy = "congressionalDistrictEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     List<SiteEntity> sites;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "congressional_districts_health_center",
-            joinColumns = @JoinColumn(name = "congressional_district_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "health_center_entity_id")
-    )
-    List<HealthCenterEntity> healthCenterEntities;
+
 
     public CongressionalDistrictEntity() {
     }
@@ -73,6 +72,8 @@ public class CongressionalDistrictEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+
+
     public CongressionalDistrictEntity(Long id,
                                        String congressionalDistrictId,
                                        String name,
@@ -81,8 +82,7 @@ public class CongressionalDistrictEntity implements Serializable {
                                        Date createdAt,
                                        Date updatedAt,
                                        CongressionalRepEntity rep,
-                                       List<SiteEntity> sites,
-                                       List<HealthCenterEntity> healthCenterEntities) {
+                                       List<SiteEntity> sites) {
         this.id = id;
         this.congressionalDistrictId = congressionalDistrictId;
         this.name = name;
@@ -92,7 +92,7 @@ public class CongressionalDistrictEntity implements Serializable {
         this.updatedAt = updatedAt;
         this.rep = rep;
         this.sites = sites;
-        this.healthCenterEntities = healthCenterEntities;
+
     }
 
     public Long getId() {
@@ -167,11 +167,5 @@ public class CongressionalDistrictEntity implements Serializable {
         this.sites = sites;
     }
 
-    public List<HealthCenterEntity> getHealthCenterEntities() {
-        return healthCenterEntities;
-    }
 
-    public void setHealthCenterEntities(List<HealthCenterEntity> healthCenterEntities) {
-        this.healthCenterEntities = healthCenterEntities;
-    }
 }

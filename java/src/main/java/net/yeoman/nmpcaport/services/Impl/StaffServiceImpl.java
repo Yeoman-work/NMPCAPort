@@ -1,8 +1,7 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.StaffEntity;
-import net.yeoman.nmpcaport.io.response.staff.StaffResponse;
-import net.yeoman.nmpcaport.repositories.StaffRepository;
+import net.yeoman.nmpcaport.io.repositories.StaffRepository;
 import net.yeoman.nmpcaport.services.StaffService;
 import net.yeoman.nmpcaport.shared.dto.StaffDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;

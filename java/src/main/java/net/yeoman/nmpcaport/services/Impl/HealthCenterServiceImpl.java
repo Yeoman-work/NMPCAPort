@@ -7,19 +7,14 @@ import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
-import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
-import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
-import net.yeoman.nmpcaport.repositories.HealthCenterRepository;
-import net.yeoman.nmpcaport.repositories.UserRepository;
+import net.yeoman.nmpcaport.io.repositories.HealthCenterRepository;
 import net.yeoman.nmpcaport.services.HealthCenterService;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
-import net.yeoman.nmpcaport.shared.dto.SiteDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -212,9 +206,9 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
     @Override
     public HealthCenterEntity savedHealthCenterEntity(HealthCenterEntity healthCenterEntity) {
-
         return this.healthCenterRepository.save(healthCenterEntity);
     }
+
 
     @Override
     public List<HealthCenterDto> getHealthCenters(int page, int limit) {
@@ -235,39 +229,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
             HealthCenterDto healthCenterDto = new ModelMapper().map(healthCenter, HealthCenterDto.class);
 
-            if(healthCenter.getCongressionalDistrictEntities().size() > 0){
-                List<CongressionalDistrictResponse> districtResponses = new ArrayList<>();
 
-                for(CongressionalDistrictEntity congressionalDistrict: healthCenter.getCongressionalDistrictEntities()){
-
-                    districtResponses.add(new ModelMapper().map(congressionalDistrict, CongressionalDistrictResponse.class));
-
-                }
-
-                healthCenterDto.setCongressionalDistrictResponseList(districtResponses);
-            }
-
-            if(healthCenter.getNmHouseDistrictsEntities().size() > 0){
-                List<NMHouseDistrictNestedResponse> districtNestedResponses = new ArrayList<>();
-
-                for(NMHouseDistrictEntity houseDistrict: healthCenter.getNmHouseDistrictsEntities()){
-
-                    districtNestedResponses.add(new ModelMapper().map(houseDistrict, NMHouseDistrictNestedResponse.class));
-                }
-
-                healthCenterDto.setNmHouseDistrictNestedResponses(districtNestedResponses);
-            }
-
-            if(healthCenter.getSenateDistrictEntities().size()> 0){
-                List<SenateDistrictResponseModel> districtResponseModelList = new ArrayList<>();
-
-                for(SenateDistrictEntity senateDistrict: healthCenter.getSenateDistrictEntities()){
-
-                    districtResponseModelList.add(new ModelMapper().map(senateDistrict, SenateDistrictResponseModel.class));
-                }
-
-                healthCenterDto.setSenateDistrictResponseModelList(districtResponseModelList);
-            }
 
             if(healthCenter.getSites().size() > 0){
 
@@ -280,6 +242,8 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
                 healthCenterDto.setSiteDetailsNestedResponseList(siteDetailsNestedResponses);
             }
+
+
 
             returnValue.add(healthCenterDto);
         }

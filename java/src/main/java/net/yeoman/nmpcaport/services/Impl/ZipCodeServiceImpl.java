@@ -2,15 +2,13 @@ package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
-import net.yeoman.nmpcaport.repositories.ZipCodeRepository;
+import net.yeoman.nmpcaport.io.repositories.ZipCodeRepository;
 import net.yeoman.nmpcaport.services.ZipCodeService;
 import net.yeoman.nmpcaport.shared.dto.ZipCodeDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;

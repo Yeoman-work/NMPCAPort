@@ -1,5 +1,9 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -7,7 +11,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 @Entity
 @Table(name = "sites")
@@ -48,53 +51,50 @@ public class SiteEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
+
     @NotNull(message = "required")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_entity_id")
     private CityEntity city;
 
     @NotNull(message = "required")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "county_entity_id")
     private CountyEntity county;
 
     @NotNull(message = "required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "health_center_entity_id")
+    @JsonIgnore
     private HealthCenterEntity healthCenter;
 
     @NotNull(message = "required")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zip_code_entity_id")
     private ZipCodeEntity zipCode;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "n_m_house_district_entity_id")
     private NMHouseDistrictEntity nmHouseDistrict;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "senate_district_entity_id")
     private SenateDistrictEntity senateDistrict;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "congressional_district_id")
     private CongressionalDistrictEntity congressionalDistrictEntity;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "sites_services",
-            joinColumns = @JoinColumn(name = "site_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "service_entity_id")
-    )
-    private List<ServiceEntity> services;
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<SiteFundingDetailsEntity> siteFundingDetails;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "fundsSites",
-            joinColumns = @JoinColumn(name = "site_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "fund_entity_id")
-    )
-    private List<FundEntity> fundEntities;
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<SiteServiceDetailsEntity> siteServiceDetails;
+
+
 
     public SiteEntity() {
     }
@@ -111,25 +111,8 @@ public class SiteEntity implements Serializable {
         this.healthCenter = healthCenter;
     }
 
-    public SiteEntity(Long id,
-                      String siteId,
-                      String name,
-                      Date createdAt,
-                      Date updatedAt,
-                      CityEntity city,
-                      CountyEntity county,
-                      HealthCenterEntity healthCenter,
-                      ZipCodeEntity zipCode) {
-        this.id = id;
-        this.siteId = siteId;
-        this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.city = city;
-        this.county = county;
-        this.healthCenter = healthCenter;
-        this.zipCode = zipCode;
-    }
+
+
 
     public Long getId() {
         return id;
@@ -163,13 +146,7 @@ public class SiteEntity implements Serializable {
         this.streetAddress = streetAddress.trim().toLowerCase();
     }
 
-    public List<FundEntity> getFundEntities() {
-        return fundEntities;
-    }
 
-    public void setFundEntities(List<FundEntity> fundEntities) {
-        this.fundEntities = fundEntities;
-    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -187,6 +164,7 @@ public class SiteEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+
     public HealthCenterEntity getHealthCenter() {
         return healthCenter;
     }
@@ -194,6 +172,7 @@ public class SiteEntity implements Serializable {
     public void setHealthCenter(HealthCenterEntity healthCenter) {
         this.healthCenter = healthCenter;
     }
+
 
     public CityEntity getCity() {
         return city;
@@ -219,13 +198,6 @@ public class SiteEntity implements Serializable {
         this.zipCode = zipCode;
     }
 
-    public List<ServiceEntity> getServices() {
-        return services;
-    }
-
-    public void setServices(List<ServiceEntity> services) {
-        this.services = services;
-    }
 
     public SenateDistrictEntity getSenateDistrict() {
         return senateDistrict;
@@ -249,5 +221,21 @@ public class SiteEntity implements Serializable {
 
     public void setCongressionalDistrictEntity(CongressionalDistrictEntity congressionalDistrictEntity) {
         this.congressionalDistrictEntity = congressionalDistrictEntity;
+    }
+
+    public List<SiteFundingDetailsEntity> getSiteFundingDetails() {
+        return siteFundingDetails;
+    }
+
+    public void setSiteFundingDetails(List<SiteFundingDetailsEntity> siteFundingDetails) {
+        this.siteFundingDetails = siteFundingDetails;
+    }
+
+    public List<SiteServiceDetailsEntity> getSiteServiceDetails() {
+        return siteServiceDetails;
+    }
+
+    public void setSiteServiceDetails(List<SiteServiceDetailsEntity> siteServiceDetails) {
+        this.siteServiceDetails = siteServiceDetails;
     }
 }

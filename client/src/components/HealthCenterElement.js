@@ -16,6 +16,9 @@ const HealthCenterElement = props =>{
             </div>
             <div className={'col overflow-auto'}>
                 <div className={'row'}>
+
+                </div>
+                <div className={'row'}>
                     <div className={'col overflow-auto'}>
                         <h4 className={'m-auto'}>Location(s):</h4>
                         <ul className={'w-25 m-auto'}>

@@ -32,6 +32,8 @@ public class NMSenateCommitteeEntity implements Serializable {
     private Date createdAt;
     private Date updatedAt;
 
+
+
     @PrePersist
     protected void onCreate(){
 
@@ -44,39 +46,8 @@ public class NMSenateCommitteeEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "nmSenatorsCommittees",
-            joinColumns = @JoinColumn(name = "n_m_senate_committee_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "state_senator_entity_id")
-    )
-    private List<StateSenatorEntity> senators;
 
     public NMSenateCommitteeEntity() {
-    }
-
-    public NMSenateCommitteeEntity(Long id,
-                                   String nmSenateCommitteeId,
-                                   String name,
-                                   String description,
-                                   Date createdAt,
-                                   Date updatedAt,
-                                   List<StateSenatorEntity> senators) {
-        this.id = id;
-        this.nmSenateCommitteeId = nmSenateCommitteeId;
-        this.name = name;
-        this.description = description;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.senators = senators;
-    }
-
-    public NMSenateCommitteeEntity(Long id, String nmSenateCommitteeId, String name, Date createdAt, Date updatedAt) {
-        this.id = id;
-        this.nmSenateCommitteeId = nmSenateCommitteeId;
-        this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public NMSenateCommitteeEntity(Long id, String nmSenateCommitteeId, String name, String description, Date createdAt, Date updatedAt) {
@@ -136,12 +107,5 @@ public class NMSenateCommitteeEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<StateSenatorEntity> getSenators() {
-        return senators;
-    }
-
-    public void setSenators(List<StateSenatorEntity> senators) {
-        this.senators = senators;
-    }
 
 }

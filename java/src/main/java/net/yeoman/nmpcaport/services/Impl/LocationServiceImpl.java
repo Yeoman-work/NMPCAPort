@@ -6,14 +6,13 @@ import net.yeoman.nmpcaport.entities.LocationEntity;
 import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.request.location.LocationDetailsRequest;
 import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
-import net.yeoman.nmpcaport.repositories.LocationRepository;
+import net.yeoman.nmpcaport.io.repositories.LocationRepository;
 import net.yeoman.nmpcaport.services.LocationService;
 import net.yeoman.nmpcaport.shared.dto.LocationDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;

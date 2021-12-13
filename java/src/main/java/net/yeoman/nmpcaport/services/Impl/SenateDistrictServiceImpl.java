@@ -1,11 +1,8 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
-import net.yeoman.nmpcaport.io.request.senateDistrict.SenateDistrictDetailsRequestList;
-import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
-import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorResponse;
-import net.yeoman.nmpcaport.repositories.SenateDistrictRepository;
+import net.yeoman.nmpcaport.io.repositories.SenateDistrictRepository;
 import net.yeoman.nmpcaport.services.SenateDistrictService;
 import net.yeoman.nmpcaport.shared.dto.SenateDistrictDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -13,11 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjuster;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service

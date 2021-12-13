@@ -1,5 +1,8 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -8,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "zipCodes")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "sites"})
 public class ZipCodeEntity implements Serializable {
 
     private static final long serialVersionUID = 2918813411729527072L;

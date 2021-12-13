@@ -1,5 +1,7 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
@@ -37,54 +39,19 @@ public class HealthCenterEntity implements Serializable {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<UserEntity> users;
 
     @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<ContactEntity> contacts;
+
+
 
     @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SiteEntity> sites;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "health_center_nm_house_district",
-            joinColumns = @JoinColumn(name = "health_center_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "n_m_house_district_entity_id")
 
-    )
-    private List<NMHouseDistrictEntity> nmHouseDistrictsEntities;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "congressional_districts_health_center",
-            joinColumns = @JoinColumn(name = "health_center_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "congressional_district_entity_id")
-    )
-    private List<CongressionalDistrictEntity> congressionalDistrictEntities;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "fundsHealthCenters",
-            joinColumns = @JoinColumn(name = "health_center_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "fund_entity_id")
-    )
-    private List<FundEntity> fundEntities;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "service_healthCenter",
-            joinColumns = @JoinColumn(name = "health_center_entity_id"),
-            inverseJoinColumns = @JoinColumn(name="service_entity_id")
-    )
-    private List<ServiceEntity> serviceEntities;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "health_centers_senate_districts",
-            joinColumns = @JoinColumn(name = "health_center_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "senate_district_entity_id")
-    )
-    private List<SenateDistrictEntity> senateDistrictEntities;
 
     @PrePersist
     protected void onCreate(){
@@ -121,6 +88,9 @@ public class HealthCenterEntity implements Serializable {
         this.contacts = contacts;
         this.sites = sites;
     }
+
+
+
 
     public Long getId() {
         return id;
@@ -194,45 +164,6 @@ public class HealthCenterEntity implements Serializable {
         this.sites = sites;
     }
 
-    public List<SenateDistrictEntity> getSenateDistrictEntities() {
-        return senateDistrictEntities;
-    }
-
-    public void setSenateDistrictEntities(List<SenateDistrictEntity> senateDistrictEntities) {
-        this.senateDistrictEntities = senateDistrictEntities;
-    }
-
-    public List<NMHouseDistrictEntity> getNmHouseDistrictsEntities() {
-        return nmHouseDistrictsEntities;
-    }
-
-    public void setNmHouseDistrictsEntities(List<NMHouseDistrictEntity> nmHouseDistrictsEntities) {
-        this.nmHouseDistrictsEntities = nmHouseDistrictsEntities;
-    }
-
-    public List<CongressionalDistrictEntity> getCongressionalDistrictEntities() {
-        return congressionalDistrictEntities;
-    }
-
-    public void setCongressionalDistrictEntities(List<CongressionalDistrictEntity> congressionalDistrictEntities) {
-        this.congressionalDistrictEntities = congressionalDistrictEntities;
-    }
-
-    public List<FundEntity> getFundEntities() {
-        return fundEntities;
-    }
-
-    public void setFundEntities(List<FundEntity> fundEntities) {
-        this.fundEntities = fundEntities;
-    }
-
-    public List<ServiceEntity> getServiceEntities() {
-        return serviceEntities;
-    }
-
-    public void setServiceEntities(List<ServiceEntity> serviceEntities) {
-        this.serviceEntities = serviceEntities;
-    }
 
 
 }

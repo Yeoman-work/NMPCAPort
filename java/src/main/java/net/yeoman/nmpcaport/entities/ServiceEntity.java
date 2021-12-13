@@ -1,5 +1,7 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -44,30 +46,13 @@ public class ServiceEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "sites_services",
-            joinColumns = @JoinColumn(name = "service_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "site_entity_id")
-    )
-    private List<SiteEntity> sites;
+    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<SiteServiceDetailsEntity> siteDetailsList;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name="service_healthCenter",
-            joinColumns = @JoinColumn(name = "service_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "health_center_entity_id")
-    )
-    private List<HealthCenterEntity> healthCenterEntities;
+
 
     public ServiceEntity() {
-    }
-
-    public ServiceEntity(Long id, String serviceId, String name, String abbr) {
-        this.id = id;
-        this.serviceId = serviceId;
-        this.name = name;
-        this.abbr = abbr;
     }
 
     public ServiceEntity(Long id,
@@ -76,14 +61,14 @@ public class ServiceEntity implements Serializable {
                          String abbr,
                          Date createdAt,
                          Date updatedAt,
-                         List<SiteEntity> sites) {
+                         List<SiteServiceDetailsEntity> siteDetailsList) {
         this.id = id;
         this.serviceId = serviceId;
         this.name = name;
         this.abbr = abbr;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.sites = sites;
+        this.siteDetailsList = siteDetailsList;
     }
 
     public Long getId() {
@@ -134,19 +119,11 @@ public class ServiceEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<SiteEntity> getSites() {
-        return sites;
+    public List<SiteServiceDetailsEntity> getSiteDetailsList() {
+        return siteDetailsList;
     }
 
-    public void setSites(List<SiteEntity> sites) {
-        this.sites = sites;
-    }
-
-    public List<HealthCenterEntity> getHealthCenterEntities() {
-        return healthCenterEntities;
-    }
-
-    public void setHealthCenterEntities(List<HealthCenterEntity> healthCenterEntities) {
-        this.healthCenterEntities = healthCenterEntities;
+    public void setSiteDetailsList(List<SiteServiceDetailsEntity> siteDetailsList) {
+        this.siteDetailsList = siteDetailsList;
     }
 }

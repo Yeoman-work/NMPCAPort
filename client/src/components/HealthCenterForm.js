@@ -6,7 +6,8 @@ const { characters } = require('../helper/generalFunctions')
 const HealthCenterForm = props =>{
     const {healthCenterState,
             healthCareFields,
-            dispatchHealthCenter
+            dispatchHealthCenter,
+            formLabel
         } = props;
 
 
@@ -26,7 +27,7 @@ const HealthCenterForm = props =>{
     return(
 
         <form className={'w-50 m-auto'}>
-
+            <h1 className={'pt-5 pb-5'}>{formLabel}</h1>
             <div className={'row'}>
                 <div className={'col form-group'}>
                     <label>HealthCenter Name</label>

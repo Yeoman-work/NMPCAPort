@@ -3,7 +3,7 @@ package net.yeoman.nmpcaport.services.Impl;
 import net.yeoman.nmpcaport.entities.CongressionalDistrictEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.CongressionalDistrictServiceException;
-import net.yeoman.nmpcaport.repositories.CongressionalDistrictRepository;
+import net.yeoman.nmpcaport.io.repositories.CongressionalDistrictRepository;
 import net.yeoman.nmpcaport.services.CongressionalDistrictService;
 import net.yeoman.nmpcaport.shared.dto.CongressionalDistrictDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;

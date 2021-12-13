@@ -1,13 +1,20 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "cities")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "sites"})
 public class CityEntity implements Serializable {
 
 
@@ -40,6 +47,8 @@ public class CityEntity implements Serializable {
 
         this.updatedAt = new Date();
     }
+
+
 
     @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SiteEntity> site;
@@ -96,6 +105,4 @@ public class CityEntity implements Serializable {
     public void setSite(List<SiteEntity> site) {
         this.site = site;
     }
-
-
 }

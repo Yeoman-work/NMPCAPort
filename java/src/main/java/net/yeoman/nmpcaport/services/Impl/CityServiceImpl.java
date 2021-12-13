@@ -2,14 +2,13 @@ package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.CityEntity;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
-import net.yeoman.nmpcaport.repositories.CityRepository;
+import net.yeoman.nmpcaport.io.repositories.CityRepository;
 import net.yeoman.nmpcaport.services.CityService;
 import net.yeoman.nmpcaport.shared.dto.CityDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -1,8 +1,7 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.entities.ServiceEntity;
 import net.yeoman.nmpcaport.entities.USSenatorEntity;
-import net.yeoman.nmpcaport.repositories.USSenatorRepository;
+import net.yeoman.nmpcaport.io.repositories.USSenatorRepository;
 import net.yeoman.nmpcaport.services.USSenatorService;
 import net.yeoman.nmpcaport.shared.dto.USSenatorDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;

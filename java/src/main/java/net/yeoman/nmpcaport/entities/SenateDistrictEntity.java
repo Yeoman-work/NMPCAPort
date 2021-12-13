@@ -1,5 +1,7 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -50,18 +52,15 @@ public class SenateDistrictEntity implements Serializable {
     }
 
     @OneToMany(mappedBy = "senateDistrict", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<SiteEntity> sites;
 
     @OneToOne(mappedBy = "senateDistrict", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private StateSenatorEntity stateSenator;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "health_centers_senate_districts",
-            joinColumns = @JoinColumn(name = "senate_district_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "health_center_entity_id")
-    )
-    private List<HealthCenterEntity> healthCenterEntities;
+
+
 
     public SenateDistrictEntity() {
     }
@@ -157,11 +156,5 @@ public class SenateDistrictEntity implements Serializable {
         this.stateSenator = stateSenator;
     }
 
-    public List<HealthCenterEntity> getHealthCenterEntities() {
-        return healthCenterEntities;
-    }
 
-    public void setHealthCenterEntities(List<HealthCenterEntity> healthCenterEntities) {
-        this.healthCenterEntities = healthCenterEntities;
-    }
 }

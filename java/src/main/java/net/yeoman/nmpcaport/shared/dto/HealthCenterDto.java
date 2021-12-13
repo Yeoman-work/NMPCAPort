@@ -4,8 +4,10 @@ import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
+import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
+import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
@@ -39,6 +41,8 @@ public class HealthCenterDto {
     private List<ServiceEntity> serviceEntities;
     private List<SenateDistrictEntity> senateDistrictEntities;
     private List<FundEntity> fundEntities;
+    private List<ServiceResponse> serviceResponseList;
+    private List<FundResponseModel> fundResponseList;
 
 
     public Long getId() {
@@ -239,6 +243,22 @@ public class HealthCenterDto {
 
     public void setSenateDistrictResponseModelList(List<SenateDistrictResponseModel> senateDistrictResponseModelList) {
         this.senateDistrictResponseModelList = senateDistrictResponseModelList;
+    }
+
+    public List<ServiceResponse> getServiceResponseList() {
+        return serviceResponseList;
+    }
+
+    public void setServiceResponseList(List<ServiceResponse> serviceResponseList) {
+        this.serviceResponseList = serviceResponseList;
+    }
+
+    public List<FundResponseModel> getFundResponseList() {
+        return fundResponseList;
+    }
+
+    public void setFundResponseList(List<FundResponseModel> fundResponseList) {
+        this.fundResponseList = fundResponseList;
     }
 
 }

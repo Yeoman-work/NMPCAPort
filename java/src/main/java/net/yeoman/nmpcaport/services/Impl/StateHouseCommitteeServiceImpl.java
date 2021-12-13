@@ -3,7 +3,7 @@ package net.yeoman.nmpcaport.services.Impl;
 import net.yeoman.nmpcaport.entities.StateHouseCommitteeEntity;
 import net.yeoman.nmpcaport.io.request.stateHouseCommittee.StateHouseCommitteeDetailsList;
 import net.yeoman.nmpcaport.io.response.stateHouseCommittee.StateHouseCommitteeResponse;
-import net.yeoman.nmpcaport.repositories.StateHouseCommitteeRepository;
+import net.yeoman.nmpcaport.io.repositories.StateHouseCommitteeRepository;
 import net.yeoman.nmpcaport.services.StateHouseCommitteeService;
 import net.yeoman.nmpcaport.shared.dto.StateHouseCommitteeDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;

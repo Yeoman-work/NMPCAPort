@@ -1,16 +1,14 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.StateRepEntity;
-import net.yeoman.nmpcaport.io.request.stateRep.StateRepDetailsRequest;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
-import net.yeoman.nmpcaport.repositories.StateRepRepository;
+import net.yeoman.nmpcaport.io.repositories.StateRepRepository;
 import net.yeoman.nmpcaport.services.StateRepService;
 import net.yeoman.nmpcaport.shared.dto.StateRepDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 @Service
 public class StateRepServiceImpl implements StateRepService {

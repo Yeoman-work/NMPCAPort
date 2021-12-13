@@ -5,7 +5,7 @@ import net.yeoman.nmpcaport.entities.StateSenatorEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.StateSenatorServiceException;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
-import net.yeoman.nmpcaport.repositories.StateSenatorRepository;
+import net.yeoman.nmpcaport.io.repositories.StateSenatorRepository;
 import net.yeoman.nmpcaport.services.StateSenatorService;
 import net.yeoman.nmpcaport.shared.dto.StateSenatorDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;

@@ -1,12 +1,11 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.bytebuddy.matcher.StringMatcher;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
 import net.yeoman.nmpcaport.entities.UserEntity;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
-import net.yeoman.nmpcaport.repositories.NetworkingGroupRepository;
-import net.yeoman.nmpcaport.repositories.UserRepository;
+import net.yeoman.nmpcaport.io.repositories.NetworkingGroupRepository;
+import net.yeoman.nmpcaport.io.repositories.UserRepository;
 import net.yeoman.nmpcaport.services.NetworkingGroupService;
 import net.yeoman.nmpcaport.shared.dto.NetworkingGroupDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class NetworkingGroupServiceImpl implements NetworkingGroupService {

@@ -1,11 +1,17 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "NMHouseDistricts")
@@ -46,18 +52,15 @@ public class NMHouseDistrictEntity implements Serializable {
     }
 
     @OneToMany(mappedBy = "nmHouseDistrict", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<SiteEntity> sites;
 
     @OneToOne(mappedBy = "nmHouseDistrict", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private StateRepEntity stateRep;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name="health_center_nm_house_district",
-            joinColumns = @JoinColumn(name = "n_m_house_district_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "health_center_entity_id")
-    )
-    private List<HealthCenterEntity> healthCenterEntities;
+
+
 
     public NMHouseDistrictEntity() {
     }
@@ -134,11 +137,5 @@ public class NMHouseDistrictEntity implements Serializable {
         this.sites = sites;
     }
 
-    public List<HealthCenterEntity> getHealthCenterEntities() {
-        return healthCenterEntities;
-    }
 
-    public void setHealthCenterEntities(List<HealthCenterEntity> healthCenterEntities) {
-        this.healthCenterEntities = healthCenterEntities;
-    }
 }

@@ -1,5 +1,7 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -26,21 +28,10 @@ public class FundEntity implements Serializable {
     private Date createdAt;
     private Date updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "fundsSites",
-            joinColumns = @JoinColumn(name = "fund_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "site_entity_id")
-    )
-    private List<SiteEntity> sites;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "fundsHealthCenters",
-            joinColumns = @JoinColumn(name = "fund_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "health_center_entity_id")
-    )
-    private List<HealthCenterEntity> healthCenterEntities;
+    @OneToMany(mappedBy = "fund", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<SiteFundingDetailsEntity> siteFundingDetails;
 
 
     @PrePersist
@@ -61,15 +52,15 @@ public class FundEntity implements Serializable {
     public FundEntity(Long id,
                       String fundId,
                       String name,
-                      String fundCode,
                       Date createdAt,
-                      Date updatedAt) {
-
+                      Date updatedAt,
+                      List<SiteFundingDetailsEntity> siteFundingDetails) {
         this.id = id;
         this.fundId = fundId;
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.siteFundingDetails = siteFundingDetails;
     }
 
     public Long getId() {
@@ -96,23 +87,6 @@ public class FundEntity implements Serializable {
         this.name = name.trim().toLowerCase();
     }
 
-
-    public List<SiteEntity> getSites() {
-        return sites;
-    }
-
-    public void setSites(List<SiteEntity> sites) {
-        this.sites = sites;
-    }
-
-    public List<HealthCenterEntity> getHealthCenterEntities() {
-        return healthCenterEntities;
-    }
-
-    public void setHealthCenterEntities(List<HealthCenterEntity> healthCenterEntities) {
-        this.healthCenterEntities = healthCenterEntities;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -129,5 +103,11 @@ public class FundEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public List<SiteFundingDetailsEntity> getSiteFundingDetails() {
+        return siteFundingDetails;
+    }
 
+    public void setSiteFundingDetails(List<SiteFundingDetailsEntity> siteFundingDetails) {
+        this.siteFundingDetails = siteFundingDetails;
+    }
 }

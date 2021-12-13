@@ -1,7 +1,7 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.UserEntity;
-import net.yeoman.nmpcaport.repositories.UserRepository;
+import net.yeoman.nmpcaport.io.repositories.UserRepository;
 import net.yeoman.nmpcaport.services.UserService;
 import net.yeoman.nmpcaport.shared.dto.UserDto;
 
@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 

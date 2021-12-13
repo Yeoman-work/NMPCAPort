@@ -1,18 +1,16 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.FundEntity;
-import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.io.request.fund.FundRequestListModel;
 import net.yeoman.nmpcaport.io.request.fund.FundRequestModel;
-import net.yeoman.nmpcaport.repositories.FundRepository;
-import net.yeoman.nmpcaport.repositories.SiteRepository;
+import net.yeoman.nmpcaport.io.repositories.FundRepository;
+import net.yeoman.nmpcaport.io.repositories.SiteRepository;
 import net.yeoman.nmpcaport.services.FundService;
 import net.yeoman.nmpcaport.shared.dto.FundDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
