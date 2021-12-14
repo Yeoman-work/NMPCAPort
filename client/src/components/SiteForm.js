@@ -123,7 +123,7 @@ const SiteForm = props =>{
                                 <option>Choose a City</option>
                                 {
                                     formData?
-                                        formData.city_list .map(({name, cityId}, index)=>{
+                                        formData.city_list.map(({name, cityId}, index)=>{
 
                                             return(
                                                 <option key={index} value={cityId + '/' + name}>{name}</option>

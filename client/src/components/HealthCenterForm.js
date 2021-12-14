@@ -1,5 +1,5 @@
 import React from "react";
-const { characters } = require('../helper/generalFunctions')
+
 
 
 

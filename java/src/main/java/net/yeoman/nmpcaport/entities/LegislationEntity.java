@@ -23,6 +23,7 @@ public class LegislationEntity implements Serializable {
 
     @NotBlank(message = "required")
     @Column(unique = true)
+    @Size(min = 3, max = 25, message = "must between 3 and 25 characters")
     private String name;
 
     @Lob

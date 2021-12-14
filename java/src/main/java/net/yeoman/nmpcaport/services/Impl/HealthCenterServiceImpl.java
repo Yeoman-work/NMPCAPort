@@ -7,7 +7,11 @@ import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
@@ -235,7 +239,9 @@ public class HealthCenterServiceImpl implements HealthCenterService {
             if(healthCenter.getSites().size() > 0){
 
                 List<SiteDetailsNestedResponse> siteDetailsNestedResponses = new ArrayList<>();
-
+                List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponses = new ArrayList<>();
+                List<CongressionalDistrictResponse> congressionalDistrictResponseList = new ArrayList<>();
+                List<SenateDistrictResponseModel> senateDistrictResponseModelList = new ArrayList<>();
                 for(SiteEntity site: healthCenter.getSites()){
 
                     SiteDetailsNestedResponse siteDetailsNestedResponse = new ModelMapper().map(site, SiteDetailsNestedResponse.class);
@@ -244,11 +250,61 @@ public class HealthCenterServiceImpl implements HealthCenterService {
                     siteDetailsNestedResponse.setCountyResponse(new ModelMapper().map(site.getCounty(), CountyResponse.class));
                     siteDetailsNestedResponse.setZipCodeResponse(new ModelMapper().map(site.getZipCode(), ZipCodeResponse.class));
 
+                    NMHouseDistrictNestedResponse nmHouseDistrictNestedResponse = new ModelMapper().map(site.getNmHouseDistrict(), NMHouseDistrictNestedResponse.class);
+                    CongressionalDistrictResponse congressionalDistrictResponse = new ModelMapper().map(site.getCongressionalDistrictEntity(), CongressionalDistrictResponse.class);
+                    SenateDistrictResponseModel senateDistrictResponseModel = new ModelMapper().map(site.getSenateDistrict(), SenateDistrictResponseModel.class);
+
+                    //add a district Boolean
+                    Boolean addNMHouseDistrict = true;
+                    Boolean addCongressionalDistrict = true;
+                    Boolean addSenateDistrict = true;
+
+                    for(NMHouseDistrictNestedResponse districtResponse: nmHouseDistrictNestedResponses){
+
+                        if(districtResponse.getHouseDistrictId() == site.getNmHouseDistrict().getHouseDistrictId()){
+                            addNMHouseDistrict = false;
+                        }
+                    }
+
+                    for(CongressionalDistrictResponse districtResponse: congressionalDistrictResponseList){
+
+                        if(districtResponse.getCongressionalDistrictId() == site.getNmHouseDistrict().getHouseDistrictId()){
+
+                            addCongressionalDistrict = false;
+                        }
+                    }
+
+                    for(SenateDistrictResponseModel districtResponse: senateDistrictResponseModelList){
+
+                        if(districtResponse.getSenateDistrictId() == site.getSenateDistrict().getSenateDistrictId()){
+
+                            addSenateDistrict = false;
+                        }
+                    }
+
+                    if(addNMHouseDistrict){
+
+                        nmHouseDistrictNestedResponses.add(new ModelMapper().map(site.getNmHouseDistrict(), NMHouseDistrictNestedResponse.class));
+                    }
+
+                    if(addCongressionalDistrict){
+
+                        congressionalDistrictResponseList.add(new ModelMapper().map(site.getCongressionalDistrictEntity(), CongressionalDistrictResponse.class));
+                    }
+
+                    if(addSenateDistrict){
+
+                        senateDistrictResponseModelList.add(new ModelMapper().map(site.getSenateDistrict(), SenateDistrictResponseModel.class ));
+                    }
+
+                    siteDetailsNestedResponses.add(siteDetailsNestedResponse);
                 }
 
                 healthCenterDto.setSiteDetailsNestedResponseList(siteDetailsNestedResponses);
+                healthCenterDto.setNmHouseDistrictNestedResponses(nmHouseDistrictNestedResponses);
+                healthCenterDto.setSenateDistrictResponseModelList(senateDistrictResponseModelList);
+                healthCenterDto.setCongressionalDistrictResponseList(congressionalDistrictResponseList);
             }
-
 
 
             returnValue.add(healthCenterDto);

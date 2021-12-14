@@ -658,7 +658,7 @@ const CreateHealthCenterView = props =>{
             })
 
             console.log(siteResponse.data);
-            //navigate('/yeoman/organizations/')
+            navigate('/yeoman/healthCenter/')
 
 
         }catch(error){
