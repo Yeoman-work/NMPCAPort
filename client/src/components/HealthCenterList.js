@@ -1,8 +1,8 @@
 import React from "react";
 import { FaRegHospital } from "react-icons/fa"
-import {Link, NavLink} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import HealthCenterElement from "./HealthCenterElement";
-const {dateAndTime} = require('../helper/generalFunctions')
+
 
 
 

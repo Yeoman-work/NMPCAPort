@@ -21,9 +21,14 @@ const characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 
                     '-', '(', ')', ' ']
 
 
+const legislativeList = ['in committee', 'passed', 'vote scheduled', 'voted down']
+const governorList = ['awaiting bill', 'signed', 'veto']
+
 
 
 module.exports={
+    legislativeList,
+    governorList,
     dateAndTime,
     characters
 }

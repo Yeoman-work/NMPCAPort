@@ -29,6 +29,10 @@ public class Utils {
 
     private final List<String> congressionalDistricts = new ArrayList<>(Arrays.asList("1", "2", "3"));
 
+    private final List<String> legislativeStatus = new ArrayList<>(Arrays.asList( "in committee", "passed", "vote scheduled", "voted down" ));
+
+    private final List<String> governorStatus = new ArrayList<>(Arrays.asList("awaiting bill", "signed", "veto"));
+
 
 
     public LocalDate initialStateSenateTerm(){
@@ -126,5 +130,15 @@ public class Utils {
         }
 
         return new String(returnValue);
+    }
+
+    public List<String> getLegislativeStatus(){
+
+        return legislativeStatus;
+    }
+
+    public List<String> getGovernorStatus(){
+
+        return governorStatus;
     }
 }

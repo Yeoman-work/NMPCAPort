@@ -1,5 +1,7 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -26,9 +28,26 @@ public class LegislationEntity implements Serializable {
     @Size(min = 3, max = 25, message = "must between 3 and 25 characters")
     private String name;
 
+
     @Lob
     @Size(max = 700)
     private String description;
+
+    private String houseStatus;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date houseStatusDate;
+
+    private String senateStatus;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date senateStatusDate;
+
+    private String governorStatus;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date governorStatusDate;
+
 
     @Column(updatable = false)
     private Date createdAt;
@@ -96,4 +115,53 @@ public class LegislationEntity implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getHouseStatus() {
+        return houseStatus;
+    }
+
+    public void setHouseStatus(String houseStatus) {
+        this.houseStatus = houseStatus;
+    }
+
+    public Date getHouseStatusDate() {
+        return houseStatusDate;
+    }
+
+    public void setHouseStatusDate(Date houseStatusDate) {
+        this.houseStatusDate = houseStatusDate;
+    }
+
+    public String getSenateStatus() {
+        return senateStatus;
+    }
+
+    public void setSenateStatus(String senateStatus) {
+        this.senateStatus = senateStatus;
+    }
+
+    public Date getSenateStatusDate() {
+        return senateStatusDate;
+    }
+
+    public void setSenateStatusDate(Date senateStatusDate) {
+        this.senateStatusDate = senateStatusDate;
+    }
+
+    public String getGovernorStatus() {
+        return governorStatus;
+    }
+
+    public void setGovernorStatus(String governorStatus) {
+        this.governorStatus = governorStatus;
+    }
+
+    public Date getGovernorStatusDate() {
+        return governorStatusDate;
+    }
+
+    public void setGovernorStatusDate(Date governorStatusDate) {
+        this.governorStatusDate = governorStatusDate;
+    }
+
 }

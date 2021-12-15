@@ -8,10 +8,16 @@ import LegislationForm from "../components/LegislationForm";
 
 
 const CreateLegislationView = props =>{
-
+    const navigate = useNavigate();
     const [ legislation, setLegislation] = useState({
         name:'',
-        description: ''
+        description: '',
+        houseStatus: '',
+        houseStatusDate:'',
+        senateStatus: '',
+        senateStatusDate: '',
+        governorStatus: '',
+        governorStatusDate: ''
     })
 
     const legislationHandler = async (e) =>{
@@ -26,12 +32,13 @@ const CreateLegislationView = props =>{
                 }
             })
 
+            console.log(legislationResponse);
+            //navigate();
+
         }catch(error){
 
-
+            console.log(error);
         }
-
-
 
     }
 
@@ -48,7 +55,6 @@ const CreateLegislationView = props =>{
                     handler={legislationHandler}
                 />
             </div>
-
         </div>
     )
 }
