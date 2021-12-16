@@ -37,7 +37,10 @@ public class CountyEntity implements Serializable {
     private List<SiteEntity> sites;
 
     @OneToMany(mappedBy = "countyEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<StateRepEntity> stateRepEntityList;
+    private List<StateSenateCountyEntity> stateSenateCountyEntityList;
+
+    @OneToMany(mappedBy = "countyEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StateRepCountyEntity> stateRepCountyEntityList;
 
     @PrePersist
     protected void onCreate(){
@@ -54,13 +57,22 @@ public class CountyEntity implements Serializable {
     public CountyEntity() {
     }
 
-    public CountyEntity(Long id, String countyId, String name, Date createdAt, Date updatedAt, List<SiteEntity> sites) {
+    public CountyEntity(Long id,
+                        String countyId,
+                        String name,
+                        Date createdAt,
+                        Date updatedAt,
+                        List<SiteEntity> sites,
+                        List<StateSenateCountyEntity> stateSenateCountyEntityList,
+                        List<StateRepCountyEntity> stateRepCountyEntityList) {
         this.id = id;
         this.countyId = countyId;
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.sites = sites;
+        this.stateSenateCountyEntityList = stateSenateCountyEntityList;
+        this.stateRepCountyEntityList = stateRepCountyEntityList;
     }
 
     public Long getId() {
@@ -111,11 +123,23 @@ public class CountyEntity implements Serializable {
         this.sites = sites;
     }
 
-    public List<StateRepEntity> getStateRepEntityList() {
-        return stateRepEntityList;
+    public List<StateSenateCountyEntity> getStateSenateCountyEntityList() {
+        return stateSenateCountyEntityList;
     }
 
-    public void setStateRepEntityList(List<StateRepEntity> stateRepEntityList) {
-        this.stateRepEntityList = stateRepEntityList;
+    public void setStateSenateCountyEntityList(List<StateSenateCountyEntity> stateSenateCountyEntityList) {
+        this.stateSenateCountyEntityList = stateSenateCountyEntityList;
+
     }
+
+    public List<StateRepCountyEntity> getStateRepCountyEntityList() {
+        return stateRepCountyEntityList;
+    }
+
+    public void setStateRepCountyEntityList(List<StateRepCountyEntity> stateRepCountyEntityList) {
+        this.stateRepCountyEntityList = stateRepCountyEntityList;
+    }
+
+
+
 }

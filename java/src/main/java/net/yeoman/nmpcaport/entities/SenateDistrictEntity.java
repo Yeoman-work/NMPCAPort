@@ -59,6 +59,9 @@ public class SenateDistrictEntity implements Serializable {
     @JsonIgnore
     private StateSenatorEntity stateSenator;
 
+    @OneToMany(mappedBy = "senateDistrict", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StateSenateCountyEntity> senateCountyEntities;
+
 
 
 
@@ -157,4 +160,11 @@ public class SenateDistrictEntity implements Serializable {
     }
 
 
+    public List<StateSenateCountyEntity> getSenateCountyEntities() {
+        return senateCountyEntities;
+    }
+
+    public void setSenateCountyEntities(List<StateSenateCountyEntity> senateCountyEntities) {
+        this.senateCountyEntities = senateCountyEntities;
+    }
 }

@@ -59,10 +59,35 @@ public class NMHouseDistrictEntity implements Serializable {
     @JsonIgnore
     private StateRepEntity stateRep;
 
+    @OneToMany(mappedBy = "nmHouseDistrictEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StateRepCountyEntity> stateRepCountyEntities;
+
 
 
 
     public NMHouseDistrictEntity() {
+    }
+
+    public NMHouseDistrictEntity(Long id,
+                                 String houseDistrictId,
+                                 String name,
+                                 String map,
+                                 LocalDate reelection,
+                                 Date createdAt,
+                                 Date updatedAt,
+                                 List<SiteEntity> sites,
+                                 StateRepEntity stateRep,
+                                 List<StateRepCountyEntity> stateRepCountyEntities) {
+        this.id = id;
+        this.houseDistrictId = houseDistrictId;
+        this.name = name;
+        this.map = map;
+        this.reelection = reelection;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.sites = sites;
+        this.stateRep = stateRep;
+        this.stateRepCountyEntities = stateRepCountyEntities;
     }
 
     public Long getId() {
@@ -135,6 +160,14 @@ public class NMHouseDistrictEntity implements Serializable {
 
     public void setSites(List<SiteEntity> sites) {
         this.sites = sites;
+    }
+
+    public List<StateRepCountyEntity> getStateRepCountyEntities() {
+        return stateRepCountyEntities;
+    }
+
+    public void setStateRepCountyEntities(List<StateRepCountyEntity> stateRepCountyEntities) {
+        this.stateRepCountyEntities = stateRepCountyEntities;
     }
 
 

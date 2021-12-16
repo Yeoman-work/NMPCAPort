@@ -6,6 +6,7 @@ import DashBoard from "./views/DashBoard";
 import CreateHealthCenterView from "./views/CreateHealthCenterView";
 import CreateLegislationView from "./views/CreateLegislationView";
 import LegislationDashBoard from "./views/LegislationDashBoard";
+import CreateStateRepView from "./views/CreateStateRepView";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
                     <Route path={'legislation'}>
                         <Route path={'dashboard'} element={<LegislationDashBoard/>}/>
                         <Route path={'createLegislation'} element={<CreateLegislationView/>}/>
+                    </Route>
+                    <Route path={'government'}>
+                        <Route path={'addStateRep'} element={<CreateStateRepView/>}/>
                     </Route>
                 </Route>
             </Routes>
