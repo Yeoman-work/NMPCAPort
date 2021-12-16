@@ -1,7 +1,11 @@
 package net.yeoman.nmpcaport.io.response.stateRep;
 
+import net.yeoman.nmpcaport.entities.ZipCodeEntity;
+import net.yeoman.nmpcaport.io.response.County.CountyResponse;
+import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
 public class StateRepResponse {
 
@@ -13,6 +17,10 @@ public class StateRepResponse {
     private String capitolRoom;
     private String streetAddress;
     private NMHouseDistrictNestedResponse nmHouseDistrictResponse;
+    private CountyResponse countyResponse;
+    private CityResponse CityResponse;
+    private ZipCodeResponse zipCodeResponse;
+
 
 
     public String getStateRepId() {
@@ -79,4 +87,27 @@ public class StateRepResponse {
         this.nmHouseDistrictResponse = nmHouseDistrictResponse;
     }
 
+    public CountyResponse getCountyResponse() {
+        return countyResponse;
+    }
+
+    public void setCountyResponse(CountyResponse countyResponse) {
+        this.countyResponse = countyResponse;
+    }
+
+    public net.yeoman.nmpcaport.io.response.city.CityResponse getCityResponse() {
+        return CityResponse;
+    }
+
+    public void setCityResponse(net.yeoman.nmpcaport.io.response.city.CityResponse cityResponse) {
+        CityResponse = cityResponse;
+    }
+
+    public ZipCodeResponse getZipCodeResponse() {
+        return zipCodeResponse;
+    }
+
+    public void setZipCodeResponse(ZipCodeResponse zipCodeResponse) {
+        this.zipCodeResponse = zipCodeResponse;
+    }
 }

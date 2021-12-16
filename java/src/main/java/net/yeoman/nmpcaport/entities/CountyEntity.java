@@ -36,6 +36,9 @@ public class CountyEntity implements Serializable {
     @OneToMany(mappedBy = "county", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<SiteEntity> sites;
 
+    @OneToMany(mappedBy = "countyEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StateRepEntity> stateRepEntityList;
+
     @PrePersist
     protected void onCreate(){
 
@@ -106,5 +109,13 @@ public class CountyEntity implements Serializable {
 
     public void setSites(List<SiteEntity> sites) {
         this.sites = sites;
+    }
+
+    public List<StateRepEntity> getStateRepEntityList() {
+        return stateRepEntityList;
+    }
+
+    public void setStateRepEntityList(List<StateRepEntity> stateRepEntityList) {
+        this.stateRepEntityList = stateRepEntityList;
     }
 }

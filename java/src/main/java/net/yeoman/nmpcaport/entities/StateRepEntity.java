@@ -64,6 +64,15 @@ public class StateRepEntity implements Serializable {
     @JoinColumn(name = "nm_house_district_entity_id")
     private NMHouseDistrictEntity nmHouseDistrict;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_entity_id")
+    private CityEntity cityEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "zip_code_entity_id")
+    private ZipCodeEntity zipCodeEntity;
+
+
     public StateRepEntity() {
     }
 
@@ -153,5 +162,22 @@ public class StateRepEntity implements Serializable {
 
     public void setNmHouseDistrict(NMHouseDistrictEntity nmHouseDistrict) {
         this.nmHouseDistrict = nmHouseDistrict;
+    }
+
+
+    public CityEntity getCityEntity() {
+        return cityEntity;
+    }
+
+    public void setCityEntity(CityEntity cityEntity) {
+        this.cityEntity = cityEntity;
+    }
+
+    public ZipCodeEntity getZipCodeEntity() {
+        return zipCodeEntity;
+    }
+
+    public void setZipCodeEntity(ZipCodeEntity zipCodeEntity) {
+        this.zipCodeEntity = zipCodeEntity;
     }
 }

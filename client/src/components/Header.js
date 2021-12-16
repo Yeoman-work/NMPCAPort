@@ -23,7 +23,7 @@ const Header = props =>{
                             <Link className="nav-link active" aria-current="page" to={'/yeoman/dashboard'}>Health Centers</Link>
                             <Link className="nav-link" to={'/'}>Contacts</Link>
                             <Link className="nav-link" to={'/'}>Government</Link>
-                            <Link className="nav-link" to={'/yeoman/legislation/createLegislation'}>Legislation</Link>
+                            <Link className="nav-link" to={'/yeoman/legislation/dashboard'}>Legislation</Link>
                             <Link className="nav-link disabled" to={'/'} tabIndex="-1" aria-disabled="true">Disabled</Link>
                         </div>
                     </div>

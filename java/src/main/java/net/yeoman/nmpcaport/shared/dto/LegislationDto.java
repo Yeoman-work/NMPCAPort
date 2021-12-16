@@ -13,6 +13,7 @@ public class LegislationDto {
     private String senateStatus;
     private Date senateStatusDate;
     private String governorStatus;
+    private Date governorStatusDate;
     private Date createdAt;
     private Date updatedAt;
 
@@ -102,5 +103,13 @@ public class LegislationDto {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Date getGovernorStatusDate() {
+        return governorStatusDate;
+    }
+
+    public void setGovernorStatusDate(Date governorStatusDate) {
+        this.governorStatusDate = governorStatusDate;
     }
 }

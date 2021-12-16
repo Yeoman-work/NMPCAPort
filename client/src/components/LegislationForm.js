@@ -11,22 +11,51 @@ const LegislationForm = props =>{
             handler
             } = props;
 
+    const saveLegislation = (legislation) =>{
+
+        let disableSave = true;
+
+        if(legislation.name.length >= 3 && legislation.name.length <= 25 ){
+
+            if(legislation.description.length <= 700){
+
+                disableSave = false;
+            }
+        }
+
+        return disableSave;
+
+    }
+
     const inputChange = (e) =>{
 
         switch (e.target.name) {
             case 'name':
                 console.log(e.target.value)
-                return setLegislation(produce(legislation, draft => {
-                        draft.name = e.target.value;
-                    })
-                );
+                if(e.target.value.length <= 25){
+                    return setLegislation(produce(legislation, draft => {
+                            draft.name = e.target.value;
+                        })
+                    );
+                }else{
+
+                    return legislation;
+                }
+
 
             case 'description':
                 console.log(e.target.value)
-                return setLegislation(produce(legislation, draft=>{
-                    draft.description = e.target.value;
-                })
-            );
+                if(e.target.value.length <= 700){
+                    return setLegislation(produce(legislation, draft=>{
+                        draft.description = e.target.value;
+                        })
+                    );
+                }else{
+
+                    return legislation
+                }
+
+
 
             case 'houseStatus':
                 console.log(e.target.value)
@@ -151,7 +180,7 @@ const LegislationForm = props =>{
                 <label>Description</label>
                 <textarea cols={4} className={'form-control'} value={legislation.description} rows={10} placeholder={'Add Description...'} name={'description'} onChange={(e)=>inputChange(e)} ></textarea>
             </div>
-            <button>Save Legislation</button>
+            <button disabled={saveLegislation(legislation)}>Save Legislation</button>
         </form>
     )
 }

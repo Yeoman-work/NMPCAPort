@@ -14,6 +14,7 @@ public class LegislationResponse {
     private String senateStatus;
     private Date senateStatusDate;
     private String governorStatus;
+    private Date governorStatusDate;
     private Date createdAt;
     private Date updatedAt;
 
@@ -97,4 +98,11 @@ public class LegislationResponse {
         this.governorStatus = governorStatus;
     }
 
+    public Date getGovernorStatusDate() {
+        return governorStatusDate;
+    }
+
+    public void setGovernorStatusDate(Date governorStatusDate) {
+        this.governorStatusDate = governorStatusDate;
+    }
 }

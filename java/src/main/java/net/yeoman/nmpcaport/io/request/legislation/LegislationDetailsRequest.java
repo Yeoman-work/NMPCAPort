@@ -13,6 +13,7 @@ public class LegislationDetailsRequest {
     private String senateStatus;
     private Date senateStatusDate;
     private String governorStatus;
+    private Date governorStatusDate;
 
     public String getName() {
         return name;
@@ -68,5 +69,13 @@ public class LegislationDetailsRequest {
 
     public void setGovernorStatus(String governorStatus) {
         this.governorStatus = governorStatus;
+    }
+
+    public Date getGovernorStatusDate() {
+        return governorStatusDate;
+    }
+
+    public void setGovernorStatusDate(Date governorStatusDate) {
+        this.governorStatusDate = governorStatusDate;
     }
 }

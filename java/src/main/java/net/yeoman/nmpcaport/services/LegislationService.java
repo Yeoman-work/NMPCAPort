@@ -8,6 +8,7 @@ import javax.persistence.Lob;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 public interface LegislationService {
 
@@ -16,6 +17,7 @@ public interface LegislationService {
     public LegislationDto updateLegislation(String legislationId, LegislationDto legislationDto);
     public LegislationDto deleteLegislation(String legislationId);
     public LegislationEntity getLegislativeEntity(String legislationId);
+    public List<LegislationDto> getLegislationList();
 
 
 }

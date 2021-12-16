@@ -68,6 +68,32 @@ public class LegislationEntity implements Serializable {
     public LegislationEntity() {
     }
 
+    public LegislationEntity(Long id,
+                             String legislationId,
+                             String name,
+                             String description,
+                             String houseStatus,
+                             Date houseStatusDate,
+                             String senateStatus,
+                             Date senateStatusDate,
+                             String governorStatus,
+                             Date governorStatusDate,
+                             Date createdAt,
+                             Date updatedAt) {
+        this.id = id;
+        this.legislationId = legislationId;
+        this.name = name;
+        this.description = description;
+        this.houseStatus = houseStatus;
+        this.houseStatusDate = houseStatusDate;
+        this.senateStatus = senateStatus;
+        this.senateStatusDate = senateStatusDate;
+        this.governorStatus = governorStatus;
+        this.governorStatusDate = governorStatusDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public Long getId() {
         return id;
     }
@@ -163,5 +189,7 @@ public class LegislationEntity implements Serializable {
     public void setGovernorStatusDate(Date governorStatusDate) {
         this.governorStatusDate = governorStatusDate;
     }
+
+
 
 }

@@ -53,6 +53,9 @@ public class CityEntity implements Serializable {
     @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SiteEntity> site;
 
+    @OneToMany(mappedBy = "cityEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StateRepEntity> stateRepEntityList;
+
 
 
     public CityEntity() {
@@ -104,5 +107,13 @@ public class CityEntity implements Serializable {
 
     public void setSite(List<SiteEntity> site) {
         this.site = site;
+    }
+
+    public List<StateRepEntity> getStateRepEntityList() {
+        return stateRepEntityList;
+    }
+
+    public void setStateRepEntityList(List<StateRepEntity> stateRepEntityList) {
+        this.stateRepEntityList = stateRepEntityList;
     }
 }

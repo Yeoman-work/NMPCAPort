@@ -39,9 +39,9 @@ public class StateRepServiceImpl implements StateRepService {
     public StateRepDto createStateRep(StateRepDto stateRepDto) {
 
         stateRepDto.setStateRepId(utils.generateRandomID());
-        if(stateRepDto.getNmHouseDistrictIdentifier() != null){
+        if(stateRepDto.getNmHouseDistrict() != null){
 
-            stateRepDto.setNmHouseDistrict(this.nmHouseDistrictService.findNMHouseDistrictEntity(stateRepDto.getNmHouseDistrictIdentifier()));
+            //stateRepDto.setNmHouseDistrict(this.nmHouseDistrictService.findNMHouseDistrictEntity(stateRepDto.getNmHouseDistrict()));
 
             stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(stateRepDto.getNmHouseDistrict(), NMHouseDistrictNestedResponse.class));
         }

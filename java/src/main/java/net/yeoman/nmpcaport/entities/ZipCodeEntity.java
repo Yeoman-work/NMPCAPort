@@ -47,6 +47,9 @@ public class ZipCodeEntity implements Serializable {
     @OneToMany(mappedBy = "zipCode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SiteEntity> sites;
 
+    @OneToMany(mappedBy = "zipCodeEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StateRepEntity> stateRepEntityList;
+
     public ZipCodeEntity() {
     }
 
@@ -97,4 +100,14 @@ public class ZipCodeEntity implements Serializable {
     public void setSites(List<SiteEntity> sites) {
         this.sites = sites;
     }
+
+    public List<StateRepEntity> getStateRepEntityList() {
+        return stateRepEntityList;
+    }
+
+    public void setStateRepEntityList(List<StateRepEntity> stateRepEntityList) {
+        this.stateRepEntityList = stateRepEntityList;
+    }
+
+
 }

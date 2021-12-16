@@ -37,7 +37,7 @@ const CreateLegislationView = props =>{
 
         }catch(error){
 
-            console.log(error);
+            console.log(error.response.data.message);
         }
 
     }
