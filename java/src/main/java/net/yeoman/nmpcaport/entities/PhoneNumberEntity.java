@@ -5,10 +5,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "phoneNumbers")
-public class PhoneNumber implements Serializable {
+public class PhoneNumberEntity implements Serializable {
 
     private static final long serialVersionUID = -5880412070465560589L;
 
@@ -44,8 +45,11 @@ public class PhoneNumber implements Serializable {
         this.updatedAt = new Date();
     }
 
+    @OneToMany(mappedBy = "phoneNumberEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AssignedNumberEntity> assignedNumberEntities;
 
-    public PhoneNumber() {
+
+    public PhoneNumberEntity() {
     }
 
     public Long getId() {
@@ -94,5 +98,13 @@ public class PhoneNumber implements Serializable {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<AssignedNumberEntity> getAssignedNumberEntities() {
+        return assignedNumberEntities;
+    }
+
+    public void setAssignedNumberEntities(List<AssignedNumberEntity> assignedNumberEntities) {
+        this.assignedNumberEntities = assignedNumberEntities;
     }
 }

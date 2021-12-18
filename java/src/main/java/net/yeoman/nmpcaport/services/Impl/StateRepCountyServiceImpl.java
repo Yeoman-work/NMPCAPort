@@ -17,7 +17,7 @@ public class StateRepCountyServiceImpl implements StateRepCountyService {
     @Override
     public StateRepCountyEntity getStateRepCountyEntity(String stateRepCountyId) {
 
-        return this.stateRepCountyRepository.findStateRepCountyId(stateRepCountyId);
+        return this.stateRepCountyRepository.findByStateRepCountyId(stateRepCountyId);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class StateRepCountyServiceImpl implements StateRepCountyService {
     @Override
     public StateRepCountyEntity deleteStateRepCounty(String stateRepCountyId) {
 
-        StateRepCountyEntity stateRepCountyEntity = this.stateRepCountyRepository.findStateRepCountyId(stateRepCountyId);
+        StateRepCountyEntity stateRepCountyEntity = this.stateRepCountyRepository.findByStateRepCountyId(stateRepCountyId);
 
         this.stateRepCountyRepository.delete(stateRepCountyEntity);
 

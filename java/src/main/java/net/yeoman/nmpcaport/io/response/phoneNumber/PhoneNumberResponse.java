@@ -1,6 +1,6 @@
 package net.yeoman.nmpcaport.io.response.phoneNumber;
 
-public class PhoneNumber {
+public class PhoneNumberResponse {
 
     private String phoneNumberId;
     private String description;
@@ -47,4 +47,6 @@ public class PhoneNumber {
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+
 }

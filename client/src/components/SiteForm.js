@@ -1,5 +1,5 @@
 import React from "react";
-
+const { InList } = require('../helper/generalFunctions')
 
 
 
@@ -13,18 +13,7 @@ const SiteForm = props =>{
           healthCenterHandler
    } = props;
 
-   const InList = (List, id) =>{
-       let isPresent = false;
 
-       for(let item of List){
-
-           if(item['id'] === id){
-               isPresent = true;
-           }
-       }
-
-       return isPresent;
-   }
 
    const addSite = (siteState, formData) =>{
 

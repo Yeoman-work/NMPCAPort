@@ -1,11 +1,14 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="stateReps")
@@ -37,6 +40,7 @@ public class StateRepEntity implements Serializable {
     @Size(min=5, max = 250)
     private String picture;
 
+    @Size(max=8, message = "Must be 8 characters or less")
     private String capitolRoom;
 
     @Size(min = 5, max= 150, message = "must be between 5 and 150 characters")
@@ -72,8 +76,42 @@ public class StateRepEntity implements Serializable {
     @JoinColumn(name = "zip_code_entity_id")
     private ZipCodeEntity zipCodeEntity;
 
+    @OneToMany(mappedBy = "stateRepEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<AssignedNumberEntity> assignedNumberEntities;
+
 
     public StateRepEntity() {
+    }
+
+    public StateRepEntity(Long id,
+                          String stateRepId,
+                          String firstName,
+                          String lastName,
+                          String email,
+                          String picture,
+                          String capitolRoom,
+                          String streetAddress,
+                          Date createdAt,
+                          Date updatedAt,
+                          NMHouseDistrictEntity nmHouseDistrict,
+                          CityEntity cityEntity,
+                          ZipCodeEntity zipCodeEntity,
+                          List<AssignedNumberEntity> assignedNumberEntities) {
+        this.id = id;
+        this.stateRepId = stateRepId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.picture = picture;
+        this.capitolRoom = capitolRoom;
+        this.streetAddress = streetAddress;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.nmHouseDistrict = nmHouseDistrict;
+        this.cityEntity = cityEntity;
+        this.zipCodeEntity = zipCodeEntity;
+        this.assignedNumberEntities = assignedNumberEntities;
     }
 
     public Long getId() {
@@ -179,5 +217,13 @@ public class StateRepEntity implements Serializable {
 
     public void setZipCodeEntity(ZipCodeEntity zipCodeEntity) {
         this.zipCodeEntity = zipCodeEntity;
+    }
+
+    public List<AssignedNumberEntity> getAssignedNumberEntities() {
+        return assignedNumberEntities;
+    }
+
+    public void setAssignedNumberEntities(List<AssignedNumberEntity> assignedNumberEntities) {
+        this.assignedNumberEntities = assignedNumberEntities;
     }
 }

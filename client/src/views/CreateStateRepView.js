@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useReducer } from "react";
 import axios from "axios";
-import SiteForm from "../components/SiteForm";
 import Header from "../components/Header";
 import produce from "immer";
 import StateRepForm from "../components/StateRepForm";
+import {number} from "../helper/generalFunctions";
+import PhoneNumberForm from "../components/PhoneNumberForm";
+const {phoneNumberPattern} = require('../helper/generalFunctions')
 
 
 const stateRepReducer = (stateRepState, action) =>{
@@ -11,27 +13,46 @@ const stateRepReducer = (stateRepState, action) =>{
     switch(action.type){
         case STATE_REP_FIELDS.STATE_REP_FIRST_NAME:
             console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.stateRep.firstName = action.payload;
-            })
+            if(action.payload.length <= 50){
+                return produce(stateRepState, draft=>{
+                    draft.stateRep.firstName = action.payload;
+                })
+            }else{
+
+                return stateRepState;
+            }
 
         case STATE_REP_FIELDS.STATE_REP_LAST_NAME:
-            console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.stateRep.lastName = action.payload;
-            })
+            if(action.payload.length <= 50){
+                return produce(stateRepState, draft=>{
+                    draft.stateRep.lastName = action.payload;
+                })
+            }else{
+
+                return stateRepState;
+            }
 
         case STATE_REP_FIELDS.STATE_REP_EMAIL:
             console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.stateRep.email = action.payload;
-            })
+            if(action.payload.length <= 150){
+                return produce(stateRepState, draft=>{
+                    draft.stateRep.email = action.payload;
+                })
+            }else{
+
+                return stateRepState;
+            }
 
         case STATE_REP_FIELDS.STATE_REP_ADDRESS:
             console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.stateRep.streetAddress = action.payload;
-            })
+            if(action.payload.length <= 150){
+                return produce(stateRepState, draft=>{
+                    draft.stateRep.streetAddress = action.payload;
+                })
+            }else{
+
+                return stateRepState;
+            }
 
         case STATE_REP_FIELDS.STATE_REP_CITY:
             console.log(stateRepState.stateRep);
@@ -39,8 +60,9 @@ const stateRepReducer = (stateRepState, action) =>{
                 draft.stateRep.city = action.payload;
             })
 
-        case STATE_REP_FIELDS.ZIP_CODE:
-            console.log(stateRepState.stateRep);
+        case STATE_REP_FIELDS.STATE_REP_ZIP_CODE:
+            console.log('sip code')
+            console.log(action.payload);
             return produce(stateRepState, draft=>{
                 draft.stateRep.zipCode = action.payload;
             })
@@ -59,15 +81,35 @@ const stateRepReducer = (stateRepState, action) =>{
 
         case STATE_REP_FIELDS.STATE_REP_PICTURE:
             console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.stateRep.picture = action.payload
+
+            if(action.payload.length <= 250){
+                return produce(stateRepState, draft=>{
+                    draft.stateRep.picture = action.payload
                 })
+            }else{
+
+                return stateRepState;
+            }
+
 
         case STATE_REP_FIELDS.STATE_REP_COUNTIES:
-            console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.stateRep.counties = [...stateRepState, action.payload]
-            })
+
+            if(action.payload.checked){
+                return produce(stateRepState, draft=>{
+                    draft.stateRep.counties = [...stateRepState.stateRep.counties, action.payload.value]
+                })
+
+            }else{
+                return produce(stateRepState, draft=>{
+
+                    let counties = draft.stateRep.counties;
+                    const removeIndex = counties.indexOf(action.payload.value);
+                    counties.splice(removeIndex, 1);
+                    draft.stateRep.counties = [...counties];
+
+                })
+            }
+
 
         case STATE_REP_FIELDS.COUNTIES:
             console.log(stateRepState.stateRep);
@@ -82,7 +124,8 @@ const stateRepReducer = (stateRepState, action) =>{
             })
 
         case STATE_REP_FIELDS.ZIP_CODE:
-            console.log(stateRepState.stateRep);
+            console.log('zip code list')
+            console.log(stateRepState.formData);
             return produce(stateRepState, draft=>{
                 draft.formData.zipCodeList = [...action.payload];
             })
@@ -93,10 +136,50 @@ const stateRepReducer = (stateRepState, action) =>{
                 draft.formData.districtList = [...action.payload];
             })
 
-        case STATE_REP_FIELDS.STATE_REP_LIST:
-            console.log(stateRepState.stateRep);
+        case STATE_REP_FIELDS.STATE_REP_PHONE_NUMBER:
+
+            let phoneNumber = action.payload;
+
+            if(number.includes(phoneNumber[phoneNumber.length - 1])){
+
+                if(action.payload.length <= 12){
+
+                    return produce(stateRepState, draft=>{
+                        draft.phoneNumber.number = phoneNumberPattern(action.payload);
+                        console.log(stateRepState);
+                    })
+
+                }else{
+
+                    return stateRepState;
+                }
+
+            }else if(phoneNumber.length < 1){
+
+                return produce(stateRepState, draft=>{
+
+                    draft.phoneNumber.number = phoneNumberPattern(action.payload);
+
+                })
+
+            }else{
+
+                return stateRepState;
+            }
+
+
+        case STATE_REP_FIELDS.STATE_REP_PHONE_DESCRIPTION:
+
             return produce(stateRepState, draft=>{
-                draft.stateRepList = [...action.payload];
+
+                draft.phoneNumber.description = action.payload.description;
+            })
+
+        case STATE_REP_FIELDS.Phone_Number_List:
+
+            return produce(stateRepState, draft=>{
+
+                draft.phoneNumberList = [...stateRepState.phoneNumberList, action.payload];
             })
 
         default:
@@ -117,11 +200,13 @@ const STATE_REP_FIELDS ={
     STATE_REP_DISTRICT: 'district',
     STATE_REP_CAPITAL_RM: 'capitalRoom',
     STATE_REP_COUNTIES: 'counties',
+    STATE_REP_PHONE_NUMBER: 'phoneNumber',
+    STATE_REP_PHONE_DESCRIPTION: 'phoneDescription',
     COUNTIES: 'countiesList',
     CITIES: 'citiesList',
     ZIP_CODE: 'zipCodeList',
     DISTRICTS: 'districtList',
-    STATE_REP_LIST: []
+    Phone_Number_List: 'phoneNumberList'
 }
 
 
@@ -142,7 +227,12 @@ const CreateStateRepView = props =>{
             counties: []
         },
 
-        stateRepList: [],
+        phoneNumber:{
+            number: '',
+            description: '',
+        },
+
+        phoneNumberList: [],
 
         formData:{
             countiesList: [],
@@ -160,14 +250,16 @@ const CreateStateRepView = props =>{
 
             try{
 
-                const countyListResponse = await axios.get('http://localhost:8080/legislation',{
+                const countyListResponse = await axios.get('http://localhost:8080/counties',{
 
                     headers:{
                         Authorization: localStorage.getItem('token')
                     }
                 })
 
-                dispatchStateRepInfo({type: STATE_REP_FIELDS.COUNTIES, payload: [...countyListResponse]})
+                dispatchStateRepInfo({type: STATE_REP_FIELDS.COUNTIES, payload: [...countyListResponse.data]})
+
+                console.log(countyListResponse.data);
 
             }catch(error){
 
@@ -191,7 +283,7 @@ const CreateStateRepView = props =>{
                     }
                 })
 
-                dispatchStateRepInfo({type: STATE_REP_FIELDS.CITIES, payload: [...cityListResponse]})
+                dispatchStateRepInfo({type: STATE_REP_FIELDS.CITIES, payload: [...cityListResponse.data]})
             }catch(error){
 
                 console.log(error.response)
@@ -216,7 +308,8 @@ const CreateStateRepView = props =>{
                     }
                 })
 
-                dispatchStateRepInfo({type: STATE_REP_FIELDS.ZIP_CODE, action: [...zipCodeListResponse]})
+                console.log(zipCodeListResponse.data);
+                dispatchStateRepInfo({type: STATE_REP_FIELDS.ZIP_CODE, payload: [...zipCodeListResponse.data]})
 
             }catch(error){
 
@@ -227,16 +320,75 @@ const CreateStateRepView = props =>{
 
     },[])
 
+    useEffect(()=>{
+
+        (async ()=>{
+
+            try{
+
+                const houseDistrictResponse = await axios.get('http://localhost:8080/nmHouseDistricts', {
+
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    }
+
+                })
+
+                dispatchStateRepInfo({type: STATE_REP_FIELDS.DISTRICTS, payload: [...houseDistrictResponse.data]})
+
+            }catch(error){
+
+                console.log(error.response);
+            }
+        })()
+    }, [])
+
+
+    const createRep = async (e)=>{
+        e.preventDefault()
+
+        try{
+
+            const createRepResponse = await  axios.post('http://localhost:8080/stateReps', stateRepInfo.stateRep, {
+
+                headers:{
+                    Authorization: localStorage.getItem('token')
+                }
+
+            })
+
+
+        }catch(error){
+
+
+        }
+    }
+
+    const addPhoneNumber = (e) =>{
+        e.preventDefault();
+
+
+    }
+
     return(
         <div>
             <Header/>
-            <StateRepForm
-                stateRepInfo={stateRepInfo}
-                formFields={STATE_REP_FIELDS}
-                dispatchStateRepInfo={dispatchStateRepInfo}
-                formLabel={'Create State Rep'}
-                formButton={'Create Rep'}
-            />
+            <div className={''}>
+                <StateRepForm
+                    stateRepInfo={stateRepInfo}
+                    formFields={STATE_REP_FIELDS}
+                    dispatchStateRepInfo={dispatchStateRepInfo}
+                    handler={createRep}
+                    formLabel={'Create State Rep'}
+                    formButton={'Create Rep'}
+                />
+                <PhoneNumberForm
+                    formFields={STATE_REP_FIELDS}
+                    dispatchStateRepInfo={dispatchStateRepInfo}
+                    phoneNumber={stateRepInfo.phoneNumber}
+                    phoneNumberList={stateRepInfo.phoneNumberList}
+                />
+            </div>
         </div>
     )
 }
