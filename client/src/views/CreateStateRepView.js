@@ -5,35 +5,58 @@ import produce from "immer";
 import StateRepForm from "../components/StateRepForm";
 import {number} from "../helper/generalFunctions";
 import PhoneNumberForm from "../components/PhoneNumberForm";
-const {phoneNumberPattern} = require('../helper/generalFunctions')
+const { phoneNumberPattern,
+        characters,
+        fieldLengthErrorMessage,
+        fieldLength,
+        emailValidation,
+        fieldLengthNotRequired,
+     } = require('../helper/generalFunctions')
 
 
 const stateRepReducer = (stateRepState, action) =>{
 
     switch(action.type){
         case STATE_REP_FIELDS.STATE_REP_FIRST_NAME:
-            console.log(stateRepState.stateRep);
-            if(action.payload.length <= 50){
-                return produce(stateRepState, draft=>{
-                    draft.stateRep.firstName = action.payload;
-                })
+
+            if(characters.includes(action.payload[action.payload.length - 1]) || action.payload.length === 0){
+
+                if(action.payload.length <= 50) {
+
+                    return produce(stateRepState, draft => {
+                        console.log('here')
+                        draft.stateRep.firstName = action.payload;
+                    })
+                }
+
             }else{
 
                 return stateRepState;
             }
 
         case STATE_REP_FIELDS.STATE_REP_LAST_NAME:
-            if(action.payload.length <= 50){
-                return produce(stateRepState, draft=>{
-                    draft.stateRep.lastName = action.payload;
-                })
+
+
+            if(characters.includes(action.payload[action.payload.length - 1]) || action.payload.length === 0){
+                if(action.payload.length <= 50){
+
+                    return produce(stateRepState, draft=>{
+                        draft.stateRep.lastName = action.payload;
+                    })
+
+                }else{
+
+                    return stateRepState;
+                }
             }else{
 
                 return stateRepState;
             }
 
+
         case STATE_REP_FIELDS.STATE_REP_EMAIL:
             console.log(stateRepState.stateRep);
+
             if(action.payload.length <= 150){
                 return produce(stateRepState, draft=>{
                     draft.stateRep.email = action.payload;
@@ -69,9 +92,25 @@ const stateRepReducer = (stateRepState, action) =>{
 
         case STATE_REP_FIELDS.STATE_REP_CAPITAL_RM:
             console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.stateRep.capitolRoom = action.payload;
-            })
+            if(characters.includes(action.payload[action.payload.length - 1])){
+                if(action.payload.length <=8){
+                    return produce(stateRepState, draft=>{
+                        draft.stateRep.capitolRoom = action.payload;
+                    })
+                }else{
+
+                    if(action.payload.length === 0){
+
+                        return produce(stateRepState, draft=>{
+
+                            draft.stateRep.capitolRoom = action.payload;
+                        })
+                    }
+                    return stateRepState;
+                }
+            }
+
+
 
         case STATE_REP_FIELDS.STATE_REP_DISTRICT:
             console.log(stateRepState.stateRep);
@@ -80,12 +119,13 @@ const stateRepReducer = (stateRepState, action) =>{
             })
 
         case STATE_REP_FIELDS.STATE_REP_PICTURE:
-            console.log(stateRepState.stateRep);
 
             if(action.payload.length <= 250){
+
                 return produce(stateRepState, draft=>{
                     draft.stateRep.picture = action.payload
                 })
+
             }else{
 
                 return stateRepState;
@@ -170,16 +210,36 @@ const stateRepReducer = (stateRepState, action) =>{
 
         case STATE_REP_FIELDS.STATE_REP_PHONE_DESCRIPTION:
 
-            return produce(stateRepState, draft=>{
+            if(characters.includes(action.payload[action.payload.length - 1]) || action.payload.length === 0){
+                if(action.payload.length <= 25){
+                    return produce(stateRepState, draft=>{
 
-                draft.phoneNumber.description = action.payload.description;
-            })
+                        draft.phoneNumber.description = action.payload;
+                    })
+                }else{
+
+                    return stateRepState;
+                }
+            }else{
+
+                return stateRepState;
+            }
 
         case STATE_REP_FIELDS.Phone_Number_List:
 
             return produce(stateRepState, draft=>{
 
                 draft.phoneNumberList = [...stateRepState.phoneNumberList, action.payload];
+            })
+
+        case STATE_REP_FIELDS.CLEAR_PHONE_NUMBER:
+            const clearPhoneNumber ={
+                number: '',
+                description: ''
+        }
+            return produce(stateRepState, draft=>{
+
+                draft.phoneNumber = {...clearPhoneNumber};
             })
 
         default:
@@ -190,8 +250,8 @@ const stateRepReducer = (stateRepState, action) =>{
 
 const STATE_REP_FIELDS ={
 
-    STATE_REP_FIRST_NAME: 'firstName',
-    STATE_REP_LAST_NAME: 'lastName',
+    STATE_REP_FIRST_NAME: 'First Name',
+    STATE_REP_LAST_NAME: 'Last Name',
     STATE_REP_EMAIL: 'email',
     STATE_REP_PICTURE: 'picture',
     STATE_REP_ADDRESS: 'streetAddress',
@@ -206,7 +266,8 @@ const STATE_REP_FIELDS ={
     CITIES: 'citiesList',
     ZIP_CODE: 'zipCodeList',
     DISTRICTS: 'districtList',
-    Phone_Number_List: 'phoneNumberList'
+    Phone_Number_List: 'phoneNumberList',
+    CLEAR_PHONE_NUMBER: 'clearPhoneNumber'
 }
 
 
@@ -225,6 +286,19 @@ const CreateStateRepView = props =>{
             zipCode: ''.trim(),
             nmHouseDistrict: ''.trim(),
             counties: []
+        },
+
+        errors:{
+          firstName: '',
+          lastName: '',
+          email: '',
+          picture:'',
+          streetAddress:'',
+          city:'',
+          capitolRoom: '',
+          zipCode: '',
+          nmHouseDistrict: '',
+          counties: ''
         },
 
         phoneNumber:{
@@ -366,8 +440,56 @@ const CreateStateRepView = props =>{
 
     const addPhoneNumber = (e) =>{
         e.preventDefault();
+        dispatchStateRepInfo({type: STATE_REP_FIELDS.Phone_Number_List, payload: stateRepInfo.phoneNumber})
+
+        dispatchStateRepInfo({type: STATE_REP_FIELDS.CLEAR_PHONE_NUMBER})
+
+    }
+
+    const stateLength = (state, lengthMin, lengthMax, required) =>{
+        let isValid = false;
+
+        if(required){
+
+            if(state.length >= lengthMin && state.length <= lengthMax){
+
+                isValid = true;
+            }
+        }else{
+
+            if((state.length === 0) || (state.length >= lengthMin && state.length <= lengthMax)){
+
+                isValid = true
+            }
+        }
+
+        return isValid;
+    }
 
 
+    const canSubmit = (stateRepInfo) =>{
+
+        let isDisabled = true;
+
+        if(!fieldLength(3, 50, stateRepInfo.stateRep.firstName)){
+            if(!fieldLength(3, 50, stateRepInfo.stateRep.lastName)){
+                if(emailValidation(stateRepInfo.stateRep.email)){
+                    if(fieldLengthNotRequired(0, 150, stateRepInfo.stateRep.email)){
+                        if(fieldLengthNotRequired(5, 250, stateRepInfo.stateRep.picture)){
+                            if(fieldLengthNotRequired(5, 150, stateRepInfo.stateRep.streetAddress)){
+                                if(fieldLengthNotRequired(0, 8, stateRepInfo.stateRep.capitolRoom)){
+                                    isDisabled = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        console.log(isDisabled)
+        return isDisabled;
     }
 
     return(
@@ -380,15 +502,20 @@ const CreateStateRepView = props =>{
                     dispatchStateRepInfo={dispatchStateRepInfo}
                     handler={createRep}
                     formLabel={'Create State Rep'}
-                    formButton={'Create Rep'}
+                    fieldLength={fieldLength}
+                    fieldLengthErrorMessages={fieldLengthErrorMessage}
+                    fieldLengthNotRequired={fieldLengthNotRequired}
+                    emailValidation={emailValidation}
                 />
                 <PhoneNumberForm
                     formFields={STATE_REP_FIELDS}
                     dispatchStateRepInfo={dispatchStateRepInfo}
                     phoneNumber={stateRepInfo.phoneNumber}
                     phoneNumberList={stateRepInfo.phoneNumberList}
+                    handler={addPhoneNumber}
                 />
             </div>
+            <button disabled={canSubmit(stateRepInfo)}>Save State</button>
         </div>
     )
 }

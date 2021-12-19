@@ -12,51 +12,17 @@ const StateRepForm = props =>{
            formFields,
            stateRepInfo,
            dispatchStateRepInfo,
-           handler
+           handler,
+           fieldLengthErrorMessages,
+           fieldLength,
+           emailValidation,
+           fieldLengthNotRequired
     } = props;
 
 
-    const stateLength = (state, lengthMin, lengthMax, required) =>{
-        let isValid = false;
 
-        if(required){
 
-            if(state.length >= lengthMin && state.length <= lengthMax){
 
-                isValid = true;
-            }
-        }else{
-
-            if((state.length === 0) || (state.length >= lengthMin && state.length <= lengthMax)){
-
-                isValid = true
-            }
-        }
-
-        return isValid;
-    }
-
-    const canSubmit = (stateRepInfo) =>{
-
-        let isDisabled = true;
-
-        if(stateLength(stateRepInfo.stateRep.firstName, 3, 50, true)){
-            if(stateLength(stateRepInfo.stateRep.lastName, 3, 50, true)){
-                if(stateLength(stateRepInfo.stateRep.email, 0, 150, false)){
-                    if(stateLength(stateRepInfo.stateRep.picture, 5, 250, false)){
-                        if(stateLength(stateRepInfo.stateRep.capitolRoom,0,8, false)){
-                            if(stateLength(stateRepInfo.stateRep.streetAddress, 5, 150, false)){
-
-                                isDisabled = false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return isDisabled;
-    }
 
 
 
@@ -66,10 +32,13 @@ const StateRepForm = props =>{
             <div className={'row'}>
                 <div className={'col form-group'}>
                     <label>First Name</label>
-                    <input type="text" className={'form-control'}
+                    <input type="text"
+                           className={'form-control'}
                            name={formFields.STATE_REP_FIRST_NAME}
                            value={stateRepInfo.stateRep.firstName}
-                           onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}/>
+                           onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
+                    />
+                    {fieldLength(3, 50, stateRepInfo.stateRep.firstName)? <span className={'text-danger'}>{fieldLengthErrorMessages(3, 50, formFields.STATE_REP_FIRST_NAME)}</span>  : null}
                 </div>
                 <div className={'col form-group'}>
                     <label>Last Name</label>
@@ -78,6 +47,7 @@ const StateRepForm = props =>{
                            value={stateRepInfo.stateRep.lastName}
                            onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
                     />
+                    {fieldLength(3, 50, stateRepInfo.stateRep.lastName)? <span className={'text-danger'}>{fieldLengthErrorMessages(3, 50, formFields.STATE_REP_LAST_NAME)}</span> : null }
                 </div>
             </div>
             <div className={'row'}>
@@ -88,6 +58,8 @@ const StateRepForm = props =>{
                            value={stateRepInfo.stateRep.email}
                            onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
                     />
+                    {!fieldLengthNotRequired(0, 150, stateRepInfo.stateRep.email)? <div className={'text-danger'}>{fieldLengthErrorMessages(0, 150, formFields.STATE_REP_EMAIL)}</div> : null}
+                    {!emailValidation(stateRepInfo.stateRep.email)? <div className={'text-danger'}>Please enter a valid email</div> : null}
                 </div>
                 <div className={'col form-group'}>
                     <label>Picture</label>
@@ -95,8 +67,8 @@ const StateRepForm = props =>{
                         name={formFields.STATE_REP_PICTURE}
                         value={stateRepInfo.stateRep.picture}
                         onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
-
                     />
+                    {!fieldLengthNotRequired(5, 250, stateRepInfo.stateRep.picture)? <span className={'text-danger'}>{fieldLengthErrorMessages(5, 250, formFields.STATE_REP_PICTURE)}</span> : null}
                 </div>
             </div>
             <div className={'row'}>
@@ -107,6 +79,7 @@ const StateRepForm = props =>{
                            value={stateRepInfo.stateRep.streetAddress}
                            onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
                     />
+                    {!fieldLengthNotRequired(5, 150, stateRepInfo.stateRep.streetAddress)? <span className={'text-danger'}>{fieldLengthErrorMessages(5, 150, formFields.STATE_REP_ADDRESS)}</span> : null}
                 </div>
                 <div className={'col form-group'}>
                     <label>Capital Office</label>
@@ -115,6 +88,7 @@ const StateRepForm = props =>{
                     value={stateRepInfo.stateRep.capitolRoom}
                     onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
                     />
+                    {!fieldLengthNotRequired(0, 8, stateRepInfo.stateRep.capitolRoom)? <span className={'text-danger'}>{fieldLengthErrorMessages(5, 150, formFields.STATE_REP_CAPITAL_RM)}</span> : null}
                 </div>
             </div>
 
@@ -204,7 +178,7 @@ const StateRepForm = props =>{
                     </select>
                 </div>
             </div>
-            <button disabled={canSubmit(stateRepInfo)}>{formButton}</button>
+
         </form>
     )
 }

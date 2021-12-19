@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ public class PhoneNumberEntity implements Serializable {
     private String phoneNumberId;
 
     @NotBlank(message = "required")
+    @Size(min = 5, max = 25)
     private String description;
 
     @NotBlank(message = "required")
