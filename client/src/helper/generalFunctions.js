@@ -74,6 +74,19 @@ const phoneNumberCheck = (phoneNumber) =>{
     return disabled;
 }
 
+
+const phoneNumberValidation = (phoneNumber) =>{
+
+    let isValid;
+
+    const pattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+    isValid = pattern.test(phoneNumber);
+
+    return isValid;
+
+}
+
 const fieldLength = (min, max, fieldInput) =>{
 
     let isValid = true;
@@ -123,7 +136,7 @@ const fieldLengthErrorMessage =(min, max, fieldName)=>{
         errorMessage = fieldName + ' must contain ' + max + ' characters or less';
     }else{
 
-        errorMessage = fieldName + ' must be between ' + min + ' and ' + max + ' characters in length';
+        errorMessage = fieldName + ' must be between ' + min + ' and ' + max + ' characters';
     }
 
     return errorMessage
@@ -160,6 +173,7 @@ const governorList = ['awaiting bill', 'signed', 'veto']
 
 module.exports={
     fieldLength,
+    phoneNumberValidation,
     fieldLengthNotRequired,
     fieldLengthErrorMessage,
     phoneNumberCheck,

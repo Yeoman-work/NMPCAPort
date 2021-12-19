@@ -1,5 +1,8 @@
 import React from "react";
-const {phoneNumberCheck} = require('../helper/generalFunctions')
+const {phoneNumberCheck,
+       fieldLength,
+       fieldLengthErrorMessage
+        } = require('../helper/generalFunctions')
 
 
 
@@ -27,6 +30,7 @@ const PhoneNumberForm = props =>{
                                    value={phoneNumber.number}
                                    onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
                             />
+
                         </div>
                         <div className={'form-group mb-3'}>
                             <label>Description</label>
@@ -36,6 +40,7 @@ const PhoneNumberForm = props =>{
                                    value={phoneNumber.description}
                                    onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
                             />
+                            {fieldLength(5, 25, phoneNumber.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, formFields.STATE_REP_PHONE_DESCRIPTION)}</div> : null}
                         </div>
                         <button disabled={phoneNumberCheck(phoneNumber)} onClick={handler}>Add Phone Number</button>
                     </div>

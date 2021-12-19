@@ -261,7 +261,7 @@ const STATE_REP_FIELDS ={
     STATE_REP_CAPITAL_RM: 'capitalRoom',
     STATE_REP_COUNTIES: 'counties',
     STATE_REP_PHONE_NUMBER: 'phoneNumber',
-    STATE_REP_PHONE_DESCRIPTION: 'phoneDescription',
+    STATE_REP_PHONE_DESCRIPTION: 'Phone Description',
     COUNTIES: 'countiesList',
     CITIES: 'citiesList',
     ZIP_CODE: 'zipCodeList',
