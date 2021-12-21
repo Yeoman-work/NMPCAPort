@@ -1,16 +1,15 @@
 package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.NMHouseDistrictEntity;
+import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
 import java.util.Date;
 
 public class StateRepDto {
@@ -27,13 +26,16 @@ public class StateRepDto {
     private String county;
     private String city;
     private String zipCode;
+    private String party;
     private Date createdAt;
     private Date updatedAt;
     private NMHouseDistrictEntity nmHouseDistrictEntity;
     private NMHouseDistrictNestedResponse nmHouseDistrictResponse;
     private CountyResponse countyResponse;
-    private net.yeoman.nmpcaport.io.response.city.CityResponse CityResponse;
+    private CityResponse cityResponse;
     private ZipCodeResponse zipCodeResponse;
+    private PoliticalPartyEntity politicalParty;
+    private PoliticalPartyResponse politicalPartyResponse;
 
     public long getId() {
         return id;
@@ -172,13 +174,6 @@ public class StateRepDto {
         this.countyResponse = countyResponse;
     }
 
-    public net.yeoman.nmpcaport.io.response.city.CityResponse getCityResponse() {
-        return CityResponse;
-    }
-
-    public void setCityResponse(net.yeoman.nmpcaport.io.response.city.CityResponse cityResponse) {
-        CityResponse = cityResponse;
-    }
 
     public ZipCodeResponse getZipCodeResponse() {
         return zipCodeResponse;
@@ -186,5 +181,37 @@ public class StateRepDto {
 
     public void setZipCodeResponse(ZipCodeResponse zipCodeResponse) {
         this.zipCodeResponse = zipCodeResponse;
+    }
+
+    public String getParty() {
+        return party;
+    }
+
+    public void setParty(String party) {
+        this.party = party;
+    }
+
+    public PoliticalPartyEntity getPoliticalParty() {
+        return politicalParty;
+    }
+
+    public void setPoliticalParty(PoliticalPartyEntity politicalParty) {
+        this.politicalParty = politicalParty;
+    }
+
+    public PoliticalPartyResponse getPoliticalPartyResponse() {
+        return politicalPartyResponse;
+    }
+
+    public void setPoliticalPartyResponse(PoliticalPartyResponse politicalPartyResponse) {
+        this.politicalPartyResponse = politicalPartyResponse;
+    }
+
+    public CityResponse getCityResponse() {
+        return cityResponse;
+    }
+
+    public void setCityResponse(CityResponse cityResponse) {
+        this.cityResponse = cityResponse;
     }
 }

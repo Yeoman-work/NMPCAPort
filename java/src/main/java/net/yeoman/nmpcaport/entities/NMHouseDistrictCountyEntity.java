@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "stateRepCounty")
-public class StateRepCountyEntity implements Serializable {
+public class NMHouseDistrictCountyEntity implements Serializable {
 
 
     @Id
@@ -35,15 +35,15 @@ public class StateRepCountyEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
-    public StateRepCountyEntity() {
+    public NMHouseDistrictCountyEntity() {
     }
 
-    public StateRepCountyEntity(Long id,
-                                String stateRepCountyId,
-                                Date createdAt,
-                                Date updatedAt,
-                                NMHouseDistrictEntity nmHouseDistrictEntity,
-                                CountyEntity countyEntity) {
+    public NMHouseDistrictCountyEntity(Long id,
+                                       String stateRepCountyId,
+                                       Date createdAt,
+                                       Date updatedAt,
+                                       NMHouseDistrictEntity nmHouseDistrictEntity,
+                                       CountyEntity countyEntity) {
         this.id = id;
         this.stateRepCountyId = stateRepCountyId;
         this.createdAt = createdAt;

@@ -12,9 +12,9 @@ public class StateRepDetailsRequest {
     private String capitolRoom;
     private String streetAddress;
     private String nmHouseDistrict;
-    private List<String> county;
     private String city;
     private String zipCode;
+    private String party;
 
 
     public String getFirstName() {
@@ -73,13 +73,6 @@ public class StateRepDetailsRequest {
         this.nmHouseDistrict = nmHouseDistrict;
     }
 
-    public List<String> getCounty() {
-        return county;
-    }
-
-    public void setCounty(List<String> county) {
-        this.county = county;
-    }
 
     public String getCity() {
         return city;
@@ -95,5 +88,13 @@ public class StateRepDetailsRequest {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getParty() {
+        return party;
+    }
+
+    public void setParty(String party) {
+        this.party = party;
     }
 }

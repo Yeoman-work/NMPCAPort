@@ -10,7 +10,10 @@ public class StateSenatorDetailsRequest {
     private String picture;
     private String capitolRoom;
     private String streetAddress;
-    private String senateDistrictIdentifier;
+    private String senateDistrict;
+    private String zipCode;
+    private String city;
+    private String party;
     private Date createdAt;
     private Date updatedAt;
 
@@ -62,12 +65,12 @@ public class StateSenatorDetailsRequest {
         this.streetAddress = streetAddress;
     }
 
-    public String getSenateDistrictIdentifier() {
-        return senateDistrictIdentifier;
+    public String getSenateDistrict() {
+        return senateDistrict;
     }
 
-    public void setSenateDistrictIdentifier(String senateDistrictIdentifier) {
-        this.senateDistrictIdentifier = senateDistrictIdentifier;
+    public void setSenateDistrict(String senateDistrict) {
+        this.senateDistrict = senateDistrict;
     }
 
     public Date getCreatedAt() {
@@ -84,5 +87,29 @@ public class StateSenatorDetailsRequest {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getParty() {
+        return party;
+    }
+
+    public void setParty(String party) {
+        this.party = party;
     }
 }

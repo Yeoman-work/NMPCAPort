@@ -1,9 +1,9 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
-import net.yeoman.nmpcaport.entities.StateSenatorEntity;
+import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
-import net.yeoman.nmpcaport.exception.StateSenatorServiceException;
+import net.yeoman.nmpcaport.exception.*;
+import net.yeoman.nmpcaport.io.repositories.CityRepository;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.repositories.StateSenatorRepository;
 import net.yeoman.nmpcaport.services.StateSenatorService;
@@ -23,6 +23,18 @@ public class StateSenatorServiceImpl implements StateSenatorService {
     private SenateDistrictServiceImpl senateDistrictService;
 
     @Autowired
+    private CityServiceImpl cityService;
+
+    @Autowired
+    private CountyServiceImpl countyService;
+
+    @Autowired
+    private ZipCodeServiceImpl zipCodeService;
+
+    @Autowired
+    private PoliticalPartyServiceImpl politicalPartyService;
+
+    @Autowired
     private Utils utils;
 
 
@@ -34,26 +46,50 @@ public class StateSenatorServiceImpl implements StateSenatorService {
     @Override
     public StateSenatorDto createSenator(StateSenatorDto stateSenatorDto) {
 
-        if(this.stateSenatorRepository.existsByEmail(stateSenatorDto.getEmail())) throw new StateSenatorServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
+       StateSenatorEntity stateSenatorEntity = new ModelMapper().map(stateSenatorDto, StateSenatorEntity.class);
 
-        StateSenatorEntity stateSenatorEntity = new ModelMapper().map(stateSenatorDto, StateSenatorEntity.class);
+       stateSenatorEntity.setStateSenatorId(utils.generateRandomID());
 
-        if(stateSenatorDto.getSenateDistrictIdentifier() != null){
-            SenateDistrictEntity senateDistrictEntity = this.senateDistrictService.findSenateDistrictEntity(stateSenatorDto.getSenateDistrictIdentifier());
-            stateSenatorEntity.setSenateDistrict(senateDistrictEntity);
-        }
+       if(!stateSenatorDto.getSenateDistrict().isBlank()){
 
-        StateSenatorEntity storedStateSenatorEntity = this.stateSenatorRepository.save(stateSenatorEntity);
+           SenateDistrictEntity senateDistrict = this.senateDistrictService.findSenateDistrictEntity(stateSenatorDto.getSenateDistrict());
 
+           if(senateDistrict == null) throw new SenateDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-        StateSenatorDto newSenateDto =  new ModelMapper().map(storedStateSenatorEntity, StateSenatorDto.class);
+           stateSenatorEntity.setSenateDistrict(senateDistrict);
+       }
 
-        if(newSenateDto.getSenateDistrict() != null){
+       if(!stateSenatorDto.getParty().isBlank()){
 
-            newSenateDto.setSenateDistrictResponse(new ModelMapper().map(newSenateDto.getSenateDistrict(), SenateDistrictResponseModel.class));
-        }
+           PoliticalPartyEntity politicalParty = this.politicalPartyService.politicalPartyEntity(stateSenatorDto.getParty());
 
-        return newSenateDto;
+           if(politicalParty == null) throw new PoliticalPartyServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+           stateSenatorEntity.setPoliticalParty(politicalParty);
+       }
+
+       if(!stateSenatorDto.getCity().isBlank()){
+
+           CityEntity cityEntity = this.cityService.findCity(stateSenatorDto.getCity());
+
+           if(cityEntity == null) throw new CityServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+           stateSenatorEntity.setCityEntity(cityEntity);
+       }
+
+       if(!stateSenatorDto.getZipCode().isBlank()){
+
+           ZipCodeEntity zipCodeEntity = this.zipCodeService.getZipCodeEntity(stateSenatorDto.getZipCode());
+
+           if(zipCodeEntity == null) throw new ZipCodeServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+           stateSenatorEntity.setZipCodeEntity(zipCodeEntity);
+
+       }
+
+       StateSenatorEntity saveStateSenator = this.stateSenatorRepository.save(stateSenatorEntity);
+
+        return new ModelMapper().map(saveStateSenator, StateSenatorDto.class);
     }
 
 

@@ -40,7 +40,7 @@ const PhoneNumberForm = props =>{
                                    value={phoneNumber.description}
                                    onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
                             />
-                            {fieldLength(5, 25, phoneNumber.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, formFields.STATE_REP_PHONE_DESCRIPTION)}</div> : null}
+                            { phoneNumber.number.length &&fieldLength(5, 25, phoneNumber.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, formFields.STATE_REP_PHONE_DESCRIPTION)}</div> : null}
                         </div>
                         <button disabled={phoneNumberCheck(phoneNumber)} onClick={handler}>Add Phone Number</button>
                     </div>

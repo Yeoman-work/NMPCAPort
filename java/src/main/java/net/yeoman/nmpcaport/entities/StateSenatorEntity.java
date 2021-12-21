@@ -20,6 +20,7 @@ public class StateSenatorEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "required")
     private String stateSenatorId;
 
 
@@ -38,6 +39,7 @@ public class StateSenatorEntity implements Serializable {
     @Size(min=5, max = 250)
     private String picture;
 
+    @Size(max = 8, message = "must be 9 character or less")
     private String capitolRoom;
 
     @Size(min = 5, max= 150, message = "must be between 5 and 150 characters")
@@ -63,6 +65,19 @@ public class StateSenatorEntity implements Serializable {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "senate_district_entity_id")
     private SenateDistrictEntity senateDistrict;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "political_party_entity_id")
+    private PoliticalPartyEntity politicalParty;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_entity_id")
+    private CityEntity cityEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "zip_code_entity_id")
+    private ZipCodeEntity zipCodeEntity;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -169,5 +184,29 @@ public class StateSenatorEntity implements Serializable {
 
     public void setCommittees(List<NMSenateCommitteeEntity> committees) {
         this.committees = committees;
+    }
+
+    public PoliticalPartyEntity getPoliticalParty() {
+        return politicalParty;
+    }
+
+    public void setPoliticalParty(PoliticalPartyEntity politicalParty) {
+        this.politicalParty = politicalParty;
+    }
+
+    public CityEntity getCityEntity() {
+        return cityEntity;
+    }
+
+    public void setCityEntity(CityEntity cityEntity) {
+        this.cityEntity = cityEntity;
+    }
+
+    public ZipCodeEntity getZipCodeEntity() {
+        return zipCodeEntity;
+    }
+
+    public void setZipCodeEntity(ZipCodeEntity zipCodeEntity) {
+        this.zipCodeEntity = zipCodeEntity;
     }
 }

@@ -50,6 +50,9 @@ public class ZipCodeEntity implements Serializable {
     @OneToMany(mappedBy = "zipCodeEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<StateRepEntity> stateRepEntityList;
 
+    @OneToMany(mappedBy = "zipCodeEntity", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    private List<StateSenatorEntity> stateSenatorEntityList;
+
     public ZipCodeEntity() {
     }
 

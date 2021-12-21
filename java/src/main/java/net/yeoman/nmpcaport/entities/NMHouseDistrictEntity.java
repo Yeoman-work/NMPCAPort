@@ -1,9 +1,6 @@
 package net.yeoman.nmpcaport.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +8,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "NMHouseDistricts")
@@ -60,7 +56,7 @@ public class NMHouseDistrictEntity implements Serializable {
     private StateRepEntity stateRep;
 
     @OneToMany(mappedBy = "nmHouseDistrictEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<StateRepCountyEntity> stateRepCountyEntities;
+    private List<NMHouseDistrictCountyEntity> nmHouseDistrictCountyEntities;
 
 
 
@@ -77,7 +73,7 @@ public class NMHouseDistrictEntity implements Serializable {
                                  Date updatedAt,
                                  List<SiteEntity> sites,
                                  StateRepEntity stateRep,
-                                 List<StateRepCountyEntity> stateRepCountyEntities) {
+                                 List<NMHouseDistrictCountyEntity> nmHouseDistrictCountyEntities) {
         this.id = id;
         this.houseDistrictId = houseDistrictId;
         this.name = name;
@@ -87,7 +83,7 @@ public class NMHouseDistrictEntity implements Serializable {
         this.updatedAt = updatedAt;
         this.sites = sites;
         this.stateRep = stateRep;
-        this.stateRepCountyEntities = stateRepCountyEntities;
+        this.nmHouseDistrictCountyEntities = nmHouseDistrictCountyEntities;
     }
 
     public Long getId() {
@@ -162,13 +158,11 @@ public class NMHouseDistrictEntity implements Serializable {
         this.sites = sites;
     }
 
-    public List<StateRepCountyEntity> getStateRepCountyEntities() {
-        return stateRepCountyEntities;
+    public List<NMHouseDistrictCountyEntity> getNmHouseDistrictCountyEntities() {
+        return nmHouseDistrictCountyEntities;
     }
 
-    public void setStateRepCountyEntities(List<StateRepCountyEntity> stateRepCountyEntities) {
-        this.stateRepCountyEntities = stateRepCountyEntities;
+    public void setNmHouseDistrictCountyEntities(List<NMHouseDistrictCountyEntity> nmHouseDistrictCountyEntities) {
+        this.nmHouseDistrictCountyEntities = nmHouseDistrictCountyEntities;
     }
-
-
 }

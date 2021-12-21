@@ -1,6 +1,9 @@
 package net.yeoman.nmpcaport.io.response.stateSenator;
 
+import net.yeoman.nmpcaport.io.response.city.CityResponse;
+import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
 import java.util.Date;
 
@@ -13,6 +16,9 @@ public class StateSenatorResponse {
     private String picture;
     private String capitolRoom;
     private String StreetAddress;
+    private ZipCodeResponse zipCodeResponse;
+    private CityResponse cityResponse;
+    private PoliticalPartyResponse politicalPartyResponse;
     private SenateDistrictResponseModel senateDistrictResponse;
     private Date createdAt;
     private Date updatedAt;
@@ -98,6 +104,27 @@ public class StateSenatorResponse {
     }
 
 
+    public ZipCodeResponse getZipCodeResponse() {
+        return zipCodeResponse;
+    }
 
+    public void setZipCodeResponse(ZipCodeResponse zipCodeResponse) {
+        this.zipCodeResponse = zipCodeResponse;
+    }
 
+    public CityResponse getCityResponse() {
+        return cityResponse;
+    }
+
+    public void setCityResponse(CityResponse cityResponse) {
+        this.cityResponse = cityResponse;
+    }
+
+    public PoliticalPartyResponse getPoliticalPartyResponse() {
+        return politicalPartyResponse;
+    }
+
+    public void setPoliticalPartyResponse(PoliticalPartyResponse politicalPartyResponse) {
+        this.politicalPartyResponse = politicalPartyResponse;
+    }
 }

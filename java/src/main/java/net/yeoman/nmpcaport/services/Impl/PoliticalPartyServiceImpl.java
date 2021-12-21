@@ -9,6 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PoliticalPartyServiceImpl implements PoliticalPartyService {
 
@@ -46,12 +49,45 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
     }
 
     @Override
+    public List<PoliticalPartyDto> getAllPoliticalParities() {
+        List<PoliticalPartyDto> returnValue = new ArrayList<>();
+        List<PoliticalPartyEntity> politicalPartyEntityList = this.partyRepository.findAll();
+
+        for(PoliticalPartyEntity party: politicalPartyEntityList){
+
+            returnValue.add(new ModelMapper().map(party, PoliticalPartyDto.class));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public List<PoliticalPartyDto> createPoliticalParty(List<PoliticalPartyDto> politicalPartyDtoList) {
+        List<PoliticalPartyDto> returnValue = new ArrayList<>();
+
+        for(PoliticalPartyDto party: politicalPartyDtoList){
+
+            PoliticalPartyEntity politicalPartyEntity = new ModelMapper().map(party, PoliticalPartyEntity.class);
+
+            politicalPartyEntity.setPartyId(utils.generateRandomID());
+
+            PoliticalPartyEntity savedPoliticalParty = this.partyRepository.save(politicalPartyEntity);
+
+            returnValue.add(new ModelMapper().map(savedPoliticalParty, PoliticalPartyDto.class));
+        }
+
+        return returnValue;
+    }
+
+    @Override
     public PoliticalPartyDto deletePoliticalParty(String partyId) {
         return null;
     }
 
     @Override
     public PoliticalPartyEntity politicalPartyEntity(String partyId) {
-        return null;
+
+        return this.partyRepository.findByPartyId(partyId);
     }
+
 }

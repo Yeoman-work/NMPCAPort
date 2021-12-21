@@ -1,6 +1,5 @@
 package net.yeoman.nmpcaport.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -40,7 +39,7 @@ public class CountyEntity implements Serializable {
     private List<StateSenateCountyEntity> stateSenateCountyEntityList;
 
     @OneToMany(mappedBy = "countyEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<StateRepCountyEntity> stateRepCountyEntityList;
+    private List<NMHouseDistrictCountyEntity> stateRepCountyEntityList;
 
     @PrePersist
     protected void onCreate(){
@@ -64,7 +63,7 @@ public class CountyEntity implements Serializable {
                         Date updatedAt,
                         List<SiteEntity> sites,
                         List<StateSenateCountyEntity> stateSenateCountyEntityList,
-                        List<StateRepCountyEntity> stateRepCountyEntityList) {
+                        List<NMHouseDistrictCountyEntity> stateRepCountyEntityList) {
         this.id = id;
         this.countyId = countyId;
         this.name = name;
@@ -132,14 +131,13 @@ public class CountyEntity implements Serializable {
 
     }
 
-    public List<StateRepCountyEntity> getStateRepCountyEntityList() {
+    public List<NMHouseDistrictCountyEntity> getStateRepCountyEntityList() {
         return stateRepCountyEntityList;
     }
 
-    public void setStateRepCountyEntityList(List<StateRepCountyEntity> stateRepCountyEntityList) {
+    public void setStateRepCountyEntityList(List<NMHouseDistrictCountyEntity> stateRepCountyEntityList) {
         this.stateRepCountyEntityList = stateRepCountyEntityList;
     }
-
 
 
 }

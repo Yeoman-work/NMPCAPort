@@ -16,7 +16,8 @@ const StateRepForm = props =>{
            fieldLengthErrorMessages,
            fieldLength,
            emailValidation,
-           fieldLengthNotRequired
+           fieldLengthNotRequired,
+           repType
     } = props;
 
 
@@ -24,10 +25,8 @@ const StateRepForm = props =>{
 
 
 
-
-
     return(
-        <form className={'w-50 m-auto mt-5 pt-5'} onSubmit={handler}>
+        <form className={'w-50 m-auto mt-3 pt-3'} onSubmit={handler}>
             <h1>{formLabel}</h1>
             <div className={'row'}>
                 <div className={'col form-group'}>
@@ -35,7 +34,7 @@ const StateRepForm = props =>{
                     <input type="text"
                            className={'form-control'}
                            name={formFields.STATE_REP_FIRST_NAME}
-                           value={stateRepInfo.stateRep.firstName}
+                           value={ stateRepInfo.stateRep.firstName}
                            onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
                     />
                     {fieldLength(3, 50, stateRepInfo.stateRep.firstName)? <span className={'text-danger'}>{fieldLengthErrorMessages(3, 50, formFields.STATE_REP_FIRST_NAME)}</span>  : null}
@@ -134,35 +133,28 @@ const StateRepForm = props =>{
             </div>
             <div className={'row mb-3 pb-2'}>
                 <div className={'col'}>
-                    <label>County</label>
-                       <div className={'height100 overflow-auto mt-2'}>
+                    <label>Political Party</label>
+                    <select className={'form-control'}
+                            name={formFields.STATE_REP_PARTY}
+                            onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
+                    >
+                        <option value="">Choose a party</option>
+                      {
+                            stateRepInfo?
+                            stateRepInfo.formData.partiesList.map((party, index)=>{
 
-                           {
-                               stateRepInfo?
-                                   stateRepInfo.formData.countiesList.map((county, index)=>{
-
-                                       return(
-                                           <div key={index} className={'d-flex justify-content-start ps-5'}>
-                                               <input value={county.countyId}
-                                                      className={'form-check-input ps-2'}
-                                                      type={'checkbox'}
-                                                      checked={stateRepInfo.stateRep.counties.includes(county.countyId)}
-                                                      name={formFields.STATE_REP_COUNTIES}
-                                                      onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: {checked: e.target.checked, value: e.target.value} })}
-                                               />
-                                               <label  className={'form-check-label ps-2'}>{county.name}</label>
-                                           </div>
-
-                                       )
-                                   })
-                                   : null
-                           }
-                       </div>
+                                return(
+                                    <option key={index} value={party.partyId}>{party.name.toUpperCase()}</option>
+                                )
+                            })
+                                : null
+                        }
+                    </select>
                 </div>
                 <div className={'col'}>
                     <label>District</label>
                     <select className={'form-control'}
-                            name={formFields.STATE_REP_DISTRICT}
+                            name={ repType? formFields.STATE_REP_DISTRICT: formFields.STATE_SEN_DISTRICT}
                             onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}>
                         <option>Select a District</option>
                         {
@@ -170,7 +162,7 @@ const StateRepForm = props =>{
                                 stateRepInfo.formData.districtList.map((district, index)=>{
 
                                     return(
-                                        <option key={index} value={district.houseDistrictId}>{district.name}</option>
+                                        <option key={index} value={repType? district.houseDistrictId: district.senateDistrictId}>{district.name}</option>
                                     )
                                 })
                                 : null
@@ -178,7 +170,6 @@ const StateRepForm = props =>{
                     </select>
                 </div>
             </div>
-
         </form>
     )
 }

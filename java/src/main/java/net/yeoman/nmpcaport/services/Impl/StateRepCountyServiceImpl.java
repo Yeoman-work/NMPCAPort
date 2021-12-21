@@ -1,6 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.entities.StateRepCountyEntity;
+import net.yeoman.nmpcaport.entities.NMHouseDistrictCountyEntity;
 import net.yeoman.nmpcaport.io.repositories.StateRepCountyRepository;
 import net.yeoman.nmpcaport.services.StateRepCountyService;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -15,25 +15,25 @@ public class StateRepCountyServiceImpl implements StateRepCountyService {
     private Utils utils;
 
     @Override
-    public StateRepCountyEntity getStateRepCountyEntity(String stateRepCountyId) {
+    public NMHouseDistrictCountyEntity getStateRepCountyEntity(String stateRepCountyId) {
 
         return this.stateRepCountyRepository.findByStateRepCountyId(stateRepCountyId);
     }
 
     @Override
-    public StateRepCountyEntity createStateRepCountyEntity(StateRepCountyEntity stateRepCountyEntity) {
+    public NMHouseDistrictCountyEntity createStateRepCountyEntity(NMHouseDistrictCountyEntity stateRepCountyEntity) {
 
         stateRepCountyEntity.setStateRepCountyId(utils.generateRandomID());
 
-        StateRepCountyEntity stateRepCounty = this.stateRepCountyRepository.save(stateRepCountyEntity);
+        NMHouseDistrictCountyEntity stateRepCounty = this.stateRepCountyRepository.save(stateRepCountyEntity);
 
         return stateRepCounty ;
     }
 
     @Override
-    public StateRepCountyEntity deleteStateRepCounty(String stateRepCountyId) {
+    public NMHouseDistrictCountyEntity deleteStateRepCounty(String stateRepCountyId) {
 
-        StateRepCountyEntity stateRepCountyEntity = this.stateRepCountyRepository.findByStateRepCountyId(stateRepCountyId);
+        NMHouseDistrictCountyEntity stateRepCountyEntity = this.stateRepCountyRepository.findByStateRepCountyId(stateRepCountyId);
 
         this.stateRepCountyRepository.delete(stateRepCountyEntity);
 

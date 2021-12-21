@@ -25,7 +25,7 @@ public class StateRepController {
 
     @PostMapping
     public StateRepResponse createStateRep(@RequestBody StateRepDetailsRequest stateRepDetails){
-
+        System.out.println( "Read this " + stateRepDetails.getParty());
         StateRepDto stateRepDto = this.stateRepService.createStateRep(new ModelMapper().map(stateRepDetails, StateRepDto.class));
 
         return new ModelMapper().map(stateRepDto, StateRepResponse.class);

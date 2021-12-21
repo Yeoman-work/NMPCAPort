@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "cities")
@@ -54,7 +54,10 @@ public class CityEntity implements Serializable {
     private List<SiteEntity> site;
 
     @OneToMany(mappedBy = "cityEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<StateRepEntity> stateRepEntityList;
+    private List<StateRepEntity> stateReps;
+
+    @OneToMany(mappedBy = "cityEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StateSenatorEntity> stateSenators;
 
 
 
@@ -109,11 +112,19 @@ public class CityEntity implements Serializable {
         this.site = site;
     }
 
-    public List<StateRepEntity> getStateRepEntityList() {
-        return stateRepEntityList;
+    public List<StateRepEntity> getStateReps() {
+        return stateReps;
     }
 
-    public void setStateRepEntityList(List<StateRepEntity> stateRepEntityList) {
-        this.stateRepEntityList = stateRepEntityList;
+    public void setStateReps(List<StateRepEntity> stateReps) {
+        this.stateReps = stateReps;
+    }
+
+    public List<StateSenatorEntity> getStateSenators() {
+        return stateSenators;
+    }
+
+    public void setStateSenators(List<StateSenatorEntity> stateSenators) {
+        this.stateSenators = stateSenators;
     }
 }

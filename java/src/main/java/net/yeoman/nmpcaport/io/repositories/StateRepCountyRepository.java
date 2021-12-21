@@ -1,16 +1,16 @@
 package net.yeoman.nmpcaport.io.repositories;
 
-import net.yeoman.nmpcaport.entities.StateRepCountyEntity;
+import net.yeoman.nmpcaport.entities.NMHouseDistrictCountyEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface StateRepCountyRepository extends CrudRepository<StateRepCountyEntity, Long> {
+public interface StateRepCountyRepository extends CrudRepository<NMHouseDistrictCountyEntity, Long> {
 
-    List<StateRepCountyEntity> findAll();
+    List<NMHouseDistrictCountyEntity> findAll();
 
-    StateRepCountyEntity findByStateRepCountyId(String stateRepCountyId);
+    NMHouseDistrictCountyEntity findByStateRepCountyId(String stateRepCountyId);
 
 }

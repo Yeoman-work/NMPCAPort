@@ -1,7 +1,10 @@
 package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
+import net.yeoman.nmpcaport.io.response.city.CityResponse;
+import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
 import java.util.Date;
 
@@ -15,11 +18,17 @@ public class StateSenatorDto {
     private String picture;
     private String capitolRoom;
     private String streetAddress;
-    private String senateDistrictIdentifier;
+    private String senateDistrict;
+    private String zipCode;
+    private String city;
+    private String party;
+    private ZipCodeResponse zipCodeResponse;
+    private CityResponse cityResponse;
+    private PoliticalPartyResponse politicalPartyResponse;
+    private SenateDistrictResponseModel senateDistrictResponse;
     private Date createdAt;
     private Date updatedAt;
-    private SenateDistrictResponseModel senateDistrictResponse;
-    private SenateDistrictEntity senateDistrict;
+    private SenateDistrictEntity senateDistrictEntity;
 
     public Long getId() {
         return id;
@@ -85,13 +94,6 @@ public class StateSenatorDto {
         this.streetAddress = streetAddress;
     }
 
-    public String getSenateDistrictIdentifier() {
-        return senateDistrictIdentifier;
-    }
-
-    public void setSenateDistrictIdentifier(String senateDistrictIdentifier) {
-        this.senateDistrictIdentifier = senateDistrictIdentifier;
-    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -109,12 +111,44 @@ public class StateSenatorDto {
         this.updatedAt = updatedAt;
     }
 
-    public SenateDistrictEntity getSenateDistrict() {
+    public String getSenateDistrict() {
         return senateDistrict;
     }
 
-    public void setSenateDistrict(SenateDistrictEntity senateDistrict) {
+    public void setSenateDistrict(String senateDistrict) {
         this.senateDistrict = senateDistrict;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getParty() {
+        return party;
+    }
+
+    public void setParty(String party) {
+        this.party = party;
+    }
+
+    public SenateDistrictEntity getSenateDistrictEntity() {
+        return senateDistrictEntity;
+    }
+
+    public void setSenateDistrictEntity(SenateDistrictEntity senateDistrictEntity) {
+        this.senateDistrictEntity = senateDistrictEntity;
     }
 
     public SenateDistrictResponseModel getSenateDistrictResponse() {
@@ -125,4 +159,27 @@ public class StateSenatorDto {
         this.senateDistrictResponse = senateDistrictResponse;
     }
 
+    public ZipCodeResponse getZipCodeResponse() {
+        return zipCodeResponse;
+    }
+
+    public void setZipCodeResponse(ZipCodeResponse zipCodeResponse) {
+        this.zipCodeResponse = zipCodeResponse;
+    }
+
+    public CityResponse getCityResponse() {
+        return cityResponse;
+    }
+
+    public void setCityResponse(CityResponse cityResponse) {
+        this.cityResponse = cityResponse;
+    }
+
+    public PoliticalPartyResponse getPoliticalPartyResponse() {
+        return politicalPartyResponse;
+    }
+
+    public void setPoliticalPartyResponse(PoliticalPartyResponse politicalPartyResponse) {
+        this.politicalPartyResponse = politicalPartyResponse;
+    }
 }

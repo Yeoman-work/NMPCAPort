@@ -76,9 +76,14 @@ public class StateRepEntity implements Serializable {
     @JoinColumn(name = "zip_code_entity_id")
     private ZipCodeEntity zipCodeEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "political_party_entity_id")
+    private PoliticalPartyEntity politicalParty;
+
     @OneToMany(mappedBy = "stateRepEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<AssignedNumberEntity> assignedNumberEntities;
+
 
 
     public StateRepEntity() {
@@ -226,4 +231,13 @@ public class StateRepEntity implements Serializable {
     public void setAssignedNumberEntities(List<AssignedNumberEntity> assignedNumberEntities) {
         this.assignedNumberEntities = assignedNumberEntities;
     }
+
+    public PoliticalPartyEntity getPoliticalParty() {
+        return politicalParty;
+    }
+
+    public void setPoliticalParty(PoliticalPartyEntity politicalParty) {
+        this.politicalParty = politicalParty;
+    }
+
 }

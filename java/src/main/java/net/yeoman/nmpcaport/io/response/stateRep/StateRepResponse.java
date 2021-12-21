@@ -5,6 +5,7 @@ import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
 public class StateRepResponse {
@@ -16,9 +17,9 @@ public class StateRepResponse {
     private String picture;
     private String capitolRoom;
     private String streetAddress;
+    private PoliticalPartyResponse party;
     private NMHouseDistrictNestedResponse nmHouseDistrictResponse;
-    private CountyResponse countyResponse;
-    private CityResponse CityResponse;
+    private CityResponse cityResponse;
     private ZipCodeResponse zipCodeResponse;
 
 
@@ -87,20 +88,12 @@ public class StateRepResponse {
         this.nmHouseDistrictResponse = nmHouseDistrictResponse;
     }
 
-    public CountyResponse getCountyResponse() {
-        return countyResponse;
+    public CityResponse getCityResponse() {
+        return cityResponse;
     }
 
-    public void setCountyResponse(CountyResponse countyResponse) {
-        this.countyResponse = countyResponse;
-    }
-
-    public net.yeoman.nmpcaport.io.response.city.CityResponse getCityResponse() {
-        return CityResponse;
-    }
-
-    public void setCityResponse(net.yeoman.nmpcaport.io.response.city.CityResponse cityResponse) {
-        CityResponse = cityResponse;
+    public void setCityResponse(CityResponse cityResponse) {
+        this.cityResponse = cityResponse;
     }
 
     public ZipCodeResponse getZipCodeResponse() {
@@ -109,5 +102,13 @@ public class StateRepResponse {
 
     public void setZipCodeResponse(ZipCodeResponse zipCodeResponse) {
         this.zipCodeResponse = zipCodeResponse;
+    }
+
+    public PoliticalPartyResponse getParty() {
+        return party;
+    }
+
+    public void setParty(PoliticalPartyResponse party) {
+        this.party = party;
     }
 }

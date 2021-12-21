@@ -1,6 +1,5 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.entities.StateRepCountyEntity;
 import net.yeoman.nmpcaport.entities.StateSenateCountyEntity;
 import net.yeoman.nmpcaport.io.repositories.StateSenateCountyRepository;
 import net.yeoman.nmpcaport.services.StateSenatorCountyService;

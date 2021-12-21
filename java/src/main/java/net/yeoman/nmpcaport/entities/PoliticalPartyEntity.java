@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "politicalParties")
@@ -38,6 +39,12 @@ public class PoliticalPartyEntity implements Serializable {
 
         this.updatedAt = new Date();
     }
+
+    @OneToMany(mappedBy = "politicalParty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<StateRepEntity> stateRepEntities;
+
+    @OneToMany(mappedBy = "politicalParty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<StateSenatorEntity> stateSenatorEntities;
 
     public PoliticalPartyEntity() {
     }
@@ -80,5 +87,21 @@ public class PoliticalPartyEntity implements Serializable {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<StateRepEntity> getStateRepEntities() {
+        return stateRepEntities;
+    }
+
+    public void setStateRepEntities(List<StateRepEntity> stateRepEntities) {
+        this.stateRepEntities = stateRepEntities;
+    }
+
+    public List<StateSenatorEntity> getStateSenatorEntities() {
+        return stateSenatorEntities;
+    }
+
+    public void setStateSenatorEntities(List<StateSenatorEntity> stateSenatorEntities) {
+        this.stateSenatorEntities = stateSenatorEntities;
     }
 }

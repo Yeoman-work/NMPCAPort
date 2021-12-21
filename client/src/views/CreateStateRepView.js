@@ -5,6 +5,7 @@ import produce from "immer";
 import StateRepForm from "../components/StateRepForm";
 import {number} from "../helper/generalFunctions";
 import PhoneNumberForm from "../components/PhoneNumberForm";
+
 const { phoneNumberPattern,
         characters,
         fieldLengthErrorMessage,
@@ -111,11 +112,11 @@ const stateRepReducer = (stateRepState, action) =>{
             }
 
 
-
         case STATE_REP_FIELDS.STATE_REP_DISTRICT:
+
             console.log(stateRepState.stateRep);
             return produce(stateRepState, draft=>{
-                draft.stateRep.district = action.payload;
+                draft.stateRep.nmHouseDistrict = action.payload;
             })
 
         case STATE_REP_FIELDS.STATE_REP_PICTURE:
@@ -131,9 +132,17 @@ const stateRepReducer = (stateRepState, action) =>{
                 return stateRepState;
             }
 
+        case STATE_REP_FIELDS.STATE_SEN_DISTRICT:
+
+            console.log(stateRepState);
+            return produce(stateRepState, draft=>{
+
+                draft.stateRep.senateDistrict = action.payload;
+            })
+
 
         case STATE_REP_FIELDS.STATE_REP_COUNTIES:
-
+            console.log(stateRepState);
             if(action.payload.checked){
                 return produce(stateRepState, draft=>{
                     draft.stateRep.counties = [...stateRepState.stateRep.counties, action.payload.value]
@@ -150,12 +159,6 @@ const stateRepReducer = (stateRepState, action) =>{
                 })
             }
 
-
-        case STATE_REP_FIELDS.COUNTIES:
-            console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.formData.countiesList = [...action.payload]
-            })
 
         case STATE_REP_FIELDS.CITIES:
             console.log(stateRepState.stateRep);
@@ -175,6 +178,7 @@ const stateRepReducer = (stateRepState, action) =>{
             return produce(stateRepState, draft=>{
                 draft.formData.districtList = [...action.payload];
             })
+
 
         case STATE_REP_FIELDS.STATE_REP_PHONE_NUMBER:
 
@@ -242,6 +246,20 @@ const stateRepReducer = (stateRepState, action) =>{
                 draft.phoneNumber = {...clearPhoneNumber};
             })
 
+        case STATE_REP_FIELDS.PARTIES_LIST:
+
+            return produce(stateRepState, draft=>{
+
+                draft.formData.partiesList = [...action.payload]
+            })
+
+        case STATE_REP_FIELDS.STATE_REP_PARTY:
+            console.log(action.payload);
+            return produce(stateRepState, draft=>{
+
+                draft.stateRep.party = action.payload;
+            })
+
         default:
             return stateRepState;
 
@@ -257,22 +275,26 @@ const STATE_REP_FIELDS ={
     STATE_REP_ADDRESS: 'streetAddress',
     STATE_REP_CITY: 'city',
     STATE_REP_ZIP_CODE: 'zipCode',
-    STATE_REP_DISTRICT: 'district',
+    STATE_REP_DISTRICT: 'nmHouseDistrict',
+    STATE_SEN_DISTRICT: 'senateDistrict',
     STATE_REP_CAPITAL_RM: 'capitalRoom',
     STATE_REP_COUNTIES: 'counties',
     STATE_REP_PHONE_NUMBER: 'phoneNumber',
     STATE_REP_PHONE_DESCRIPTION: 'Phone Description',
-    COUNTIES: 'countiesList',
+    STATE_REP_SELECTOR: 'selector',
+    STATE_REP_PARTY: 'party',
     CITIES: 'citiesList',
     ZIP_CODE: 'zipCodeList',
     DISTRICTS: 'districtList',
+    PARTIES_LIST: 'parties_list',
     Phone_Number_List: 'phoneNumberList',
     CLEAR_PHONE_NUMBER: 'clearPhoneNumber'
+
 }
 
 
 const CreateStateRepView = props =>{
-
+    const [repType, setRepType] = useState(true);
     const [stateRepInfo, dispatchStateRepInfo] = useReducer(stateRepReducer, {
 
         stateRep:{
@@ -285,7 +307,8 @@ const CreateStateRepView = props =>{
             capitolRoom: ''.trim(),
             zipCode: ''.trim(),
             nmHouseDistrict: ''.trim(),
-            counties: []
+            senateDistrict: ''.trim(),
+            party: ''.trim(),
         },
 
         errors:{
@@ -298,6 +321,7 @@ const CreateStateRepView = props =>{
           capitolRoom: '',
           zipCode: '',
           nmHouseDistrict: '',
+          senateDistrict: '',
           counties: ''
         },
 
@@ -309,7 +333,8 @@ const CreateStateRepView = props =>{
         phoneNumberList: [],
 
         formData:{
-            countiesList: [],
+            partiesList: [],
+
             citiesList: [],
             zipCodeList: [],
             districtList: [],
@@ -317,32 +342,18 @@ const CreateStateRepView = props =>{
 
     })
 
+    const repTypeSelector = (e) =>{
 
-    useEffect(()=>{
+        if(repType){
 
-        (async ()=>{
+            setRepType(false);
+        }else{
 
-            try{
+            setRepType(true);
+        }
+    }
 
-                const countyListResponse = await axios.get('http://localhost:8080/counties',{
 
-                    headers:{
-                        Authorization: localStorage.getItem('token')
-                    }
-                })
-
-                dispatchStateRepInfo({type: STATE_REP_FIELDS.COUNTIES, payload: [...countyListResponse.data]})
-
-                console.log(countyListResponse.data);
-
-            }catch(error){
-
-                console.log(error.response);
-
-            }
-        })()
-
-    },[])
 
     useEffect(()=>{
 
@@ -368,6 +379,29 @@ const CreateStateRepView = props =>{
 
     },[])
 
+    useEffect(()=>{
+
+        (async ()=>{
+
+            try{
+
+                const PartyListResponse = await axios.get('http://localhost:8080/politicalParties',{
+
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    }
+                })
+
+                dispatchStateRepInfo({type: STATE_REP_FIELDS.PARTIES_LIST, payload: [...PartyListResponse.data]})
+
+            }catch(error){
+
+                console.log(error.response);
+            }
+
+
+        })()
+    }, [])
 
     useEffect(()=>{
 
@@ -396,11 +430,67 @@ const CreateStateRepView = props =>{
 
     useEffect(()=>{
 
-        (async ()=>{
+        if(repType){
+
+            (async ()=>{
+
+                try{
+
+                    const houseDistrictResponse = await axios.get('http://localhost:8080/nmHouseDistricts', {
+
+                        headers:{
+                            Authorization: localStorage.getItem('token')
+                        }
+
+                    })
+
+                    dispatchStateRepInfo({type: STATE_REP_FIELDS.DISTRICTS, payload: [...houseDistrictResponse.data]})
+                    console.log(houseDistrictResponse.data);
+                }catch(error){
+
+                    console.log(error.response);
+                }
+            })()
+
+        }else{
+
+
+            (async ()=>{
+
+               try{
+
+                   const senateDistrictResponse = await axios.get('http://localhost:8080/senateDistricts', {
+
+                       headers:{
+                           Authorization: localStorage.getItem('token')
+                       }
+
+                   })
+                   console.log(senateDistrictResponse.data);
+                   dispatchStateRepInfo({type: STATE_REP_FIELDS.DISTRICTS, payload: [...senateDistrictResponse.data]})
+
+               }catch(error){
+
+                   console.log(error.response)
+
+               }
+
+            })()
+
+
+        }
+
+    }, [repType])
+
+
+    const createRep = async (e)=>{
+        e.preventDefault()
+
+        if(repType){
 
             try{
 
-                const houseDistrictResponse = await axios.get('http://localhost:8080/nmHouseDistricts', {
+                const createRepResponse = await  axios.post('http://localhost:8080/stateReps', stateRepInfo.stateRep, {
 
                     headers:{
                         Authorization: localStorage.getItem('token')
@@ -408,34 +498,37 @@ const CreateStateRepView = props =>{
 
                 })
 
-                dispatchStateRepInfo({type: STATE_REP_FIELDS.DISTRICTS, payload: [...houseDistrictResponse.data]})
+
 
             }catch(error){
 
-                console.log(error.response);
+                console.log(error)
+
             }
-        })()
-    }, [])
+
+        }else{
 
 
-    const createRep = async (e)=>{
-        e.preventDefault()
+            try{
 
-        try{
+                const createSenatorResponse = await axios.post('http://localhost:8080/stateSenators', stateRepInfo.stateRep,{
 
-            const createRepResponse = await  axios.post('http://localhost:8080/stateReps', stateRepInfo.stateRep, {
-
-                headers:{
-                    Authorization: localStorage.getItem('token')
-                }
-
-            })
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    }
+                })
 
 
-        }catch(error){
+            }catch(error){
+
+                console.log(error)
+            }
+
 
 
         }
+
+
     }
 
     const addPhoneNumber = (e) =>{
@@ -492,20 +585,26 @@ const CreateStateRepView = props =>{
         return isDisabled;
     }
 
+    let Senator;
     return(
         <div>
             <Header/>
             <div className={''}>
+                <div className={'mt-5 pt-5'}>
+                    <button disabled={repType} onClick={(e)=>repTypeSelector(e)} className={'p-2'}>Representative</button>
+                    <button disabled={!repType} className={'p-2'} onClick={(e)=>repTypeSelector(e)}>Senator</button>
+                </div>
                 <StateRepForm
                     stateRepInfo={stateRepInfo}
                     formFields={STATE_REP_FIELDS}
                     dispatchStateRepInfo={dispatchStateRepInfo}
                     handler={createRep}
-                    formLabel={'Create State Rep'}
+                    formLabel={repType?  'New State Rep': 'New State Senator'}
                     fieldLength={fieldLength}
                     fieldLengthErrorMessages={fieldLengthErrorMessage}
                     fieldLengthNotRequired={fieldLengthNotRequired}
                     emailValidation={emailValidation}
+                    repType={repType}
                 />
                 <PhoneNumberForm
                     formFields={STATE_REP_FIELDS}
@@ -515,7 +614,7 @@ const CreateStateRepView = props =>{
                     handler={addPhoneNumber}
                 />
             </div>
-            <button disabled={canSubmit(stateRepInfo)}>Save State</button>
+            <button disabled={stateRepInfo.stateRep?canSubmit(stateRepInfo) : true} onClick={(e)=>createRep(e)}>Save State</button>
         </div>
     )
 }
