@@ -45,7 +45,7 @@ const Header = props =>{
                                     Government
                                 </Link>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><Link className="dropdown-item" to={''}>State Representatives</Link></li>
+                                    <li><Link className="dropdown-item" to={'/yeoman/government/stateRepDashboard'}>State Representatives</Link></li>
                                     <li><Link className="dropdown-item" to={''}>State Senators</Link></li>
                                     <li><Link className='dropdown-item' to={''}>Congressional Representatives</Link></li>
                                     <li><Link className='dropdown-item' to={''}>Senators</Link></li>

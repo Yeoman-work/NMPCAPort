@@ -172,7 +172,7 @@ public class StateRepEntity implements Serializable {
     }
 
     public void setCapitolRoom(String capitolRoom) {
-        this.capitolRoom = capitolRoom;
+        this.capitolRoom = capitolRoom.trim().toLowerCase();
     }
 
     public String getStreetAddress() {

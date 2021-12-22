@@ -7,6 +7,8 @@ import CreateHealthCenterView from "./views/CreateHealthCenterView";
 import CreateLegislationView from "./views/CreateLegislationView";
 import LegislationDashBoard from "./views/LegislationDashBoard";
 import CreateStateRepView from "./views/CreateStateRepView";
+import StatePoliticianElement from "./components/StatePoliticianElement";
+import StateRepDashboard from "./views/StateRepDashboard";
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
                         <Route path={'createLegislation'} element={<CreateLegislationView/>}/>
                     </Route>
                     <Route path={'government'}>
+                        <Route path={'stateRepDashboard'} element={<StateRepDashboard/>}/>
                         <Route path={'addStateRep'} element={<CreateStateRepView/>}/>
                     </Route>
                 </Route>

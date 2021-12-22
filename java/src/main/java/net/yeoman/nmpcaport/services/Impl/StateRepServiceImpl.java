@@ -17,6 +17,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class StateRepServiceImpl implements StateRepService {
 
@@ -149,5 +152,45 @@ public class StateRepServiceImpl implements StateRepService {
     @Override
     public StateRepEntity findStateRepEntityById(String stateRepId) {
         return null;
+    }
+
+    @Override
+    public List<StateRepDto> findAllStateReps() {
+        List<StateRepDto> returnValue = new ArrayList<>();
+
+        List<StateRepEntity> allStateReps = this.stateRepRepository.findAll();
+
+        for(StateRepEntity rep: allStateReps){
+
+
+            StateRepDto stateRepDto = new ModelMapper().map(rep, StateRepDto.class);
+
+            if(stateRepDto.getCityEntity() != null){
+
+                stateRepDto.setCityResponse(new ModelMapper().map(stateRepDto.getCityEntity(), CityResponse.class));
+            }
+
+            if(stateRepDto.getZipCodeEntity() != null){
+
+                stateRepDto.setZipCodeResponse(new ModelMapper().map(stateRepDto.getZipCodeEntity(), ZipCodeResponse.class));
+
+            }
+
+            if(stateRepDto.getPoliticalParty() != null){
+
+                stateRepDto.setPoliticalPartyResponse(new ModelMapper().map(stateRepDto.getPoliticalParty(), PoliticalPartyResponse.class));
+
+            }
+
+            if(stateRepDto.getNmHouseDistrictEntity() != null){
+
+                stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(stateRepDto.getNmHouseDistrictEntity(), NMHouseDistrictNestedResponse.class));
+            }
+
+
+            returnValue.add(stateRepDto);
+        }
+
+        return returnValue;
     }
 }

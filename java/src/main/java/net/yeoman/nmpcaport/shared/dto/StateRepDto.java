@@ -1,7 +1,9 @@
 package net.yeoman.nmpcaport.shared.dto;
 
+import net.yeoman.nmpcaport.entities.CityEntity;
 import net.yeoman.nmpcaport.entities.NMHouseDistrictEntity;
 import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
+import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
@@ -36,6 +38,8 @@ public class StateRepDto {
     private ZipCodeResponse zipCodeResponse;
     private PoliticalPartyEntity politicalParty;
     private PoliticalPartyResponse politicalPartyResponse;
+    private ZipCodeEntity zipCodeEntity;
+    private CityEntity cityEntity;
 
     public long getId() {
         return id;
@@ -214,4 +218,22 @@ public class StateRepDto {
     public void setCityResponse(CityResponse cityResponse) {
         this.cityResponse = cityResponse;
     }
+
+    public ZipCodeEntity getZipCodeEntity() {
+        return zipCodeEntity;
+    }
+
+    public void setZipCodeEntity(ZipCodeEntity zipCodeEntity) {
+        this.zipCodeEntity = zipCodeEntity;
+    }
+
+    public CityEntity getCityEntity() {
+        return cityEntity;
+    }
+
+    public void setCityEntity(CityEntity cityEntity) {
+        this.cityEntity = cityEntity;
+    }
+
+
 }

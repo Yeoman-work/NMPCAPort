@@ -10,12 +10,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/stateReps")
 public class StateRepController {
 
     @Autowired
     private StateRepServiceImpl stateRepService;
+
+
+    @GetMapping
+    public List<StateRepResponse> getAllStateReps(){
+        List<StateRepResponse> returnValue = new ArrayList<>();
+
+        List<StateRepDto> stateRepDtoList = this.stateRepService.findAllStateReps();
+
+        for(StateRepDto rep: stateRepDtoList){
+
+            returnValue.add(new ModelMapper().map(rep, StateRepResponse.class));
+        }
+
+        return returnValue;
+    }
 
     @GetMapping("/{stateRepId}")
     public StateRepResponse getStateRep(@PathVariable("stateRepId") String stateRepId){
