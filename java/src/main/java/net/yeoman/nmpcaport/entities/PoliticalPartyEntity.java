@@ -43,7 +43,7 @@ public class PoliticalPartyEntity implements Serializable {
     @OneToMany(mappedBy = "politicalParty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<StateRepEntity> stateRepEntities;
 
-    @OneToMany(mappedBy = "politicalParty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "politicalPartyEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<StateSenatorEntity> stateSenatorEntities;
 
     public PoliticalPartyEntity() {

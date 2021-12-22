@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.GeneratedValue;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/stateSenators")
@@ -18,9 +20,17 @@ public class StateSenatorController {
     private StateSenatorServiceImpl stateSenatorService;
 
     @GetMapping
-    public String getStateSenators(){
+    public List<StateSenatorResponse> getStateSenators(){
+        List<StateSenatorResponse> returnValue = new ArrayList<>();
 
-        return "inside state senators";
+        List<StateSenatorDto> stateSenatorDtoList = this.stateSenatorService.getAllStateSenators();
+
+        for(StateSenatorDto stateSenator: stateSenatorDtoList){
+
+            returnValue.add(new ModelMapper().map(stateSenator, StateSenatorResponse.class));
+        }
+
+        return returnValue;
     }
 
     @PostMapping

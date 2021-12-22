@@ -4,14 +4,21 @@ import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.repositories.CityRepository;
+import net.yeoman.nmpcaport.io.response.city.CityResponse;
+import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.repositories.StateSenatorRepository;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.services.StateSenatorService;
 import net.yeoman.nmpcaport.shared.dto.StateSenatorDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class StateSenatorServiceImpl implements StateSenatorService {
@@ -40,6 +47,7 @@ public class StateSenatorServiceImpl implements StateSenatorService {
 
     @Override
     public StateSenatorDto getStateSenator(String senatorId) {
+
         return null;
     }
 
@@ -56,7 +64,7 @@ public class StateSenatorServiceImpl implements StateSenatorService {
 
            if(senateDistrict == null) throw new SenateDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-           stateSenatorEntity.setSenateDistrict(senateDistrict);
+           stateSenatorEntity.setSenateDistrictEntity(senateDistrict);
        }
 
        if(!stateSenatorDto.getParty().isBlank()){
@@ -65,7 +73,7 @@ public class StateSenatorServiceImpl implements StateSenatorService {
 
            if(politicalParty == null) throw new PoliticalPartyServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-           stateSenatorEntity.setPoliticalParty(politicalParty);
+           stateSenatorEntity.setPoliticalPartyEntity(politicalParty);
        }
 
        if(!stateSenatorDto.getCity().isBlank()){
@@ -108,5 +116,41 @@ public class StateSenatorServiceImpl implements StateSenatorService {
     public StateSenatorEntity getStateSenatorEntity(String senatorId) {
 
         return this.stateSenatorRepository.findByStateSenatorId(senatorId);
+    }
+
+    @Override
+    public List<StateSenatorDto> getAllStateSenators() {
+        List<StateSenatorDto> returnValue = new ArrayList<>();
+
+        List<StateSenatorEntity> stateSenatorEntities = this.stateSenatorRepository.findAll();
+
+        for(StateSenatorEntity stateSenator: stateSenatorEntities){
+
+            StateSenatorDto stateSenatorDto = new ModelMapper().map(stateSenator, StateSenatorDto.class);
+
+            if(stateSenatorDto.getSenateDistrictEntity() != null){
+                stateSenatorDto.setSenateDistrictResponse(new ModelMapper().map(stateSenatorDto.getSenateDistrictEntity(), SenateDistrictResponseModel.class));
+            }
+
+            if(stateSenatorDto.getCityEntity() != null){
+
+                stateSenatorDto.setCityResponse(new ModelMapper().map(stateSenatorDto.getCityEntity(), CityResponse.class));
+            }
+
+            if(stateSenatorDto.getZipCodeEntity() != null){
+
+                stateSenatorDto.setZipCodeResponse(new ModelMapper().map(stateSenatorDto.getCityEntity(), ZipCodeResponse.class));
+            }
+
+            if(stateSenatorDto.getPoliticalPartyEntity() != null){
+
+                stateSenatorDto.setPoliticalPartyResponse(new ModelMapper().map(stateSenator.getPoliticalPartyEntity(), PoliticalPartyResponse.class));
+            }
+
+            returnValue.add(stateSenatorDto);
+
+        }
+
+        return returnValue;
     }
 }

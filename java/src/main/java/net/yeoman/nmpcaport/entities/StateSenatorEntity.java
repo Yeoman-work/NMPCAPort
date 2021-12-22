@@ -62,14 +62,14 @@ public class StateSenatorEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "senate_district_entity_id")
-    private SenateDistrictEntity senateDistrict;
+    private SenateDistrictEntity senateDistrictEntity;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "political_party_entity_id")
-    private PoliticalPartyEntity politicalParty;
+    private PoliticalPartyEntity politicalPartyEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_entity_id")
@@ -170,12 +170,12 @@ public class StateSenatorEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public SenateDistrictEntity getSenateDistrict() {
-        return senateDistrict;
+    public SenateDistrictEntity getSenateDistrictEntity() {
+        return senateDistrictEntity;
     }
 
-    public void setSenateDistrict(SenateDistrictEntity senateDistrict) {
-        this.senateDistrict = senateDistrict;
+    public void setSenateDistrictEntity(SenateDistrictEntity senateDistrictEntity) {
+        this.senateDistrictEntity = senateDistrictEntity;
     }
 
     public List<NMSenateCommitteeEntity> getCommittees() {
@@ -186,12 +186,12 @@ public class StateSenatorEntity implements Serializable {
         this.committees = committees;
     }
 
-    public PoliticalPartyEntity getPoliticalParty() {
-        return politicalParty;
+    public PoliticalPartyEntity getPoliticalPartyEntity() {
+        return politicalPartyEntity;
     }
 
-    public void setPoliticalParty(PoliticalPartyEntity politicalParty) {
-        this.politicalParty = politicalParty;
+    public void setPoliticalPartyEntity(PoliticalPartyEntity politicalPartyEntity) {
+        this.politicalPartyEntity = politicalPartyEntity;
     }
 
     public CityEntity getCityEntity() {
@@ -209,4 +209,7 @@ public class StateSenatorEntity implements Serializable {
     public void setZipCodeEntity(ZipCodeEntity zipCodeEntity) {
         this.zipCodeEntity = zipCodeEntity;
     }
+
+
+
 }

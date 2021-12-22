@@ -1,6 +1,9 @@
 package net.yeoman.nmpcaport.shared.dto;
 
+import net.yeoman.nmpcaport.entities.CityEntity;
+import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
 import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
+import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
@@ -29,6 +32,9 @@ public class StateSenatorDto {
     private Date createdAt;
     private Date updatedAt;
     private SenateDistrictEntity senateDistrictEntity;
+    private PoliticalPartyEntity politicalPartyEntity;
+    private CityEntity cityEntity;
+    private ZipCodeEntity zipCodeEntity;
 
     public Long getId() {
         return id;
@@ -181,5 +187,29 @@ public class StateSenatorDto {
 
     public void setPoliticalPartyResponse(PoliticalPartyResponse politicalPartyResponse) {
         this.politicalPartyResponse = politicalPartyResponse;
+    }
+
+    public PoliticalPartyEntity getPoliticalPartyEntity() {
+        return politicalPartyEntity;
+    }
+
+    public void setPoliticalPartyEntity(PoliticalPartyEntity politicalPartyEntity) {
+        this.politicalPartyEntity = politicalPartyEntity;
+    }
+
+    public CityEntity getCityEntity() {
+        return cityEntity;
+    }
+
+    public void setCityEntity(CityEntity cityEntity) {
+        this.cityEntity = cityEntity;
+    }
+
+    public ZipCodeEntity getZipCodeEntity() {
+        return zipCodeEntity;
+    }
+
+    public void setZipCodeEntity(ZipCodeEntity zipCodeEntity) {
+        this.zipCodeEntity = zipCodeEntity;
     }
 }

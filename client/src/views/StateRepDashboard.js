@@ -30,7 +30,7 @@ const StateRepDashboard = props =>{
                 })
 
                 console.log(stateRepsResponse.data);
-                setStateRepList(...stateRepList, stateRepsResponse.data)
+                setStateRepList(...stateRepList, stateRepsResponse.data);
 
             }catch(error){
 

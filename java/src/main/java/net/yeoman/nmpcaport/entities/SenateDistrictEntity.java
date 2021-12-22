@@ -55,7 +55,7 @@ public class SenateDistrictEntity implements Serializable {
     @JsonIgnore
     private List<SiteEntity> sites;
 
-    @OneToOne(mappedBy = "senateDistrict", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "senateDistrictEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private StateSenatorEntity stateSenator;
 
@@ -70,12 +70,14 @@ public class SenateDistrictEntity implements Serializable {
 
     public SenateDistrictEntity(Long id,
                                 String senateDistrictId,
-                                String name, String map,
+                                String name,
+                                String map,
                                 LocalDate electionDate,
                                 Date createdAt,
                                 Date updatedAt,
                                 List<SiteEntity> sites,
-                                StateSenatorEntity stateSenator) {
+                                StateSenatorEntity stateSenator,
+                                List<StateSenateCountyEntity> senateCountyEntities) {
         this.id = id;
         this.senateDistrictId = senateDistrictId;
         this.name = name;
@@ -85,6 +87,7 @@ public class SenateDistrictEntity implements Serializable {
         this.updatedAt = updatedAt;
         this.sites = sites;
         this.stateSenator = stateSenator;
+        this.senateCountyEntities = senateCountyEntities;
     }
 
     public Long getId() {
