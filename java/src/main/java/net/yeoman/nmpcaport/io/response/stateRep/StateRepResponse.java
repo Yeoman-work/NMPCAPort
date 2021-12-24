@@ -17,7 +17,7 @@ public class StateRepResponse {
     private String picture;
     private String capitolRoom;
     private String streetAddress;
-    private PoliticalPartyResponse party;
+    private PoliticalPartyResponse politicalPartyResponse;
     private NMHouseDistrictNestedResponse nmHouseDistrictResponse;
     private CityResponse cityResponse;
     private ZipCodeResponse zipCodeResponse;
@@ -104,11 +104,11 @@ public class StateRepResponse {
         this.zipCodeResponse = zipCodeResponse;
     }
 
-    public PoliticalPartyResponse getParty() {
-        return party;
+    public PoliticalPartyResponse getPoliticalPartyResponse() {
+        return politicalPartyResponse;
     }
 
-    public void setParty(PoliticalPartyResponse party) {
-        this.party = party;
+    public void setPoliticalPartyResponse(PoliticalPartyResponse politicalPartyResponse) {
+        this.politicalPartyResponse = politicalPartyResponse;
     }
 }

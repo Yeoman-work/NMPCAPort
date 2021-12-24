@@ -139,7 +139,7 @@ public class StateSenatorServiceImpl implements StateSenatorService {
 
             if(stateSenatorDto.getZipCodeEntity() != null){
 
-                stateSenatorDto.setZipCodeResponse(new ModelMapper().map(stateSenatorDto.getCityEntity(), ZipCodeResponse.class));
+                stateSenatorDto.setZipCodeResponse(new ModelMapper().map(stateSenatorDto.getZipCodeEntity(), ZipCodeResponse.class));
             }
 
             if(stateSenatorDto.getPoliticalPartyEntity() != null){

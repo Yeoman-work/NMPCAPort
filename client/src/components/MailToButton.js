@@ -10,6 +10,7 @@ const MailToButton = ({mailto, label}) =>{
     return(
         <Link
             to={'#'}
+            className={'text-dark'}
               onClick={(e)=>{
                 window.open('mailto:' + mailto);
                 e.preventDefault();

@@ -12,7 +12,7 @@ public class CongressionalRepDetailsRequest {
     private String firstName;
     private String lastName;
     private String email;
-    private String congressionalDistrictIdentifier;
+    private String congressionalDistrict;
     private String picture;
     private String website;
     
@@ -58,12 +58,11 @@ public class CongressionalRepDetailsRequest {
         this.website = website;
     }
 
-    public String getCongressionalDistrictIdentifier() {
-
-        return congressionalDistrictIdentifier;
+    public String getCongressionalDistrict() {
+        return congressionalDistrict;
     }
 
-    public void setCongressionalDistrictIdentifier(String congressionalDistrictIdentifier) {
-        this.congressionalDistrictIdentifier = congressionalDistrictIdentifier;
+    public void setCongressionalDistrict(String congressionalDistrict) {
+        this.congressionalDistrict = congressionalDistrict;
     }
 }

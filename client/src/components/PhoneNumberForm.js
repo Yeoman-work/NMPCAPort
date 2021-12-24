@@ -7,7 +7,7 @@ const {phoneNumberCheck,
 
 
 const PhoneNumberForm = props =>{
-        const { dispatchStateRepInfo,
+        const { dispatchFunction,
                 formFields,
                 phoneNumber,
                 phoneNumberList,
@@ -16,7 +16,7 @@ const PhoneNumberForm = props =>{
 
 
     return(
-        <div className={'w-50 m-auto pb-3'}>
+        <div className={'w-75 m-auto pb-3'}>
             <form className={'mb-3'}>
                 <div className={'row'}>
                     <div className={'col'}>
@@ -25,22 +25,22 @@ const PhoneNumberForm = props =>{
                             <label>Number</label>
                             <input type="tel"
                                    pattern={'[0-9]{3}-[0-9]{2}-[0-9]{3}'}
-                                   name={formFields.STATE_REP_PHONE_NUMBER}
+                                   name={formFields.PHONE_NUMBER}
                                    className={'form-control'}
                                    value={phoneNumber.number}
-                                   onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
+                                   onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target.value})}
                             />
 
                         </div>
                         <div className={'form-group mb-3'}>
                             <label>Description</label>
                             <input type="text"
-                                   name={formFields.STATE_REP_PHONE_DESCRIPTION}
+                                   name={formFields.PHONE_DESCRIPTION}
                                    className={'form-control'}
                                    value={phoneNumber.description}
-                                   onChange={(e)=>dispatchStateRepInfo({type: e.target.name, payload: e.target.value})}
+                                   onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target.value})}
                             />
-                            { phoneNumber.number.length &&fieldLength(5, 25, phoneNumber.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, formFields.STATE_REP_PHONE_DESCRIPTION)}</div> : null}
+                            { phoneNumber.number.length && fieldLength(5, 25, phoneNumber.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, formFields.PHONE_DESCRIPTION)}</div> : null}
                         </div>
                         <button disabled={phoneNumberCheck(phoneNumber)} onClick={handler}>Add Phone Number</button>
                     </div>

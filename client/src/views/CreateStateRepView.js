@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useReducer } from "react";
 import axios from "axios";
-import Header from "../components/Header";
+import { useNavigate, useParams } from "react-router";
 import produce from "immer";
+import Header from "../components/Header";
 import StateRepForm from "../components/StateRepForm";
 import {number} from "../helper/generalFunctions";
 import PhoneNumberForm from "../components/PhoneNumberForm";
@@ -260,6 +261,25 @@ const stateRepReducer = (stateRepState, action) =>{
                 draft.stateRep.party = action.payload;
             })
 
+        case STATE_REP_FIELDS.CLEAR_STATE_REP:
+            const stateRep ={
+                    firstName: ''.trim(),
+                    lastName: ''.trim(),
+                    email: ''.trim(),
+                    picture: ''.trim(),
+                    streetAddress: ''.trim(),
+                    city: ''.trim(),
+                    capitolRoom: ''.trim(),
+                    zipCode: ''.trim(),
+                    nmHouseDistrict: ''.trim(),
+                    senateDistrict: ''.trim(),
+                    party: ''.trim()
+            }
+            return produce(stateRepState, draft=>{
+
+                 draft.stateRep = {...stateRep};
+            })
+
         default:
             return stateRepState;
 
@@ -279,8 +299,8 @@ const STATE_REP_FIELDS ={
     STATE_SEN_DISTRICT: 'senateDistrict',
     STATE_REP_CAPITAL_RM: 'capitalRoom',
     STATE_REP_COUNTIES: 'counties',
-    STATE_REP_PHONE_NUMBER: 'phoneNumber',
-    STATE_REP_PHONE_DESCRIPTION: 'Phone Description',
+    PHONE_NUMBER: 'phoneNumber',
+    PHONE_DESCRIPTION: 'Phone Description',
     STATE_REP_SELECTOR: 'selector',
     STATE_REP_PARTY: 'party',
     CITIES: 'citiesList',
@@ -288,13 +308,25 @@ const STATE_REP_FIELDS ={
     DISTRICTS: 'districtList',
     PARTIES_LIST: 'parties_list',
     Phone_Number_List: 'phoneNumberList',
-    CLEAR_PHONE_NUMBER: 'clearPhoneNumber'
+    CLEAR_PHONE_NUMBER: 'clearPhoneNumber',
+    CLEAR_STATE_REP: 'clearStateRep'
 
 }
 
 
 const CreateStateRepView = props =>{
-    const [repType, setRepType] = useState(true);
+    let params = useParams();
+    const navigate = useNavigate();
+
+    let repType = true;
+
+    if(params.type === 'senator'){
+
+        repType = false;
+
+    }
+
+
     const [stateRepInfo, dispatchStateRepInfo] = useReducer(stateRepReducer, {
 
         stateRep:{
@@ -346,10 +378,10 @@ const CreateStateRepView = props =>{
 
         if(repType){
 
-            setRepType(false);
+            repType = false;
         }else{
 
-            setRepType(true);
+            repType = true;
         }
     }
 
@@ -369,6 +401,7 @@ const CreateStateRepView = props =>{
                 })
 
                 dispatchStateRepInfo({type: STATE_REP_FIELDS.CITIES, payload: [...cityListResponse.data]})
+
             }catch(error){
 
                 console.log(error.response)
@@ -416,7 +449,7 @@ const CreateStateRepView = props =>{
                     }
                 })
 
-                console.log(zipCodeListResponse.data);
+
                 dispatchStateRepInfo({type: STATE_REP_FIELDS.ZIP_CODE, payload: [...zipCodeListResponse.data]})
 
             }catch(error){
@@ -499,6 +532,9 @@ const CreateStateRepView = props =>{
                 })
 
 
+                dispatchStateRepInfo({type: STATE_REP_FIELDS.CLEAR_STATE_REP});
+
+                navigate('/yeoman/government/stateRepDashboard');
 
             }catch(error){
 
@@ -517,6 +553,12 @@ const CreateStateRepView = props =>{
                         Authorization: localStorage.getItem('token')
                     }
                 })
+
+
+                dispatchStateRepInfo({type: STATE_REP_FIELDS.CLEAR_STATE_REP});
+
+                navigate('/yeoman/government/stateSenatorDashboard');
+
 
 
             }catch(error){
@@ -585,7 +627,7 @@ const CreateStateRepView = props =>{
         return isDisabled;
     }
 
-    let Senator;
+
     return(
         <div>
             <Header/>
@@ -608,7 +650,7 @@ const CreateStateRepView = props =>{
                 />
                 <PhoneNumberForm
                     formFields={STATE_REP_FIELDS}
-                    dispatchStateRepInfo={dispatchStateRepInfo}
+                    dispatchFunction={dispatchStateRepInfo}
                     phoneNumber={stateRepInfo.phoneNumber}
                     phoneNumberList={stateRepInfo.phoneNumberList}
                     handler={addPhoneNumber}

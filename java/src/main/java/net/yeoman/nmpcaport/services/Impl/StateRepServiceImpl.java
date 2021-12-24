@@ -67,7 +67,7 @@ public class StateRepServiceImpl implements StateRepService {
         stateRepEntity.setStateRepId(utils.generateRandomID());
 
         //check for NMHouse district
-        if(stateRepDto.getNmHouseDistrict() != null){
+        if(!stateRepDto.getNmHouseDistrict().isBlank()){
 
             //get NM House district
             NMHouseDistrictEntity nmHouseDistrictEntity = this.nmHouseDistrictService.findNMHouseDistrictEntity(stateRepDto.getNmHouseDistrict());
@@ -85,7 +85,7 @@ public class StateRepServiceImpl implements StateRepService {
         }
 
         //check if party id exist
-        if(stateRepDto.getParty() != null){
+        if(!stateRepDto.getParty().isBlank()){
 
             //get political party
             PoliticalPartyEntity politicalPartyEntity = this.politicalPartyService.politicalPartyEntity(stateRepDto.getParty());
@@ -102,7 +102,7 @@ public class StateRepServiceImpl implements StateRepService {
         }
 
         //if city id exist
-        if(stateRepDto.getCity() != null){
+        if(!stateRepDto.getCity().isBlank()){
 
             //get city entity
             CityEntity cityEntity = this.cityService.findCity(stateRepDto.getCity());
@@ -117,7 +117,7 @@ public class StateRepServiceImpl implements StateRepService {
             stateRepEntity.setCityEntity(cityEntity);
         }
 
-        if(stateRepDto.getZipCode() != null){
+        if(!stateRepDto.getZipCode().isBlank()){
 
             //get zip code
             ZipCodeEntity zipCodeEntity = this.zipCodeService.getZipCodeEntity(stateRepDto.getZipCode());

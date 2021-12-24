@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from 'react-router-dom'
+import {RiGovernmentFill} from 'react-icons/ri'
 import Header from "../components/Header";
 import StatePoliticianElement from "../components/StatePoliticianElement";
 
@@ -24,23 +26,24 @@ const StateSenatorDashBoardView = props =>{
                     }
                 })
 
-                //setStateSenatorList(...stateSenatorList, stateSenatorResponse.data);
+                setStateSenatorList(...stateSenatorList, stateSenatorResponse.data);
                 console.log(stateSenatorResponse.data);
             }catch(error){
 
-                console.log(error.response.data);
+
 
             }
 
         })()
 
 
-    })
+    },[])
 
     return(
         <div>
             <Header/>
-            <div>
+            <h1 className={'mt-5 mb-5'}>State Senators <Link to={'/yeoman/government/addStateRep/senator'}><RiGovernmentFill/></Link> </h1>
+            <div className={'pt-3 w-75 m-auto'}>
                 {
                     stateSenatorList.length > 0?
                     stateSenatorList.map((official, index)=>{
@@ -48,7 +51,7 @@ const StateSenatorDashBoardView = props =>{
                         return(
                             <StatePoliticianElement
                                 key={index}
-                                electedOfficical={official}
+                                electedOfficial={official}
                             />
                         )
                     })

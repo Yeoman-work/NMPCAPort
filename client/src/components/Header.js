@@ -3,21 +3,7 @@ import {Link} from "react-router-dom";
 
 
 const Header = props =>{
-    const [govDD, setGovDD] = useState(false);
-    let dropDown = false;
-    const governmentDropDown =(e)=>{
-        e.preventDefault();
 
-        if(govDD){
-
-            setGovDD(false);
-
-        }else{
-            setGovDD(true);
-        }
-
-
-    }
 
     return(
             <nav className="navbar navbar-expand-lg navbar-light bg-light ">

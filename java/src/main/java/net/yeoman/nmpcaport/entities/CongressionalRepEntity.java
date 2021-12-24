@@ -22,11 +22,11 @@ public class CongressionalRepEntity implements Serializable {
     private String congressionalRepId;
 
     @NotBlank(message = "required")
-    @Size(min = 3, max = 45, message = "Must be between 3 and 45 characters")
+    @Size(min = 3, max = 25, message = "Must be between 3 and 25 characters")
     private String firstName;
 
     @NotBlank(message = "required")
-    @Size(min = 3, max = 45, message = "Must be between 3 and 45 characters")
+    @Size(min = 3, max = 25, message = "Must be between 3 and 25 characters")
     private String lastName;
 
     @NotBlank(message = "required")
@@ -36,7 +36,7 @@ public class CongressionalRepEntity implements Serializable {
     @Size(max = 250)
     private String picture;
 
-    @Size(min = 4, max = 300, message = "Must be between 4 and 300 characters")
+    @Size(max = 300, message = "Must be 300 characters or less")
     private String website;
 
     @Column(updatable = false)
@@ -56,9 +56,9 @@ public class CongressionalRepEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "congressional_district_entity_id")
-    private CongressionalDistrictEntity district;
+    private CongressionalDistrictEntity districtEntity;
 
     public CongressionalRepEntity() {
     }
@@ -175,13 +175,11 @@ public class CongressionalRepEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public CongressionalDistrictEntity getDistrict() {
-        return district;
+    public CongressionalDistrictEntity getDistrictEntity() {
+        return districtEntity;
     }
 
-    public void setDistrict(CongressionalDistrictEntity district) {
-        this.district = district;
+    public void setDistrictEntity(CongressionalDistrictEntity districtEntity) {
+        this.districtEntity = districtEntity;
     }
-
-
 }

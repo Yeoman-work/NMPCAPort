@@ -28,7 +28,7 @@ public class CountyEntity implements Serializable {
     @Column(updatable = false)
     private String name;
 
-    @Column(updatable = true)
+    @Column(updatable = false)
     private Date createdAt;
     private Date updatedAt;
 

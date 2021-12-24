@@ -1,5 +1,7 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -35,12 +37,16 @@ public class USSenatorEntity implements Serializable {
     @Size(max = 120, message = "must be 120 characters and below")
     private String email;
 
+    @Size(max=300)
     private String website;
 
+    @Size(max = 250)
     private String picture;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate elected;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate nextElection;
 
     @Column(updatable = false)

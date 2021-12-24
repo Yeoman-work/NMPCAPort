@@ -68,23 +68,23 @@ public class CongressionalRepServiceImpl implements CongressionalRepService {
             congressionalRep.setLastName(congressionalRepDto.getLastName());
         }
 
-        if(congressionalRep.getDistrict() != null){
+        if(congressionalRep.getDistrictEntity() != null){
 
-            if(!congressionalRep.getDistrict().getCongressionalDistrictId().equals(congressionalRepDto.getCongressionalDistrictIdentifier())){
+            if(!congressionalRep.getDistrictEntity().getCongressionalDistrictId().equals(congressionalRepDto.getCongressionalDistrictIdentifier())){
 
                 CongressionalDistrictEntity congressionalDistrict = this.congressionalDistrictRepository.findByCongressionalDistrictId(congressionalRepDto.getCongressionalDistrictIdentifier());
 
                 if(congressionalDistrict == null) throw new CongressionalDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-                congressionalRep.setDistrict(congressionalDistrict);
+                congressionalRep.setDistrictEntity(congressionalDistrict);
             }
         }
 
-        if(congressionalRep.getDistrict() == null){
+        if(congressionalRep.getDistrictEntity() == null){
 
             if(congressionalRepDto.getCongressionalDistrictIdentifier() != null){
 
-                congressionalRep.setDistrict(this.congressionalDistrictRepository.findByCongressionalDistrictId(congressionalRepDto.getCongressionalDistrictIdentifier()));
+                congressionalRep.setDistrictEntity(this.congressionalDistrictRepository.findByCongressionalDistrictId(congressionalRepDto.getCongressionalDistrictIdentifier()));
             }
         }
 

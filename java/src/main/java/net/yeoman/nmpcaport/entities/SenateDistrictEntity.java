@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -33,6 +34,7 @@ public class SenateDistrictEntity implements Serializable {
     @Size(min = 500)
     private String map;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate electionDate;
 
     @Column(updatable = false)

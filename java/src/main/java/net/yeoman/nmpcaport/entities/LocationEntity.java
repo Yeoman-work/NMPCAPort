@@ -25,6 +25,9 @@ public class LocationEntity implements Serializable {
     @Size(max = 256)
     private String description;
 
+    @NotBlank(message = "required")
+    private String streetAddress;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_entity_id")
     private CityEntity cityEntity;
@@ -94,6 +97,14 @@ public class LocationEntity implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 
     public void setName(String name) {

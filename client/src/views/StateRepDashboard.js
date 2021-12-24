@@ -46,8 +46,8 @@ const StateRepDashboard = props =>{
     return(
         <div className={''}>
             <Header/>
-            <h1 className={'mt-5 mb-5'}>State Representatives <Link to={'/yeoman/government/addStateRep'}><RiGovernmentFill/></Link></h1>
-            <div className={'w-75'}>
+            <h1 className={'mt-5 mb-5'}>State Representatives <Link to={'/yeoman/government/addStateRep/rep'}><RiGovernmentFill/></Link></h1>
+            <div className={'w-75 m-auto'}>
                 {
                     stateRepList.length > 0?
                     stateRepList.map((official, index)=>{

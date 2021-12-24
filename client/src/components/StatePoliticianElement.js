@@ -6,23 +6,59 @@ import MailToButton from "./MailToButton";
 
 const StatePoliticianElement = props =>{
     const { electedOfficial } = props;
+    let district;
+    let politicianBackgroundColor;
 
+    if(electedOfficial.nmHouseDistrictResponse){
+        district = electedOfficial.nmHouseDistrictResponse;
 
-    console.log(electedOfficial.email)
+    }else if(electedOfficial.senateDistrictResponse){
+
+        district = electedOfficial.senateDistrictResponse;
+
+    }
+
+    switch (electedOfficial.politicalPartyResponse.name){
+
+        case 'republican':
+            politicianBackgroundColor = 'bg-danger'
+            break;
+
+        case 'democratic':
+            politicianBackgroundColor = 'bg-primary'
+            break;
+
+        case 'libertarian':
+            politicianBackgroundColor = 'bg-warning'
+            break;
+
+        default:
+            politicianBackgroundColor = 'bg-secondary'
+    }
 
 
     return(
-        <div className={'d-inline-block ms-5, me-5 border  p-3'}>
-            <img src={electedOfficial.picture} alt={`picture of ${electedOfficial.firstName} ${electedOfficial.lastName}`}/>
-            <div className={'text-left'}>
-                <h3 className={''}><strong>Rep:</strong> {electedOfficial.firstName.toUpperCase()} {electedOfficial.lastName.toUpperCase()} </h3>
-                <h4><strong>District:</strong> {electedOfficial.nmHouseDistrictResponse.name}</h4>
-                <h4><strong>Party:</strong> {electedOfficial.party.name.toUpperCase()}</h4>
+        <div className={'m-auto mb-5 mt-5 p-3 w-75 border border-dark rounded border row ' + politicianBackgroundColor}>
+            <div className={'col align-top'}>
+                <img src={electedOfficial.picture} alt={`picture of ${electedOfficial.firstName} ${electedOfficial.lastName}`}/>
+            </div>
+            <div className={'col align-bottom text-start'}>
+                {electedOfficial.nmHouseDistrictResponse? <h3>Representative</h3>: <h3>Senator</h3>}
+                <h3 className={''}>{electedOfficial.firstName.toUpperCase()} {electedOfficial.lastName.toUpperCase()} </h3>
+                <h4>Party:{electedOfficial.politicalPartyResponse.name.toUpperCase()}</h4>
                 {electedOfficial.capitolRoom? <h5><strong>Capitol Room:</strong> {electedOfficial.capitolRoom}</h5>: <h5><strong>Capitol Room:</strong> Not provided</h5> }
-                { electedOfficial.streetAddress?<h5 className={''}><strong>Address:</strong> {electedOfficial.streetAddress}</h5> : <h5>Address: Not Provided</h5>}
-                { electedOfficial.cityResponse?<h5><strong>City:</strong> {electedOfficial.cityResponse.name.toUpperCase()}</h5> : <h5>City Not provided</h5>}
-                { electedOfficial.zipCodeResponse? <h5><strong>Zip Code:</strong>{electedOfficial.zipCodeResponse.name}</h5> : <h5>Zip Code not provided</h5>}
+                <div className={'m-3'}>
+                    <h6>Address:</h6>
+                    <p>
+                        {electedOfficial.streetAddress? electedOfficial.streetAddress : ''}<br/>
+                        { electedOfficial.cityResponse? electedOfficial.cityResponse.name.toUpperCase() + ', ' : ''}
+                        { electedOfficial.zipCodeResponse? electedOfficial.zipCodeResponse.name: ''}
+                    </p>
+                </div>
                 { electedOfficial.email? <MailToButton mailto={electedOfficial.email} label={electedOfficial.email}/>: <h5>No Email Provided</h5>}
+            </div>
+            <div className={'col'}>
+                <h4><strong>District:</strong> {district.name}</h4>
             </div>
         </div>
     )

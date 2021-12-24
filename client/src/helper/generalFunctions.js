@@ -1,4 +1,5 @@
 const { utcToZonedTime, format } = require('date-fns-tz')
+const produce = require("immer");
 
 
 const dateAndTime = (time) =>{
@@ -11,6 +12,19 @@ const dateAndTime = (time) =>{
 
     return updatedTime;
 }
+
+
+const characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+    'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'W', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+    'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', ',',
+    '-', '(', ')', ' ' ]
+
+
+const number = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+
+const legislativeList = ['in committee', 'passed', 'vote scheduled', 'voted down']
+const governorList = ['awaiting bill', 'signed', 'veto']
 
 
 const InList = (List, id, itemLabel) =>{
@@ -106,6 +120,20 @@ const fieldLength = (min, max, fieldInput) =>{
     return isValid;
 }
 
+
+const fieldLengthRequired = (min, max, fieldInput)=>{
+
+    let isValid = false;
+
+    if(fieldInput.length >= min){
+        if(fieldInput.length <= max){
+            isValid = true;
+        }
+    }
+
+    return isValid;
+}
+
 const fieldLengthNotRequired = (min, max, fieldInput) =>{
 
     let isValid = true;
@@ -154,30 +182,64 @@ const emailValidation =(email)=>{
     return isValid;
 }
 
+const isValidCharacter = (characterInput) =>{
+
+     const isValid = characters.includes(characterInput[characterInput.length - 1])
+
+     return isValid;
+
+}
+
+
+const phoneNumberBuilder = (phoneNumber, state) =>{
+
+    let returnValue;
+    console.log(phoneNumber);
+    if(number.includes(phoneNumber[phoneNumber.length - 1])){
+
+        if(phoneNumber.length <= 12){
+
+
+                returnValue = phoneNumberPattern(phoneNumber);
+
+        }else{
+
+            return state;
+        }
+
+    }else if(phoneNumber.length < 1){
+
+        console.log('here here')
+        returnValue = phoneNumber;
+
+    }else{
+
+        return state;
+    }
+
+
+    return returnValue;
+
+
+}
 
 
 
-const characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-                    'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'W', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
-                    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-                    'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', ',',
-                    '-', '(', ')', ' ' ]
 
 
-const number = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
-
-const legislativeList = ['in committee', 'passed', 'vote scheduled', 'voted down']
-const governorList = ['awaiting bill', 'signed', 'veto']
 
 
 
 module.exports={
+    phoneNumberBuilder,
     fieldLength,
+    fieldLengthRequired,
     phoneNumberValidation,
     fieldLengthNotRequired,
     fieldLengthErrorMessage,
     phoneNumberCheck,
     emailValidation,
+    isValidCharacter,
     number,
     legislativeList,
     governorList,
