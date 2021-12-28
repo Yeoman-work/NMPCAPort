@@ -12,6 +12,7 @@ public class CongressionalRepDetailsRequest {
     private String firstName;
     private String lastName;
     private String email;
+    private String politicalParty;
     private String congressionalDistrict;
     private String picture;
     private String website;
@@ -64,5 +65,13 @@ public class CongressionalRepDetailsRequest {
 
     public void setCongressionalDistrict(String congressionalDistrict) {
         this.congressionalDistrict = congressionalDistrict;
+    }
+
+    public String getPoliticalParty() {
+        return politicalParty;
+    }
+
+    public void setPoliticalParty(String politicalParty) {
+        this.politicalParty = politicalParty;
     }
 }

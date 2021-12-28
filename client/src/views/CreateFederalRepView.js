@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, {useEffect, useReducer } from "react";
 import axios from "axios";
 import produce from "immer";
+import {useNavigate} from "react-router";
 import Header from "../components/Header";
 import FederalRepForm from "../components/FederalRepForm";
+import CongressionalRep from "../components/CongressionalRep";
 import PhoneNumberForm from "../components/PhoneNumberForm";
-import LocationForm from "../components/LocationForm";
-const {characters,
+
+const {
        emailValidation,
        isValidCharacter,
-       phoneNumberBuilder,
        fieldLengthRequired,
        fieldLengthNotRequired,
 
@@ -21,42 +22,123 @@ const federalRepReducer = (federalRepState, action)=>{
 
         case FEDERAL_REP_FIELDS.FEDERAL_REP_FIRST_NAME:
              console.log(federalRepState);
-            if(isValidCharacter(action.payload)){
+            if(action.payload.length < 25){
+                if(isValidCharacter(action.payload)){
 
-                if(federalRepState.repType){
+                    if(federalRepState.repType){
 
-                    return produce(federalRepState, draft=>{
-                        draft.rep.firstName = action.payload;
-                    })
+                        return produce(federalRepState, draft=>{
+
+                            draft.rep.firstName = action.payload.trim();
+
+                        })
+
+                    }else{
+
+                        return produce(federalRepState,draft=>{
+
+                            draft.sen.firstName = action.payload.trim();
+
+                        })
+
+                    }
+
+                }else if(action.payload.length < 1){
+
+                    if(federalRepState.repType){
+
+                        return produce(federalRepState, draft=>{
+
+                            draft.rep.firstName = action.payload.trim();
+
+                        })
+
+                    }else{
+
+                        return produce(federalRepState, draft=>{
+
+                            draft.sen.lastName = action.payload.trim();
+
+                        })
+                    }
 
                 }else{
 
-                    return produce(federalRepState,draft=>{
-
-                        draft.sen.firstName = action.payload;
-                    })
-
+                    return federalRepState
                 }
+
             }else{
 
                 return federalRepState;
+
             }
 
         case FEDERAL_REP_FIELDS.FEDERAL_REP_LAST_NAME:
             console.log(federalRepState);
-            if(isValidCharacter(action.payload)){
+           if(action.payload.length < 25){
+               if(isValidCharacter(action.payload)){
+
+                   if(federalRepState.repType){
+
+                       return produce(federalRepState, draft=>{
+
+                           draft.rep.lastName = action.payload.trim();
+                       })
+
+                   }else{
+
+                       return produce(federalRepState, draft=>{
+
+                           draft.sen.lastName =action.payload.trim();
+                       })
+                   }
+
+               }else if(action.payload.length < 1){
+
+                   if(federalRepState.repType){
+
+                       return produce(federalRepState, draft=>{
+
+                           draft.rep.firstName = action.payload.trim();
+
+                       })
+
+                   }else{
+
+                       return produce(federalRepState, draft=>{
+
+                           draft.sen.lastName = action.payload.trim();
+
+                       })
+                   }
+
+               }else{
+
+                   return federalRepState;
+
+               }
+
+           }else{
+
+               return federalRepState;
+           }
+
+        case FEDERAL_REP_FIELDS.FEDERAL_REP_EMAIL:
+
+            if(action.payload.length <= 150){
 
                 if(federalRepState.repType){
 
                     return produce(federalRepState, draft=>{
 
-                        draft.rep.lastName = action.payload;
+                        draft.rep.email = action.payload.trim();
                     })
+
                 }else{
 
                     return produce(federalRepState, draft=>{
 
-                        draft.sen.lastName =action.payload;
+                        draft.sen.email = action.payload.trim();
                     })
                 }
 
@@ -65,56 +147,53 @@ const federalRepReducer = (federalRepState, action)=>{
                 return federalRepState;
             }
 
-        case FEDERAL_REP_FIELDS.FEDERAL_REP_EMAIL:
-
-            if(federalRepState.repType){
-
-                return produce(federalRepState, draft=>{
-
-                    draft.rep.email = action.payload;
-                })
-
-            }else{
-
-                return produce(federalRepState, draft=>{
-
-                    draft.sen.email = action.payload;
-                })
-            }
 
 
 
         case FEDERAL_REP_FIELDS.FEDERAL_REP_PICTURE:
 
-            if(federalRepState.repType){
+            if(action.payload.length <= 250){
 
-                return produce(federalRepState, draft=>{
+                if(federalRepState.repType){
 
-                    draft.rep.picture = action.payload;
-                })
+                    return produce(federalRepState, draft=>{
+
+                        draft.rep.picture = action.payload;
+                    })
+                }else{
+
+                    return produce(federalRepState, draft=>{
+
+                        draft.sen.picture = action.payload.trim();
+                    })
+                }
             }else{
 
-                return produce(federalRepState, draft=>{
-
-                    draft.sen.picture = action.payload;
-                })
+                return federalRepState;
             }
 
         case FEDERAL_REP_FIELDS.FEDERAL_REP_WEBSITE:
 
-            if(federalRepState.repType){
+            if(action.payload.length <= 300){
 
-                return produce(federalRepState, draft=>{
+                if(federalRepState.repType){
 
-                    draft.rep.website = action.payload;
-                })
+                    return produce(federalRepState, draft=>{
+
+                        draft.rep.website = action.payload.trim();
+                    })
+                }else{
+
+                    return produce(federalRepState, draft=>{
+
+                        draft.sen.website = action.payload.trim();
+                    });
+                }
             }else{
 
-                return produce(federalRepState, draft=>{
-
-                    draft.sen.website = action.payload;
-                });
+                return federalRepState;
             }
+
         case FEDERAL_REP_FIELDS.FEDERAL_REP_DISTRICT:
 
             if(federalRepState.repType){
@@ -123,6 +202,9 @@ const federalRepReducer = (federalRepState, action)=>{
 
                     draft.rep.congressionalDistrict = action.payload;
                 })
+            }else{
+
+                return federalRepState;
             }
 
         case FEDERAL_REP_FIELDS.FEDERAL_REP_ELECTED:
@@ -176,6 +258,64 @@ const federalRepReducer = (federalRepState, action)=>{
                 })
             }
 
+        case FEDERAL_REP_FIELDS.REP_RESPONSE:
+
+            return produce(federalRepState, draft=>{
+                console.log('read this');
+                console.log(action.payload);
+                draft.repResponse ={...action.payload}
+            })
+
+        case FEDERAL_REP_FIELDS.SENATOR_RESPONSE:
+
+            return produce(federalRepState, draft=>{
+
+                draft.senatorResponse = {...action.payload}
+            })
+
+        case FEDERAL_REP_FIELDS.PARTY_LIST:
+
+            return produce(federalRepState, draft=>{
+
+                draft.formData.partiesList = [...action.payload];
+
+                console.log(federalRepState);
+            })
+
+        case FEDERAL_REP_FIELDS.PARTY_AFFILIATION:
+
+            if(federalRepState.repType){
+
+                return produce(federalRepState, draft=>{
+
+                    draft.rep.politicalParty = action.payload;
+                })
+
+            }else{
+
+                return produce(federalRepState, draft=>{
+
+                    draft.sen.politicalParty = action.payload;
+                })
+            }
+        case FEDERAL_REP_FIELDS.FINISHED:
+
+            if(federalRepState.finish){
+
+                return produce(federalRepState, draft=>{
+
+                    draft.finish = false;
+                })
+
+            }else{
+
+                return produce(federalRepState, draft=>{
+
+                    draft.finish = true;
+                })
+
+            }
+
 
         default:
             return federalRepState;
@@ -197,6 +337,7 @@ const FEDERAL_REP_FIELDS ={
     PHONE_NUMBER: 'Phone Number',
     PHONE_DESCRIPTION: 'Description',
     REP_SELECTOR: 'rep selector',
+    PARTY_AFFILIATION: 'party affiliation',
     LOCATION_NAME: 'location name',
     LOCATION_DESCRIPTION: 'location description',
     LOCATION_CITY: 'location city',
@@ -208,7 +349,10 @@ const FEDERAL_REP_FIELDS ={
     ZIP_CODE_LIST: 'zipCodeList',
     PARTY_LIST: 'party list',
     LOCATION_LIST: 'location list',
-    DISTRICT_LIST: 'district list'
+    DISTRICT_LIST: 'district list',
+    REP_RESPONSE: 'rep response',
+    SENATOR_RESPONSE: 'senator response',
+    FINISHED: 'finished'
 
 
 }
@@ -216,18 +360,19 @@ const FEDERAL_REP_FIELDS ={
 
 const CreateFederalRepView = props =>{
 
-
+    const navigate = useNavigate();
 
     const [federalRepInfo, dispatchFederalRepInfo] = useReducer(federalRepReducer, {
 
         rep:{
+
             firstName: ''.toLowerCase().trim(),
             lastName: ''.toLowerCase().trim(),
             email: ''.trim(),
             picture: ''.trim(),
             website: ''.trim(),
+            politicalParty: ''.trim(),
             congressionalDistrict: ''.trim(),
-
 
         },
 
@@ -238,7 +383,8 @@ const CreateFederalRepView = props =>{
             picture: ''.trim(),
             website: ''.trim(),
             elected: ''.trim(),
-            nextElection: ''.trim()
+            nextElection: ''.trim(),
+            politicalParty: ''.trim()
         },
 
         phoneNumber:{
@@ -272,6 +418,30 @@ const CreateFederalRepView = props =>{
             zipCodeList: []
         },
 
+        repResponse:{
+
+            congressionalRepId: '',
+            firstName: ''.toLowerCase().trim(),
+            lastName: ''.toLowerCase().trim(),
+            email: ''.trim(),
+            picture: ''.trim(),
+            website: ''.trim(),
+            districtResponse: {},
+
+        },
+
+        senatorResponse: {
+            senatorId: '',
+            firstName: ''.toLowerCase().trim(),
+            lastName: ''.toLowerCase().trim(),
+            email: ''.trim(),
+            picture: ''.trim(),
+            website: ''.trim(),
+            elected: ''.trim(),
+            nextElection: ''.trim()
+        },
+
+        finish: false,
 
         repType: true,
     })
@@ -292,7 +462,8 @@ const CreateFederalRepView = props =>{
                 })
 
 
-                dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.DISTRICT_LIST, payload: [...districtResponse.data]})
+                dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.DISTRICT_LIST, payload: [...districtResponse.data]});
+
 
 
             }catch(error){
@@ -305,6 +476,35 @@ const CreateFederalRepView = props =>{
 
     }, [])
 
+    useEffect(()=>{
+
+        (async ()=>{
+
+            try{
+
+                const partyResponse = await axios.get('http://localhost:8080/politicalParties',{
+
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    }
+
+                })
+
+
+                dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.PARTY_LIST, payload: [...partyResponse.data]})
+
+
+
+
+            }catch(error){
+
+
+            }
+
+        })()
+
+    }, [])
+
     const canSubmitRep = (federalRepInfo) =>{
 
         let isValid = false;
@@ -313,7 +513,7 @@ const CreateFederalRepView = props =>{
             if(fieldLengthRequired(3, 25, federalRepInfo.rep.lastName)){
                 if(fieldLengthNotRequired(0, 120, federalRepInfo.rep.email)){
                     if(federalRepInfo.rep.email.length > 0){
-                        if(emailValidation(federalRepInfo.sen.email)){
+                        if(emailValidation(federalRepInfo.rep.email)){
                             if(fieldLengthNotRequired(0, 250, federalRepInfo.rep.picture)){
                                 if(fieldLengthNotRequired(0, 300, federalRepInfo.rep.website)){
 
@@ -376,25 +576,55 @@ const CreateFederalRepView = props =>{
 
         if(federalRepInfo.repType){
 
-            const createCongressPerson = await axios.post('http://localhost:8080/congressionalReps', federalRepInfo.federalRep, {
+            try{
 
-                headers:{
-                    Authorization: localStorage.getItem('token')
-                }
+                const createCongressPerson = await axios.post('http://localhost:8080/congressionalReps', federalRepInfo.rep, {
 
-            })
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    }
+
+                })
+
+                //console.log(createCongressPerson.data);
+                dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.REP_RESPONSE, payload: {...createCongressPerson.data}});
+                dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.FINISHED});
+
+
+            }catch(error){
+
+
+
+            }
 
 
         }else{
 
-            const createSenator = await axios.post('http://localhost:8080/stateSenators', federalRepInfo.federalRep,{
+            try{
 
-                headers:{
-                    Authorization: localStorage.getItem('token')
-                }
-            })
+                const createSenator = await axios.post('http://localhost:8080/stateSenators', federalRepInfo.sen,{
+
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    }
+                })
+
+                dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.SENATOR_RESPONSE, payload: {...createSenator.data}})
+
+            }catch(error){
+
+
+            }
+
 
         }
+    }
+
+
+
+    const finish = (e) =>{
+
+        navigate('/yeoman/government/')
     }
 
 
@@ -402,17 +632,28 @@ const CreateFederalRepView = props =>{
         <div>
             <Header/>
             <div className={'w-50 m-auto'}>
-                <button disabled={federalRepInfo.repType} onClick={(e)=>dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.REP_SELECTOR})}>{'Congressional Representatives'}</button>
-                <button disabled={!federalRepInfo.repType} onClick={(e)=>dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.REP_SELECTOR})}>{'US Senator'}</button>
-                <FederalRepForm
-                    formLabelRep={'New Representative'}
-                    formLabelSen={'New Senator'}
-                    federalRepInfo={federalRepInfo}
-                    dispatchFederalRep={dispatchFederalRepInfo}
-                    formFields={FEDERAL_REP_FIELDS}
-                />
-                { federalRepInfo.repType? <button disabled={!canSubmitRep(federalRepInfo)}>{'Create Congress Person'}</button>: <button disabled={!canSubmitSen(federalRepInfo)}>{'Create Senator'}</button> }
-
+                <button hidden={federalRepInfo.finish} disabled={federalRepInfo.repType} onClick={(e)=>dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.REP_SELECTOR})}>{'Congressional Representatives'}</button>
+                <button hidden={federalRepInfo.finish} disabled={!federalRepInfo.repType} onClick={(e)=>dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.REP_SELECTOR})}>{'US Senator'}</button>
+                {
+                    !federalRepInfo.finish?
+                        <FederalRepForm
+                            formLabel={federalRepInfo.repType? 'New Representative' : 'New Senator'}
+                            federalRepInfo={federalRepInfo}
+                            dispatchFederalRep={dispatchFederalRepInfo}
+                            formFields={FEDERAL_REP_FIELDS}
+                        />
+                    :
+                    <div>
+                        <CongressionalRep
+                            rep={federalRepInfo.repResponse}
+                            district={federalRepInfo.repResponse.districtResponse}
+                        />
+                        <button>Add Phone Numbers Location</button>
+                        <button onClick={(e)=>finish(e)}>Finish</button>
+                    </div>
+                }
+                <button hidden={!federalRepInfo.repType || federalRepInfo.finish} disabled={!canSubmitRep(federalRepInfo)} onClick={(e)=>submitHandler(e)}>{'Create Congress Person'}</button>
+                <button hidden={federalRepInfo.repType || federalRepInfo.finish} disabled={!canSubmitSen(federalRepInfo)} onClick={(e)=>submitHandler(e)}>{'Create Senator'}</button>
             </div>
         </div>
     )

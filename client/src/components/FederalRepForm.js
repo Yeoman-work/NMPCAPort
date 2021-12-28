@@ -4,8 +4,8 @@ import React from "react";
 
 
 const FederalRepForm = props =>{
-   const { formLabelRep,
-           formLabelSen,
+   const {
+           formLabel,
            federalRepInfo,
            dispatchFederalRep,
            formFields,
@@ -86,6 +86,24 @@ const FederalRepForm = props =>{
                                 : null
                         }
                     </select>
+                    <label hidden={federalRepInfo.repType}>Party</label>
+                    <select className={'form-control'}
+                            hidden={federalRepInfo.repType}
+                            name={formFields.PARTY_AFFILIATION}
+                            onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                    >
+                        <option value="">Choose a Party</option>
+                        {
+                            federalRepInfo?
+                            federalRepInfo.formData.partiesList.map((party, index)=>{
+
+                                return(
+                                    <option key={index} value={party.partyId}>{party.name}</option>
+                                )
+                            })
+                                : null
+                        }
+                    </select>
                 </div>
             </div>
             {
@@ -112,8 +130,28 @@ const FederalRepForm = props =>{
                             />
                         </div>
                     </div>
-                    : null
 
+                    :
+
+                    <div className={'form-group'}>
+                        <label>Party</label>
+                        <select className={'form-control w-50 m-auto'}
+                                name={formFields.PARTY_AFFILIATION}
+                                onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                        >
+                            <option value="">Choose a Party</option>
+                            {
+                                federalRepInfo?
+                                    federalRepInfo.formData.partiesList.map((party, index)=>{
+
+                                        return(
+                                            <option key={index} value={party.partyId}>{party.name}</option>
+                                        )
+                                    })
+                                    : null
+                            }
+                        </select>
+                    </div>
             }
 
         </form>

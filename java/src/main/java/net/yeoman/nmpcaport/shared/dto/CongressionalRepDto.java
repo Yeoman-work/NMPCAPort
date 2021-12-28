@@ -1,14 +1,13 @@
 package net.yeoman.nmpcaport.shared.dto;
 
-import net.yeoman.nmpcaport.entities.CongressionalDistrictEntity;
-import net.yeoman.nmpcaport.entities.CongressionalRepEntity;
+import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
+import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
+import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
 import java.util.Date;
+import java.util.List;
 
 public class CongressionalRepDto {
 
@@ -18,9 +17,15 @@ public class CongressionalRepDto {
     private String lastName;
     private String email;
     private String picture;
+    private String politicalParty;
+    private String congressionalDistrict;
     private CongressionalDistrictEntity districtEntity;
-    private CongressionalDistrictResponse district;
-    private String congressionalDistrictIdentifier;
+    private CongressionalDistrictResponse districtResponse;
+    private PoliticalPartyEntity politicalPartyEntity;
+    private PoliticalPartyResponse politicalPartyResponse;
+    private List<AssignedNumberEntity> assignedNumberEntity;
+    private List<PhoneNumberResponse> phoneNumberResponse;
+    private PhoneNumberEntity phoneNumberEntity;
     private String website;
     private Date createdAt;
     private Date updatedAt;
@@ -97,12 +102,12 @@ public class CongressionalRepDto {
         this.updatedAt = updatedAt;
     }
 
-    public String getCongressionalDistrictIdentifier() {
-        return congressionalDistrictIdentifier;
+    public String getCongressionalDistrict() {
+        return congressionalDistrict;
     }
 
-    public void setCongressionalDistrictIdentifier(String congressionalDistrictIdentifier) {
-        this.congressionalDistrictIdentifier = congressionalDistrictIdentifier;
+    public void setCongressionalDistrict(String congressionalDistrict) {
+        this.congressionalDistrict = congressionalDistrict;
     }
 
     public CongressionalDistrictEntity getDistrictEntity() {
@@ -113,13 +118,59 @@ public class CongressionalRepDto {
         this.districtEntity = districtEntity;
     }
 
-    public CongressionalDistrictResponse getDistrict() {
-        return district;
+    public CongressionalDistrictResponse getDistrictResponse() {
+        return districtResponse;
     }
 
-    public void setDistrict(CongressionalDistrictResponse district) {
-        this.district = district;
+    public void setDistrictResponse(CongressionalDistrictResponse districtResponse) {
+        this.districtResponse = districtResponse;
     }
 
+    public String getPoliticalParty() {
+        return politicalParty;
+    }
 
+    public void setPoliticalParty(String politicalParty) {
+        this.politicalParty = politicalParty;
+    }
+
+    public PoliticalPartyResponse getPoliticalPartyResponse() {
+        return politicalPartyResponse;
+    }
+
+    public void setPoliticalPartyResponse(PoliticalPartyResponse politicalPartyResponse) {
+        this.politicalPartyResponse = politicalPartyResponse;
+    }
+
+    public PoliticalPartyEntity getPoliticalPartyEntity() {
+        return politicalPartyEntity;
+    }
+
+    public void setPoliticalPartyEntity(PoliticalPartyEntity politicalPartyEntity) {
+        this.politicalPartyEntity = politicalPartyEntity;
+    }
+
+    public List<AssignedNumberEntity> getAssignedNumberEntity() {
+        return assignedNumberEntity;
+    }
+
+    public void setAssignedNumberEntity(List<AssignedNumberEntity> assignedNumberEntity) {
+        this.assignedNumberEntity = assignedNumberEntity;
+    }
+
+    public List<PhoneNumberResponse> getPhoneNumberResponse() {
+        return phoneNumberResponse;
+    }
+
+    public void setPhoneNumberResponse(List<PhoneNumberResponse> phoneNumberResponse) {
+        this.phoneNumberResponse = phoneNumberResponse;
+    }
+
+    public PhoneNumberEntity getPhoneNumberEntity() {
+        return phoneNumberEntity;
+    }
+
+    public void setPhoneNumberEntity(PhoneNumberEntity phoneNumberEntity) {
+        this.phoneNumberEntity = phoneNumberEntity;
+    }
 }

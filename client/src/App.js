@@ -11,6 +11,8 @@ import StatePoliticianElement from "./components/StatePoliticianElement";
 import StateRepDashboard from "./views/StateRepDashboard";
 import StateSenatorDashBoardView from "./views/StateSenatorDashBoardView";
 import CreateFederalRepView from "./views/CreateFederalRepView";
+import FederalRepView from "./views/FederalRepView";
+import CongressionalDashboard from "./views/CongressionalDashboard";
 
 function App() {
   return (
@@ -33,9 +35,9 @@ function App() {
                         <Route path={'addStateRep'}>
                             <Route path={':type'} element={<CreateStateRepView/>}/>
                         </Route>
-                        <Route path={'addFederalRep'} element={<CreateFederalRepView/>}>
-
-                        </Route>
+                        <Route path={'congressionalRepDashboard'} element={<CongressionalDashboard/>}/>
+                        <Route path={'addFederalRep'} element={<CreateFederalRepView/>}/>
+                        <Route path={'federalRepFinish'} element={<FederalRepView/>}/>
                         <Route path ={'stateSenatorDashboard'} element={<StateSenatorDashBoardView/>}/>
                     </Route>
                 </Route>

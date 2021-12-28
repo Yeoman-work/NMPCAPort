@@ -1,8 +1,6 @@
 package net.yeoman.nmpcaport.shared.dto;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
 import java.util.Date;
 
 public class USSenatorDto {
@@ -12,6 +10,10 @@ public class USSenatorDto {
     private String firstName;
     private String lastName;
     private String email;
+    private String picture;
+    private String website;
+    private String elected;
+    private String nextElection;
     private Date createdAt;
     private Date updatedAt;
 
@@ -69,5 +71,37 @@ public class USSenatorDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getElected() {
+        return elected;
+    }
+
+    public void setElected(String elected) {
+        this.elected = elected;
+    }
+
+    public String getNextElection() {
+        return nextElection;
+    }
+
+    public void setNextElection(String nextElection) {
+        this.nextElection = nextElection;
     }
 }

@@ -4,9 +4,9 @@ public class LocationDetailsRequest {
 
     private String name;
     private String description;
-    private String cityId;
-    private String countyId;
-    private String zipCodeId;
+    private String city;
+    private String county;
+    private String zipCode;
 
     public String getName() {
         return name;
@@ -24,27 +24,27 @@ public class LocationDetailsRequest {
         this.description = description;
     }
 
-    public String getCityId() {
-        return cityId;
+    public String getCity() {
+        return city;
     }
 
-    public void setCityId(String cityId) {
-        this.cityId = cityId;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getCountyId() {
-        return countyId;
+    public String getCounty() {
+        return county;
     }
 
-    public void setCountyId(String countyId) {
-        this.countyId = countyId;
+    public void setCounty(String county) {
+        this.county = county;
     }
 
-    public String getZipCodeId() {
-        return zipCodeId;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setZipCodeId(String zipCodeId) {
-        this.zipCodeId = zipCodeId;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 }

@@ -3,6 +3,8 @@ package net.yeoman.nmpcaport.services;
 import net.yeoman.nmpcaport.entities.CongressionalRepEntity;
 import net.yeoman.nmpcaport.shared.dto.CongressionalRepDto;
 
+import java.util.List;
+
 public interface CongressionalRepService {
 
     public CongressionalRepDto getCongressionalRep(String congressionalRepId);
@@ -10,6 +12,7 @@ public interface CongressionalRepService {
     public CongressionalRepDto updateCongressionalRep(String RepId, CongressionalRepDto congressionalRepDto);
     public CongressionalRepDto deleteCongressionalRep(String repId);
     public CongressionalRepEntity getCongressionalRepEntity(String congressionalRepId);
+    public List<CongressionalRepDto> getAllCongressionalReps();
 
 
 }

@@ -40,6 +40,13 @@ public class PoliticalPartyEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
+
+    @OneToMany(mappedBy = "politicalPartyEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<USSenatorEntity> usSenatorEntities;
+
+    @OneToMany(mappedBy = "politicalPartyEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<CongressionalRepEntity> congressionalRepEntities;
+
     @OneToMany(mappedBy = "politicalParty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<StateRepEntity> stateRepEntities;
 
@@ -103,5 +110,21 @@ public class PoliticalPartyEntity implements Serializable {
 
     public void setStateSenatorEntities(List<StateSenatorEntity> stateSenatorEntities) {
         this.stateSenatorEntities = stateSenatorEntities;
+    }
+
+    public List<CongressionalRepEntity> getCongressionalRepEntities() {
+        return congressionalRepEntities;
+    }
+
+    public void setCongressionalRepEntities(List<CongressionalRepEntity> congressionalRepEntities) {
+        this.congressionalRepEntities = congressionalRepEntities;
+    }
+
+    public List<USSenatorEntity> getUsSenatorEntities() {
+        return usSenatorEntities;
+    }
+
+    public void setUsSenatorEntities(List<USSenatorEntity> usSenatorEntities) {
+        this.usSenatorEntities = usSenatorEntities;
     }
 }

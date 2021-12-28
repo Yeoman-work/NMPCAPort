@@ -117,11 +117,7 @@ public class LocationServiceImpl implements LocationService {
                 location.setDescription(item.getDescription());
             }
 
-            location.setCityEntity(this.cityService.findCity(item.getCityId()));
 
-            location.setCounty(this.countyService.findCountyEntity(item.getCountyId()));
-
-            location.setZipCode(this.zipCodeService.getZipCodeEntity(item.getZipCodeId()));
 
             LocationEntity savedLocation = this.locationRepository.save(location);
 

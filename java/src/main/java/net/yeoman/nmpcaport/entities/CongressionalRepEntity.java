@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="congressionalReps")
@@ -29,8 +30,9 @@ public class CongressionalRepEntity implements Serializable {
     @Size(min = 3, max = 25, message = "Must be between 3 and 25 characters")
     private String lastName;
 
-    @NotBlank(message = "required")
+
     @Email(message = "Please enter a valid email")
+    @Size(max=150)
     private String email;
 
     @Size(max = 250)
@@ -56,9 +58,20 @@ public class CongressionalRepEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
+    @OneToMany(mappedBy = "congressionalRepEntity" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<PersonnelLocationEntity> personnelLocationEntities;
+
+    @OneToMany(mappedBy = "congressionalRepEntity" , cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<AssignedNumberEntity> assignedNumberEntities ;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "congressional_district_entity_id")
     private CongressionalDistrictEntity districtEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "political_party_entity_id")
+    private PoliticalPartyEntity politicalPartyEntity;
+
 
     public CongressionalRepEntity() {
     }
@@ -181,5 +194,29 @@ public class CongressionalRepEntity implements Serializable {
 
     public void setDistrictEntity(CongressionalDistrictEntity districtEntity) {
         this.districtEntity = districtEntity;
+    }
+
+    public PoliticalPartyEntity getPoliticalPartyEntity() {
+        return politicalPartyEntity;
+    }
+
+    public void setPoliticalPartyEntity(PoliticalPartyEntity politicalPartyEntity) {
+        this.politicalPartyEntity = politicalPartyEntity;
+    }
+
+    public List<PersonnelLocationEntity> getPersonnelLocationEntities() {
+        return personnelLocationEntities;
+    }
+
+    public void setPersonnelLocationEntities(List<PersonnelLocationEntity> personnelLocationEntities) {
+        this.personnelLocationEntities = personnelLocationEntities;
+    }
+
+    public List<AssignedNumberEntity> getAssignedNumberEntities() {
+        return assignedNumberEntities;
+    }
+
+    public void setAssignedNumberEntities(List<AssignedNumberEntity> assignedNumberEntities) {
+        this.assignedNumberEntities = assignedNumberEntities;
     }
 }

@@ -68,4 +68,6 @@ public class USSenatorDetailsRequest {
     public void setNextElection(String nextElection) {
         this.nextElection = nextElection;
     }
+
+
 }

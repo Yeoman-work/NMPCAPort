@@ -66,6 +66,10 @@ public class USSenatorEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "political_party_entity_id")
+    private PoliticalPartyEntity politicalPartyEntity;
+
     public USSenatorEntity() {
     }
 
@@ -155,5 +159,13 @@ public class USSenatorEntity implements Serializable {
 
     public void setElected(LocalDate elected) {
         this.elected = elected;
+    }
+
+    public PoliticalPartyEntity getPoliticalPartyEntity() {
+        return politicalPartyEntity;
+    }
+
+    public void setPoliticalPartyEntity(PoliticalPartyEntity politicalPartyEntity) {
+        this.politicalPartyEntity = politicalPartyEntity;
     }
 }

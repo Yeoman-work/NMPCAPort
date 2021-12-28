@@ -33,7 +33,7 @@ const Header = props =>{
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><Link className="dropdown-item" to={'/yeoman/government/stateRepDashboard'}>State Representatives</Link></li>
                                     <li><Link className="dropdown-item" to={'/yeoman/government/stateSenatorDashboard'}>State Senators</Link></li>
-                                    <li><Link className='dropdown-item' to={''}>Congressional Representatives</Link></li>
+                                    <li><Link className='dropdown-item' to={'/yeoman/government/congressionalRepDashboard'}>Congressional Representatives</Link></li>
                                     <li><Link className='dropdown-item' to={''}>Senators</Link></li>
                                     <li>
                                         <hr className="dropdown-divider"/>
