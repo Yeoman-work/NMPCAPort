@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "usSenators")
@@ -66,9 +68,15 @@ public class USSenatorEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
+    @NotNull(message = "required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "political_party_entity_id")
     private PoliticalPartyEntity politicalPartyEntity;
+
+    @OneToMany(mappedBy = "usSenatorEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OfficeAssignmentEntity> officeAssignmentEntities;
+
+
 
     public USSenatorEntity() {
     }
@@ -145,14 +153,6 @@ public class USSenatorEntity implements Serializable {
         this.picture = picture;
     }
 
-    public LocalDate getNextElection() {
-        return nextElection;
-    }
-
-    public void setNextElection(LocalDate nextElection) {
-        this.nextElection = nextElection;
-    }
-
     public LocalDate getElected() {
         return elected;
     }
@@ -161,11 +161,27 @@ public class USSenatorEntity implements Serializable {
         this.elected = elected;
     }
 
+    public LocalDate getNextElection() {
+        return nextElection;
+    }
+
+    public void setNextElection(LocalDate nextElection) {
+        this.nextElection = nextElection;
+    }
+
     public PoliticalPartyEntity getPoliticalPartyEntity() {
         return politicalPartyEntity;
     }
 
     public void setPoliticalPartyEntity(PoliticalPartyEntity politicalPartyEntity) {
         this.politicalPartyEntity = politicalPartyEntity;
+    }
+
+    public List<OfficeAssignmentEntity> getOfficeAssignmentEntities() {
+        return officeAssignmentEntities;
+    }
+
+    public void setOfficeAssignmentEntities(List<OfficeAssignmentEntity> officeAssignmentEntities) {
+        this.officeAssignmentEntities = officeAssignmentEntities;
     }
 }

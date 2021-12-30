@@ -1,21 +1,22 @@
 package net.yeoman.nmpcaport.io.response.LocationResponse;
 
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
+import net.yeoman.nmpcaport.io.response.USSenator.USSenatorResponse;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
 import java.util.Date;
 
-public class LocationResponse {
+public class LocationWithUSSenatorResponse {
 
     private String name;
     private String description;
     private CityResponse cityResponse;
     private ZipCodeResponse zipCodeResponse;
     private CountyResponse countyResponse;
+    private USSenatorResponse usSenatorResponse;
     private Date createdAt;
     private Date updatedAt;
-
 
     public String getName() {
         return name;
@@ -71,5 +72,13 @@ public class LocationResponse {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public USSenatorResponse getUsSenatorResponse() {
+        return usSenatorResponse;
+    }
+
+    public void setUsSenatorResponse(USSenatorResponse usSenatorResponse) {
+        this.usSenatorResponse = usSenatorResponse;
     }
 }

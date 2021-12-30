@@ -7,12 +7,13 @@ import CreateHealthCenterView from "./views/CreateHealthCenterView";
 import CreateLegislationView from "./views/CreateLegislationView";
 import LegislationDashBoard from "./views/LegislationDashBoard";
 import CreateStateRepView from "./views/CreateStateRepView";
-import StatePoliticianElement from "./components/StatePoliticianElement";
 import StateRepDashboard from "./views/StateRepDashboard";
 import StateSenatorDashBoardView from "./views/StateSenatorDashBoardView";
 import CreateFederalRepView from "./views/CreateFederalRepView";
 import FederalRepView from "./views/FederalRepView";
 import CongressionalDashboard from "./views/CongressionalDashboard";
+import USSenatorsDashboard from "./views/USSenatorsDashboard";
+import USSenatorOffice from "./views/USSenatorOffice";
 
 function App() {
   return (
@@ -36,9 +37,15 @@ function App() {
                             <Route path={':type'} element={<CreateStateRepView/>}/>
                         </Route>
                         <Route path={'congressionalRepDashboard'} element={<CongressionalDashboard/>}/>
-                        <Route path={'addFederalRep'} element={<CreateFederalRepView/>}/>
+                        <Route path={'addFederalRep'}>
+                            <Route path={':type'} element={<CreateFederalRepView/>}/>
+                        </Route>
                         <Route path={'federalRepFinish'} element={<FederalRepView/>}/>
                         <Route path ={'stateSenatorDashboard'} element={<StateSenatorDashBoardView/>}/>
+                        <Route path={'senatorDashboard'} element={<USSenatorsDashboard/>}/>
+                    </Route>
+                    <Route path={'location'}>
+                        <Route path={'senator/:id'} element={<USSenatorOffice/>}/>
                     </Route>
                 </Route>
             </Routes>

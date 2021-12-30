@@ -1,8 +1,11 @@
 package net.yeoman.nmpcaport.shared.dto;
 
-import net.yeoman.nmpcaport.entities.CityEntity;
-import net.yeoman.nmpcaport.entities.CountyEntity;
-import net.yeoman.nmpcaport.entities.ZipCodeEntity;
+import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.io.response.CongressionalRepResponse.CongressionalRepResponse;
+import net.yeoman.nmpcaport.io.response.County.CountyResponse;
+import net.yeoman.nmpcaport.io.response.USSenator.USSenatorResponse;
+import net.yeoman.nmpcaport.io.response.city.CityResponse;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
 import java.util.Date;
 
@@ -12,12 +15,20 @@ public class LocationDto {
     private String locationId;
     private String name;
     private String description;
-    private String cityId;
-    private String countyId;
-    private String zipCodeId;
+    private String city;
+    private String county;
+    private String zipCode;
+    private String usSenator;
+    private USSenatorEntity usSenatorEntity;
+    private USSenatorResponse usSenatorResponse;
+    private CongressionalRepEntity congressionalRepEntity;
+    private CongressionalRepResponse congressionalRepResponse;
     private CityEntity cityEntity;
     private ZipCodeEntity zipCodeEntity;
     private CountyEntity countyEntity;
+    private CityResponse cityResponse;
+    private CountyResponse countyResponse;
+    private ZipCodeResponse zipCodeResponse;
     private Date createdAt;
     private Date updatedAt;
 
@@ -54,28 +65,84 @@ public class LocationDto {
         this.description = description;
     }
 
-    public String getCityId() {
-        return cityId;
+    public String getCity() {
+        return city;
     }
 
-    public void setCityId(String cityId) {
-        this.cityId = cityId;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getCountyId() {
-        return countyId;
+    public String getCounty() {
+        return county;
     }
 
-    public void setCountyId(String countyId) {
-        this.countyId = countyId;
+    public void setCounty(String county) {
+        this.county = county;
     }
 
-    public String getZipCodeId() {
-        return zipCodeId;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setZipCodeId(String zipCodeId) {
-        this.zipCodeId = zipCodeId;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public CityResponse getCityResponse() {
+        return cityResponse;
+    }
+
+    public void setCityResponse(CityResponse cityResponse) {
+        this.cityResponse = cityResponse;
+    }
+
+    public CountyResponse getCountyResponse() {
+        return countyResponse;
+    }
+
+    public void setCountyResponse(CountyResponse countyResponse) {
+        this.countyResponse = countyResponse;
+    }
+
+    public ZipCodeResponse getZipCodeResponse() {
+        return zipCodeResponse;
+    }
+
+    public void setZipCodeResponse(ZipCodeResponse zipCodeResponse) {
+        this.zipCodeResponse = zipCodeResponse;
+    }
+
+    public USSenatorEntity getUsSenatorEntity() {
+        return usSenatorEntity;
+    }
+
+    public void setUsSenatorEntity(USSenatorEntity usSenatorEntity) {
+        this.usSenatorEntity = usSenatorEntity;
+    }
+
+    public USSenatorResponse getUsSenatorResponse() {
+        return usSenatorResponse;
+    }
+
+    public void setUsSenatorResponse(USSenatorResponse usSenatorResponse) {
+        this.usSenatorResponse = usSenatorResponse;
+    }
+
+    public CongressionalRepEntity getCongressionalRepEntity() {
+        return congressionalRepEntity;
+    }
+
+    public void setCongressionalRepEntity(CongressionalRepEntity congressionalRepEntity) {
+        this.congressionalRepEntity = congressionalRepEntity;
+    }
+
+    public CongressionalRepResponse getCongressionalRepResponse() {
+        return congressionalRepResponse;
+    }
+
+    public void setCongressionalRepResponse(CongressionalRepResponse congressionalRepResponse) {
+        this.congressionalRepResponse = congressionalRepResponse;
     }
 
     public CityEntity getCityEntity() {
@@ -117,4 +184,13 @@ public class LocationDto {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public String getUsSenator() {
+        return usSenator;
+    }
+
+    public void setUsSenator(String usSenator) {
+        this.usSenator = usSenator;
+    }
+
 }

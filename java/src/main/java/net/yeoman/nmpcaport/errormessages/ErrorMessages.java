@@ -10,13 +10,16 @@ public enum ErrorMessages {
     COULD_NOT_UPDATE_RECORD("Could not update record"),
     COULD_NOT_DELETE_RECORD("Could not delete record"),
     FAILED_TO_SAVE_RECORD("Failed to save records"),
-    Email_ADDRESS_NOT_VERIFIED("Email address could not be verified"),
+    EMAIL_ADDRESS_NOT_VERIFIED("Email address could not be verified"),
     DISTRICT_NOT_VALID("Not a valid district"),
     EMAIL_VALIDATION("Please enter a valid email address"),
     NO_PARTY_AFFILIATION("Party affiliation required"),
     EMAIL_CHARACTER_LENGTH("Email must be 150 characters and below"),
     PICTURE_LENGTH("Picture URL must be 250 characters or less"),
-    WEBSITE_URL("Website URL must be 300 characters or less");
+    WEBSITE_URL("Website URL must be 300 characters or less"),
+    FIRST_NAME_LENGTH("First name must be between 3 and 25 characters"),
+    LAST_NAME_LENGTH("Last name must be between 3 and 25 characters");
+
 
     private String errorMessage;
 

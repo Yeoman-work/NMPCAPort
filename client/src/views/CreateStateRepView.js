@@ -280,6 +280,24 @@ const stateRepReducer = (stateRepState, action) =>{
                  draft.stateRep = {...stateRep};
             })
 
+        case STATE_REP_FIELDS.REP_TYPE:
+
+            if(action.payload === 'senator'){
+
+                return produce(stateRepState, draft=>{
+
+                    draft.repType = false;
+                })
+
+            }else{
+
+                return produce(stateRepState, draft=>{
+
+                    draft.repType = true;
+                })
+
+            }
+
         default:
             return stateRepState;
 
@@ -309,7 +327,8 @@ const STATE_REP_FIELDS ={
     PARTIES_LIST: 'parties_list',
     Phone_Number_List: 'phoneNumberList',
     CLEAR_PHONE_NUMBER: 'clearPhoneNumber',
-    CLEAR_STATE_REP: 'clearStateRep'
+    CLEAR_STATE_REP: 'clearStateRep',
+    REP_TYPE: 'repType'
 
 }
 

@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "locations")
@@ -34,11 +35,15 @@ public class LocationEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "county_entity_id")
-    private CountyEntity county;
+    private CountyEntity countyEntity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "zip_code_entity_id")
-    private ZipCodeEntity zipCode;
+    private ZipCodeEntity zipCodeEntity;
+
+    @OneToMany(mappedBy = "locationEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OfficeAssignmentEntity> officeAssignmentEntities;
+
 
     @Column(updatable = false)
     private Date createdAt;
@@ -73,8 +78,8 @@ public class LocationEntity implements Serializable {
         this.name = name;
         this.description = description;
         this.cityEntity = cityEntity;
-        this.county = county;
-        this.zipCode = zipCode;
+        this.countyEntity = county;
+        this.zipCodeEntity = zipCode;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -127,20 +132,20 @@ public class LocationEntity implements Serializable {
         this.cityEntity = cityEntity;
     }
 
-    public CountyEntity getCounty() {
-        return county;
+    public CountyEntity getCountyEntity() {
+        return countyEntity;
     }
 
-    public void setCounty(CountyEntity county) {
-        this.county = county;
+    public void setCountyEntity(CountyEntity countyEntity) {
+        this.countyEntity = countyEntity;
     }
 
-    public ZipCodeEntity getZipCode() {
-        return zipCode;
+    public ZipCodeEntity getZipCodeEntity() {
+        return zipCodeEntity;
     }
 
-    public void setZipCode(ZipCodeEntity zipCode) {
-        this.zipCode = zipCode;
+    public void setZipCodeEntity(ZipCodeEntity zipCodeEntity) {
+        this.zipCodeEntity = zipCodeEntity;
     }
 
     public Date getCreatedAt() {
@@ -157,5 +162,13 @@ public class LocationEntity implements Serializable {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<OfficeAssignmentEntity> getOfficeAssignmentEntities() {
+        return officeAssignmentEntities;
+    }
+
+    public void setOfficeAssignmentEntities(List<OfficeAssignmentEntity> officeAssignmentEntities) {
+        this.officeAssignmentEntities = officeAssignmentEntities;
     }
 }

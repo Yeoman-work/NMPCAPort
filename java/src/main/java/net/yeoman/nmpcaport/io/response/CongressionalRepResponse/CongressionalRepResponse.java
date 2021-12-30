@@ -13,10 +13,10 @@ public class CongressionalRepResponse {
     private String lastName;
     private String email;
     private String picture;
+    private String website;
     private CongressionalDistrictResponse districtResponse;
     private PhoneNumberResponse phoneNumberResponse;
     private PoliticalPartyResponse politicalPartyResponse;
-    private String website;
     private Date createdAt;
     private Date updatedAt;
 

@@ -1,6 +1,6 @@
 package net.yeoman.nmpcaport.services;
 
-import net.yeoman.nmpcaport.io.request.location.LocationDetailsRequest;
+import net.yeoman.nmpcaport.io.request.location.LocationDetailsRequestWithSenator;
 import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
 import net.yeoman.nmpcaport.shared.dto.LocationDto;
 
@@ -10,12 +10,14 @@ public interface LocationService {
 
     public LocationDto getOneLocation(String locationId);
 
-    public LocationDto createLocation(LocationDto locationDto);
+    public List<LocationDto> createLocationUsSenator(List<LocationDto> locationDtoList, String senatorId);
+
+    public LocationDto createLocationCongressionalRep(LocationDto locationDto);
 
     public LocationDto updateLocation(LocationDto locationDto, String locationId);
 
     public LocationDto deleteLocation(String locationId);
 
-    public List<LocationResponse> createLocationsBulk(List<LocationDetailsRequest> locationDetailsRequests);
+    public List<LocationResponse> createLocationsBulk(List<LocationDetailsRequestWithSenator> locationDetailsRequests);
 
 }

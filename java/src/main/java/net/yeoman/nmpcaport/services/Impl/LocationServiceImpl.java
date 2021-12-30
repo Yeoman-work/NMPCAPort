@@ -1,12 +1,15 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.entities.CityEntity;
-import net.yeoman.nmpcaport.entities.CountyEntity;
-import net.yeoman.nmpcaport.entities.LocationEntity;
-import net.yeoman.nmpcaport.entities.ZipCodeEntity;
-import net.yeoman.nmpcaport.io.request.location.LocationDetailsRequest;
+import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.exception.*;
+import net.yeoman.nmpcaport.io.request.location.LocationDetailsRequestWithSenator;
+import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
 import net.yeoman.nmpcaport.io.repositories.LocationRepository;
+import net.yeoman.nmpcaport.io.response.USSenator.USSenatorResponse;
+import net.yeoman.nmpcaport.io.response.city.CityResponse;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.services.LocationService;
 import net.yeoman.nmpcaport.shared.dto.LocationDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -23,6 +26,9 @@ public class LocationServiceImpl implements LocationService {
     private LocationRepository locationRepository;
 
     @Autowired
+    private USSenatorServiceImpl usSenatorService;
+
+    @Autowired
     private CityServiceImpl cityService;
 
     @Autowired
@@ -37,15 +43,137 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationDto getOneLocation(String locationId) {
 
-        return new ModelMapper().map(this.locationRepository.findByLocationId(locationId), LocationDto.class);
+        ModelMapper modelMapper = new ModelMapper();
+        LocationEntity locationEntity = this.locationRepository.findByLocationId(locationId);
+
+        if(locationEntity == null) throw new LocationServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        LocationDto locationDto = modelMapper.map(locationEntity, LocationDto.class);
+
+        if(locationDto.getCityEntity() != null){
+
+            locationDto.setCityResponse(modelMapper.map(locationDto.getCityEntity(), CityResponse.class));
+        }
+
+        if(locationDto.getCountyEntity() != null){
+
+            locationDto.setCountyResponse(modelMapper.map(locationDto.getCountyEntity(), CountyResponse.class));
+        }
+
+        if(locationDto.getZipCodeEntity() != null){
+
+            locationDto.setZipCodeResponse(modelMapper.map(locationDto.getZipCodeResponse(), ZipCodeResponse.class));
+        }
+
+        return locationDto;
+    }
+
+
+    @Override
+    public LocationDto createLocationCongressionalRep(LocationDto locationDto) {
+        return null;
     }
 
     @Override
-    public LocationDto createLocation(LocationDto locationDto) {
+    public List<LocationDto> createLocationUsSenator(List<LocationDto> locationDtoList, String senatorId ) {
 
-        LocationEntity preSavedLocation = new ModelMapper().map(locationDto, LocationEntity.class);
-        LocationEntity saved = this.locationRepository.save(preSavedLocation);
-        return new ModelMapper().map(saved, LocationDto.class);
+        List<LocationDto> returnValue = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
+
+        for(LocationDto locationDto: locationDtoList){
+
+            //convert dto to entity
+            LocationEntity preSavedLocation = modelMapper.map(locationDto, LocationEntity.class);
+
+            //get US Senator
+            USSenatorEntity usSenatorEntity = this.usSenatorService.getUSSenatorEntity(senatorId);
+
+            //throw error if senator doesn't exist
+            if(usSenatorEntity == null) throw new UsSenatorServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+            //get all office assignments
+            List<OfficeAssignmentEntity> officeAssignments = preSavedLocation.getOfficeAssignmentEntities();
+
+            // new office assignment entity
+            OfficeAssignmentEntity officeAssignmentEntity = new OfficeAssignmentEntity();
+
+            //generate public id
+            officeAssignmentEntity.setPublicId(utils.generateRandomID());
+
+            //assign senator to office assignment
+            officeAssignmentEntity.setUsSenatorEntity(usSenatorEntity);
+
+            //save assignments to list
+            officeAssignments.add(officeAssignmentEntity);
+
+            //assign to location
+            preSavedLocation.setOfficeAssignmentEntities(officeAssignments);
+
+
+            //get county entity
+            CountyEntity countyEntity = this.countyService.findCountyEntity(locationDto.getCounty());
+
+            //throw error if county doesn't exist
+            if(countyEntity == null) throw new CountyServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+            //set county entity for location
+            preSavedLocation.setCountyEntity(countyEntity);
+
+            //get city entity
+            CityEntity cityEntity = this.cityService.findCity(locationDto.getCity());
+
+            //if city doesn't exist throw error
+            if(cityEntity == null) throw new CityServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+            //set city for location
+            preSavedLocation.setCityEntity(cityEntity);
+
+
+            //get zip code
+            ZipCodeEntity zipCodeEntity = this.zipCodeService.getZipCodeEntity(locationDto.getZipCode());
+
+            //throw error if zip code exist
+            if(zipCodeEntity == null) throw new ZipCodeServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+            //set zip code for location
+            preSavedLocation.setZipCodeEntity(zipCodeEntity);
+
+            //save location
+            LocationEntity savedLocation = this.locationRepository.save(preSavedLocation);
+
+            //add to list that will be returned
+            returnValue.add(modelMapper.map(preSavedLocation, LocationDto.class));
+
+        }
+
+        for(LocationDto locationDto: returnValue){
+
+            //check for county entity
+            if(locationDto.getCountyEntity() != null){
+
+                locationDto.setCountyResponse(modelMapper.map(locationDto.getCountyEntity(), CountyResponse.class));
+            }
+
+            //check for city entity
+            if(locationDto.getCityEntity() != null){
+
+                locationDto.setCityResponse(modelMapper.map(locationDto.getCityEntity(), CityResponse.class));
+            }
+
+            //check for zip code entity
+            if(locationDto.getZipCodeEntity() != null){
+
+                locationDto.setZipCodeResponse(modelMapper.map(locationDto.getZipCodeEntity(), ZipCodeResponse.class));
+            }
+
+            //check for usSenator
+            if(locationDto.getUsSenatorEntity() != null){
+
+                locationDto.setUsSenatorResponse(modelMapper.map(locationDto.getUsSenatorEntity(), USSenatorResponse.class));
+            }
+        }
+
+        return returnValue;
     }
 
     @Override
@@ -63,28 +191,15 @@ public class LocationServiceImpl implements LocationService {
             oldLocation.setDescription(locationDto.getDescription());
         }
 
-        if(!oldLocation.getCityEntity().getCityId().equals(locationDto.getCityId())){
+        if(!oldLocation.getCityEntity().getCityId().equals(locationDto.getCity())){
 
-            CityEntity city = this.cityService.findCity(locationDto.getCityId());
+            CityEntity city = this.cityService.findCity(locationDto.getCity());
 
             oldLocation.setCityEntity(city);
 
         }
 
-        if(!oldLocation.getCounty().getCountyId().equals(locationDto.getCountyId())){
 
-            CountyEntity county = this.countyService.findCountyEntity(locationDto.getCountyId());
-
-            oldLocation.setCounty(county);
-        }
-
-        if(!oldLocation.getZipCode().getZipCodeId().equals(locationDto.getZipCodeId())){
-
-            ZipCodeEntity zipCode = this.zipCodeService.getZipCodeEntity(locationDto.getZipCodeId());
-
-            oldLocation.setZipCode(zipCode);
-
-        }
 
 
         LocationEntity saved = this.locationRepository.save(oldLocation);
@@ -103,9 +218,9 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<LocationResponse> createLocationsBulk(List<LocationDetailsRequest> locationDetailsRequests) {
+    public List<LocationResponse> createLocationsBulk(List<LocationDetailsRequestWithSenator> locationDetailsRequests) {
         List<LocationResponse> returnValue = new ArrayList<>();
-        for(LocationDetailsRequest item: locationDetailsRequests){
+        for(LocationDetailsRequestWithSenator item: locationDetailsRequests){
             LocationEntity location = new LocationEntity();
 
             location.setLocationId(utils.generateRandomID());

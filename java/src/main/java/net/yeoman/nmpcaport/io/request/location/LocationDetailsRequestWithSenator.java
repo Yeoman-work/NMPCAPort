@@ -1,12 +1,14 @@
 package net.yeoman.nmpcaport.io.request.location;
 
-public class LocationDetailsRequest {
+public class LocationDetailsRequestWithSenator {
 
     private String name;
     private String description;
     private String city;
     private String county;
     private String zipCode;
+    private String usSenator;
+
 
     public String getName() {
         return name;
@@ -46,5 +48,13 @@ public class LocationDetailsRequest {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getUsSenator() {
+        return usSenator;
+    }
+
+    public void setUsSenator(String usSenator) {
+        this.usSenator = usSenator;
     }
 }

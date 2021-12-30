@@ -2,6 +2,8 @@ package net.yeoman.nmpcaport.io.request.UsSenator;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.Date;
 
 public class USSenatorDetailsRequest {
 
@@ -10,8 +12,9 @@ public class USSenatorDetailsRequest {
     private String email;
     private String picture;
     private String website;
-    private String elected;
-    private String nextElection;
+    private String politicalParty;
+    private LocalDate elected;
+    private LocalDate nextElection;
 
     public String getFirstName() {
         return firstName;
@@ -53,21 +56,27 @@ public class USSenatorDetailsRequest {
         this.website = website;
     }
 
-    public String getElected() {
+    public LocalDate getElected() {
         return elected;
     }
 
-    public void setElected(String elected) {
+    public void setElected(LocalDate elected) {
         this.elected = elected;
     }
 
-    public String getNextElection() {
+    public LocalDate getNextElection() {
         return nextElection;
     }
 
-    public void setNextElection(String nextElection) {
+    public void setNextElection(LocalDate nextElection) {
         this.nextElection = nextElection;
     }
 
+    public String getPoliticalParty() {
+        return politicalParty;
+    }
 
+    public void setPoliticalParty(String politicalParty) {
+        this.politicalParty = politicalParty;
+    }
 }

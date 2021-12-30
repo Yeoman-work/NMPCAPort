@@ -86,32 +86,11 @@ const FederalRepForm = props =>{
                                 : null
                         }
                     </select>
-                    <label hidden={federalRepInfo.repType}>Party</label>
-                    <select className={'form-control'}
-                            hidden={federalRepInfo.repType}
-                            name={formFields.PARTY_AFFILIATION}
-                            onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
-                    >
-                        <option value="">Choose a Party</option>
-                        {
-                            federalRepInfo?
-                            federalRepInfo.formData.partiesList.map((party, index)=>{
-
-                                return(
-                                    <option key={index} value={party.partyId}>{party.name}</option>
-                                )
-                            })
-                                : null
-                        }
-                    </select>
-                </div>
-            </div>
-            {
-                !federalRepInfo.repType?
                     <div className={'row'}>
                         <div className={'col form-group'}>
-                            <label>Elected</label>
+                            <label hidden={federalRepInfo.repType}>Elected</label>
                             <input type="date"
+                                   hidden={federalRepInfo.repType}
                                    className={'form-control'}
                                    name={formFields.FEDERAL_REP_ELECTED}
                                    value={federalRepInfo.sen.elected}
@@ -119,41 +98,29 @@ const FederalRepForm = props =>{
                                    onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
                             />
                         </div>
-                        <div className={'col form-group'}>
-                            <label>Next Election</label>
-                            <input type="date"
-                                   className={'form-control'}
-                                   name={formFields.FEDERAL_REP_NEXT_ELECTION}
-                                   value={federalRepInfo.sen.nextElection}
-                                   pattern={'yyyy-MM-dd'}
-                                   onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
-                            />
-                        </div>
+
                     </div>
+                </div>
+            </div>
+            <div className={'form-group'}>
+                <label>Party</label>
+                <select className={'form-control w-50 m-auto'}
+                        name={formFields.PARTY_AFFILIATION}
+                        onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                >
+                    <option value="">Choose a Party</option>
+                    {
+                        federalRepInfo?
+                            federalRepInfo.formData.partiesList.map((party, index)=>{
 
-                    :
-
-                    <div className={'form-group'}>
-                        <label>Party</label>
-                        <select className={'form-control w-50 m-auto'}
-                                name={formFields.PARTY_AFFILIATION}
-                                onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
-                        >
-                            <option value="">Choose a Party</option>
-                            {
-                                federalRepInfo?
-                                    federalRepInfo.formData.partiesList.map((party, index)=>{
-
-                                        return(
-                                            <option key={index} value={party.partyId}>{party.name}</option>
-                                        )
-                                    })
-                                    : null
-                            }
-                        </select>
-                    </div>
-            }
-
+                                return(
+                                    <option key={index} value={party.partyId}>{party.name}</option>
+                                )
+                            })
+                            : null
+                    }
+                </select>
+            </div>
         </form>
     )
 }

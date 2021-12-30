@@ -1,6 +1,12 @@
 package net.yeoman.nmpcaport.shared.dto;
 
 
+import net.yeoman.nmpcaport.entities.LocationEntity;
+import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
+import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
+import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 public class USSenatorDto {
@@ -12,8 +18,13 @@ public class USSenatorDto {
     private String email;
     private String picture;
     private String website;
-    private String elected;
-    private String nextElection;
+    private String politicalParty;
+    private PoliticalPartyEntity politicalPartyEntity;
+    private LocationEntity locationEntity;
+    private PoliticalPartyResponse politicalPartyResponse;
+    private LocationResponse locationResponse;
+    private LocalDate elected;
+    private LocalDate nextElection;
     private Date createdAt;
     private Date updatedAt;
 
@@ -89,19 +100,59 @@ public class USSenatorDto {
         this.website = website;
     }
 
-    public String getElected() {
+    public LocalDate getElected() {
         return elected;
     }
 
-    public void setElected(String elected) {
+    public void setElected(LocalDate elected) {
         this.elected = elected;
     }
 
-    public String getNextElection() {
+    public LocalDate getNextElection() {
         return nextElection;
     }
 
-    public void setNextElection(String nextElection) {
+    public void setNextElection(LocalDate nextElection) {
         this.nextElection = nextElection;
+    }
+
+    public String getPoliticalParty() {
+        return politicalParty;
+    }
+
+    public void setPoliticalParty(String politicalParty) {
+        this.politicalParty = politicalParty;
+    }
+
+    public PoliticalPartyEntity getPoliticalPartyEntity() {
+        return politicalPartyEntity;
+    }
+
+    public void setPoliticalPartyEntity(PoliticalPartyEntity politicalPartyEntity) {
+        this.politicalPartyEntity = politicalPartyEntity;
+    }
+
+    public PoliticalPartyResponse getPoliticalPartyResponse() {
+        return politicalPartyResponse;
+    }
+
+    public void setPoliticalPartyResponse(PoliticalPartyResponse politicalPartyResponse) {
+        this.politicalPartyResponse = politicalPartyResponse;
+    }
+
+    public LocationEntity getLocationEntity() {
+        return locationEntity;
+    }
+
+    public void setLocationEntity(LocationEntity locationEntity) {
+        this.locationEntity = locationEntity;
+    }
+
+    public LocationResponse getLocationResponse() {
+        return locationResponse;
+    }
+
+    public void setLocationResponse(LocationResponse locationResponse) {
+        this.locationResponse = locationResponse;
     }
 }

@@ -38,7 +38,7 @@ const CongressionalDashboard = props =>{
     return(
         <div>
             <Header/>
-            <h1 className={'mt-5'}>Congressional Representatives <Link to={'/yeoman/government/addFederalRep'}><GiCongress/></Link> </h1>
+            <h1 className={'mt-5'}>Congressional Representatives <Link to={'/yeoman/government/addFederalRep/congressionalRep'}><GiCongress/></Link> </h1>
             <div className={'mt-5 pt-3'}>
                 {
                     reps?

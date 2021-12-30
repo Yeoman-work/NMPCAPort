@@ -1,11 +1,12 @@
 import React, {useEffect, useReducer } from "react";
 import axios from "axios";
 import produce from "immer";
-import {useNavigate} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import Header from "../components/Header";
 import FederalRepForm from "../components/FederalRepForm";
 import CongressionalRep from "../components/CongressionalRep";
 import PhoneNumberForm from "../components/PhoneNumberForm";
+import CongressionalRepElement from "../components/CongressionalRepElement";
 
 const {
        emailValidation,
@@ -316,6 +317,24 @@ const federalRepReducer = (federalRepState, action)=>{
 
             }
 
+        case FEDERAL_REP_FIELDS.REP_TYPE:
+
+            if(action.payload === 'senator'){
+
+                return produce(federalRepState, draft=>{
+
+                    draft.repType = false;
+                })
+
+            }else{
+
+                return produce(federalRepState, draft=>{
+
+                    draft.repType = true;
+                })
+
+            }
+
 
         default:
             return federalRepState;
@@ -352,7 +371,8 @@ const FEDERAL_REP_FIELDS ={
     DISTRICT_LIST: 'district list',
     REP_RESPONSE: 'rep response',
     SENATOR_RESPONSE: 'senator response',
-    FINISHED: 'finished'
+    FINISHED: 'finished',
+    REP_TYPE: 'repType'
 
 
 }
@@ -360,7 +380,9 @@ const FEDERAL_REP_FIELDS ={
 
 const CreateFederalRepView = props =>{
 
+    const params = useParams();
     const navigate = useNavigate();
+
 
     const [federalRepInfo, dispatchFederalRepInfo] = useReducer(federalRepReducer, {
 
@@ -427,6 +449,7 @@ const CreateFederalRepView = props =>{
             picture: ''.trim(),
             website: ''.trim(),
             districtResponse: {},
+            politicalParty: {}
 
         },
 
@@ -438,13 +461,31 @@ const CreateFederalRepView = props =>{
             picture: ''.trim(),
             website: ''.trim(),
             elected: ''.trim(),
-            nextElection: ''.trim()
+            nextElection: ''.trim(),
+            politicalParty: {}
         },
 
         finish: false,
 
         repType: true,
-    })
+    });
+
+
+    useEffect(()=>{
+
+        if(params.type === 'senator'){
+
+            dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.REP_TYPE, payload: params.type})
+
+        }else{
+
+            dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.REP_TYPE, payload: params.type})
+
+        }
+
+    }, [])
+
+
 
 
 
@@ -602,14 +643,16 @@ const CreateFederalRepView = props =>{
 
             try{
 
-                const createSenator = await axios.post('http://localhost:8080/stateSenators', federalRepInfo.sen,{
+                const createSenator = await axios.post('http://localhost:8080/usSenators', federalRepInfo.sen,{
 
                     headers:{
                         Authorization: localStorage.getItem('token')
                     }
                 })
 
+                console.log(createSenator.data)
                 dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.SENATOR_RESPONSE, payload: {...createSenator.data}})
+                dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.FINISHED})
 
             }catch(error){
 
@@ -622,6 +665,8 @@ const CreateFederalRepView = props =>{
 
 
 
+
+
     const finish = (e) =>{
 
         navigate('/yeoman/government/')
@@ -631,7 +676,7 @@ const CreateFederalRepView = props =>{
     return(
         <div>
             <Header/>
-            <div className={'w-50 m-auto'}>
+            <div className={'m-auto'}>
                 <button hidden={federalRepInfo.finish} disabled={federalRepInfo.repType} onClick={(e)=>dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.REP_SELECTOR})}>{'Congressional Representatives'}</button>
                 <button hidden={federalRepInfo.finish} disabled={!federalRepInfo.repType} onClick={(e)=>dispatchFederalRepInfo({type: FEDERAL_REP_FIELDS.REP_SELECTOR})}>{'US Senator'}</button>
                 {
@@ -644,9 +689,9 @@ const CreateFederalRepView = props =>{
                         />
                     :
                     <div>
-                        <CongressionalRep
-                            rep={federalRepInfo.repResponse}
-                            district={federalRepInfo.repResponse.districtResponse}
+                        <CongressionalRepElement
+                            rep={federalRepInfo.repType? federalRepInfo.repResponse : federalRepInfo.senatorResponse}
+                            repType={federalRepInfo.repType}
                         />
                         <button>Add Phone Numbers Location</button>
                         <button onClick={(e)=>finish(e)}>Finish</button>
