@@ -4,10 +4,11 @@ public class LocationDetailsRequestWithSenator {
 
     private String name;
     private String description;
+    private String streetAddress;
     private String city;
     private String county;
     private String zipCode;
-    private String usSenator;
+
 
 
     public String getName() {
@@ -50,11 +51,11 @@ public class LocationDetailsRequestWithSenator {
         this.zipCode = zipCode;
     }
 
-    public String getUsSenator() {
-        return usSenator;
+    public String getStreetAddress() {
+        return streetAddress;
     }
 
-    public void setUsSenator(String usSenator) {
-        this.usSenator = usSenator;
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 }

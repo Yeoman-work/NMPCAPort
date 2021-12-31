@@ -4,6 +4,7 @@ import {useParams} from "react-router";
 import Header from "../components/Header";
 import LocationForm from "../components/LocationForm";
 import CongressionalRep from "../components/CongressionalRep";
+import OfficeLocationElement from "../components/OfficeLocationElement";
 
 
 
@@ -26,7 +27,7 @@ const USSenatorOffice = props =>{
                     }
                 })
 
-
+                console.log(senatorResponse.data);
                 setSenator(senatorResponse.data);
 
             }catch(error){
@@ -37,14 +38,19 @@ const USSenatorOffice = props =>{
         })()
 
 
-    }, [])
+    }, [params])
 
     const submitHandler = async (e, locationList, senatorId) =>{
         e.preventDefault();
-
+        console.log(locationList)
+        const  locationDetailsRequestWithSenatorList = [...locationList];
         try{
 
-            const locationResponse = await axios.post('http://localhost:8080/locations/usSenator/' + senatorId, locationList, {
+            const locationResponse = await axios.post('http://localhost:8080/locations/usSenator/' + senatorId,{
+
+                locationDetailsRequestWithSenatorList
+
+            }, {
 
                 headers:{
 
@@ -52,24 +58,30 @@ const USSenatorOffice = props =>{
                 }
             })
 
+            console.log(locationResponse.data);
+
         }catch(error){
 
+            console.log(error.response)
 
         }
     }
 
 
     return(
-        <div className={''}>
+        <div>
             <Header/>
             <div className={'mt-5 pt-5 mb-5 height800 overflow-auto'}>
                 <CongressionalRep
                     rep={senator}
                     repType={false}
                 />
+                <OfficeLocationElement
+                    offices={senator.locationResponses}
+                />
                 <div className={'w-75 m-auto mt-5 pt-5'}>
                     <LocationForm
-                        senator={senator}
+                        senatorId={senator.senatorId}
                         handler={submitHandler}
                     />
                 </div>

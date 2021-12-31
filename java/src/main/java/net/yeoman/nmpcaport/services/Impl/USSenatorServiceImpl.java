@@ -1,13 +1,18 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.entities.OfficeAssignmentEntity;
 import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
 import net.yeoman.nmpcaport.entities.USSenatorEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.PoliticalPartyServiceException;
 import net.yeoman.nmpcaport.exception.UsSenatorServiceException;
 import net.yeoman.nmpcaport.io.repositories.USSenatorRepository;
+import net.yeoman.nmpcaport.io.response.County.CountyResponse;
+import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
 import net.yeoman.nmpcaport.io.response.USSenator.USSenatorResponse;
+import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.services.USSenatorService;
 import net.yeoman.nmpcaport.shared.dto.USSenatorDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -38,14 +43,28 @@ public class USSenatorServiceImpl implements USSenatorService {
 
     @Override
     public USSenatorDto getSenator(String senatorId){
-
+        ModelMapper modelMapper = new ModelMapper();
         //get senator entity
         USSenatorEntity usSenatorEntity = this.usSenatorRepository.findBySenatorId(senatorId);
         //convert to Dto
-        USSenatorDto usSenatorDto = new ModelMapper().map(usSenatorEntity, USSenatorDto.class);
+        USSenatorDto usSenatorDto = modelMapper.map(usSenatorEntity, USSenatorDto.class);
 
         //convert political party entity to response object
         usSenatorDto.setPoliticalPartyResponse(new ModelMapper().map(usSenatorDto.getPoliticalPartyEntity(), PoliticalPartyResponse.class));
+
+        List<LocationResponse> locationResponseList = new ArrayList<>();
+        for(OfficeAssignmentEntity assignment: usSenatorDto.getOfficeAssignmentEntities()){
+
+            LocationResponse locationResponse = modelMapper.map(assignment.getLocationEntity(), LocationResponse.class);
+
+            locationResponse.setCityResponse(modelMapper.map(assignment.getLocationEntity().getCityEntity(), CityResponse.class));
+            locationResponse.setCountyResponse(modelMapper.map(assignment.getLocationEntity().getCountyEntity(), CountyResponse.class));
+            locationResponse.setZipCodeResponse(modelMapper.map(assignment.getLocationEntity().getZipCodeEntity(), ZipCodeResponse.class));
+
+            locationResponseList.add(locationResponse);
+        }
+
+        usSenatorDto.setLocationResponses(locationResponseList);
 
         return usSenatorDto;
     }
@@ -132,7 +151,8 @@ public class USSenatorServiceImpl implements USSenatorService {
 
     @Override
     public USSenatorEntity getUSSenatorEntity(String senatorId) {
-        return null;
+
+        return this.usSenatorRepository.findBySenatorId(senatorId);
     }
 
     @Override

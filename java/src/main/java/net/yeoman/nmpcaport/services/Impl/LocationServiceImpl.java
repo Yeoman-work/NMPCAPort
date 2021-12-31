@@ -29,6 +29,9 @@ public class LocationServiceImpl implements LocationService {
     private USSenatorServiceImpl usSenatorService;
 
     @Autowired
+    OfficeAssignmentServiceImpl officeAssignmentService;
+
+    @Autowired
     private CityServiceImpl cityService;
 
     @Autowired
@@ -85,14 +88,27 @@ public class LocationServiceImpl implements LocationService {
             //convert dto to entity
             LocationEntity preSavedLocation = modelMapper.map(locationDto, LocationEntity.class);
 
+            System.out.println("read here");
+            System.out.println(preSavedLocation.getStreetAddress());
+
+            preSavedLocation.setLocationId(utils.generateRandomID());
+
             //get US Senator
             USSenatorEntity usSenatorEntity = this.usSenatorService.getUSSenatorEntity(senatorId);
 
             //throw error if senator doesn't exist
             if(usSenatorEntity == null) throw new UsSenatorServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-            //get all office assignments
-            List<OfficeAssignmentEntity> officeAssignments = preSavedLocation.getOfficeAssignmentEntities();
+            //office assignment list
+            List<OfficeAssignmentEntity> officeAssignments = new ArrayList<>();
+
+            //check for office entities
+            if(preSavedLocation.getOfficeAssignmentEntities() != null){
+
+                officeAssignments = preSavedLocation.getOfficeAssignmentEntities();
+
+            }
+
 
             // new office assignment entity
             OfficeAssignmentEntity officeAssignmentEntity = new OfficeAssignmentEntity();
@@ -103,7 +119,7 @@ public class LocationServiceImpl implements LocationService {
             //assign senator to office assignment
             officeAssignmentEntity.setUsSenatorEntity(usSenatorEntity);
 
-            //save assignments to list
+            //set assignments to list
             officeAssignments.add(officeAssignmentEntity);
 
             //assign to location
@@ -140,6 +156,10 @@ public class LocationServiceImpl implements LocationService {
 
             //save location
             LocationEntity savedLocation = this.locationRepository.save(preSavedLocation);
+
+            officeAssignmentEntity.setLocationEntity(savedLocation);
+
+            this.officeAssignmentService.createOfficeAssignment(officeAssignmentEntity);
 
             //add to list that will be returned
             returnValue.add(modelMapper.map(preSavedLocation, LocationDto.class));

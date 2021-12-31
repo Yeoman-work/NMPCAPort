@@ -2,12 +2,14 @@ package net.yeoman.nmpcaport.shared.dto;
 
 
 import net.yeoman.nmpcaport.entities.LocationEntity;
+import net.yeoman.nmpcaport.entities.OfficeAssignmentEntity;
 import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
 import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 public class USSenatorDto {
 
@@ -21,6 +23,8 @@ public class USSenatorDto {
     private String politicalParty;
     private PoliticalPartyEntity politicalPartyEntity;
     private LocationEntity locationEntity;
+    private List<OfficeAssignmentEntity> officeAssignmentEntities;
+    private List<LocationResponse> locationResponses;
     private PoliticalPartyResponse politicalPartyResponse;
     private LocationResponse locationResponse;
     private LocalDate elected;
@@ -154,5 +158,21 @@ public class USSenatorDto {
 
     public void setLocationResponse(LocationResponse locationResponse) {
         this.locationResponse = locationResponse;
+    }
+
+    public List<OfficeAssignmentEntity> getOfficeAssignmentEntities() {
+        return officeAssignmentEntities;
+    }
+
+    public void setOfficeAssignmentEntities(List<OfficeAssignmentEntity> officeAssignmentEntities) {
+        this.officeAssignmentEntities = officeAssignmentEntities;
+    }
+
+    public List<LocationResponse> getLocationResponses() {
+        return locationResponses;
+    }
+
+    public void setLocationResponses(List<LocationResponse> locationResponses) {
+        this.locationResponses = locationResponses;
     }
 }

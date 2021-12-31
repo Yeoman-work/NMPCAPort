@@ -11,6 +11,10 @@
     height: 500px;
 }
 
+.height650{
+    height: 650px;
+}
+
 .height100{
     height: 100px;
 }
@@ -25,4 +29,8 @@
 
 .height700{
     height: 700px;
+}
+
+.height800{
+    height: 800px;
 }

@@ -10,6 +10,7 @@ public class LocationResponse {
 
     private String name;
     private String description;
+    private String streetAddress;
     private CityResponse cityResponse;
     private ZipCodeResponse zipCodeResponse;
     private CountyResponse countyResponse;
@@ -71,5 +72,13 @@ public class LocationResponse {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 }

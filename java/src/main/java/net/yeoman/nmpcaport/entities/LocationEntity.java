@@ -21,23 +21,25 @@ public class LocationEntity implements Serializable {
     private String locationId;
 
     @NotBlank(message = "required")
+    @Size(min=3, max=25)
     private String name;
 
-    @Size(max = 256)
+    @Size(min=5, max = 256)
     private String description;
 
     @NotBlank(message = "required")
+    @Size(min=5, max=100)
     private String streetAddress;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_entity_id")
     private CityEntity cityEntity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "county_entity_id")
     private CountyEntity countyEntity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zip_code_entity_id")
     private ZipCodeEntity zipCodeEntity;
 

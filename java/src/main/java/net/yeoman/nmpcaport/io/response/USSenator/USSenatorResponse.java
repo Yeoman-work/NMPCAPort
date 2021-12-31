@@ -1,12 +1,12 @@
 package net.yeoman.nmpcaport.io.response.USSenator;
 
+import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 public class USSenatorResponse {
 
@@ -19,6 +19,7 @@ public class USSenatorResponse {
     private LocalDate elected;
     private LocalDate nextElection;
     private PoliticalPartyResponse politicalPartyResponse;
+    private List<LocationResponse> locationResponses;
     private Date createdAt;
     private Date updatedAt;
 
@@ -108,5 +109,13 @@ public class USSenatorResponse {
 
     public void setPoliticalPartyResponse(PoliticalPartyResponse politicalPartyResponse) {
         this.politicalPartyResponse = politicalPartyResponse;
+    }
+
+    public List<LocationResponse> getLocationResponses() {
+        return locationResponses;
+    }
+
+    public void setLocationResponses(List<LocationResponse> locationResponses) {
+        this.locationResponses = locationResponses;
     }
 }

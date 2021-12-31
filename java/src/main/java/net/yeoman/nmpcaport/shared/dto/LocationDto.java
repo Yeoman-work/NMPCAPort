@@ -14,6 +14,7 @@ public class LocationDto {
     private Long id;
     private String locationId;
     private String name;
+    private String streetAddress;
     private String description;
     private String city;
     private String county;
@@ -193,4 +194,11 @@ public class LocationDto {
         this.usSenator = usSenator;
     }
 
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
 }
