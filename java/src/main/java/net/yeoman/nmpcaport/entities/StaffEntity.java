@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "staff")
@@ -30,7 +31,11 @@ public class StaffEntity implements Serializable {
     @Size(min = 3, max = 25, message = "must be between 3 and 25 characters")
     private String lastName;
 
+    @Size(min=3, max = 50)
+    private String title;
+
     @Email(message = "Please enter a valid email address")
+    @Size(max = 150)
     private String email;
 
     @Column(updatable = false)
@@ -49,6 +54,13 @@ public class StaffEntity implements Serializable {
 
         this.updatedAt = new Date();
     }
+
+    @OneToMany(mappedBy = "staffEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AssignedNumberEntity> assignedNumberEntities;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "u_s_senator_entity_id")
+    private USSenatorEntity usSenatorEntity;
 
     public StaffEntity() {
     }
@@ -107,5 +119,29 @@ public class StaffEntity implements Serializable {
 
     public void setEmail(String email) {
         this.email = email.trim().toLowerCase();
+    }
+
+    public USSenatorEntity getUsSenatorEntity() {
+        return usSenatorEntity;
+    }
+
+    public void setUsSenatorEntity(USSenatorEntity usSenatorEntity) {
+        this.usSenatorEntity = usSenatorEntity;
+    }
+
+    public List<AssignedNumberEntity> getAssignedNumberEntities() {
+        return assignedNumberEntities;
+    }
+
+    public void setAssignedNumberEntities(List<AssignedNumberEntity> assignedNumberEntities) {
+        this.assignedNumberEntities = assignedNumberEntities;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

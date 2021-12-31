@@ -14,6 +14,7 @@ import FederalRepView from "./views/FederalRepView";
 import CongressionalDashboard from "./views/CongressionalDashboard";
 import USSenatorsDashboard from "./views/USSenatorsDashboard";
 import USSenatorOffice from "./views/USSenatorOffice";
+import USSenatorStaff from "./views/USSenatorStaff";
 
 function App() {
   return (
@@ -46,6 +47,9 @@ function App() {
                     </Route>
                     <Route path={'location'}>
                         <Route path={'senator/:id'} element={<USSenatorOffice/>}/>
+                    </Route>
+                    <Route path={'staff'}>
+                        <Route path={'senator/:id'} element={<USSenatorStaff/>}/>
                     </Route>
                 </Route>
             </Routes>

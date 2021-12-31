@@ -4,12 +4,12 @@ import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.staff.StaffResponse;
 
-
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-public class USSenatorResponse {
+public class USSenatorStaffResponse {
+
 
     private String senatorId;
     private String firstName;
@@ -19,9 +19,8 @@ public class USSenatorResponse {
     private String picture;
     private LocalDate elected;
     private LocalDate nextElection;
-    private StaffResponse staffResponse;
+    private List<StaffResponse> staffResponses;
     private PoliticalPartyResponse politicalPartyResponse;
-    private List<LocationResponse> locationResponses;
     private Date createdAt;
     private Date updatedAt;
 
@@ -47,22 +46,6 @@ public class USSenatorResponse {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public String getEmail() {
@@ -105,6 +88,14 @@ public class USSenatorResponse {
         this.nextElection = nextElection;
     }
 
+    public List<StaffResponse> getStaffResponses() {
+        return staffResponses;
+    }
+
+    public void setStaffResponses(List<StaffResponse> staffResponses) {
+        this.staffResponses = staffResponses;
+    }
+
     public PoliticalPartyResponse getPoliticalPartyResponse() {
         return politicalPartyResponse;
     }
@@ -113,19 +104,19 @@ public class USSenatorResponse {
         this.politicalPartyResponse = politicalPartyResponse;
     }
 
-    public List<LocationResponse> getLocationResponses() {
-        return locationResponses;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setLocationResponses(List<LocationResponse> locationResponses) {
-        this.locationResponses = locationResponses;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public StaffResponse getStaffResponse() {
-        return staffResponse;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setStaffResponse(StaffResponse staffResponse) {
-        this.staffResponse = staffResponse;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

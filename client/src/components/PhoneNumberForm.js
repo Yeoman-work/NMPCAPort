@@ -11,12 +11,13 @@ const PhoneNumberForm = props =>{
                 formFields,
                 phoneNumber,
                 phoneNumberList,
-                handler
+                handler,
+                divClass
         } = props;
 
 
     return(
-        <div className={'w-75 m-auto pb-3'}>
+        <div className={divClass}>
             <form className={'mb-3'}>
                 <div className={'row'}>
                     <div className={'col'}>

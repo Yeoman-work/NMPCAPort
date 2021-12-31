@@ -47,8 +47,8 @@ public class AssignedNumberEntity implements Serializable {
     private StateSenatorEntity stateSenatorEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "congressional_district_entity_id")
-    private CongressionalDistrictEntity congressionalDistrictEntity;
+    @JoinColumn(name = "u_s_senator_entity_id")
+    private USSenatorEntity usSenatorEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "congressional_rep_entity_id")
@@ -122,12 +122,12 @@ public class AssignedNumberEntity implements Serializable {
         this.stateSenatorEntity = stateSenatorEntity;
     }
 
-    public CongressionalDistrictEntity getCongressionalDistrictEntity() {
-        return congressionalDistrictEntity;
+    public USSenatorEntity getUsSenatorEntity() {
+        return usSenatorEntity;
     }
 
-    public void setCongressionalDistrictEntity(CongressionalDistrictEntity congressionalDistrictEntity) {
-        this.congressionalDistrictEntity = congressionalDistrictEntity;
+    public void setUsSenatorEntity(USSenatorEntity usSenatorEntity) {
+        this.usSenatorEntity = usSenatorEntity;
     }
 
     public ContactEntity getContactEntity() {
@@ -153,4 +153,5 @@ public class AssignedNumberEntity implements Serializable {
     public void setCongressionalRepEntity(CongressionalRepEntity congressionalRepEntity) {
         this.congressionalRepEntity = congressionalRepEntity;
     }
+
 }

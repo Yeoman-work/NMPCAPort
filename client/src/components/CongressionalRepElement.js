@@ -63,7 +63,7 @@ const CongressionalRepElement = props =>{
                     :
 
                     <div className={'col'}>
-                        <h3>Staff <Link to={''}><IoIosPeople/></Link></h3>
+                        <h3>Staff <Link to={'/yeoman/staff/senator/' + rep.senatorId}><IoIosPeople/></Link></h3>
                     </div>
 
             }
