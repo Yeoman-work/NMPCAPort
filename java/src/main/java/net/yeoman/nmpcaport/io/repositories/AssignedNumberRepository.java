@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface AssignedNumberRepository extends CrudRepository<AssignedNumberEntity, Long> {
 
     AssignedNumberEntity findByAssignmentId(String assignmentId);
+
+    Boolean existsByAssignmentId(String assignmentId);
 }

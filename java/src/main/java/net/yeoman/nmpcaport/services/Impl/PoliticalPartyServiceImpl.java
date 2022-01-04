@@ -1,8 +1,8 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.services.PoliticalPartyService;
 import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
 import net.yeoman.nmpcaport.io.repositories.PoliticalPartyRepository;
-import net.yeoman.nmpcaport.services.PoliticalPartyService;
 import net.yeoman.nmpcaport.shared.dto.PoliticalPartyDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;

@@ -11,14 +11,15 @@ const TextInputField = props =>{
         divClass,
         onChange,
         fieldValue,
-        name
+        name,
+        type
     } = props
 
 
     return(
         <div className={divClass}>
             <label>{label}</label>
-            <input type="text"
+            <input type={type}
                    name={name}
                    value={fieldValue}
                    className={fieldClass}

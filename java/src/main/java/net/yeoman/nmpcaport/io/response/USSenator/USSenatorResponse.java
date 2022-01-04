@@ -19,7 +19,7 @@ public class USSenatorResponse {
     private String picture;
     private LocalDate elected;
     private LocalDate nextElection;
-    private StaffResponse staffResponse;
+    private List<StaffResponse> staffResponses;
     private PoliticalPartyResponse politicalPartyResponse;
     private List<LocationResponse> locationResponses;
     private Date createdAt;
@@ -121,11 +121,11 @@ public class USSenatorResponse {
         this.locationResponses = locationResponses;
     }
 
-    public StaffResponse getStaffResponse() {
-        return staffResponse;
+    public List<StaffResponse> getStaffResponses() {
+        return staffResponses;
     }
 
-    public void setStaffResponse(StaffResponse staffResponse) {
-        this.staffResponse = staffResponse;
+    public void setStaffResponses(List<StaffResponse> staffResponses) {
+        this.staffResponses = staffResponses;
     }
 }

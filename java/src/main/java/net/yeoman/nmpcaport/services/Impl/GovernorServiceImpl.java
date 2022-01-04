@@ -1,8 +1,8 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.services.GovernorService;
 import net.yeoman.nmpcaport.entities.GovernorEntity;
 import net.yeoman.nmpcaport.io.repositories.GovernorRepository;
-import net.yeoman.nmpcaport.services.GovernorService;
 import net.yeoman.nmpcaport.shared.dto.GovernorDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;

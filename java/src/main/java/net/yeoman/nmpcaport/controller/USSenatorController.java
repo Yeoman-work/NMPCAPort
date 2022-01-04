@@ -1,15 +1,12 @@
 package net.yeoman.nmpcaport.controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import net.yeoman.nmpcaport.io.request.UsSenator.USSenatorDetailsRequest;
 import net.yeoman.nmpcaport.io.response.USSenator.USSenatorResponse;
 import net.yeoman.nmpcaport.services.Impl.USSenatorServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.USSenatorDto;
-import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

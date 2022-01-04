@@ -1,10 +1,10 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.services.GovernorStatusService;
 import net.yeoman.nmpcaport.entities.GovernorStatusEntity;
 import net.yeoman.nmpcaport.io.request.governorStatus.GovernorStatusRequest;
 import net.yeoman.nmpcaport.io.response.GovernorStatus.GovernorStatusResponse;
 import net.yeoman.nmpcaport.io.repositories.GovernorStatusRepository;
-import net.yeoman.nmpcaport.services.GovernorStatusService;
 import net.yeoman.nmpcaport.shared.dto.GovernorStatusDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;

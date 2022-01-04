@@ -1,10 +1,10 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.services.NMSenateCommitteeService;
 import net.yeoman.nmpcaport.entities.NMSenateCommitteeEntity;
 import net.yeoman.nmpcaport.io.request.NMSenateCommittee.NMSenateCommitteesList;
 import net.yeoman.nmpcaport.io.response.nmSenateCommittee.NMSenateCommitteeResponse;
 import net.yeoman.nmpcaport.io.repositories.NMSenateCommitteeRepository;
-import net.yeoman.nmpcaport.services.NMSenateCommitteeService;
 import net.yeoman.nmpcaport.shared.dto.NMSenateCommitteeDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,7 +5,9 @@ import net.yeoman.nmpcaport.io.repositories.AssignedNumberRepository;
 import net.yeoman.nmpcaport.services.AssignedNumberService;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AssignedNumberServiceImpl implements AssignedNumberService {
 
     @Autowired
@@ -42,4 +44,12 @@ public class AssignedNumberServiceImpl implements AssignedNumberService {
 
         return assignedNumberEntity;
     }
+
+    @Override
+    public Boolean existByAssignmentId(String assignmentID) {
+
+        return this.assignedNumberRepository.existsByAssignmentId(assignmentID);
+    }
+
+
 }

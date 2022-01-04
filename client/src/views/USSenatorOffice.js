@@ -40,13 +40,13 @@ const USSenatorOffice = props =>{
 
     }, [params])
 
-    const submitHandler = async (e, locationList, senatorId) =>{
+    const submitHandler = async (e, locationList, id) =>{
         e.preventDefault();
         console.log(locationList)
         const  locationDetailsRequestWithSenatorList = [...locationList];
         try{
 
-            const locationResponse = await axios.post('http://localhost:8080/locations/usSenator/' + senatorId,{
+            const locationResponse = await axios.post('http://localhost:8080/locations/usSenator/' + id,{
 
                 locationDetailsRequestWithSenatorList
 
@@ -81,7 +81,7 @@ const USSenatorOffice = props =>{
                 />
                 <div className={'w-75 m-auto mt-5 pt-5'}>
                     <LocationForm
-                        senatorId={senator.senatorId}
+                        id={senator.senatorId}
                         handler={submitHandler}
                     />
                 </div>

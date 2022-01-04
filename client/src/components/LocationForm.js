@@ -157,12 +157,14 @@ const locationReducer = (locationState, action) =>{
         case LOCATION_FIELDS.LOCATION_LIST:
 
             return produce(locationState, draft=>{
-
+                console.log(locationState.location.rep);
+                const rep = locationState.location.rep;
                 draft.locationDisplayList = [...locationState.locationDisplayList, locationState.locationDisplay];
                 draft.locationList = [...locationState.locationList, locationState.location];
 
                 draft.locationDisplay = {...clearData};
                 draft.location = {...clearData};
+                draft.location.rep = rep;
             })
 
         case LOCATION_FIELDS.REMOVE_LOCATION:
@@ -235,14 +237,15 @@ const clearData = {
     description: ''.toLowerCase().trim(),
     city: ''.trim(),
     county: ''.trim(),
-    zipCode: ''.trim()
+    zipCode: ''.trim(),
+    rep: ''.trim()
 }
 
 
 
 const LocationForm = props =>{
 
-    const {senatorId, handler, formLabel } = props;
+    const {id, handler, formLabel } = props;
     const [locationInfo, dispatchLocationInfo] = useReducer(locationReducer, {
 
         location:{
@@ -251,7 +254,8 @@ const LocationForm = props =>{
             description: ''.toLowerCase().trim(),
             city: ''.trim(),
             county: ''.trim(),
-            zipCode: ''.trim()
+            zipCode: ''.trim(),
+            rep: id,
         },
 
         locationDisplay:{
@@ -508,7 +512,7 @@ const LocationForm = props =>{
                         })
                     }
                 </div>
-                <button disabled={locationInfo.locationList.length < 1} onClick={(e)=>handler(e, locationInfo.locationList, senatorId)}>Save Locations</button>
+                <button disabled={locationInfo.locationList.length < 1} onClick={(e)=>handler(e, locationInfo.locationList)}>Save Locations</button>
             </div>
 
 

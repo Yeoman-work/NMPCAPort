@@ -19,7 +19,7 @@ public class LocationDto {
     private String city;
     private String county;
     private String zipCode;
-    private String usSenator;
+    private String rep;
     private USSenatorEntity usSenatorEntity;
     private USSenatorResponse usSenatorResponse;
     private CongressionalRepEntity congressionalRepEntity;
@@ -186,12 +186,12 @@ public class LocationDto {
         this.updatedAt = updatedAt;
     }
 
-    public String getUsSenator() {
-        return usSenator;
+    public String getRep() {
+        return rep;
     }
 
-    public void setUsSenator(String usSenator) {
-        this.usSenator = usSenator;
+    public void setRep(String rep) {
+        this.rep = rep;
     }
 
     public String getStreetAddress() {

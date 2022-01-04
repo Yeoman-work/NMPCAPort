@@ -14,7 +14,7 @@ const CongressionalRepElement = props =>{
 
 
     return(
-        <div className={'row m-auto w-75 border rounded pt-4 pb-4'}>
+        <div className={'row m-auto w-75 border rounded pt-4 pb-4 '}>
             {
                 rep.districtResponse?
                     <div className={'col'}>
@@ -37,33 +37,106 @@ const CongressionalRepElement = props =>{
                     </div>
 
             }
-            {
-                rep.districtResponse?
 
-                    <div className={'col'}>
-                        <h3>Offices <Link to={''}><MdOutlineLocationCity/></Link></h3>
 
-                    </div>
+                {/*<div className={'col'}>*/}
+                {/*    <h3>Offices <Link to={'/yeoman/location/congressionalRep/' + rep.congressionalRepId}><MdOutlineLocationCity/></Link></h3>*/}
 
-                    :
+                {/*</div>*/}
 
-                    <div className={'col'}>
+
+
+                <div className={'col'}>
+                    {
+                        rep.districtResponse? <h3>Offices <Link to={'/yeoman/location/congressionalRep/' + rep.congressionalRepId}><MdOutlineLocationCity/></Link></h3>
+                            :
                         <h3>Offices <Link to={'/yeoman/location/senator/' + rep.senatorId}><MdOutlineLocationCity/></Link></h3>
+                    }
+                    {
+                        rep.locationResponses.map((location, index)=>{
 
-                    </div>
-            }
+                            return(
+                                <div key={index} className={'border rounded'}>
+                                    <h6>{location.name}</h6>
+                                    <p>{location.streetAddress}</p>
+                                    <p>{`${location.cityResponse.name} ${location.zipCodeResponse.name}`}</p>
+                                    <p>{`County of ${location.countyResponse.name}`}</p>
+                                </div>
+                            )
+                        })
+                    }
+
+                </div>
+
             {
 
                 rep.districtResponse?
 
                     <div className={'col'}>
-                        <h3>Staff <Link to={''}><IoIosPeople/></Link></h3>
+                        <h3>Staff <Link to={'/yeoman/staff/congressionalRep/' + rep.congressionalRepId}><IoIosPeople/></Link></h3>
+                        <div className={'height400 overflow-auto'}>
+                            {
+                                rep.staffResponses?
+                                rep.staffResponses.map((staff, index)=>{
+
+                                    return(
+                                        <div key={index} className={'border rounded overflow-auto'}>
+                                            <h6>{`${staff.firstName}  ${staff.lastName}`}</h6>
+                                            <p>{`Title ${staff.title}`}</p>
+                                            <div>
+                                                <p>Phone Numbers:</p>
+                                                {
+                                                    staff.phoneNumberResponses.map((phoneNumber, index)=>{
+
+                                                        return(
+                                                            <div key={index} className={'overflow-auto'}>
+                                                                <p>{ phoneNumber.number }</p>
+                                                                <p>{phoneNumber.description}</p>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                                    : null
+                            }
+                        </div>
                     </div>
 
                     :
 
                     <div className={'col'}>
                         <h3>Staff <Link to={'/yeoman/staff/senator/' + rep.senatorId}><IoIosPeople/></Link></h3>
+                        <div className={'height400 overflow-auto'}>
+                            {
+                                rep.staffResponses.map((staff, index)=>{
+
+                                    return(
+                                        <div key={index} className={'border rounded overflow-auto'}>
+                                            <h6>{`${staff.firstName}  ${staff.lastName}`}</h6>
+                                            <p>{`Title ${staff.title}`}</p>
+                                            <div>
+                                                <p>Phone Numbers:</p>
+                                                {
+                                                    staff.phoneNumberResponses.map((phoneNumber, index)=>{
+
+                                                        return(
+                                                            <div key={index} className={'overflow-auto'}>
+                                                                <p>{ phoneNumber.number }</p>
+                                                                <p>{phoneNumber.description}</p>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+
                     </div>
 
             }

@@ -7,7 +7,12 @@ import CongressionalRep from "../components/CongressionalRep";
 import StaffForm from "../components/StaffForm";
 import StaffElement from "../components/StaffElement";
 import PhoneNumberForm from "../components/PhoneNumberForm";
-const {isValidCharacter, phoneNumberBuilder} = require('../helper/generalFunctions')
+const {isValidCharacter,
+       phoneNumberBuilder,
+       fieldLengthRequired,
+       fieldLengthNotRequired,
+       emailValidation
+} = require('../helper/generalFunctions')
 
 
 const staffReducer = (staffInfoState, action) =>{
@@ -16,9 +21,17 @@ const staffReducer = (staffInfoState, action) =>{
 
         case STAFF_FIELDS.FIRST_NAME:
 
+            console.log(staffInfoState);
             if(action.payload.length <=25){
 
                 if(isValidCharacter(action.payload)){
+
+                    return produce(staffInfoState, draft=>{
+
+                        draft.staffMember.firstName = action.payload;
+                    })
+
+                }else if(action.payload.length < 1){
 
                     return produce(staffInfoState, draft=>{
 
@@ -46,6 +59,13 @@ const staffReducer = (staffInfoState, action) =>{
                         draft.staffMember.lastName = action.payload;
                     })
 
+                }else if(action.payload.length < 1){
+
+                    return produce(staffInfoState, draft=>{
+
+                        draft.staffMember.lastName = action.payload;
+                    })
+
                 }else{
 
                     return staffInfoState
@@ -61,6 +81,13 @@ const staffReducer = (staffInfoState, action) =>{
             if(action.payload.length <= 150){
 
                 if(isValidCharacter(action.payload)){
+
+                    return produce(staffInfoState, draft=>{
+
+                        draft.staffMember.email = action.payload;
+                    })
+
+                }else if(action.payload.length < 1){
 
                     return produce(staffInfoState, draft=>{
 
@@ -89,6 +116,13 @@ const staffReducer = (staffInfoState, action) =>{
                         draft.staffMember.title = action.payload;
                     })
 
+                }else if(action.payload.length < 1){
+
+                    return produce(staffInfoState, draft =>{
+
+                        draft.staffMember.title = action.payload;
+                    })
+
                 }else{
 
                     return staffInfoState;
@@ -104,7 +138,7 @@ const staffReducer = (staffInfoState, action) =>{
 
             return produce(staffInfoState, draft=>{
 
-                draft.phoneNumber.number = phoneNumberBuilder(action.payload, staffInfoState);
+                draft.phoneNumber.number = phoneNumberBuilder(action.payload, staffInfoState.phoneNumber.number);
             })
 
         case STAFF_FIELDS.PHONE_DESCRIPTION:
@@ -117,6 +151,14 @@ const staffReducer = (staffInfoState, action) =>{
 
                         draft.phoneNumber.description = action.payload;
                     })
+
+                }else if(action.payload.length < 1){
+
+                    return produce(staffInfoState, draft =>{
+
+                        draft.phoneNumber.description = action.payload;
+                    })
+
 
                 }else{
 
@@ -137,10 +179,12 @@ const staffReducer = (staffInfoState, action) =>{
             })
 
         case STAFF_FIELDS.PHONE_NUMBER_LIST:
-
+            console.log(staffInfoState)
             return produce(staffInfoState, draft=>{
 
-                draft.phoneNumberList = [...staffInfoState.phoneNumberList, action.payload];
+                draft.staffMember.phoneNumberList = [...staffInfoState.staffMember.phoneNumberList, staffInfoState.phoneNumber];
+
+                draft.phoneNumber = {...clearPhoneNumber};
             })
 
         default:
@@ -155,9 +199,15 @@ const STAFF_FIELDS ={
     EMAIL: 'email',
     TITLE: 'title',
     SENATOR: 'senator',
-    PHONE_NUMBER: 'phone number',
-    PHONE_DESCRIPTION: 'phone description',
+    PHONE_NUMBER: 'number',
+    PHONE_DESCRIPTION: 'description',
     PHONE_NUMBER_LIST: 'phone number list'
+}
+
+const clearPhoneNumber ={
+
+        number: ''.trim(),
+        description: ''.trim()
 }
 
 
@@ -167,11 +217,12 @@ const USSenatorStaff = props =>{
     const [staffInfo, dispatchStaffInfo] = useReducer(staffReducer, {
 
         staffMember:{
-
             title: ''.trim(),
             firstName: ''.trim().toLowerCase(),
             lastName: ''.trim().toLowerCase(),
-            email: ''.trim().toLowerCase()
+            email: ''.trim().toLowerCase(),
+            senator: params.id,
+            phoneNumberList: [],
         },
 
         senator: {},
@@ -181,9 +232,12 @@ const USSenatorStaff = props =>{
             description: ''.trim()
         },
 
-        phoneNumberList: [],
+
+
 
     })
+
+
 
 
 
@@ -206,11 +260,38 @@ const USSenatorStaff = props =>{
 
             }catch(error){
 
+                console.log(error.response)
             }
 
         })()
 
     }, [params])
+
+
+    const saveStaffMember = async (e)=>{
+        e.preventDefault();
+        console.log(staffInfo.staffMember)
+        try{
+
+            const savedStaffMember = await axios.post('http://localhost:8080/staff', {...staffInfo.staffMember}, {
+
+                headers:{
+
+                    Authorization: localStorage.getItem('token')
+                }
+            })
+
+            console.log(savedStaffMember);
+
+
+        }catch(error){
+
+            console.log(error.response);
+
+        }
+
+    }
+
 
 
     return(
@@ -234,9 +315,10 @@ const USSenatorStaff = props =>{
                 formFields={STAFF_FIELDS}
                 divClass={'w-50 m-auto pb-3 mt-5'}
                 phoneNumber={staffInfo.phoneNumber}
-                phoneNumberList={staffInfo.phoneNumberList}
+                phoneNumberList={staffInfo.staffMember.phoneNumberList}
                 dispatchFunction={dispatchStaffInfo}
             />
+            <button onClick={(e)=>saveStaffMember(e)} >Save Staff Member</button >
         </div>
     )
 }

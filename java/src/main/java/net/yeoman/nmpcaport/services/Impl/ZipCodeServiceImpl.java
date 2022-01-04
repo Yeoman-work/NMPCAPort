@@ -1,9 +1,9 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.services.ZipCodeService;
 import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.io.repositories.ZipCodeRepository;
-import net.yeoman.nmpcaport.services.ZipCodeService;
 import net.yeoman.nmpcaport.shared.dto.ZipCodeDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;

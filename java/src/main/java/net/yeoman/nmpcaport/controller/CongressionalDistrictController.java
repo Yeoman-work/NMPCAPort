@@ -7,8 +7,6 @@ import net.yeoman.nmpcaport.services.Impl.CongressionalDistrictServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.CongressionalDistrictDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

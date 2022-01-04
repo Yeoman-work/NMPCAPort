@@ -7,7 +7,6 @@ import net.yeoman.nmpcaport.services.Impl.PoliticalPartyServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.PoliticalPartyDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

@@ -95,17 +95,7 @@ public class ContactServiceImpl implements ContactService {
 
 
 
-        if(contactDto.getNetworkingGroups().size() > 0){
-            List<NetworkingGroupResponseModel> networkingGroupResponseList = new ArrayList<>();
 
-            for(NetworkingGroupEntity networkingGroup: contactEntity.getNetworkingGroups()){
-
-                networkingGroupResponseList.add(new ModelMapper().map(networkingGroup, NetworkingGroupResponseModel.class));
-
-            }
-
-            contactDto.setNetworkingGroupResponse(networkingGroupResponseList);
-        }
 
         if(contactDto.getHealthCenter() != null){
 
@@ -123,16 +113,7 @@ public class ContactServiceImpl implements ContactService {
 
         ContactEntity contactEntity = new ModelMapper().map(contactDto, ContactEntity.class);
 
-        if(contactDto.getNetworkingGroupIds().size() > 0){
-            List<NetworkingGroupEntity> networkingGroups = new ArrayList<>();
-            for(String networkingGroupId: contactDto.getNetworkingGroupIds()){
 
-                NetworkingGroupEntity networkingGroup = networkingGroupService.networkGroupEntityByNetworkingGroupId(networkingGroupId);
-                networkingGroups.add(networkingGroup);
-            }
-
-            contactEntity.setNetworkingGroups(networkingGroups);
-        }
 
         contactEntity.setContactId(utils.generateRandomID());
 
@@ -194,19 +175,7 @@ public class ContactServiceImpl implements ContactService {
         }
     	
     	//check if the user updated the networking groups
-    	if(contactDto.getNetworkingGroupIds().size() > 0) {
-    		
-    		List<NetworkingGroupEntity> networkEntityList = new ArrayList<>();
-    		
-    		for(String networkingGroupId: contactDto.getNetworkingGroupIds()) {
-    			
-    			 NetworkingGroupEntity networkingEntity = this.networkingGroupService.networkGroupEntityByNetworkingGroupId(networkingGroupId);
-    			 
-    			 networkEntityList.add(networkingEntity);
-    		}
-    		
-    		contactEntity.setNetworkingGroups(networkEntityList);
-    	}
+
 
         ContactEntity updatedContact = this.contactRepository.save(contactEntity);
 

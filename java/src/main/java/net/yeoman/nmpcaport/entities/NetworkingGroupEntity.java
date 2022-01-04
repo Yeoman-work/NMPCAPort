@@ -24,30 +24,20 @@ public class NetworkingGroupEntity implements Serializable {
 
     @NotBlank(message = "required")
     @Column(unique = true)
+    @Size(min= 3, max = 50)
     private String name;
 
-    @Size(min=5, max = 100, message = "must be between 5 and 100 characters")
+    @Size(min=5, max = 250, message = "must be between 5 and 250 characters")
     private String description;
 
     @Column(updatable = false)
     private Date createdAt;
     private Date updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "usersNetworkingGroups",
-            joinColumns = @JoinColumn(name = "networking_group_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_entity_id")
-    )
-    private List<UserEntity> users;
+    @OneToMany(mappedBy = "networkingGroupEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "contactsNetworkingGroups",
-            joinColumns = @JoinColumn(name = "networking_group_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "contact_entity_id")
-    )
-    public List<ContactEntity> contacts;
+
 
     @PrePersist
     protected void onCreate(){
@@ -71,7 +61,7 @@ public class NetworkingGroupEntity implements Serializable {
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.users = users;
+
     }
 
     public Long getId() {
@@ -122,19 +112,12 @@ public class NetworkingGroupEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<UserEntity> getUsers() {
-        return users;
+
+    public List<AssignedNetworkingGroupEntity> getAssignedNetworkingGroupEntities() {
+        return assignedNetworkingGroupEntities;
     }
 
-    public void setUsers(List<UserEntity> users) {
-        this.users = users;
-    }
-
-    public List<ContactEntity> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<ContactEntity> contacts) {
-        this.contacts = contacts;
+    public void setAssignedNetworkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
+        this.assignedNetworkingGroupEntities = assignedNetworkingGroupEntities;
     }
 }

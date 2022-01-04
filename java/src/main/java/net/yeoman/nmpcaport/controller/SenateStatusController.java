@@ -1,6 +1,5 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.entities.SenateStatusEntity;
 import net.yeoman.nmpcaport.io.request.SenateStatus.SenateStatusRequest;
 import net.yeoman.nmpcaport.io.request.SenateStatus.SenateStatusRequestList;
 import net.yeoman.nmpcaport.services.Impl.SenateStatusServiceImpl;

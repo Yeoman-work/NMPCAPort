@@ -44,6 +44,10 @@ public class OfficeAssignmentEntity implements Serializable {
     @JoinColumn(name = "location_entity_id")
     private LocationEntity locationEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "congressional_rep_entity_id")
+    private CongressionalRepEntity congressionalRepEntity;
+
 
     public OfficeAssignmentEntity() {
     }
@@ -94,5 +98,13 @@ public class OfficeAssignmentEntity implements Serializable {
 
     public void setLocationEntity(LocationEntity locationEntity) {
         this.locationEntity = locationEntity;
+    }
+
+    public CongressionalRepEntity getCongressionalRepEntity() {
+        return congressionalRepEntity;
+    }
+
+    public void setCongressionalRepEntity(CongressionalRepEntity congressionalRepEntity) {
+        this.congressionalRepEntity = congressionalRepEntity;
     }
 }

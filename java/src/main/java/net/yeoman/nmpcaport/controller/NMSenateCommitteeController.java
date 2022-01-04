@@ -1,11 +1,9 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.io.request.NMSenateCommittee.NMSenateCommitteeDetailsRequest;
 import net.yeoman.nmpcaport.io.request.NMSenateCommittee.NMSenateCommitteesList;
 import net.yeoman.nmpcaport.io.response.nmSenateCommittee.NMSenateCommitteeResponse;
 import net.yeoman.nmpcaport.services.Impl.NMSenateCommitteeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

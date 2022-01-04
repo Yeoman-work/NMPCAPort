@@ -1,8 +1,8 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.services.StateSenatorCountyService;
 import net.yeoman.nmpcaport.entities.StateSenateCountyEntity;
 import net.yeoman.nmpcaport.io.repositories.StateSenateCountyRepository;
-import net.yeoman.nmpcaport.services.StateSenatorCountyService;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 

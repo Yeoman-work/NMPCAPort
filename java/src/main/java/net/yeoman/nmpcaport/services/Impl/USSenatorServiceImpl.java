@@ -1,32 +1,29 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.entities.OfficeAssignmentEntity;
-import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
-import net.yeoman.nmpcaport.entities.USSenatorEntity;
+import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
+import net.yeoman.nmpcaport.io.response.staff.StaffResponse;
+import net.yeoman.nmpcaport.services.USSenatorService;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.PoliticalPartyServiceException;
 import net.yeoman.nmpcaport.exception.UsSenatorServiceException;
 import net.yeoman.nmpcaport.io.repositories.USSenatorRepository;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
-import net.yeoman.nmpcaport.io.response.USSenator.USSenatorResponse;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
-import net.yeoman.nmpcaport.services.USSenatorService;
+import net.yeoman.nmpcaport.shared.dto.StaffDto;
 import net.yeoman.nmpcaport.shared.dto.USSenatorDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
-import org.dom4j.rule.Mode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -43,9 +40,11 @@ public class USSenatorServiceImpl implements USSenatorService {
 
     @Override
     public USSenatorDto getSenator(String senatorId){
+
         ModelMapper modelMapper = new ModelMapper();
         //get senator entity
         USSenatorEntity usSenatorEntity = this.usSenatorRepository.findBySenatorId(senatorId);
+
         //convert to Dto
         USSenatorDto usSenatorDto = modelMapper.map(usSenatorEntity, USSenatorDto.class);
 
@@ -62,6 +61,34 @@ public class USSenatorServiceImpl implements USSenatorService {
             locationResponse.setZipCodeResponse(modelMapper.map(assignment.getLocationEntity().getZipCodeEntity(), ZipCodeResponse.class));
 
             locationResponseList.add(locationResponse);
+        }
+
+        if(usSenatorDto.getStaffEntities() != null){
+
+            List<StaffResponse> staffResponses = new ArrayList<>();
+
+            for(StaffEntity staff: usSenatorDto.getStaffEntities()){
+
+                StaffDto staffDto = modelMapper.map(staff, StaffDto.class);
+
+                if(staffDto.getAssignedNumberEntities() != null){
+
+                    List<PhoneNumberResponse> phoneNumberResponses = new ArrayList<>();
+
+                    for(AssignedNumberEntity assignedNumber: staffDto.getAssignedNumberEntities()){
+
+                        phoneNumberResponses.add(modelMapper.map(assignedNumber.getPhoneNumberEntity(), PhoneNumberResponse.class));
+
+                    }
+
+                    staffDto.setPhoneNumberResponses(phoneNumberResponses);
+                }
+
+                staffResponses.add(modelMapper.map(staffDto, StaffResponse.class));
+            }
+
+            usSenatorDto.setStaffResponses(staffResponses);
+
         }
 
         usSenatorDto.setLocationResponses(locationResponseList);
@@ -157,16 +184,60 @@ public class USSenatorServiceImpl implements USSenatorService {
 
     @Override
     public List<USSenatorDto> getAllSenators() {
-
+        ModelMapper modelMapper = new ModelMapper();
         List<USSenatorDto> returnValue = new ArrayList<>();
 
         List<USSenatorEntity> fromRepo = this.usSenatorRepository.findAll();
 
         for(USSenatorEntity senator: fromRepo){
 
-            USSenatorDto usSenatorDto = new ModelMapper().map(senator, USSenatorDto.class);
+            USSenatorDto usSenatorDto = modelMapper.map(senator, USSenatorDto.class);
 
             usSenatorDto.setPoliticalPartyResponse(new ModelMapper().map(usSenatorDto.getPoliticalPartyEntity(), PoliticalPartyResponse.class));
+
+            if(usSenatorDto.getOfficeAssignmentEntities() != null || usSenatorDto.getOfficeAssignmentEntities().size() > 0){
+
+                List<LocationResponse> officeLocations = new ArrayList<>();
+
+                for(OfficeAssignmentEntity officeAssignment: usSenatorDto.getOfficeAssignmentEntities()){
+
+                    LocationResponse locationResponse = modelMapper.map(officeAssignment.getLocationEntity(), LocationResponse.class);
+                    locationResponse.setCityResponse(modelMapper.map(officeAssignment.getLocationEntity().getCityEntity(), CityResponse.class));
+                    locationResponse.setCountyResponse(modelMapper.map(officeAssignment.getLocationEntity().getCountyEntity(), CountyResponse.class));
+                    locationResponse.setZipCodeResponse(modelMapper.map(officeAssignment.getLocationEntity().getZipCodeEntity(), ZipCodeResponse.class));
+
+                    officeLocations.add(locationResponse);
+                }
+
+                usSenatorDto.setLocationResponses(officeLocations);
+            }
+
+            if(usSenatorDto.getStaffEntities() != null){
+
+                List<StaffResponse> staffResponses = new ArrayList<>();
+
+                for(StaffEntity staffEntity: usSenatorDto.getStaffEntities()){
+
+                    StaffResponse staffResponse = modelMapper.map(staffEntity, StaffResponse.class);
+
+                    if(staffEntity.getAssignedNumberEntities() != null){
+
+                        List<PhoneNumberResponse> phoneNumberResponses = new ArrayList<>();
+
+                        for(AssignedNumberEntity assignedNumber: staffEntity.getAssignedNumberEntities()){
+
+                            phoneNumberResponses.add(modelMapper.map(assignedNumber.getPhoneNumberEntity(), PhoneNumberResponse.class));
+                        }
+
+                        staffResponse.setPhoneNumberResponses(phoneNumberResponses);
+                    }
+
+                    staffResponses.add(staffResponse);
+                }
+
+                usSenatorDto.setStaffResponses(staffResponses);
+            }
+
 
             returnValue.add(usSenatorDto);
 

@@ -11,4 +11,6 @@ public interface LocationRepository extends CrudRepository<LocationEntity, Long>
     List<LocationEntity> findAll();
 
     LocationEntity findByLocationId(String locationId);
+
+    Boolean existsByLocationId(String locationId);
 }

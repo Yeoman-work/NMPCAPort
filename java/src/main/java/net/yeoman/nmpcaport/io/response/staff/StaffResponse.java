@@ -1,11 +1,22 @@
 package net.yeoman.nmpcaport.io.response.staff;
 
+import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
+import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
+
+import java.util.Date;
+import java.util.List;
+
 public class StaffResponse {
 
     private String staffId;
     private String firstName;
+    private String title;
     private String lastName;
     private String email;
+    private List<PhoneNumberResponse> phoneNumberResponses;
+    private Date createdAt;
+    private Date updatedAt;
+
 
     public String getStaffId() {
         return staffId;
@@ -37,5 +48,37 @@ public class StaffResponse {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<PhoneNumberResponse> getPhoneNumberResponses() {
+        return phoneNumberResponses;
+    }
+
+    public void setPhoneNumberResponses(List<PhoneNumberResponse> phoneNumberResponses) {
+        this.phoneNumberResponses = phoneNumberResponses;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

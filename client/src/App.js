@@ -15,6 +15,9 @@ import CongressionalDashboard from "./views/CongressionalDashboard";
 import USSenatorsDashboard from "./views/USSenatorsDashboard";
 import USSenatorOffice from "./views/USSenatorOffice";
 import USSenatorStaff from "./views/USSenatorStaff";
+import CongressionalRepOffice from "./views/CongressionalRepOffice";
+import CongressionalRepStaff from "./views/CongressionalRepStaff";
+import CreateNetworkingGroupView from "./views/CreateNetworkingGroupView";
 
 function App() {
   return (
@@ -47,9 +50,14 @@ function App() {
                     </Route>
                     <Route path={'location'}>
                         <Route path={'senator/:id'} element={<USSenatorOffice/>}/>
+                        <Route path={'congressionalRep/:id'} element={<CongressionalRepOffice/>}/>
                     </Route>
                     <Route path={'staff'}>
                         <Route path={'senator/:id'} element={<USSenatorStaff/>}/>
+                        <Route path={'congressionalRep/:id'} element={<CongressionalRepStaff/>}/>
+                    </Route>
+                    <Route path={'networkingGroup'}>
+                        <Route path={'createNetworkingGroup'} element={<CreateNetworkingGroupView/>}/>
                     </Route>
                 </Route>
             </Routes>

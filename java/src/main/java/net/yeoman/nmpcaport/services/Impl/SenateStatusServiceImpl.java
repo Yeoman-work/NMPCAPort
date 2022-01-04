@@ -1,7 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.SenateStatusEntity;
-import net.yeoman.nmpcaport.io.repositories.SenateDistrictRepository;
 import net.yeoman.nmpcaport.io.repositories.SenateStatusRepository;
 import net.yeoman.nmpcaport.services.SenateStatusService;
 import net.yeoman.nmpcaport.shared.dto.SenateStatusDto;
@@ -9,7 +8,6 @@ import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;

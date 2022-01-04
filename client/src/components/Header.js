@@ -25,6 +25,9 @@ const Header = props =>{
                             <li className="nav-item">
                                 <Link className="nav-link" to={''}>Contacts</Link>
                             </li>
+                            <li className={"nav-item"}>
+                                <Link className={"nav-link"} to={'/yeoman/networkingGroup/createNetworkingGroup'}>Networking Groups</Link>
+                            </li>
                             <li className="nav-item dropdown">
                                 <Link className="nav-link dropdown-toggle" to={''} id="navbarDropdown" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">

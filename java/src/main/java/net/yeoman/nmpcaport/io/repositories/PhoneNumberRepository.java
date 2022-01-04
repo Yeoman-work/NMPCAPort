@@ -11,4 +11,10 @@ public interface PhoneNumberRepository extends CrudRepository<PhoneNumberEntity,
 
     PhoneNumberEntity findByPhoneNumberId(String phoneNumberId);
 
+    PhoneNumberEntity findByNumber(String number);
+
+    Boolean existsByPhoneNumberId(String phoneNumberId);
+
+    Boolean existsByNumber(String number);
+
 }

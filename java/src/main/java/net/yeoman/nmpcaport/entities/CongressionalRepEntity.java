@@ -64,6 +64,12 @@ public class CongressionalRepEntity implements Serializable {
     @OneToMany(mappedBy = "congressionalRepEntity" , cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<AssignedNumberEntity> assignedNumberEntities ;
 
+    @OneToMany(mappedBy = "congressionalRepEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OfficeAssignmentEntity> officeAssignmentEntities;
+
+    @OneToMany(mappedBy = "congressionalRepEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StaffEntity> staffEntities;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "congressional_district_entity_id")
     private CongressionalDistrictEntity districtEntity;
@@ -218,5 +224,21 @@ public class CongressionalRepEntity implements Serializable {
 
     public void setAssignedNumberEntities(List<AssignedNumberEntity> assignedNumberEntities) {
         this.assignedNumberEntities = assignedNumberEntities;
+    }
+
+    public List<OfficeAssignmentEntity> getOfficeAssignmentEntities() {
+        return officeAssignmentEntities;
+    }
+
+    public void setOfficeAssignmentEntities(List<OfficeAssignmentEntity> officeAssignmentEntities) {
+        this.officeAssignmentEntities = officeAssignmentEntities;
+    }
+
+    public List<StaffEntity> getStaffEntities() {
+        return staffEntities;
+    }
+
+    public void setStaffEntities(List<StaffEntity> staffEntities) {
+        this.staffEntities = staffEntities;
     }
 }

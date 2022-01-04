@@ -25,7 +25,7 @@ const PhoneNumberForm = props =>{
                         <div className={'form-group'}>
                             <label>Number</label>
                             <input type="tel"
-                                   pattern={'[0-9]{3}-[0-9]{2}-[0-9]{3}'}
+                                   pattern={'[0-9]{3}-[0-9]{3}-[0-9]{4}'}
                                    name={formFields.PHONE_NUMBER}
                                    className={'form-control'}
                                    value={phoneNumber.number}
@@ -43,18 +43,18 @@ const PhoneNumberForm = props =>{
                             />
                             { phoneNumber.number.length && fieldLength(5, 25, phoneNumber.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, formFields.PHONE_DESCRIPTION)}</div> : null}
                         </div>
-                        <button disabled={phoneNumberCheck(phoneNumber)} onClick={handler}>Add Phone Number</button>
+                        <button disabled={phoneNumberCheck(phoneNumber)} onClick={(e)=>dispatchFunction({type: formFields.PHONE_NUMBER_LIST})}>Add Phone Number</button>
                     </div>
                     <div className={'col'}>
                         <label>Added Phone Number</label>
-                        <div className={'pt-2'}>
+                        <div className={'pt-2 height200 overflow-auto'}>
                             {
                             phoneNumber?
                              phoneNumberList.map((number, index)=>{
 
                                  return(
                                      <div key={index} className={'mt-2 border w-50 m-auto'}>
-                                        <p>
+                                        <p className={'w-75 overflow-hidden m-auto'}>
                                             <strong>Number:</strong><br/>
                                              {number.number}<br/>
                                             <strong>Description:</strong><br/>

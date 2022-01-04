@@ -12,4 +12,6 @@ public interface OfficeAssignmentRepository extends CrudRepository<OfficeAssignm
     List<OfficeAssignmentEntity> findAll();
 
     OfficeAssignmentEntity findByPublicId(String publicId);
+
+    Boolean existsByPublicId(String publicId);
 }

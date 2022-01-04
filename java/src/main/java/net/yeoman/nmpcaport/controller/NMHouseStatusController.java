@@ -1,6 +1,5 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.entities.NMHouseStatusEntity;
 import net.yeoman.nmpcaport.io.request.NMHouseStatus.NMHouseStatusRequest;
 import net.yeoman.nmpcaport.io.request.NMHouseStatus.NMHouseStatusRequestList;
 import net.yeoman.nmpcaport.services.Impl.NMHouseStatusServiceImpl;
@@ -8,10 +7,8 @@ import net.yeoman.nmpcaport.shared.dto.NMHouseStatusDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

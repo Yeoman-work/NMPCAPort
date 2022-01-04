@@ -226,14 +226,39 @@ const phoneNumberBuilder = (phoneNumber, state) =>{
 }
 
 
+const staffMemberValidation = (staffInfo) =>{
 
+    let isValid = false;
 
+    if(fieldLengthRequired(3, 25, staffInfo.staffMember.firstName)){
+        if(fieldLengthRequired(3, 25, staffInfo.staffMember.lastName)){
+            if(fieldLengthNotRequired(3, 50, staffInfo.staffMember.title)){
+                if(staffInfo.staffMember.email.length > 0){
+                    if(emailValidation(staffInfo.staffMember.email)){
 
+                        isValid = true;
+                    }
 
+                }else{
+                    isValid = true;
+                }
+            }
+        }
+    }
 
+    return isValid;
+}
+
+const characterCount = (characters) =>{
+
+    const count = characters.length;
+
+    return count;
+}
 
 module.exports={
     phoneNumberBuilder,
+    characterCount,
     fieldLength,
     fieldLengthRequired,
     phoneNumberValidation,
@@ -248,5 +273,6 @@ module.exports={
     dateAndTime,
     characters,
     InList,
-    phoneNumberPattern
+    phoneNumberPattern,
+    staffMemberValidation
 }

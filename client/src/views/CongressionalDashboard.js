@@ -24,6 +24,7 @@ const CongressionalDashboard = props =>{
                     }
                 })
 
+                console.log(repResponse.data);
                 setReps(repResponse.data);
 
             }catch(error){

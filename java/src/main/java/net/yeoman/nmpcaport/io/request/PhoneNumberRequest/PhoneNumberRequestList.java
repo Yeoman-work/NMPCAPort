@@ -4,13 +4,13 @@ import java.util.List;
 
 public class PhoneNumberRequestList {
 
-    private List<PhoneNumberRequest> phoneNumberRequestList;
+    private List<PhoneNumberRequest> phoneNumberList;
 
-    public List<PhoneNumberRequest> getPhoneNumberRequestList() {
-        return phoneNumberRequestList;
+    public List<PhoneNumberRequest> getPhoneNumberList() {
+        return phoneNumberList;
     }
 
-    public void setPhoneNumberRequestList(List<PhoneNumberRequest> phoneNumberRequestList) {
-        this.phoneNumberRequestList = phoneNumberRequestList;
+    public void setPhoneNumberList(List<PhoneNumberRequest> phoneNumberList) {
+        this.phoneNumberList = phoneNumberList;
     }
 }

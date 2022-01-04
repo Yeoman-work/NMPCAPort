@@ -1,9 +1,11 @@
 package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
+import net.yeoman.nmpcaport.io.response.staff.StaffResponse;
 
 
 import java.util.Date;
@@ -24,7 +26,12 @@ public class CongressionalRepDto {
     private PoliticalPartyEntity politicalPartyEntity;
     private PoliticalPartyResponse politicalPartyResponse;
     private List<AssignedNumberEntity> assignedNumberEntity;
+    private List<OfficeAssignmentEntity> officeAssignmentEntities;
+    private List<LocationEntity> locationEntities;
+    private List<LocationResponse> locationResponses;
     private List<PhoneNumberResponse> phoneNumberResponse;
+    private List<StaffEntity> staffEntities;
+    private List<StaffResponse> staffResponses;
     private PhoneNumberEntity phoneNumberEntity;
     private String website;
     private Date createdAt;
@@ -172,5 +179,45 @@ public class CongressionalRepDto {
 
     public void setPhoneNumberEntity(PhoneNumberEntity phoneNumberEntity) {
         this.phoneNumberEntity = phoneNumberEntity;
+    }
+
+    public List<LocationEntity> getLocationEntities() {
+        return locationEntities;
+    }
+
+    public void setLocationEntities(List<LocationEntity> locationEntities) {
+        this.locationEntities = locationEntities;
+    }
+
+    public List<LocationResponse> getLocationResponses() {
+        return locationResponses;
+    }
+
+    public void setLocationResponses(List<LocationResponse> locationResponses) {
+        this.locationResponses = locationResponses;
+    }
+
+    public List<OfficeAssignmentEntity> getOfficeAssignmentEntities() {
+        return officeAssignmentEntities;
+    }
+
+    public void setOfficeAssignmentEntities(List<OfficeAssignmentEntity> officeAssignmentEntities) {
+        this.officeAssignmentEntities = officeAssignmentEntities;
+    }
+
+    public List<StaffEntity> getStaffEntities() {
+        return staffEntities;
+    }
+
+    public void setStaffEntities(List<StaffEntity> staffEntities) {
+        this.staffEntities = staffEntities;
+    }
+
+    public List<StaffResponse> getStaffResponses() {
+        return staffResponses;
+    }
+
+    public void setStaffResponses(List<StaffResponse> staffResponses) {
+        this.staffResponses = staffResponses;
     }
 }

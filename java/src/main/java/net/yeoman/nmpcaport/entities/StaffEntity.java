@@ -62,6 +62,10 @@ public class StaffEntity implements Serializable {
     @JoinColumn(name = "u_s_senator_entity_id")
     private USSenatorEntity usSenatorEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="congressional_rep_entity_id")
+    private CongressionalRepEntity congressionalRepEntity;
+
     public StaffEntity() {
     }
 
@@ -143,5 +147,13 @@ public class StaffEntity implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public CongressionalRepEntity getCongressionalRepEntity() {
+        return congressionalRepEntity;
+    }
+
+    public void setCongressionalRepEntity(CongressionalRepEntity congressionalRepEntity) {
+        this.congressionalRepEntity = congressionalRepEntity;
     }
 }

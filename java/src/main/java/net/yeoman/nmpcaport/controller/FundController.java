@@ -1,10 +1,8 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.entities.FundEntity;
 import net.yeoman.nmpcaport.io.request.fund.FundRequestListModel;
 import net.yeoman.nmpcaport.io.request.fund.FundRequestModel;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
-import net.yeoman.nmpcaport.services.FundService;
 import net.yeoman.nmpcaport.services.Impl.FundServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.FundDto;
 import org.modelmapper.ModelMapper;

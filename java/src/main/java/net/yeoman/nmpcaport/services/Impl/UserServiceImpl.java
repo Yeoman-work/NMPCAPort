@@ -1,8 +1,8 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.services.UserService;
 import net.yeoman.nmpcaport.entities.UserEntity;
 import net.yeoman.nmpcaport.io.repositories.UserRepository;
-import net.yeoman.nmpcaport.services.UserService;
 import net.yeoman.nmpcaport.shared.dto.UserDto;
 
 import net.yeoman.nmpcaport.shared.utils.Utils;

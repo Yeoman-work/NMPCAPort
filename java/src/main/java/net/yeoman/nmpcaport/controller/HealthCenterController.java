@@ -1,15 +1,12 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.entities.HealthCenterEntity;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseBaseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseFull;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.services.Impl.HealthCenterServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

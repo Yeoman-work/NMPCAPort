@@ -141,4 +141,16 @@ public class Utils {
 
         return governorStatus;
     }
+
+    public Boolean ListNotNull( Object testList ){
+
+        Boolean isValid = false;
+
+        if(testList != null){
+
+                isValid = true;
+        }
+
+        return isValid;
+    }
 }

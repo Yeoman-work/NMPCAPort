@@ -8,4 +8,6 @@ public interface AssignedNumberService {
     public AssignedNumberEntity createAssignedNumber(AssignedNumberEntity assignedNumberEntity);
     public AssignedNumberEntity updateAssignedNumber(String assignmentId);
     public AssignedNumberEntity deleteAssignedNumber(String assignmentId);
+    public Boolean existByAssignmentId(String assignmentID);
+
 }

@@ -1,6 +1,5 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.io.request.congressionalDistrict.CongressionalDistrictDetailsRequest;
 import net.yeoman.nmpcaport.io.request.congressionalRep.CongressionalRepDetailsRequest;
 import net.yeoman.nmpcaport.io.response.CongressionalRepResponse.CongressionalRepResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
@@ -9,7 +8,6 @@ import net.yeoman.nmpcaport.shared.dto.CongressionalRepDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

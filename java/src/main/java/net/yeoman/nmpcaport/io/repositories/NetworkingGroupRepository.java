@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface NetworkingGroupRepository extends CrudRepository<NetworkingGroupEntity, Long> {
 
+    List<NetworkingGroupEntity> findAll();
     NetworkingGroupEntity findByNetworkingGroupId(String netGrpId);
     Boolean existsByName(String name);
 
-    List<NetworkingGroupEntity> findByUsersContains(UserEntity user);
 }

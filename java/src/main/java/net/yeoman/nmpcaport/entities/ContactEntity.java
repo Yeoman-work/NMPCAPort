@@ -40,13 +40,10 @@ public class ContactEntity implements Serializable {
     private Date createdAt;
     private Date updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "contactsNetworkingGroups",
-            joinColumns = @JoinColumn(name = "contact_entity_id"),
-            inverseJoinColumns = @JoinColumn(name ="networking_group_entity_id")
-    )
-    public List<NetworkingGroupEntity> networkingGroups;
+
+    @OneToMany(mappedBy = "contactEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "health_center_entity_id")
@@ -142,13 +139,6 @@ public class ContactEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<NetworkingGroupEntity> getNetworkingGroups() {
-        return networkingGroups;
-    }
-
-    public void setNetworkingGroups(List<NetworkingGroupEntity> networkingGroups) {
-        this.networkingGroups = networkingGroups;
-    }
 
     public HealthCenterEntity getHealthCenter() {
         return healthCenter;
@@ -156,5 +146,13 @@ public class ContactEntity implements Serializable {
 
     public void setHealthCenter(HealthCenterEntity healthCenter) {
         this.healthCenter = healthCenter;
+    }
+
+    public List<AssignedNetworkingGroupEntity> getAssignedNetworkingGroupEntities() {
+        return assignedNetworkingGroupEntities;
+    }
+
+    public void setAssignedNetworkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
+        this.assignedNetworkingGroupEntities = assignedNetworkingGroupEntities;
     }
 }

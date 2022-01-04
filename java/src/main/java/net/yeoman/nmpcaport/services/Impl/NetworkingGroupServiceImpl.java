@@ -1,12 +1,12 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.services.NetworkingGroupService;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
 import net.yeoman.nmpcaport.entities.UserEntity;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 import net.yeoman.nmpcaport.io.repositories.NetworkingGroupRepository;
 import net.yeoman.nmpcaport.io.repositories.UserRepository;
-import net.yeoman.nmpcaport.services.NetworkingGroupService;
 import net.yeoman.nmpcaport.shared.dto.NetworkingGroupDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
@@ -91,7 +91,7 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
                 users.add(userEntity);
             }
 
-            networkingGroupEntity.setUsers(users);
+
         }
 
         NetworkingGroupEntity storedGroup = this.networkingGroupRepository.save(networkingGroupEntity);
@@ -119,7 +119,7 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
         List<UserEntity> updatedUsers = getUserEntityFromUserIds(networkingGroup.getUserIds());
 
-        networkingGroupEntity.setUsers(updatedUsers);
+
 
         NetworkingGroupEntity storedGroup = this.networkingGroupRepository.save(networkingGroupEntity);
 
@@ -146,7 +146,21 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
         return new ModelMapper().map(networkingGroupDto, NetworkingGroupResponseModel.class);
     }
 
-    
+    @Override
+    public List<NetworkingGroupDto> getAllNetworkingGroups() {
+        ModelMapper modelMapper = new ModelMapper();
+        List<NetworkingGroupDto> returnValue = new ArrayList<>();
+
+        List<NetworkingGroupEntity> networkingGroupEntities = this.networkingGroupRepository.findAll();
+
+        for(NetworkingGroupEntity networkingGroup: networkingGroupEntities){
+            returnValue.add(modelMapper.map(networkingGroup, NetworkingGroupDto.class));
+        }
+
+        return returnValue;
+    }
+
+
     @Override
     public NetworkingGroupEntity networkGroupEntityByNetworkingGroupId(String netGrpId) {
 
