@@ -1,5 +1,6 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useReducer } from "react";
 import axios from "axios";
+import {useNavigate} from "react-router";
 import NetworkingGroupForm from "../components/NetworkingGroupForm";
 import Header from "../components/Header";
 import produce from "immer";
@@ -78,6 +79,8 @@ const FORM_FIELDS={
 
 
 const CreateNetworkingGroupView = props =>{
+
+    const navigate = useNavigate();
     const [netGrp, dispatchNetGrp] = useReducer(networkGroupReducer, {
 
         name: ''.trim(),
@@ -87,7 +90,8 @@ const CreateNetworkingGroupView = props =>{
 
 
     const submitHandler = async (e) =>{
-
+        e.preventDefault()
+        console.log('this')
         try {
 
             const createNetworkingGroupResponse = await axios.post('http://localhost:8080/networkingGroups', netGrp, {
@@ -98,6 +102,9 @@ const CreateNetworkingGroupView = props =>{
             })
 
             console.log(createNetworkingGroupResponse.data);
+            navigate('/yeoman/')
+
+
 
         }catch(error){
 

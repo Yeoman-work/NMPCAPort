@@ -14,4 +14,6 @@ public interface NetworkingGroupRepository extends CrudRepository<NetworkingGrou
     NetworkingGroupEntity findByNetworkingGroupId(String netGrpId);
     Boolean existsByName(String name);
 
+    Boolean existsByNetworkingGroupId(String publicId);
+
 }

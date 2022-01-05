@@ -18,6 +18,8 @@ import USSenatorStaff from "./views/USSenatorStaff";
 import CongressionalRepOffice from "./views/CongressionalRepOffice";
 import CongressionalRepStaff from "./views/CongressionalRepStaff";
 import CreateNetworkingGroupView from "./views/CreateNetworkingGroupView";
+import NetworkingGroupDashboard from "./views/NetworkingGroupDashboard";
+import CreateContactsView from "./views/CreateContactsView";
 
 function App() {
   return (
@@ -57,7 +59,11 @@ function App() {
                         <Route path={'congressionalRep/:id'} element={<CongressionalRepStaff/>}/>
                     </Route>
                     <Route path={'networkingGroup'}>
+                        <Route path={'dashboard'} element={<NetworkingGroupDashboard/>}/>
                         <Route path={'createNetworkingGroup'} element={<CreateNetworkingGroupView/>}/>
+                    </Route>
+                    <Route path={'contacts'}>
+                        <Route path={'addContact'} element={<CreateContactsView/>}/>
                     </Route>
                 </Route>
             </Routes>

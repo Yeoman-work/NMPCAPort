@@ -34,6 +34,7 @@ public class ContactEntity implements Serializable {
 
     @NotBlank(message = "required")
     @Email(message = "Please enter a valid email")
+    @Size(max = 150)
     private String email;
 
     @Column(updatable = false)

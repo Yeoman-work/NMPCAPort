@@ -30,11 +30,9 @@ const NetworkingGroupForm = props =>{
                           cols="30" rows="10"
                           onChange={(e)=>onChange({type: e.target.name, payload: e.target.value})}
                 ></textarea>
-                <p>{characterCount(grp.description)} /250 characters left</p>
+                <p>{characterCount(grp.description)} /250 characters</p>
             </div>
-            <Button
-            label={'Save Group'}
-            />
+            <button> Save Group</button>
         </form>
     )
 }

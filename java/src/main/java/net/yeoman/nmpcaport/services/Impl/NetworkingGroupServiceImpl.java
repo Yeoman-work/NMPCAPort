@@ -82,16 +82,9 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
         networkingGroupEntity.setNetworkingGroupId(utils.generateRandomID());
 
-        if(networkingGroup.getUserIds().size() > 0){
-            List<UserEntity> users = new ArrayList<>();
-            for(String userId: networkingGroup.getUserIds()){
+        while(this.networkingGroupRepository.existsByNetworkingGroupId(networkingGroupEntity.getNetworkingGroupId())){
 
-                UserEntity userEntity = this.userRepository.findByUserId(userId);
-
-                users.add(userEntity);
-            }
-
-
+            networkingGroupEntity.setNetworkingGroupId(utils.generateRandomID());
         }
 
         NetworkingGroupEntity storedGroup = this.networkingGroupRepository.save(networkingGroupEntity);

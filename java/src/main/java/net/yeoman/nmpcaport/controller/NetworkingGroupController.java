@@ -21,7 +21,7 @@ public class NetworkingGroupController {
     private NetworkingGroupServiceImpl networkingGroupService;
 
 
-    @GetMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<NetworkingGroupResponseModel> getAllNetworkingGroups(){
         ModelMapper modelMapper = new ModelMapper();
         List<NetworkingGroupResponseModel> returnValue = new ArrayList<>();

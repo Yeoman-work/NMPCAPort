@@ -23,10 +23,10 @@ const Header = props =>{
                                 <Link className="nav-link" to={'/yeoman/legislation/dashboard'}>Legislation</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to={''}>Contacts</Link>
+                                <Link className="nav-link" to={'/yeoman/contacts/addContact'}>Contacts</Link>
                             </li>
                             <li className={"nav-item"}>
-                                <Link className={"nav-link"} to={'/yeoman/networkingGroup/createNetworkingGroup'}>Networking Groups</Link>
+                                <Link className={"nav-link"} to={'/yeoman/networkingGroup/dashboard'}>Networking Groups</Link>
                             </li>
                             <li className="nav-item dropdown">
                                 <Link className="nav-link dropdown-toggle" to={''} id="navbarDropdown" role="button"
