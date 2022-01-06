@@ -50,4 +50,10 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
 
         return this.siteFundingDetailsRepository.save(siteFundingDetailsEntity);
     }
+
+    @Override
+    public Boolean existByPublicId(String publicId) {
+
+        return this.siteFundingDetailsRepository.existsBySiteFundingDetailsId(publicId);
+    }
 }

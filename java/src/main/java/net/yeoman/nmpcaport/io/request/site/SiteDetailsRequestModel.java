@@ -18,7 +18,7 @@ public class SiteDetailsRequestModel {
     private String nmHouseDistrict;
     private String senateDistrict;
     private String congressionalDistrict;
-    private List<String> fund;
+    private List<String> funding;
     private List<String> service;
 
     public String getName() {
@@ -93,12 +93,12 @@ public class SiteDetailsRequestModel {
         this.congressionalDistrict = congressionalDistrict;
     }
 
-    public List<String> getFund() {
-        return fund;
+    public List<String> getFunding() {
+        return funding;
     }
 
-    public void setFund(List<String> fund) {
-        this.fund = fund;
+    public void setFunding(List<String> funding) {
+        this.funding = funding;
     }
 
     public List<String> getService() {

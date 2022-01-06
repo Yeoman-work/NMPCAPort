@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
@@ -12,6 +13,7 @@ import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
+import java.util.Date;
 import java.util.List;
 
 public class HealthCenterDto {
@@ -20,19 +22,20 @@ public class HealthCenterDto {
     private String healthCenterId;
     private String name;
     private String nameAbbr;
-    private String createdAt;
-    private String updatedAt;
-    private List<String> userIds;
-    private List<String> contactIds;
-    private List<String> siteIds;
+    private Date createdAt;
+    private Date updatedAt;
+    private List<SiteDetailsRequestModel> siteDetailsRequests;
+    private List<String> users;
+    private List<String> contacts;
+    private List<String> sites;
     private List<ContactResponseModel> contactResponseList;
     private List<ContactNestedResponseModel> contactNestedResponseList;
     private List<UserDetailsResponseModel> userDetailsResponseList;
     private List<SiteDetailsResponse> siteResponse;
     private List<SiteDetailsNestedResponse> siteDetailsNestedResponseList;
-    private List<SiteEntity> sites;
-    private List<UserEntity> users;
-    private List<ContactEntity> contacts;
+    private List<SiteEntity> siteEntities;
+    private List<UserEntity> userEntities;
+    private List<ContactEntity> contactEntities;
     private List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponses;
     private List<CongressionalDistrictResponse> congressionalDistrictResponseList;
     private List<SenateDistrictResponseModel> senateDistrictResponseModelList;
@@ -77,60 +80,64 @@ public class HealthCenterDto {
         this.nameAbbr = nameAbbr;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public List<String> getUserIds() {
-        return userIds;
-    }
-
-    public void setUserIds(List<String> userIds) {
-        this.userIds = userIds;
-    }
-
-    public List<String> getContactIds() {
-        return contactIds;
-    }
-
-    public void setContactIds(List<String> contactIds) {
-        this.contactIds = contactIds;
-    }
-
-    public List<String> getSiteIds() {
-        return siteIds;
-    }
-
-    public void setSiteIds(List<String> siteIds) {
-        this.siteIds = siteIds;
-    }
-
-    public List<UserEntity> getUsers() {
+    public List<String> getUsers() {
         return users;
     }
 
-    public void setUsers(List<UserEntity> users) {
+    public void setUsers(List<String> users) {
         this.users = users;
     }
 
-    public List<ContactEntity> getContacts() {
+    public List<String> getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<ContactEntity> contacts) {
+    public void setContacts(List<String> contacts) {
         this.contacts = contacts;
+    }
+
+    public void setSites(List<String> sites) {
+        this.sites = sites;
+    }
+
+    public List<SiteEntity> getSiteEntities() {
+        return siteEntities;
+    }
+
+    public void setSiteEntities(List<SiteEntity> siteEntities) {
+        this.siteEntities = siteEntities;
+    }
+
+    public List<UserEntity> getUserEntities() {
+        return userEntities;
+    }
+
+    public void setUserEntities(List<UserEntity> userEntities) {
+        this.userEntities = userEntities;
+    }
+
+    public List<ContactEntity> getContactEntities() {
+        return contactEntities;
+    }
+
+    public void setContactEntities(List<ContactEntity> contactEntities) {
+        this.contactEntities = contactEntities;
     }
 
     public List<ContactResponseModel> getContactResponseList() {
@@ -157,12 +164,8 @@ public class HealthCenterDto {
         this.contactNestedResponseList = contactNestedResponseList;
     }
 
-    public List<SiteEntity> getSites() {
+    public List<String> getSites() {
         return sites;
-    }
-
-    public void setSites(List<SiteEntity> sites) {
-        this.sites = sites;
     }
 
     public List<SiteDetailsResponse> getSiteResponse() {
@@ -261,4 +264,11 @@ public class HealthCenterDto {
         this.fundResponseList = fundResponseList;
     }
 
+    public List<SiteDetailsRequestModel> getSiteDetailsRequests() {
+        return siteDetailsRequests;
+    }
+
+    public void setSiteDetailsRequests(List<SiteDetailsRequestModel> siteDetailsRequests) {
+        this.siteDetailsRequests = siteDetailsRequests;
+    }
 }

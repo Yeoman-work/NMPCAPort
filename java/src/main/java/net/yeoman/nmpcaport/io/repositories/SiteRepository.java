@@ -11,4 +11,6 @@ public interface SiteRepository extends CrudRepository<SiteEntity, Long> {
 
     SiteEntity findBySiteId(String siteId);
 
+    Boolean existsBySiteId(String siteId);
+
 }

@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseBaseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseFull;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.services.Impl.HealthCenterServiceImpl;
@@ -27,6 +28,22 @@ public class HealthCenterController {
     }
 
     @GetMapping
+    public List<HealthCenterResponseBaseModel> getAllHealthCenter(){
+        ModelMapper modelMapper = new ModelMapper();
+        List<HealthCenterResponseBaseModel> returnValue = new ArrayList<>();
+
+        List<HealthCenterDto> healthCenterDtoList = this.healthCenterService.getAllHealthCenters();
+
+        for(HealthCenterDto healthCenter: healthCenterDtoList){
+
+            returnValue.add(modelMapper.map(healthCenter, HealthCenterResponseBaseModel.class));
+        }
+
+        return returnValue;
+
+    }
+
+    @GetMapping(path = "/pagination")
     public List<HealthCenterResponseFull> getHealthCenters(@RequestParam(value ="page", defaultValue = "0") int page,
                                                            @RequestParam(value= "limit", defaultValue = "25") int limit){
 

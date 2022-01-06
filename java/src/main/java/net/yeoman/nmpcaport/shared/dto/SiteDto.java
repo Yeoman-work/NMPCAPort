@@ -1,14 +1,19 @@
 package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.io.request.fund.FundRequestModel;
+import net.yeoman.nmpcaport.io.request.service.ServiceDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
+import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
+import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
+import java.util.Date;
 import java.util.List;
 
 public class SiteDto {
@@ -34,14 +39,20 @@ public class SiteDto {
     private HealthCenterEntity healthCenterEntity;
     private ZipCodeResponse zipCodeResponse;
     private ZipCodeEntity zipCodeEntity;
-    private String createdAt;
-    private String updatedAt;
+    private List<FundEntity> fundEntities;
+    private List<FundRequestModel> fundRequestModels;
+    private List<FundResponseModel> fundResponseModels;
+    private List<ServiceEntity> serviceEntities;
+    private List<ServiceDetailsRequestModel> serviceDetailsRequestModels;
+    private List<ServiceResponse> serviceResponses;
     private NMHouseDistrictEntity nmHouseDistrictEntity;
     private SenateDistrictEntity senateDistrictEntity;
     private CongressionalDistrictEntity congressionalDistrictEntity;
     private NMHouseDistrictResponse nmHouseDistrictResponse;
     private SenateDistrictResponseModel senateDistrictResponseModel;
     private CongressionalDistrictResponse congressionalDistrictResponse;
+    private Date createdAt;
+    private Date updatedAt;
 
 
     public Long getId() {
@@ -212,19 +223,67 @@ public class SiteDto {
         this.zipCodeEntity = zipCodeEntity;
     }
 
-    public String getCreatedAt() {
+    public List<FundEntity> getFundEntities() {
+        return fundEntities;
+    }
+
+    public void setFundEntities(List<FundEntity> fundEntities) {
+        this.fundEntities = fundEntities;
+    }
+
+    public List<FundRequestModel> getFundRequestModels() {
+        return fundRequestModels;
+    }
+
+    public void setFundRequestModels(List<FundRequestModel> fundRequestModels) {
+        this.fundRequestModels = fundRequestModels;
+    }
+
+    public List<FundResponseModel> getFundResponseModels() {
+        return fundResponseModels;
+    }
+
+    public void setFundResponseModels(List<FundResponseModel> fundResponseModels) {
+        this.fundResponseModels = fundResponseModels;
+    }
+
+    public List<ServiceEntity> getServiceEntities() {
+        return serviceEntities;
+    }
+
+    public void setServiceEntities(List<ServiceEntity> serviceEntities) {
+        this.serviceEntities = serviceEntities;
+    }
+
+    public List<ServiceDetailsRequestModel> getServiceDetailsRequestModels() {
+        return serviceDetailsRequestModels;
+    }
+
+    public void setServiceDetailsRequestModels(List<ServiceDetailsRequestModel> serviceDetailsRequestModels) {
+        this.serviceDetailsRequestModels = serviceDetailsRequestModels;
+    }
+
+    public List<ServiceResponse> getServiceResponses() {
+        return serviceResponses;
+    }
+
+    public void setServiceResponses(List<ServiceResponse> serviceResponses) {
+        this.serviceResponses = serviceResponses;
+    }
+
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 

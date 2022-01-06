@@ -1,14 +1,14 @@
 package net.yeoman.nmpcaport.io.request.HealthCenter;
 
+import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
+
 import java.util.List;
 
 public class HealthCenterDetailsRequestModel {
 
     private String name;
     private String nameAbbr;
-    private List<String> siteIds;
-    private List<String> contactIds;
-    private List<String> userIds;
+    private List<SiteDetailsRequestModel> siteDetailsRequests;
 
 
     public String getName() {
@@ -27,31 +27,11 @@ public class HealthCenterDetailsRequestModel {
         this.nameAbbr = nameAbbr;
     }
 
-    public List<String> getSiteIds() {
-        return siteIds;
+    public List<SiteDetailsRequestModel> getSiteDetailsRequests() {
+        return siteDetailsRequests;
     }
 
-    public void setSiteIds(List<String> siteIds) {
-        this.siteIds = siteIds;
+    public void setSiteDetailsRequests(List<SiteDetailsRequestModel> siteDetailsRequests) {
+        this.siteDetailsRequests = siteDetailsRequests;
     }
-
-    public List<String> getContactIds() {
-        return contactIds;
-    }
-
-    public void setContactIds(List<String> contactIds) {
-        this.contactIds = contactIds;
-    }
-
-    public List<String> getUserIds() {
-        return userIds;
-    }
-
-    public void setUserIds(List<String> userIds) {
-        this.userIds = userIds;
-    }
-
-
-
-
 }

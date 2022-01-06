@@ -15,6 +15,7 @@ public interface HealthCenterService {
     public HealthCenterEntity getHealthCenterEntity(String healthCenterId);
     public HealthCenterEntity savedHealthCenterEntity(HealthCenterEntity healthCenterEntity);
     public List<HealthCenterDto> getHealthCenters(int page, int limit);
+    public List<HealthCenterDto> getAllHealthCenters();
 
 
 }

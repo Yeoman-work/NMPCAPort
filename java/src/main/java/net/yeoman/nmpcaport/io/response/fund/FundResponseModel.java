@@ -6,7 +6,6 @@ public class FundResponseModel {
 
     private String fundId;
     private String name;
-    private String fundCode;
     private Date createdAt;
     private Date updatedAt;
 
@@ -27,14 +26,6 @@ public class FundResponseModel {
         this.name = name;
     }
 
-    public String getFundCode() {
-        return fundCode;
-    }
-
-    public void setFundCode(String fundCode) {
-        this.fundCode = fundCode;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -50,4 +41,5 @@ public class FundResponseModel {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }

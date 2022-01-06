@@ -12,5 +12,7 @@ public interface HealthCenterRepository extends PagingAndSortingRepository<Healt
 
     HealthCenterEntity findByHealthCenterId(String healthCenterId);
 
+    Boolean existsByHealthCenterId(String healthCenterId);
+
     List<HealthCenterEntity> findAll();
 }

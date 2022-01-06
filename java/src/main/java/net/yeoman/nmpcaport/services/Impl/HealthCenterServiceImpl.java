@@ -1,9 +1,10 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.exception.*;
+import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
 import net.yeoman.nmpcaport.services.HealthCenterService;
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
-import net.yeoman.nmpcaport.exception.HealthCenterServiceException;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
@@ -36,7 +37,38 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     private HealthCenterRepository healthCenterRepository;
 
     @Autowired
+    private SiteServiceImpl siteService;
+
+
+    @Autowired
+    private SiteFundingDetailsServiceImpl siteFundingDetailsService;
+
+    @Autowired
+    private FundServiceImpl fundService;
+
+    @Autowired
+    private SiteServiceDetailsServiceImpl siteServiceDetailsService;
+
+    @Autowired
+    private NMHouseDistrictServiceImpl nmHouseDistrictService;
+
+    @Autowired
+    private SenateDistrictServiceImpl senateDistrictService;
+
+    @Autowired
+    private CongressionalDistrictServiceImpl congressionalDistrictService;
+
+    @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private CityServiceImpl cityService;
+
+    @Autowired
+    private CountyServiceImpl countyService;
+
+    @Autowired
+    private ZipCodeServiceImpl zipCodeService;
 
     @Autowired
     private ContactServiceImpl contactService;
@@ -55,7 +87,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
             List<UserDetailsResponseModel> userResponseList = new ArrayList<>();
 
-            for(UserEntity user: healthCenterDto.getUsers()){
+            for(UserEntity user: healthCenterDto.getUserEntities()){
 
                 userResponseList.add(new ModelMapper().map(user, UserDetailsResponseModel.class));
             }
@@ -63,11 +95,11 @@ public class HealthCenterServiceImpl implements HealthCenterService {
             healthCenterDto.setUserDetailsResponseList(userResponseList);
         }
 
-        if(healthCenterDto.getContacts() != null){
+        if(healthCenterDto.getContactEntities() != null){
 
             List<ContactNestedResponseModel> contactNestedResponseList = new ArrayList<>();
 
-            for(ContactEntity contact: healthCenterDto.getContacts()){
+            for(ContactEntity contact: healthCenterDto.getContactEntities()){
 
                 contactNestedResponseList.add(new ModelMapper().map(contact, ContactNestedResponseModel.class));
             }
@@ -79,7 +111,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
             List<SiteDetailsResponse> siteDetails = new ArrayList<>();
 
-            for(SiteEntity site: healthCenterDto.getSites()){
+            for(SiteEntity site: healthCenterDto.getSiteEntities()){
 
                 SiteDetailsResponse siteResponse = new ModelMapper().map(site, SiteDetailsResponse.class);
 
@@ -99,77 +131,25 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
     @Override
     public HealthCenterResponseModel createHealthCenter(HealthCenterDto healthCenterDto) {
-
+        ModelMapper modelMapper = new ModelMapper();
         HealthCenterEntity healthCenterEntity = new ModelMapper().map(healthCenterDto, HealthCenterEntity.class);
 
         healthCenterEntity.setHealthCenterId(utils.generateRandomID());
 
+        while(this.healthCenterRepository.existsByHealthCenterId(healthCenterEntity.getHealthCenterId())){
+
+            healthCenterEntity.setHealthCenterId(utils.generateRandomID());
+        }
+
         HealthCenterEntity newHealthCenter = this.healthCenterRepository.save(healthCenterEntity);
 
+        if(healthCenterDto.getSenateDistrictResponseModelList() != null){
 
-
-        if(healthCenterDto.getUserIds() != null){
-
-            List<UserEntity> users = new ArrayList<>();
-            for(String userId: healthCenterDto.getUserIds()){
-
-                UserEntity user = this.userService.getUserEntity(userId);
-
-                user.setHealthCenter(newHealthCenter);
-
-                this.userService.saveUser(user);
-
-                users.add(user);
-            }
-
-            healthCenterDto.setUsers(users);
 
         }
 
-        if(healthCenterDto.getContactIds() != null){
-
-            List<ContactEntity> contacts = new ArrayList<>();
-            for(String contactId: healthCenterDto.getContactIds()){
-
-                ContactEntity contact = this.contactService.getContactEntity(contactId);
-
-                contact.setHealthCenter(newHealthCenter);
-
-                this.contactService.saveContact(contact);
-
-                contacts.add(contact);
-
-            }
-            healthCenterDto.setContacts(contacts);
-        }
 
 
-        HealthCenterResponseModel healthCenterResponse = new ModelMapper().map(healthCenterEntity, HealthCenterResponseModel.class);
-
-        if(healthCenterDto.getContacts() != null){
-
-            List<ContactNestedResponseModel> contacts = new ArrayList<>();
-
-            for(ContactEntity contact: healthCenterDto.getContacts()){
-
-                contacts.add(new ModelMapper().map(contact, ContactNestedResponseModel.class));
-            }
-
-            healthCenterResponse.setContactNestedResponseList(contacts);
-
-        }
-
-        if(healthCenterDto.getUsers() != null){
-
-            List<UserDetailsResponseModel> users = new ArrayList<>();
-
-            for(UserEntity user: healthCenterDto.getUsers()){
-
-                users.add(new ModelMapper().map(user, UserDetailsResponseModel.class));
-            }
-
-            healthCenterResponse.setUserDetailsResponseList(users);
-        }
 
         return healthCenterResponse;
     }
@@ -306,6 +286,20 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
 
             returnValue.add(healthCenterDto);
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public List<HealthCenterDto> getAllHealthCenters() {
+        ModelMapper modelMapper = new ModelMapper();
+        List<HealthCenterDto> returnValue = new ArrayList<>();
+        List<HealthCenterEntity> healthCenterEntities = this.healthCenterRepository.findAll();
+
+        for(HealthCenterEntity healthCenterEntity: healthCenterEntities){
+
+            returnValue.add(modelMapper.map(healthCenterEntity, HealthCenterDto.class));
         }
 
         return returnValue;

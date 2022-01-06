@@ -1,4 +1,5 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
+import axios from "axios";
 import produce from "immer";
 import Header from "../components/Header";
 import ContactForm from "../components/ContactForm";
@@ -112,24 +113,56 @@ const contactReducer = (contactState, action) =>{
             })
 
         case FORM_FIELDS.NETWORK_GRP:
+            const {checked, value} = action.payload;
 
-            return produce(contactState, draft=>{
+            if(checked){
 
-                draft.contact.networkingGroups = [...contactState.contact.networkingGroups, action.payload];
-            })
+                if(!contactState.contact.networkingGroups.includes(value)){
+                    return produce(contactState, draft=>{
+
+                        draft.contact.networkingGroups = [...contactState.contact.networkingGroups, value];
+
+                        console.log(contactState.contact.networkingGroups)
+                    })
+                }else{
+
+                    return contactState;
+                }
+
+            }else{
+
+                if(contactState.contact.networkingGroups.includes(value)){
+                    return produce(contactState, draft=>{
+
+                        const removeAtIndex = contactState.contact.networkingGroups.indexOf(value);
+
+                        let networkingGroupList = [...contactState.contact.networkingGroups]
+
+                        networkingGroupList.splice(removeAtIndex, 1)
+
+                        draft.contact.networkingGroups = [...networkingGroupList];
+
+                    })
+                }else{
+
+                    return contactState;
+                }
+
+            }
+
 
         case FORM_FIELDS.HEALTH_CENTER_LIST:
 
             return produce(contactState, draft=>{
 
-                draft.healthCenters = [...contactState.HEALTH_CENTER_LIST, action.payload]
+                draft.healthCenters = [...action.payload]
             })
 
         case FORM_FIELDS.NETWORK_GRP_LIST:
 
             return produce(contactState, draft=>{
 
-                draft.healthCenters = [...contactState.healthCenters, action.payload];
+                draft.networkingGroupsList = [...action.payload];
             })
 
     }
@@ -166,6 +199,59 @@ const CreateContactsView = props =>{
         healthCenters: []
 
     })
+
+
+    useEffect(()=>{
+
+        (async ()=>{
+
+            try{
+
+                const networkingListResponse = await axios.get('http://localhost:8080/networkingGroups', {
+
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    }
+                })
+
+                console.log(networkingListResponse.data);
+                dispatchContactInfo({type: FORM_FIELDS.NETWORK_GRP_LIST, payload: [...networkingListResponse.data]})
+
+
+            }catch(error){
+
+                console.log(error.response)
+
+            }
+
+        })()
+
+    },[])
+
+
+    useEffect(()=>{
+
+        (async()=>{
+
+            try{
+
+              const  healthCenterResponse = await axios.get('http://localhost:8080/healthCenters', {
+
+                  headers:{
+                      Authorization: localStorage.getItem('token')
+                  }
+              })
+
+              console.log(healthCenterResponse.data)
+              dispatchContactInfo({type: FORM_FIELDS.HEALTH_CENTER_LIST, payload: [...healthCenterResponse.data]})
+
+            }catch(error){
+
+                console.log(error.response)
+
+            }
+        })()
+    }, [])
 
     return(
         <div>

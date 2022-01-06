@@ -18,26 +18,29 @@ const ContactForm = props =>{
             <TextInputField
                 label={'Title'}
                 type={'text'}
+                name={formFields.TITLE}
                 fieldClass={'form-control'}
                 divClass={'form-group m-auto w-25'}
-                fieldValue={contactData.contact.title}
+                fieldValue={contactData? contactData.contact.title : null}
                 onChange={dispatchFunction}
             />
             <div className={'row'}>
                 <TextInputField
                     label={'First Name'}
                     type={'text'}
+                    name={formFields.FIRST_NAME}
                     fieldClass={"form-control"}
                     divClass={'form-group col'}
-                    fieldValue={contactData.contact.firstName}
+                    fieldValue={contactData? contactData.contact.firstName : null}
                     onChange={dispatchFunction}
                 />
                 <TextInputField
                     label={'Last Name'}
                     type={'text'}
+                    name={formFields.LAST_NAME}
                     fieldClass={'form-control'}
                     divClass={'form-group col'}
-                    fieldValue={contactData.contact.lastName}
+                    fieldValue={contactData? contactData.contact.lastName : null}
                     onChange={dispatchFunction}
                 />
             </div>
@@ -45,9 +48,10 @@ const ContactForm = props =>{
                 <TextInputField
                     label={'Email'}
                     type={'email'}
+                    name={formFields.EMAIL}
                     fieldClass={'form-control'}
                     divClass={'form-group col'}
-                    fieldValue={contactData.contact.email}
+                    fieldValue={contactData? contactData.contact.email : null}
                     onChange={dispatchFunction}
                 />
                 <div className={'col'}>
@@ -57,29 +61,68 @@ const ContactForm = props =>{
                             onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target.value})}
                     >
                         {
+                        contactData?
                          contactData.healthCenters.map((healthCenter, index)=>{
 
                              return(
                                  <option key={index} value={healthCenter.healthCenterId}>{healthCenter.name}</option>
                              )
                          })
+                            : null
                         }
                     </select>
                 </div>
             </div>
             <div className={'row'}>
                 <div className={'col'}>
+                    <label>Select Networking groups</label>
                     {
+                        contactData?
                         contactData.networkingGroupsList.map((group, index)=>{
 
-                            return(
-                                <label key={index} className={'form-check-label'}><input type="checkbox" className={'form-check-input'} value={group.networkingGroupId}/>{group.name}</label>
-                            )
+                            if(!contactData.contact.networkingGroups.includes(group.networkingGroupId)){
+                                return(
+
+                                    <div key={index} className={'border'}>
+                                        <label className={'form-check-label'}></label>
+                                        <input type="checkbox"
+                                               name={formFields.NETWORK_GRP}
+                                               checked={contactData.contact.networkingGroups.includes(group.networkingGroupId)}
+                                               className={'form-check-input'}
+                                               value={group.networkingGroupId}
+                                               onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target})}
+                                        />{group.name}</div>
+                                )
+                            }
                         })
+                            : null
                     }
                 </div>
                 <div className={'col'}>
+                    <label>Added Groups</label>
+                    {
+                        contactData?
+                        contactData.networkingGroupsList.map((group, index)=>{
 
+                            if(contactData.contact.networkingGroups.includes(group.networkingGroupId)){
+                                return(
+
+                                    <div key={index} className={'border text-start ps-3 m-auto w-75'}>
+                                        <label className={'form-check-label'}></label>
+                                        <input type="checkbox"
+                                               className={'form-check-input'}
+                                               checked={contactData.contact.networkingGroups.includes(group.networkingGroupId)}
+                                               name={formFields.NETWORK_GRP}
+                                               value={group.networkingGroupId}
+                                               onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target})}
+                                        />{group.name}</div>
+
+                                )
+                            }
+
+                        })
+                            : null
+                    }
                 </div>
             </div>
         </form>

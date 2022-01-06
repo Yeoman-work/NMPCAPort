@@ -14,5 +14,6 @@ public interface SiteService {
     public SiteEntity getSiteEntity(String siteId);
     public void deleteSite(String siteId);
     public List<SiteDto> createSiteBulk(List<SiteDto> siteDtoList, String healthCenterId);
+    public Boolean siteExist(String publicId);
 
 }

@@ -12,4 +12,5 @@ public interface SiteFundingDetailsService {
     public List<SiteFundingDetailsDto> getAllSiteFunding();
     public SiteFundingDetailsDto createSiteFunding(SiteFundingDetailsEntity siteFundingDetailsServiceEntity);
     public SiteFundingDetailsEntity createSiteFundingEntity(SiteFundingDetailsEntity siteFundingDetailsEntity);
+    public Boolean existByPublicId(String publicId);
 }

@@ -10,4 +10,6 @@ public interface SiteFundingDetailsRepository extends CrudRepository<SiteFunding
     List<SiteFundingDetailsEntity> findAll();
 
     SiteFundingDetailsEntity findBySiteFundingDetailsId(String id);
+
+    Boolean existsBySiteFundingDetailsId(String publicId);
 }

@@ -29,14 +29,12 @@ const legislativeList = ['in committee', 'passed', 'vote scheduled', 'voted down
 const governorList = ['awaiting bill', 'signed', 'veto']
 
 
-const InList = (List, id, itemLabel) =>{
+const InList = (list, value) =>{
     let isPresent = false;
-    const itemId = itemLabel + 'Id';
-    for(let item of List){
-        console.log(item[itemId.toString()]);
-        if(item[itemId] === id){
-            isPresent = true;
-        }
+
+    if(list.includes(value)){
+
+        isPresent = true;
     }
 
     return isPresent;
