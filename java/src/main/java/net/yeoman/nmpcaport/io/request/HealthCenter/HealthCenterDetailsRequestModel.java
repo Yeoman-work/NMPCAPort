@@ -8,7 +8,7 @@ public class HealthCenterDetailsRequestModel {
 
     private String name;
     private String nameAbbr;
-    private List<SiteDetailsRequestModel> siteDetailsRequests;
+    private List<SiteDetailsRequestModel> sitesRequest;
 
 
     public String getName() {
@@ -27,11 +27,11 @@ public class HealthCenterDetailsRequestModel {
         this.nameAbbr = nameAbbr;
     }
 
-    public List<SiteDetailsRequestModel> getSiteDetailsRequests() {
-        return siteDetailsRequests;
+    public List<SiteDetailsRequestModel> getSitesRequest() {
+        return sitesRequest;
     }
 
-    public void setSiteDetailsRequests(List<SiteDetailsRequestModel> siteDetailsRequests) {
-        this.siteDetailsRequests = siteDetailsRequests;
+    public void setSitesRequest(List<SiteDetailsRequestModel> sitesRequest) {
+        this.sitesRequest = sitesRequest;
     }
 }

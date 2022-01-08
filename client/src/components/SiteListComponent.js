@@ -17,7 +17,7 @@ const SiteListComponent = props =>{
                 <h4>{healthCenterName}</h4>
 
                 <div className={' overflow-auto height500'}>
-                    {
+                    {   siteListing?
                         siteListing.map((site, index)=>{
 
                             return(
@@ -64,6 +64,7 @@ const SiteListComponent = props =>{
 
                             )
                         })
+                        : null
                     }
                 </div>
 

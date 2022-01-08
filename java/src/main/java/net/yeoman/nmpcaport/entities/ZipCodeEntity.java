@@ -44,7 +44,7 @@ public class ZipCodeEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
-    @OneToMany(mappedBy = "zipCode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "zipCodeEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SiteEntity> sites;
 
     @OneToMany(mappedBy = "zipCodeEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

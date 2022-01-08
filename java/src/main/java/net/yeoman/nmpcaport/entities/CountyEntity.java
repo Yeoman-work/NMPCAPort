@@ -32,7 +32,7 @@ public class CountyEntity implements Serializable {
     private Date createdAt;
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "county", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "countyEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<SiteEntity> sites;
 
     @OneToMany(mappedBy = "countyEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -35,13 +35,13 @@ public class SiteServiceDetailsEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "site_entity_id")
-    private SiteEntity site;
+    private SiteEntity siteEntity;
 
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_entity_id")
-    private ServiceEntity service;
+    private ServiceEntity serviceEntity;
 
     public SiteServiceDetailsEntity() {
     }
@@ -57,8 +57,8 @@ public class SiteServiceDetailsEntity implements Serializable {
         this.siteServiceDetailsId = siteServiceDetailsId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.site = site;
-        this.service = service;
+        this.siteEntity = site;
+        this.serviceEntity = service;
     }
 
     public Long getId() {
@@ -93,20 +93,19 @@ public class SiteServiceDetailsEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public SiteEntity getSite() {
-        return site;
+    public SiteEntity getSiteEntity() {
+        return siteEntity;
     }
 
-    public void setSite(SiteEntity site) {
-        this.site = site;
+    public void setSiteEntity(SiteEntity siteEntity) {
+        this.siteEntity = siteEntity;
     }
 
-    public ServiceEntity getService() {
-        return service;
+    public ServiceEntity getServiceEntity() {
+        return serviceEntity;
     }
 
-    public void setService(ServiceEntity service) {
-        this.service = service;
+    public void setServiceEntity(ServiceEntity serviceEntity) {
+        this.serviceEntity = serviceEntity;
     }
-
 }

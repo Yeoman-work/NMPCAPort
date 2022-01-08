@@ -46,7 +46,7 @@ const clearSiteData ={
 
 
 function healthCenterReducer(healthCenterState, action){
-
+    console.log(healthCenterState);
     switch(action.type){
         case HEALTH_CENTER_FIELDS.HEALTH_CENTER_NAME:
 
@@ -133,13 +133,14 @@ function healthCenterReducer(healthCenterState, action){
         case HEALTH_CENTER_FIELDS.CITY:
             console.log(action.payload)
             const cityString = action.payload.split('/');
+
             const cityObj = {
                 id: cityString[0],
                 name: cityString[1]
             }
             return produce(healthCenterState, draft=>{
                 draft.siteJson.city = cityString[0];
-                draft.site.city = cityObj;
+                draft.site.city = {...cityObj};
             })
 
         case HEALTH_CENTER_FIELDS.COUNTY:
@@ -162,7 +163,7 @@ function healthCenterReducer(healthCenterState, action){
             }
             return produce(healthCenterState, draft=>{
                 draft.siteJson.zipCode = zipCodeString[0];
-                draft.site.zipCode = zipCodeObj;
+                draft.site.zipCode = {...zipCodeObj};
             })
 
         case HEALTH_CENTER_FIELDS.SITE_FUNDING:
@@ -174,7 +175,7 @@ function healthCenterReducer(healthCenterState, action){
             console.log(fundingObj);
             if(action.payload.target.checked){
                 return produce(healthCenterState, draft=>{
-                    draft.siteJson.fund = [...healthCenterState.siteJson.fund, fundingObj.id]
+                    draft.siteJson.funding = [...healthCenterState.siteJson.fund, fundingObj.id]
                     draft.site.funding = [...healthCenterState.site.funding, fundingObj]
                 })
             }
@@ -198,36 +199,58 @@ function healthCenterReducer(healthCenterState, action){
             break;
 
         case HEALTH_CENTER_FIELDS.SITE_SERVICES:
-            const serviceObj = {
-                id: action.payload.target.value,
-                name: action.payload.name
+            const {value, checked} = action.payload
+            const siteList = value.split('/')
+            console.log(healthCenterState);
+            const siteObj ={
+                id: siteList[0],
+                name: siteList[1],
             }
-            if(action.payload.target.checked){
-                return produce(healthCenterState, draft=>{
-                    draft.siteJson.service = [...healthCenterState.siteJson.service, serviceObj.id]
-                    draft.site.service = [...healthCenterState.site.service, serviceObj];
-                    console.log(healthCenterState.siteJson)
-                })
-            }
-            if(!action.payload.target.checked){
-                const services = healthCenterState.site.service;
-                let newArray = [];
-                let newArrayIds = [];
-                for(let i = 0; i < services.length; i++){
-                    if(services[i].id !== serviceObj.id){
-                        newArray.push(services[i]);
-                        newArrayIds.push(services[i].id);
-                    }
+
+            if(checked){
+                console.log('this')
+                if(!healthCenterState.siteJson.service.includes(siteList[0]) && !healthCenterState.site.service.includes(siteList[1])){
+
+                    return produce(healthCenterState, draft=>{
+
+                        draft.siteJson.service = [...healthCenterState.siteJson.service, siteList[0]];
+
+                        draft.site.service = [...healthCenterState.site.service, siteObj];
+                    })
+
+                }else{
+
+                    return healthCenterState;
                 }
 
-                return produce(healthCenterState, draft=>{
-                    draft.siteJson.service = [...newArrayIds];
-                    draft.site.service = [...newArray];
-                    console.log(healthCenterState.siteJson)
-                })
 
+            }else{
+
+                if(healthCenterState.siteJson.service.includes(siteList[0]) && healthCenterState.site.service.includes(siteList[1])){
+
+                    return  produce(healthCenterState, draft=>{
+
+                        let serviceList = [...healthCenterState.siteJson.service];
+                        let serviceListDisplay = [...healthCenterState.site.service];
+
+                        const removeServiceIdIndex =  serviceList.indexOf(siteList[0])
+                        const removeServiceNameIndex = serviceListDisplay.indexOf(siteList[1]);
+
+                        serviceList.splice(serviceList.indexOf(siteList[0]), 1);
+                        serviceListDisplay.splice(removeServiceNameIndex, 1)
+
+                        draft.siteJson.service = [...serviceList];
+                        draft.site.service = [...serviceListDisplay];
+
+                    })
+
+                }else{
+
+                    return healthCenterState;
+                }
             }
-            break;
+
+            return healthCenterState;
 
         case HEALTH_CENTER_FIELDS.PARENT_HEALTH_CENTER:
             return produce(healthCenterState, draft=>{
@@ -314,14 +337,13 @@ function healthCenterReducer(healthCenterState, action){
 
         case HEALTH_CENTER_FIELDS.NEW_SITE_LIST:
 
-
             return produce(healthCenterState, draft=>{
-                draft.formData.newSiteFormat = [...healthCenterState.formData.newSiteFormat, healthCenterState.siteJson];
-                draft.formData.newSites_list = [...healthCenterState.formData.newSites_list, action.payload];
-                draft.site = {...clearSiteData.site};
-                draft.siteJson = {...clearSiteData.siteJson}
-                console.log(healthCenterState);
-                //draft.siteJson = {...clearSiteData.siteJson};
+
+                draft.healthCenter.sitesRequest = [...healthCenterState.healthCenter.sitesRequest, healthCenterState.siteJson];
+                draft.formData.newSites = [...healthCenterState.formData.newSites, healthCenterState.site];
+
+                draft.siteJson = {...clearData.siteJson}
+                draft.site = {...clearData.site}
             })
 
         case HEALTH_CENTER_FIELDS.ZIP_CODE_LIST:
@@ -393,6 +415,39 @@ const HEALTH_CENTER_FIELDS ={
 
 }
 
+const clearData ={
+
+    site:{
+
+        name: ''.trim().toLowerCase(),
+        streetAddress: ''.trim().toLowerCase(),
+        city: ''.trim(),
+        county: ''.trim(),
+        zipCode: ''.trim(),
+        healthCenter: ''.trim(),
+        nmHouseDistrict: ''.trim(),
+        senateDistrict: ''.trim(),
+        congressionalDistrict: ''.trim(),
+        service: [],
+        funding:  []
+    },
+
+    siteJson:{
+        name: ''.trim().toLowerCase(),
+        streetAddress: ''.trim().toLowerCase(),
+        city: '',
+        county: '',
+        zipCode: '',
+        healthCenter: '',
+        nmHouseDistrict: '',
+        senateDistrict: '',
+        congressionalDistrict: '',
+        funding : [],
+        service: [],
+    },
+
+}
+
 const CreateHealthCenterView = props =>{
     const navigate = useNavigate();
 
@@ -402,20 +457,20 @@ const CreateHealthCenterView = props =>{
             id: ''.trim(),
             name: ''.trim().toLowerCase(),
             nameAbbr: ''.trim().toLowerCase(),
-            contacts: [],
-            users: []
+            sitesRequest: [],
         },
 
         site:{
+
             name: ''.trim().toLowerCase(),
             streetAddress: ''.trim().toLowerCase(),
-            city: {id: '', name: ''},
-            county: {id: '', name: ''},
-            zipCode: {id: '', name: ''},
-            healthCenter: {id: '', name: ''},
-            nmHouseDistrict: {id: '', name: ''},
-            senateDistrict:{id: '', name: ''},
-            congressionalDistrict: {id: '', name: ''},
+            city: ''.trim(),
+            county: ''.trim(),
+            zipCode: ''.trim(),
+            healthCenter: ''.trim(),
+            nmHouseDistrict: ''.trim(),
+            senateDistrict: ''.trim(),
+            congressionalDistrict: ''.trim(),
             service: [],
             funding:  []
         },
@@ -430,7 +485,7 @@ const CreateHealthCenterView = props =>{
           nmHouseDistrict: '',
           senateDistrict: '',
           congressionalDistrict: '',
-          fund : [],
+          funding : [],
           service: [],
         },
 
@@ -443,11 +498,10 @@ const CreateHealthCenterView = props =>{
             county_list: [],
             city_list : [],
             zipCode_list: [],
-            newSites_list: [],
-            newSiteFormat: [],
             contact_list: [],
             user_list: [],
-            healthCenterProcess: 0
+            healthCenterProcess: 0,
+            newSites: []
         },
 
         errors:{
@@ -631,7 +685,7 @@ const CreateHealthCenterView = props =>{
     const healthCenterHandler = async (e) =>{
 
         e.preventDefault()
-
+        console.log(healthCenterInfo.healthCenter);
 
         try{
 
@@ -643,27 +697,12 @@ const CreateHealthCenterView = props =>{
                 }
             } )
 
-            const healthCenterId = healthCenterResponse.data.healthCenterId;
-
-            const siteDetailsRequestModelList = [...healthCenterInfo.formData.newSiteFormat];
-
-            console.log(siteDetailsRequestModelList);
-            console.log(healthCenterId);
-            const siteResponse = await axios.post('http://localhost:8080/sites/bulk/'+ healthCenterId, {siteDetailsRequestModelList},{
-
-                headers:{
-                    Authorization: localStorage.getItem('token')
-                }
-
-            })
-
-            console.log(siteResponse.data);
             navigate('/yeoman/healthCenter/')
 
 
         }catch(error){
 
-            console.log(error.response);
+            console.log(error.response.data);
 
         }
 
@@ -694,12 +733,13 @@ const CreateHealthCenterView = props =>{
                     <div  className={'d-inline-flex m-auto'}>
                         <SiteListComponent
                             healthCenterName={healthCenterInfo.healthCenter.name}
-                            siteListing={healthCenterInfo.formData.newSites_list}
+                            siteListing={healthCenterInfo.formData.newSites}
                             dispatchHealthCenterInfo={dispatchHealthCenterInfo}
                             removeField={HEALTH_CENTER_FIELDS.REMOVE_CLINIC}
                         />
                         <SiteForm
                             siteState={healthCenterInfo.site}
+                            siteJson={healthCenterInfo.siteJson}
                             siteDataFields={HEALTH_CENTER_FIELDS}
                             dispatchSite={dispatchHealthCenterInfo}
                             formData={healthCenterInfo.formData}

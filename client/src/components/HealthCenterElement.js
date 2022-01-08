@@ -9,12 +9,44 @@ const HealthCenterElement = props =>{
 
     return(
 
-        <div className={'row m-auto align-items-center border rounded height400'}>
-            <div className={'col height200'}>
-                <h3>{healthCenter.name} ({healthCenter.nameAbbr})</h3>
-                <h6 className={'align-bottom'}>Updated: {healthCenter.updatedAt? dateAndTime(healthCenter.updatedAt): dateAndTime(healthCenter.createdAt)}</h6>
+        <div className={'pt-4 p-2 row m-auto border rounded height400'}>
+            <div className={'col'}>
+                <h3 className={'mb-4'}>{healthCenter.name} ({healthCenter.nameAbbr})</h3>
+                <div className={'row mt-4 pt-4'}>
+                    <div className={'col height200 overflow-auto'}>
+                        <h6>Service(s)</h6>
+                        <ul>
+                            {
+                                healthCenter?
+                                healthCenter.serviceResponses.map(({name}, index)=>{
+
+                                    return(
+                                        <li key={index} className={'text-start'}>{name}</li>
+                                    )
+                                })
+                                    : null
+                            }
+                        </ul>
+                    </div>
+                    <div className={'col'}>
+                        <h6>Funding</h6>
+                        <ul>
+                            {
+                                healthCenter.fundResponseModels?
+                                healthCenter.fundResponseModels.map(({name}, index)=>{
+
+                                    return(
+                                        <li key={index}>{name}</li>
+                                    )
+                                })
+                                    : <li>No services List</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <h6 className={'text-start'}>Updated: {healthCenter.updatedAt? dateAndTime(healthCenter.updatedAt): dateAndTime(healthCenter.createdAt)}</h6>
             </div>
-            <div className={'col height200'}>
+            <div className={'col'}>
                 <h4 className={'m-auto'}>Location(s)</h4>
                 <div className={' overflow-auto height200'}>
                     {
@@ -96,7 +128,7 @@ const HealthCenterElement = props =>{
                                 <ul className={'w-25 m-auto'}>
                                     {
                                         healthCenter?
-                                            healthCenter.senateDistrictResponseModelList.map((district, index)=>{
+                                            healthCenter.congressionalDistrictResponseList.map((district, index)=>{
 
 
                                                 return(

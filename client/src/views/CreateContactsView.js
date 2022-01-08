@@ -3,7 +3,10 @@ import axios from "axios";
 import produce from "immer";
 import Header from "../components/Header";
 import ContactForm from "../components/ContactForm";
-const { isValidCharacter } = require('../helper/generalFunctions')
+import PhoneNumberForm from "../components/PhoneNumberForm";
+import Button from "../components/Button";
+const { isValidCharacter, phoneNumberBuilder } = require('../helper/generalFunctions')
+const { isContact } = require('../helper/contactValidation')
 
 const contactReducer = (contactState, action) =>{
 
@@ -165,8 +168,63 @@ const contactReducer = (contactState, action) =>{
                 draft.networkingGroupsList = [...action.payload];
             })
 
+        case FORM_FIELDS.PHONE_NUMBER:
+
+            return produce(contactState, draft=>{
+
+                draft.phoneNumber.number = phoneNumberBuilder(action.payload, contactState.phoneNumber.number);
+            })
+
+        case FORM_FIELDS.PHONE_DESCRIPTION:
+
+            if(action.payload.length <= 25){
+
+                if(isValidCharacter(action.payload)){
+
+                    return produce(contactState, draft=>{
+
+                        draft.phoneNumber.description = action.payload;
+                    })
+
+
+                }else if(action.payload.length < 1){
+
+                    return produce(contactState, draft=>{
+
+                        draft.phoneNumber.description = action.payload;
+                    })
+
+
+                }else{
+
+                    return contactState;
+                }
+
+
+            }else{
+
+                return contactState;
+
+            }
+
+        case FORM_FIELDS.PHONE_NUMBER_LIST:
+
+            return produce(contactState, draft=>{
+
+                draft.contact.phoneNumbers = [...contactState.contact.phoneNumbers, contactState.phoneNumber];
+
+                draft.phoneNumber = clearPhoneNumber;
+            })
+
     }
 }
+
+
+const clearPhoneNumber={
+        number: ''.trim(),
+        description: ''.trim()
+}
+
 
 const FORM_FIELDS={
 
@@ -177,7 +235,10 @@ const FORM_FIELDS={
     HEALTH_CENTER: 'healthCenter',
     HEALTH_CENTER_LIST: 'healthCenterList',
     NETWORK_GRP: 'networkGroup',
-    NETWORK_GRP_LIST: 'networkGroupList'
+    NETWORK_GRP_LIST: 'networkGroupList',
+    PHONE_NUMBER: 'phone numbers',
+    PHONE_DESCRIPTION: 'phone description',
+    PHONE_NUMBER_LIST: 'phone number list'
 
 }
 
@@ -191,7 +252,13 @@ const CreateContactsView = props =>{
             email: ''.trim().toLowerCase(),
             title: ''.trim().toLowerCase(),
             healthCenter: ''.trim(),
+            phoneNumbers: [],
             networkingGroups: []
+        },
+
+        phoneNumber: {
+            number: ''.trim(),
+            description: ''.trim()
         },
 
         networkingGroupsList: [],
@@ -253,6 +320,30 @@ const CreateContactsView = props =>{
         })()
     }, [])
 
+
+
+
+
+    const submitContact = async (e) =>{
+        e.preventDefault();
+
+        try{
+
+            const savedContactResponse = await axios.post('http://localhost:8080/contacts', contactInfo.contact, {
+
+                headers:{
+
+                    Authorization: localStorage.getItem('token')
+                }
+            })
+
+        }catch(error){
+
+            console.log(error.response);
+
+        }
+    }
+
     return(
         <div>
             <Header/>
@@ -265,6 +356,22 @@ const CreateContactsView = props =>{
                     divProps={'w-50 m-auto'}
                 />
             </div>
+            <div className={'m-auto mt-5'}>
+                <h6 className={'border w-50 m-auto'}>Phone Numbers</h6>
+                <PhoneNumberForm
+                    dispatchFunction={dispatchContactInfo}
+                    formFields={FORM_FIELDS}
+                    phoneNumber={contactInfo.phoneNumber}
+                    phoneNumberList={contactInfo.contact.phoneNumbers}
+                    divClass={'m-auto w-50'}
+                />
+            </div>
+            <Button
+                label={'Save Contact'}
+                action={submitContact}
+                disable={!isContact(contactInfo.contact)}
+
+            />
         </div>
     )
 }

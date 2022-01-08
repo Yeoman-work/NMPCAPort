@@ -24,7 +24,7 @@ public class HealthCenterDto {
     private String nameAbbr;
     private Date createdAt;
     private Date updatedAt;
-    private List<SiteDetailsRequestModel> siteDetailsRequests;
+    private List<SiteDetailsRequestModel> sitesRequest;
     private List<String> users;
     private List<String> contacts;
     private List<String> sites;
@@ -46,6 +46,8 @@ public class HealthCenterDto {
     private List<FundEntity> fundEntities;
     private List<ServiceResponse> serviceResponseList;
     private List<FundResponseModel> fundResponseList;
+    private List<ServiceResponse> serviceResponses;
+    private List<FundResponseModel> fundResponseModels;
 
 
     public Long getId() {
@@ -264,11 +266,27 @@ public class HealthCenterDto {
         this.fundResponseList = fundResponseList;
     }
 
-    public List<SiteDetailsRequestModel> getSiteDetailsRequests() {
-        return siteDetailsRequests;
+    public List<SiteDetailsRequestModel> getSitesRequest() {
+        return sitesRequest;
     }
 
-    public void setSiteDetailsRequests(List<SiteDetailsRequestModel> siteDetailsRequests) {
-        this.siteDetailsRequests = siteDetailsRequests;
+    public void setSitesRequest(List<SiteDetailsRequestModel> sitesRequest) {
+        this.sitesRequest = sitesRequest;
+    }
+
+    public List<ServiceResponse> getServiceResponses() {
+        return serviceResponses;
+    }
+
+    public void setServiceResponses(List<ServiceResponse> serviceResponses) {
+        this.serviceResponses = serviceResponses;
+    }
+
+    public List<FundResponseModel> getFundResponseModels() {
+        return fundResponseModels;
+    }
+
+    public void setFundResponseModels(List<FundResponseModel> fundResponseModels) {
+        this.fundResponseModels = fundResponseModels;
     }
 }

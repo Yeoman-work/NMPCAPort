@@ -1,5 +1,6 @@
 import React from "react";
 const { InList } = require('../helper/generalFunctions')
+const { addSite } = require('../helper/siteValidation')
 
 
 
@@ -7,6 +8,7 @@ const { InList } = require('../helper/generalFunctions')
 const SiteForm = props =>{
 
    const {siteState,
+          siteJson,
           siteDataFields,
           dispatchSite,
           formData,
@@ -15,55 +17,13 @@ const SiteForm = props =>{
 
 
 
-   const addSite = (siteState, formData) =>{
-
-       let disable = true;
 
 
-       if(siteState.name.length >= 3 && siteState.name.length <= 50){
-           if(siteState.streetAddress.length >= 5 && siteState.streetAddress.length <= 100 ){
-               if(formData.city_list) {
 
-                   for (let city of formData.city_list) {
-
-                       if (city.cityId === siteState.city.id) {
-
-                           if(formData.county_list){
-
-                               for(let county of formData.county_list){
-                                   console.log('this is it')
-                                   if(county.countyId === siteState.county.id){
-
-                                       if(formData.zipCode_list){
-
-                                           for(let zipCode of formData.zipCode_list){
-
-                                               if(zipCode.zipCodeId === siteState.zipCode.id){
-                                                   disable = false
-                                                   break;
-                                               }
-                                           }
-
-                                       }
-                                   }
-                               }
-                           }
-                       }
-                   }
-               }
-           }
-
-       }else{
-
-           disable = true;
-       }
-
-       return disable;
-   }
 
    const saveHealthCenter = (formData) =>{
        let disable = true;
-       const siteList = formData.newSiteFormat.length;
+       const siteList = formData.newSites.length;
 
 
        if(siteList > 0) {
@@ -178,10 +138,9 @@ const SiteForm = props =>{
                                                                    itemID={serviceId}
                                                                    name={siteDataFields.SITE_SERVICES}
                                                                    className={'form-check-input me-2'}
-                                                                   checked={InList(siteState.service, serviceId)}
-                                                                   value={serviceId}
-                                                                   onChange={(e)=>dispatchSite({type: e.target.name,
-                                                                       payload: {target : e.target, name: name}})}
+                                                                   checked={InList(siteJson.service, serviceId)}
+                                                                   value={serviceId + '/' + name}
+                                                                   onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target})}
                                                             />
                                                             {name}</label>
                                                     </div>
@@ -284,7 +243,7 @@ const SiteForm = props =>{
                     </div>
                 </form>
                 <button onClick={(e)=>dispatchSite({type: siteDataFields.FORM_DECREMENT})}>Back</button>
-                <button disabled={addSite(siteState, formData)} onClick={(e)=>dispatchSite({type: siteDataFields.NEW_SITE_LIST, payload: {...siteState}, option: e })}>Add Another Site</button>
+                <button disabled={addSite(siteJson, formData)} onClick={(e)=>dispatchSite({ type: siteDataFields.NEW_SITE_LIST })}>Add Another Site</button>
                 <button disabled={saveHealthCenter(formData)} onClick={(e)=>healthCenterHandler(e)}>Finish</button>
             </div>
         </div>

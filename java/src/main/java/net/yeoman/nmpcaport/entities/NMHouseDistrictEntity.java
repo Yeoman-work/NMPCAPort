@@ -49,7 +49,7 @@ public class NMHouseDistrictEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
-    @OneToMany(mappedBy = "nmHouseDistrict", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "nmHouseDistrictEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<SiteEntity> sites;
 

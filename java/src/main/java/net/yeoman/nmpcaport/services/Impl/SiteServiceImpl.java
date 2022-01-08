@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
+import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.services.SiteFundingDetailsService;
 import net.yeoman.nmpcaport.services.SiteService;
 import net.yeoman.nmpcaport.entities.*;
@@ -92,8 +93,11 @@ public class SiteServiceImpl implements SiteService {
             List<SiteDto> returnValue = new ArrayList<>();
             ModelMapper modelMapper = new ModelMapper();
 
+            HealthCenterEntity healthCenterEntity = this.healthCenterService.getHealthCenterEntity(healthCenterId);
+
             //loop through site DTO
             for(SiteDto siteDto: siteDtoList){
+
                 //convert dto to entity
                 SiteEntity siteEntity = modelMapper.map(siteDto, SiteEntity.class);
 
@@ -105,6 +109,8 @@ public class SiteServiceImpl implements SiteService {
                     siteEntity.setSiteId(utils.generateRandomID());
                 }
 
+                System.out.println("read this");
+                System.out.println(siteDto.getCity());
                 //check for city id
                 if(siteDto.getCity() != null){
 
@@ -113,7 +119,7 @@ public class SiteServiceImpl implements SiteService {
                     // check is entity is present
                     if(cityEntity == null) throw new CityServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
                     //set city entity
-                    siteEntity.setCity(cityEntity);
+                    siteEntity.setCityEntity(cityEntity);
                 }
                 //check for county id
                 if(siteDto.getCounty() != null){
@@ -122,7 +128,7 @@ public class SiteServiceImpl implements SiteService {
                     //check for county entity
                     if(countyEntity == null) throw new CountyServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
                     //set county entity
-                    siteEntity.setCounty(countyEntity);
+                    siteEntity.setCountyEntity(countyEntity);
                 }
                 //check zip code id
                 if(siteDto.getZipCode() != null){
@@ -131,7 +137,7 @@ public class SiteServiceImpl implements SiteService {
                     //check if zip code eneity is present
                     if(zipCodeEntity == null) throw new ZipCodeServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
                     //set zip code entity
-                    siteEntity.setZipCode(zipCodeEntity);
+                    siteEntity.setZipCodeEntity(zipCodeEntity);
                 }
 
                 //check for nm house district id
@@ -142,7 +148,7 @@ public class SiteServiceImpl implements SiteService {
                     //check if entity is present
                     if(nmHouseDistrict == null) throw new NMHouseDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
                     //set nm house district entity
-                    siteEntity.setNmHouseDistrict(nmHouseDistrict);
+                    siteEntity.setNmHouseDistrictEntity(nmHouseDistrict);
                 }
 
                 //set senate district entity
@@ -152,7 +158,7 @@ public class SiteServiceImpl implements SiteService {
                     //check if senate district is present
                     if(senateDistrict == null) throw new SenateDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
                     //set senate district entity
-                    siteEntity.setSenateDistrict(senateDistrict);
+                    siteEntity.setSenateDistrictEntity(senateDistrict);
                 }
 
                 //check for congressional district id
@@ -166,6 +172,9 @@ public class SiteServiceImpl implements SiteService {
                     siteEntity.setCongressionalDistrictEntity(congressionalDistrictEntity);
                 }
 
+
+                //set health center
+                siteEntity.setHealthCenterEntity(healthCenterEntity);
                 //save site entity
                 SiteEntity savedSiteEntity = this.siteRepository.save(siteEntity);
 
@@ -174,9 +183,8 @@ public class SiteServiceImpl implements SiteService {
 
                 //check for site funding
                 if(siteDto.getFund() != null){
-                    //loop through funding Ids
                     List<FundResponseModel> fundResponseModelList = new ArrayList<>();
-
+                    //loop through funding Ids
                     for(String id: siteDto.getFund()){
                         //get fund entity
                         FundEntity fundEntity = this.fundService.getFundEntity(id);
@@ -192,20 +200,55 @@ public class SiteServiceImpl implements SiteService {
                             siteFundingDetailsEntity.setSiteFundingDetailsId(utils.generateRandomID());
                         }
                         //assign site
-                        siteFundingDetailsEntity.setSite(savedSiteEntity);
+                        siteFundingDetailsEntity.setSiteEntity(savedSiteEntity);
                         //assign fund
-                        siteFundingDetailsEntity.setFund(fundEntity);
-
+                        siteFundingDetailsEntity.setFundEntity(fundEntity);
+                        //convert fund to fund response model
                         fundResponseModelList.add(modelMapper.map(fundEntity, FundResponseModel.class));
                     }
-
+                    //fund response
                     savedSiteDto.setFundResponseModels(fundResponseModelList);
 
-                    for(String id: siteDto)
                 }
+                //check for service(s)
+                if(siteDto.getService() != null){
+
+                    //list to collect Service responses
+                    List<ServiceResponse> serviceResponses = new ArrayList<>();
+
+                    //loop through service Id
+                    for(String id: siteDto.getService()){
+                        //get service entity
+                        ServiceEntity serviceEntity = this.serviceService.getServiceEntity(id);
+                        //check service entity exist
+                        if(serviceEntity == null) throw new ServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+                        //create site service entity
+                        SiteServiceDetailsEntity siteServiceDetailsEntity = new SiteServiceDetailsEntity();
+                        //create public id
+                        siteServiceDetailsEntity.setSiteServiceDetailsId(utils.generateRandomID());
+
+                        //check if public id is unique
+                        while(this.siteServiceDetailsService.existByPublicId(siteServiceDetailsEntity.getSiteServiceDetailsId())){
+
+                            siteServiceDetailsEntity.setSiteServiceDetailsId(utils.generateRandomID());
+                        }
+                        //save site and service to entity
+                        siteServiceDetailsEntity.setServiceEntity(serviceEntity);
+                        siteServiceDetailsEntity.setSiteEntity(savedSiteEntity);
+
+                        //save entity
+                        SiteServiceDetailsEntity savedSiteServiceDetailsEntity = this.siteServiceDetailsService.createSiteServiceEntity(siteServiceDetailsEntity);
+
+                        //convert service response to service class
+                        serviceResponses.add(modelMapper.map(savedSiteServiceDetailsEntity.getServiceEntity(), ServiceResponse.class));
+                    }
+
+                    //add list of responses to saved dto
+                    savedSiteDto.setServiceResponses(serviceResponses);
+                }
+
+                returnValue.add(savedSiteDto);
             }
-
-
 
         return returnValue;
     }

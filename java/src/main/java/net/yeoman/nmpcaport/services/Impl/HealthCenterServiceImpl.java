@@ -2,6 +2,9 @@ package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.services.HealthCenterService;
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
@@ -19,6 +22,7 @@ import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.io.repositories.HealthCenterRepository;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
+import net.yeoman.nmpcaport.shared.dto.SiteDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,10 +119,10 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
                 SiteDetailsResponse siteResponse = new ModelMapper().map(site, SiteDetailsResponse.class);
 
-                siteResponse.setCityResponse(new ModelMapper().map(site.getCity(), CityResponse.class));
-                siteResponse.setCountyResponse(new ModelMapper().map(site.getCounty(), CountyResponse.class));
-                siteResponse.setZipCodeResponse(new ModelMapper().map(site.getZipCode(), ZipCodeResponse.class));
-                siteResponse.setHealthCenterResponse(new ModelMapper().map(site.getHealthCenter(), HealthCenterNestedResponseModel.class));
+                siteResponse.setCityResponse(new ModelMapper().map(site.getCityEntity(), CityResponse.class));
+                siteResponse.setCountyResponse(new ModelMapper().map(site.getCountyEntity(), CountyResponse.class));
+                siteResponse.setZipCodeResponse(new ModelMapper().map(site.getZipCodeEntity(), ZipCodeResponse.class));
+                siteResponse.setHealthCenterResponse(new ModelMapper().map(site.getHealthCenterEntity(), HealthCenterNestedResponseModel.class));
 
                 siteDetails.add(siteResponse);
             }
@@ -131,27 +135,51 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
     @Override
     public HealthCenterResponseModel createHealthCenter(HealthCenterDto healthCenterDto) {
+        System.out.println("Inside health care service");
         ModelMapper modelMapper = new ModelMapper();
         HealthCenterEntity healthCenterEntity = new ModelMapper().map(healthCenterDto, HealthCenterEntity.class);
 
         healthCenterEntity.setHealthCenterId(utils.generateRandomID());
-
+        System.out.println("after health Center public assignment");
         while(this.healthCenterRepository.existsByHealthCenterId(healthCenterEntity.getHealthCenterId())){
 
             healthCenterEntity.setHealthCenterId(utils.generateRandomID());
         }
 
+
         HealthCenterEntity newHealthCenter = this.healthCenterRepository.save(healthCenterEntity);
 
-        if(healthCenterDto.getSenateDistrictResponseModelList() != null){
+        HealthCenterDto savedHealthCenterDto = modelMapper.map(newHealthCenter, HealthCenterDto.class);
 
+        if(newHealthCenter == null) throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
+        if(healthCenterDto.getSitesRequest() != null){
+            System.out.println("in here");
+            List<SiteDto> siteDtoList = new ArrayList<>();
+
+            for(SiteDetailsRequestModel site: healthCenterDto.getSitesRequest()){
+
+                siteDtoList.add(modelMapper.map(site, SiteDto.class));
+            }
+
+            List<SiteDto> savedSiteDtoList = this.siteService.createSiteBulk(siteDtoList, newHealthCenter.getHealthCenterId());
+
+            if(savedSiteDtoList == null) throw new SiteServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+            List<SiteDetailsResponse> siteDetailsResponses = new ArrayList<>();
+
+            for(SiteDto siteDto: savedSiteDtoList){
+
+                siteDetailsResponses.add(modelMapper.map(siteDto, SiteDetailsResponse.class));
+
+            }
+
+            savedHealthCenterDto.setSiteResponse(siteDetailsResponses);
         }
 
 
+        return modelMapper.map(savedHealthCenterDto, HealthCenterResponseModel.class);
 
-
-        return healthCenterResponse;
     }
 
 
@@ -195,10 +223,15 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
     @Override
     public List<HealthCenterDto> getHealthCenters(int page, int limit) {
-
+        ModelMapper modelMapper = new ModelMapper();
         List<HealthCenterDto> returnValue = new ArrayList<>();
+        List<NMHouseDistrictEntity> nmHouseDistrictEntities = new ArrayList<>();
+        List<CongressionalDistrictEntity> congressionalDistrictEntities = new ArrayList<>();
+        List<SenateDistrictEntity> senateDistrictEntities = new ArrayList<>();
+        List<ServiceEntity> serviceEntities = new ArrayList<>();
+        List<FundEntity> fundEntities = new ArrayList<>();
 
-        if(page > 0) page -=1;
+        if (page > 0) page -= 1;
 
         Pageable pageableRequest = PageRequest.of(page, limit);
 
@@ -207,83 +240,176 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         List<HealthCenterEntity> healthCenters = healthCenterPage.getContent();
 
 
+        for (HealthCenterEntity healthCenter : healthCenters) {
 
-        for(HealthCenterEntity healthCenter: healthCenters){
-
-            HealthCenterDto healthCenterDto = new ModelMapper().map(healthCenter, HealthCenterDto.class);
-
+            HealthCenterDto healthCenterDto = modelMapper.map(healthCenter, HealthCenterDto.class);
 
 
-            if(healthCenter.getSites().size() > 0){
+            if (healthCenter.getSiteEntities() != null) {
+                List<SiteDetailsNestedResponse> siteDetailsResponses = new ArrayList<>();
 
-                List<SiteDetailsNestedResponse> siteDetailsNestedResponses = new ArrayList<>();
-                List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponses = new ArrayList<>();
-                List<CongressionalDistrictResponse> congressionalDistrictResponseList = new ArrayList<>();
-                List<SenateDistrictResponseModel> senateDistrictResponseModelList = new ArrayList<>();
-                for(SiteEntity site: healthCenter.getSites()){
+                for (SiteEntity site : healthCenter.getSiteEntities()) {
 
-                    SiteDetailsNestedResponse siteDetailsNestedResponse = new ModelMapper().map(site, SiteDetailsNestedResponse.class);
+                    SiteDto siteDto = modelMapper.map(site, SiteDto.class);
 
-                    siteDetailsNestedResponse.setCityResponse(new ModelMapper().map(site.getCity(), CityResponse.class));
-                    siteDetailsNestedResponse.setCountyResponse(new ModelMapper().map(site.getCounty(), CountyResponse.class));
-                    siteDetailsNestedResponse.setZipCodeResponse(new ModelMapper().map(site.getZipCode(), ZipCodeResponse.class));
+                    if(site.getCityEntity() != null){
 
-                    NMHouseDistrictNestedResponse nmHouseDistrictNestedResponse = new ModelMapper().map(site.getNmHouseDistrict(), NMHouseDistrictNestedResponse.class);
-                    CongressionalDistrictResponse congressionalDistrictResponse = new ModelMapper().map(site.getCongressionalDistrictEntity(), CongressionalDistrictResponse.class);
-                    SenateDistrictResponseModel senateDistrictResponseModel = new ModelMapper().map(site.getSenateDistrict(), SenateDistrictResponseModel.class);
+                        siteDto.setCityResponse(modelMapper.map(site.getCityEntity(), CityResponse.class));
+                    }
 
-                    //add a district Boolean
-                    Boolean addNMHouseDistrict = true;
-                    Boolean addCongressionalDistrict = true;
-                    Boolean addSenateDistrict = true;
+                    if(site.getCountyEntity() != null){
 
-                    for(NMHouseDistrictNestedResponse districtResponse: nmHouseDistrictNestedResponses){
+                        siteDto.setCountyResponse(modelMapper.map(site.getCountyEntity(), CountyResponse.class));
+                    }
 
-                        if(districtResponse.getHouseDistrictId() == site.getNmHouseDistrict().getHouseDistrictId()){
-                            addNMHouseDistrict = false;
+                    if(site.getZipCodeEntity() != null){
+
+                        siteDto.setZipCodeResponse(modelMapper.map(site.getZipCodeEntity(), ZipCodeResponse.class));
+                    }
+
+
+                    if(site.getNmHouseDistrictEntity() != null){
+
+                        siteDto.setNmHouseDistrictResponse(modelMapper.map(site.getNmHouseDistrictEntity(), NMHouseDistrictResponse.class));
+
+                        if(!nmHouseDistrictEntities.contains(site.getNmHouseDistrictEntity())){
+                            nmHouseDistrictEntities.add(site.getNmHouseDistrictEntity());
                         }
                     }
 
-                    for(CongressionalDistrictResponse districtResponse: congressionalDistrictResponseList){
+                    if(site.getSenateDistrictEntity() != null){
 
-                        if(districtResponse.getCongressionalDistrictId() == site.getNmHouseDistrict().getHouseDistrictId()){
+                        siteDto.setSenateDistrictResponseModel(modelMapper.map(site.getSenateDistrictEntity(), SenateDistrictResponseModel.class));
 
-                            addCongressionalDistrict = false;
+                        if(!senateDistrictEntities.contains(site.getSenateDistrictEntity())){
+
+                            senateDistrictEntities.add(site.getSenateDistrictEntity());
                         }
                     }
 
-                    for(SenateDistrictResponseModel districtResponse: senateDistrictResponseModelList){
+                    if(site.getCongressionalDistrictEntity() != null){
 
-                        if(districtResponse.getSenateDistrictId() == site.getSenateDistrict().getSenateDistrictId()){
+                        siteDto.setCongressionalDistrictResponse(modelMapper.map(site.getCongressionalDistrictEntity(), CongressionalDistrictResponse.class));
 
-                            addSenateDistrict = false;
+                        if(!congressionalDistrictEntities.contains(site.getCongressionalDistrictEntity())){
+
+                            congressionalDistrictEntities.add(site.getCongressionalDistrictEntity());
                         }
+
                     }
 
-                    if(addNMHouseDistrict){
+                    if(site.getSiteFundingDetailsEntities() != null){
+                        List<FundResponseModel> fundResponseModelList = new ArrayList<>();
 
-                        nmHouseDistrictNestedResponses.add(new ModelMapper().map(site.getNmHouseDistrict(), NMHouseDistrictNestedResponse.class));
+                        for(SiteFundingDetailsEntity fundDetails: site.getSiteFundingDetailsEntities()){
+
+                            FundResponseModel fundResponseModel = modelMapper.map(fundDetails.getFundEntity(), FundResponseModel.class);
+
+                            fundResponseModelList.add(fundResponseModel);
+
+                            if(!fundEntities.contains(fundDetails.getFundEntity())){
+
+                                fundEntities.add(fundDetails.getFundEntity());
+                            }
+                        }
+
+                        siteDto.setFundResponseModels(fundResponseModelList);
                     }
 
-                    if(addCongressionalDistrict){
+                    if(site.getServiceDetailsEntities() != null){
 
-                        congressionalDistrictResponseList.add(new ModelMapper().map(site.getCongressionalDistrictEntity(), CongressionalDistrictResponse.class));
+                        List<ServiceResponse> serviceResponseList = new ArrayList<>();
+
+                        for(SiteServiceDetailsEntity serviceDetails: site.getServiceDetailsEntities()){
+
+                            ServiceResponse serviceResponse = modelMapper.map(serviceDetails.getServiceEntity(), ServiceResponse.class);
+
+                            serviceResponseList.add(serviceResponse);
+
+                            if(!serviceEntities.contains(serviceDetails.getServiceEntity())){
+
+                                serviceEntities.add(serviceDetails.getServiceEntity());
+                            }
+                        }
+
+                        siteDto.setServiceResponses(serviceResponseList);
                     }
 
-                    if(addSenateDistrict){
 
-                        senateDistrictResponseModelList.add(new ModelMapper().map(site.getSenateDistrict(), SenateDistrictResponseModel.class ));
-                    }
+                    siteDetailsResponses.add(modelMapper.map(siteDto, SiteDetailsNestedResponse.class));
 
-                    siteDetailsNestedResponses.add(siteDetailsNestedResponse);
                 }
 
-                healthCenterDto.setSiteDetailsNestedResponseList(siteDetailsNestedResponses);
-                healthCenterDto.setNmHouseDistrictNestedResponses(nmHouseDistrictNestedResponses);
-                healthCenterDto.setSenateDistrictResponseModelList(senateDistrictResponseModelList);
-                healthCenterDto.setCongressionalDistrictResponseList(congressionalDistrictResponseList);
+                healthCenterDto.setSiteDetailsNestedResponseList(siteDetailsResponses);
             }
 
+            if(nmHouseDistrictEntities.size() > 0){
+
+                List<NMHouseDistrictNestedResponse> houseDistrictResponses = new ArrayList<>();
+
+                for(NMHouseDistrictEntity houseDistrict: nmHouseDistrictEntities ){
+
+                    houseDistrictResponses.add(modelMapper.map(houseDistrict, NMHouseDistrictNestedResponse.class));
+
+                }
+
+                healthCenterDto.setNmHouseDistrictNestedResponses(houseDistrictResponses);
+
+            }
+
+            if(senateDistrictEntities.size() > 0){
+
+                List<SenateDistrictResponseModel> senateDistrictResponseModels = new ArrayList<>();
+
+                for(SenateDistrictEntity senateDistrict: senateDistrictEntities){
+
+                    senateDistrictResponseModels.add(modelMapper.map(senateDistrict, SenateDistrictResponseModel.class));
+                }
+
+                healthCenterDto.setSenateDistrictResponseModelList(senateDistrictResponseModels);
+            }
+
+            if(congressionalDistrictEntities.size() > 0){
+
+                List<CongressionalDistrictResponse> congressionalDistrictResponses = new ArrayList<>();
+
+                for(CongressionalDistrictEntity congressionalDistrict: congressionalDistrictEntities){
+
+                    congressionalDistrictResponses.add(modelMapper.map(congressionalDistrict, CongressionalDistrictResponse.class));
+
+                }
+
+                healthCenterDto.setCongressionalDistrictResponseList(congressionalDistrictResponses);
+            }
+
+            if(serviceEntities.size() > 0){
+
+                List<ServiceResponse> serviceResponses = new ArrayList<>();
+
+                for(ServiceEntity service: serviceEntities){
+
+                    ServiceResponse serviceResponse = modelMapper.map(service, ServiceResponse.class);
+
+                    serviceResponses.add(serviceResponse);
+                }
+
+                healthCenterDto.setServiceResponses(serviceResponses);
+            }
+
+            if(fundEntities.size() > 0){
+
+                List<FundResponseModel> fundResponseModels = new ArrayList<>();
+
+                for(FundEntity fund: fundEntities){
+
+                    FundResponseModel fundResponseModel = modelMapper.map(fund, FundResponseModel.class);
+
+                    fundResponseModels.add(fundResponseModel);
+                }
+
+                healthCenterDto.setFundResponseModels(fundResponseModels);
+
+            }
 
             returnValue.add(healthCenterDto);
         }
@@ -304,4 +430,5 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         return returnValue;
     }
+
 }

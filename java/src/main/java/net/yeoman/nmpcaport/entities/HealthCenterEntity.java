@@ -48,8 +48,8 @@ public class HealthCenterEntity implements Serializable {
 
 
 
-    @OneToMany(mappedBy = "healthCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SiteEntity> sites;
+    @OneToMany(mappedBy = "healthCenterEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SiteEntity> siteEntities;
 
 
 
@@ -76,8 +76,7 @@ public class HealthCenterEntity implements Serializable {
                               Date createdAt,
                               Date updatedAt,
                               List<UserEntity> users,
-                              List<ContactEntity> contacts,
-                              List<SiteEntity> sites) {
+                              List<ContactEntity> contacts) {
         this.id = id;
         this.healthCenterId = healthCenterId;
         this.name = name;
@@ -86,7 +85,7 @@ public class HealthCenterEntity implements Serializable {
         this.updatedAt = updatedAt;
         this.users = users;
         this.contacts = contacts;
-        this.sites = sites;
+
     }
 
 
@@ -156,14 +155,11 @@ public class HealthCenterEntity implements Serializable {
         this.contacts = contacts;
     }
 
-    public List<SiteEntity> getSites() {
-        return sites;
+    public List<SiteEntity> getSiteEntities() {
+        return siteEntities;
     }
 
-    public void setSites(List<SiteEntity> sites) {
-        this.sites = sites;
+    public void setSiteEntities(List<SiteEntity> siteEntities) {
+        this.siteEntities = siteEntities;
     }
-
-
-
 }

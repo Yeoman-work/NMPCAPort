@@ -53,7 +53,7 @@ public class SenateDistrictEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
-    @OneToMany(mappedBy = "senateDistrict", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "senateDistrictEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<SiteEntity> sites;
 

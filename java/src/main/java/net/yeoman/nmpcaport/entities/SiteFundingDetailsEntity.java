@@ -18,11 +18,11 @@ public class SiteFundingDetailsEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "site_entity_id")
-    private SiteEntity site;
+    private SiteEntity siteEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fund_entity_id")
-    private FundEntity fund;
+    private FundEntity fundEntity;
 
 
 
@@ -57,8 +57,8 @@ public class SiteFundingDetailsEntity implements Serializable {
                                     Date updatedAt) {
         this.id = id;
         this.siteFundingDetailsId = siteFundingDetailsId;
-        this.site = site;
-        this.fund = fund;
+        this.siteEntity = site;
+        this.fundEntity = fund;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -79,12 +79,20 @@ public class SiteFundingDetailsEntity implements Serializable {
         this.siteFundingDetailsId = siteFundingDetailsId;
     }
 
-    public SiteEntity getSite() {
-        return site;
+    public SiteEntity getSiteEntity() {
+        return siteEntity;
     }
 
-    public void setSite(SiteEntity site) {
-        this.site = site;
+    public void setSiteEntity(SiteEntity siteEntity) {
+        this.siteEntity = siteEntity;
+    }
+
+    public FundEntity getFundEntity() {
+        return fundEntity;
+    }
+
+    public void setFundEntity(FundEntity fundEntity) {
+        this.fundEntity = fundEntity;
     }
 
     public Date getCreatedAt() {
@@ -102,13 +110,4 @@ public class SiteFundingDetailsEntity implements Serializable {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-    public FundEntity getFund() {
-        return fund;
-    }
-
-    public void setFund(FundEntity fund) {
-        this.fund = fund;
-    }
-
 }

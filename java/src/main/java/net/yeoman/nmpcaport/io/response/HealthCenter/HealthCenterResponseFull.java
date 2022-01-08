@@ -2,8 +2,10 @@ package net.yeoman.nmpcaport.io.response.HealthCenter;
 
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
+import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
@@ -19,6 +21,8 @@ public class HealthCenterResponseFull {
     private List<CongressionalDistrictResponse> congressionalDistrictResponseList;
     private List<SenateDistrictResponseModel> senateDistrictResponseModelList;
     private List<SiteDetailsNestedResponse> siteDetailsNestedResponseList;
+    private List<ServiceResponse> serviceResponses;
+    private List<FundResponseModel> fundResponseModels;
     private Date createdAt;
     private Date updatedAt;
 
@@ -92,5 +96,21 @@ public class HealthCenterResponseFull {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<ServiceResponse> getServiceResponses() {
+        return serviceResponses;
+    }
+
+    public void setServiceResponses(List<ServiceResponse> serviceResponses) {
+        this.serviceResponses = serviceResponses;
+    }
+
+    public List<FundResponseModel> getFundResponseModels() {
+        return fundResponseModels;
+    }
+
+    public void setFundResponseModels(List<FundResponseModel> fundResponseModels) {
+        this.fundResponseModels = fundResponseModels;
     }
 }

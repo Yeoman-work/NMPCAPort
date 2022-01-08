@@ -13,7 +13,7 @@ const ContactForm = props =>{
   } = props;
 
     return(
-        <form className={divProps}>
+        <div className={divProps}>
             <h1>{label}</h1>
             <TextInputField
                 label={'Title'}
@@ -60,6 +60,7 @@ const ContactForm = props =>{
                             name={formFields.HEALTH_CENTER}
                             onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target.value})}
                     >
+                        <option>Choose a HealthCenter</option>
                         {
                         contactData?
                          contactData.healthCenters.map((healthCenter, index)=>{
@@ -74,6 +75,7 @@ const ContactForm = props =>{
                 </div>
             </div>
             <div className={'row'}>
+                <h6 className={'border'}>Networking Groups</h6>
                 <div className={'col'}>
                     <label>Select Networking groups</label>
                     {
@@ -83,7 +85,7 @@ const ContactForm = props =>{
                             if(!contactData.contact.networkingGroups.includes(group.networkingGroupId)){
                                 return(
 
-                                    <div key={index} className={'border'}>
+                                    <div key={index} className={'border text-start ps-3 m-auto w-75'}>
                                         <label className={'form-check-label'}></label>
                                         <input type="checkbox"
                                                name={formFields.NETWORK_GRP}
@@ -125,7 +127,7 @@ const ContactForm = props =>{
                     }
                 </div>
             </div>
-        </form>
+        </div>
     )
 }
 

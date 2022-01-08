@@ -46,9 +46,9 @@ public class ServiceEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
-    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "serviceEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<SiteServiceDetailsEntity> siteDetailsList;
+    private List<SiteServiceDetailsEntity> siteServiceDetailsEntities;
 
 
 
@@ -68,7 +68,7 @@ public class ServiceEntity implements Serializable {
         this.abbr = abbr;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.siteDetailsList = siteDetailsList;
+
     }
 
     public Long getId() {
@@ -119,11 +119,11 @@ public class ServiceEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<SiteServiceDetailsEntity> getSiteDetailsList() {
-        return siteDetailsList;
+    public List<SiteServiceDetailsEntity> getSiteServiceDetailsEntities() {
+        return siteServiceDetailsEntities;
     }
 
-    public void setSiteDetailsList(List<SiteServiceDetailsEntity> siteDetailsList) {
-        this.siteDetailsList = siteDetailsList;
+    public void setSiteServiceDetailsEntities(List<SiteServiceDetailsEntity> siteServiceDetailsEntities) {
+        this.siteServiceDetailsEntities = siteServiceDetailsEntities;
     }
 }

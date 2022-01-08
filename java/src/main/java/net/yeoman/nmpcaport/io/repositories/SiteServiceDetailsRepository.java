@@ -10,5 +10,6 @@ public interface SiteServiceDetailsRepository extends CrudRepository<SiteService
 
     List<SiteServiceDetailsEntity> findAll();
     SiteServiceDetailsEntity findBySiteServiceDetailsId(String id);
+    Boolean existsBySiteServiceDetailsId(String publicId);
 
 }

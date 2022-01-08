@@ -52,4 +52,10 @@ public class SiteServiceDetailsServiceImpl implements SiteServiceDetailsService 
         return this.siteServiceDetailsRepository.save(serviceDetailsEntity);
 
     }
+
+    @Override
+    public Boolean existByPublicId(String publicId) {
+
+        return this.siteServiceDetailsRepository.existsBySiteServiceDetailsId(publicId);
+    }
 }

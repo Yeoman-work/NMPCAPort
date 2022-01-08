@@ -43,7 +43,7 @@ const InList = (list, value) =>{
 
 const phoneNumberPattern = (number) =>{
     let returnValue;
-    //console.log('number ' + number)
+
     if(number.length === 7 && number.charAt(3) !== '-'){
         returnValue = number.substring(0,3) + '-' + number.substring(3);
 
@@ -194,7 +194,7 @@ const isValidCharacter = (characterInput) =>{
 const phoneNumberBuilder = (phoneNumber, state) =>{
 
     let returnValue;
-    console.log(phoneNumber);
+
     if(number.includes(phoneNumber[phoneNumber.length - 1])){
 
         if(phoneNumber.length <= 12){

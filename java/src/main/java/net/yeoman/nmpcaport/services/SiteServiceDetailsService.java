@@ -11,4 +11,6 @@ public interface SiteServiceDetailsService {
     public SiteServiceDetailsDto createSiteService(SiteServiceDetailsDto siteServiceDetailsDto);
     public SiteServiceDetailsDto updateSiteService(SiteServiceDetailsDto serviceDetailsDto, String id);
     public SiteServiceDetailsEntity createSiteServiceEntity(SiteServiceDetailsEntity serviceDetailsEntity);
+    public Boolean existByPublicId(String publicId);
+
 }

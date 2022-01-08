@@ -55,44 +55,44 @@ public class SiteEntity implements Serializable {
     @NotNull(message = "required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_entity_id")
-    private CityEntity city;
+    private CityEntity cityEntity;
 
     @NotNull(message = "required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "county_entity_id")
-    private CountyEntity county;
+    private CountyEntity countyEntity;
 
     @NotNull(message = "required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "health_center_entity_id")
     @JsonIgnore
-    private HealthCenterEntity healthCenter;
+    private HealthCenterEntity healthCenterEntity;
 
     @NotNull(message = "required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zip_code_entity_id")
-    private ZipCodeEntity zipCode;
+    private ZipCodeEntity zipCodeEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "n_m_house_district_entity_id")
-    private NMHouseDistrictEntity nmHouseDistrict;
+    private NMHouseDistrictEntity nmHouseDistrictEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "senate_district_entity_id")
-    private SenateDistrictEntity senateDistrict;
+    private SenateDistrictEntity senateDistrictEntity;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "congressional_district_id")
     private CongressionalDistrictEntity congressionalDistrictEntity;
 
-    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "siteEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<SiteFundingDetailsEntity> siteFundingDetails;
+    private List<SiteFundingDetailsEntity> siteFundingDetailsEntities;
 
-    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "siteEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<SiteServiceDetailsEntity> siteServiceDetails;
+    private List<SiteServiceDetailsEntity> serviceDetailsEntities;
 
 
 
@@ -108,7 +108,7 @@ public class SiteEntity implements Serializable {
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.healthCenter = healthCenter;
+        this.healthCenterEntity = healthCenterEntity;
     }
 
 
@@ -165,54 +165,68 @@ public class SiteEntity implements Serializable {
     }
 
 
-    public HealthCenterEntity getHealthCenter() {
-        return healthCenter;
+    public CityEntity getCityEntity() {
+        return cityEntity;
     }
 
-    public void setHealthCenter(HealthCenterEntity healthCenter) {
-        this.healthCenter = healthCenter;
+    public void setCityEntity(CityEntity cityEntity) {
+        this.cityEntity = cityEntity;
     }
 
-
-    public CityEntity getCity() {
-        return city;
+    public CountyEntity getCountyEntity() {
+        return countyEntity;
     }
 
-    public void setCity(CityEntity city) {
-        this.city = city;
+    public void setCountyEntity(CountyEntity countyEntity) {
+        this.countyEntity = countyEntity;
     }
 
-    public CountyEntity getCounty() {
-        return county;
+    public HealthCenterEntity getHealthCenterEntity() {
+        return healthCenterEntity;
     }
 
-    public void setCounty(CountyEntity county) {
-        this.county = county;
+    public void setHealthCenterEntity(HealthCenterEntity healthCenterEntity) {
+        this.healthCenterEntity = healthCenterEntity;
     }
 
-    public ZipCodeEntity getZipCode() {
-        return zipCode;
+    public ZipCodeEntity getZipCodeEntity() {
+        return zipCodeEntity;
     }
 
-    public void setZipCode(ZipCodeEntity zipCode) {
-        this.zipCode = zipCode;
+    public void setZipCodeEntity(ZipCodeEntity zipCodeEntity) {
+        this.zipCodeEntity = zipCodeEntity;
     }
 
-
-    public SenateDistrictEntity getSenateDistrict() {
-        return senateDistrict;
+    public NMHouseDistrictEntity getNmHouseDistrictEntity() {
+        return nmHouseDistrictEntity;
     }
 
-    public void setSenateDistrict(SenateDistrictEntity senateDistrict) {
-        this.senateDistrict = senateDistrict;
+    public void setNmHouseDistrictEntity(NMHouseDistrictEntity nmHouseDistrictEntity) {
+        this.nmHouseDistrictEntity = nmHouseDistrictEntity;
     }
 
-    public NMHouseDistrictEntity getNmHouseDistrict() {
-        return nmHouseDistrict;
+    public SenateDistrictEntity getSenateDistrictEntity() {
+        return senateDistrictEntity;
     }
 
-    public void setNmHouseDistrict(NMHouseDistrictEntity nmHouseDistrict) {
-        this.nmHouseDistrict = nmHouseDistrict;
+    public void setSenateDistrictEntity(SenateDistrictEntity senateDistrictEntity) {
+        this.senateDistrictEntity = senateDistrictEntity;
+    }
+
+    public List<SiteFundingDetailsEntity> getSiteFundingDetailsEntities() {
+        return siteFundingDetailsEntities;
+    }
+
+    public void setSiteFundingDetailsEntities(List<SiteFundingDetailsEntity> siteFundingDetailsEntities) {
+        this.siteFundingDetailsEntities = siteFundingDetailsEntities;
+    }
+
+    public List<SiteServiceDetailsEntity> getServiceDetailsEntities() {
+        return serviceDetailsEntities;
+    }
+
+    public void setServiceDetailsEntities(List<SiteServiceDetailsEntity> serviceDetailsEntities) {
+        this.serviceDetailsEntities = serviceDetailsEntities;
     }
 
     public CongressionalDistrictEntity getCongressionalDistrictEntity() {
@@ -223,19 +237,5 @@ public class SiteEntity implements Serializable {
         this.congressionalDistrictEntity = congressionalDistrictEntity;
     }
 
-    public List<SiteFundingDetailsEntity> getSiteFundingDetails() {
-        return siteFundingDetails;
-    }
 
-    public void setSiteFundingDetails(List<SiteFundingDetailsEntity> siteFundingDetails) {
-        this.siteFundingDetails = siteFundingDetails;
-    }
-
-    public List<SiteServiceDetailsEntity> getSiteServiceDetails() {
-        return siteServiceDetails;
-    }
-
-    public void setSiteServiceDetails(List<SiteServiceDetailsEntity> siteServiceDetails) {
-        this.siteServiceDetails = siteServiceDetails;
-    }
 }

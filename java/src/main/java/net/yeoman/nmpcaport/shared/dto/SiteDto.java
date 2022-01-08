@@ -44,6 +44,8 @@ public class SiteDto {
     private List<FundResponseModel> fundResponseModels;
     private List<ServiceEntity> serviceEntities;
     private List<ServiceDetailsRequestModel> serviceDetailsRequestModels;
+    private List<SiteServiceDetailsEntity> siteServiceDetailsEntities;
+    private List<SiteFundingDetailsEntity> siteFundingDetailsEntities;
     private List<ServiceResponse> serviceResponses;
     private NMHouseDistrictEntity nmHouseDistrictEntity;
     private SenateDistrictEntity senateDistrictEntity;
@@ -333,5 +335,21 @@ public class SiteDto {
 
     public void setCongressionalDistrictResponse(CongressionalDistrictResponse congressionalDistrictResponse) {
         this.congressionalDistrictResponse = congressionalDistrictResponse;
+    }
+
+    public List<SiteServiceDetailsEntity> getSiteServiceDetailsEntities() {
+        return siteServiceDetailsEntities;
+    }
+
+    public void setSiteServiceDetailsEntities(List<SiteServiceDetailsEntity> siteServiceDetailsEntities) {
+        this.siteServiceDetailsEntities = siteServiceDetailsEntities;
+    }
+
+    public List<SiteFundingDetailsEntity> getSiteFundingDetailsEntities() {
+        return siteFundingDetailsEntities;
+    }
+
+    public void setSiteFundingDetailsEntities(List<SiteFundingDetailsEntity> siteFundingDetailsEntities) {
+        this.siteFundingDetailsEntities = siteFundingDetailsEntities;
     }
 }

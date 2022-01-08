@@ -29,7 +29,7 @@ public class FundEntity implements Serializable {
     private Date updatedAt;
 
 
-    @OneToMany(mappedBy = "fund", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fundEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<SiteFundingDetailsEntity> siteFundingDetails;
 
