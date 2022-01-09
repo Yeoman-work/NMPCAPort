@@ -2,10 +2,12 @@ package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.HealthCenterEntity;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
+import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 
+import java.util.Date;
 import java.util.List;
 
 public class ContactDto {
@@ -16,14 +18,15 @@ public class ContactDto {
     private String firstName;
     private String lastName;
     private String email;
-    private String createdAt;
-    private String updatedAt;
-    private List<String> networkingGroupIds;
-    private String healthCenterId;
+    private Date createdAt;
+    private Date updatedAt;
+    private List<String> networkingGroups;
+    private String healthCenter;
+    private List<PhoneNumberRequest> phoneNumbers;
     private HealthCenterNestedResponseModel healthCenterNestedResponse;
-    private HealthCenterEntity healthCenter;
-    private List<NetworkingGroupEntity> networkingGroups;
-    private List<NetworkingGroupResponseModel> networkingGroupResponse;
+    private HealthCenterEntity healthCenterEntity;
+    private List<NetworkingGroupEntity> networkingGroupEntities;
+    private List<NetworkingGroupResponseModel> networkingGroupResponses;
 
     public Long getId() {
         return id;
@@ -74,44 +77,44 @@ public class ContactDto {
         this.email = email;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public List<String> getNetworkingGroupIds() {
-        return networkingGroupIds;
-    }
-
-    public void setNetworkingGroupIds(List<String> networkingGroupIds) {
-        this.networkingGroupIds = networkingGroupIds;
-    }
-
-    public List<NetworkingGroupEntity> getNetworkingGroups() {
+    public List<String> getNetworkingGroups() {
         return networkingGroups;
     }
 
-    public void setNetworkingGroups(List<NetworkingGroupEntity> networkingGroups) {
+    public List<PhoneNumberRequest> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    public void setPhoneNumbers(List<PhoneNumberRequest> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
+    }
+
+    public void setNetworkingGroups(List<String> networkingGroups) {
         this.networkingGroups = networkingGroups;
     }
 
-    public List<NetworkingGroupResponseModel> getNetworkingGroupResponse() {
-        return networkingGroupResponse;
+    public String getHealthCenter() {
+        return healthCenter;
     }
 
-    public void setNetworkingGroupResponse(List<NetworkingGroupResponseModel> networkingGroupResponse) {
-        this.networkingGroupResponse = networkingGroupResponse;
+    public void setHealthCenter(String healthCenter) {
+        this.healthCenter = healthCenter;
     }
 
     public HealthCenterNestedResponseModel getHealthCenterNestedResponse() {
@@ -122,19 +125,27 @@ public class ContactDto {
         this.healthCenterNestedResponse = healthCenterNestedResponse;
     }
 
-    public HealthCenterEntity getHealthCenter() {
-        return healthCenter;
+    public HealthCenterEntity getHealthCenterEntity() {
+        return healthCenterEntity;
     }
 
-    public void setHealthCenter(HealthCenterEntity healthCenter) {
-        this.healthCenter = healthCenter;
+    public void setHealthCenterEntity(HealthCenterEntity healthCenterEntity) {
+        this.healthCenterEntity = healthCenterEntity;
     }
 
-    public String getHealthCenterId() {
-        return healthCenterId;
+    public List<NetworkingGroupEntity> getNetworkingGroupEntities() {
+        return networkingGroupEntities;
     }
 
-    public void setHealthCenterId(String healthCenterId) {
-        this.healthCenterId = healthCenterId;
+    public void setNetworkingGroupEntities(List<NetworkingGroupEntity> networkingGroupEntities) {
+        this.networkingGroupEntities = networkingGroupEntities;
+    }
+
+    public List<NetworkingGroupResponseModel> getNetworkingGroupResponses() {
+        return networkingGroupResponses;
+    }
+
+    public void setNetworkingGroupResponses(List<NetworkingGroupResponseModel> networkingGroupResponses) {
+        this.networkingGroupResponses = networkingGroupResponses;
     }
 }

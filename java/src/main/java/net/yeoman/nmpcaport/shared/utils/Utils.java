@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.shared.utils;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
@@ -152,5 +153,10 @@ public class Utils {
         }
 
         return isValid;
+    }
+
+    public ModelMapper objectMapper(){
+
+        return new ModelMapper();
     }
 }

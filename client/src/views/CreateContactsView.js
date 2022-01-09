@@ -9,11 +9,10 @@ const { isValidCharacter, phoneNumberBuilder } = require('../helper/generalFunct
 const { isContact } = require('../helper/contactValidation')
 
 const contactReducer = (contactState, action) =>{
-
+    console.log(contactState);
     switch(action.type){
 
         case FORM_FIELDS.FIRST_NAME:
-
             if(isValidCharacter(action.payload)){
 
                 if(action.payload.length <= 25){

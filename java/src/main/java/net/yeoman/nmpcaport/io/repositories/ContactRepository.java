@@ -12,4 +12,5 @@ public interface ContactRepository extends CrudRepository<ContactEntity, Long> {
 
     ContactEntity findByContactId(String contactId);
     List<ContactEntity> findAll();
+    Boolean existsByContactId(String contactId);
 }

@@ -45,6 +45,8 @@ public class ContactEntity implements Serializable {
     @OneToMany(mappedBy = "contactEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities;
 
+    @OneToMany(mappedBy = "contactEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<AssignedNumberEntity> assignedNumberEntities;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "health_center_entity_id")
@@ -155,5 +157,13 @@ public class ContactEntity implements Serializable {
 
     public void setAssignedNetworkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
         this.assignedNetworkingGroupEntities = assignedNetworkingGroupEntities;
+    }
+
+    public List<AssignedNumberEntity> getAssignedNumberEntities() {
+        return assignedNumberEntities;
+    }
+
+    public void setAssignedNumberEntities(List<AssignedNumberEntity> assignedNumberEntities) {
+        this.assignedNumberEntities = assignedNumberEntities;
     }
 }

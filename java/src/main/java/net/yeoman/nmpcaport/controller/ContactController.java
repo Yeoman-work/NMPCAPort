@@ -43,9 +43,13 @@ public class ContactController {
     			 produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ContactResponseModel createContact(@RequestBody ContactDetailsRequestModel contactDetails){
 
-        ContactDto storedContactDto = this.contactService.createContact(new ModelMapper().map(contactDetails, ContactDto.class));
+        ModelMapper modelMapper = new ModelMapper();
 
-        return new ModelMapper().map(storedContactDto, ContactResponseModel.class);
+        ContactDto contactDto = modelMapper.map(contactDetails, ContactDto.class);
+
+
+
+        return
     }
     
 

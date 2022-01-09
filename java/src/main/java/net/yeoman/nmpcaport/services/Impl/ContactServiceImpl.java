@@ -1,14 +1,20 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.entities.ContactEntity;
-import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
+import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.exception.*;
+import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
+import net.yeoman.nmpcaport.io.request.contact.ContactDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 import net.yeoman.nmpcaport.io.repositories.ContactRepository;
+import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 import net.yeoman.nmpcaport.services.ContactService;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
+import net.yeoman.nmpcaport.shared.dto.PhoneNumberDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +33,15 @@ public class ContactServiceImpl implements ContactService {
     private NetworkingGroupServiceImpl networkingGroupService;
 
     @Autowired
+    private AssignedNetworkingGroupServiceImpl assignedNetworkingGroupService;
+
+    @Autowired
+    private PhoneNumberServiceImpl phoneNumberService;
+
+    @Autowired
+    private AssignedNumberServiceImpl assignedNumberService;
+
+    @Autowired
     private HealthCenterServiceImpl healthCenterService;
 
     @Autowired
@@ -34,32 +49,43 @@ public class ContactServiceImpl implements ContactService {
 
 
 
-    public HealthCenterNestedResponseModel healthCenterDtoToNetworkingGroupResponse(String healthCenterId){
 
-        HealthCenterDto healthCenterDto = this.healthCenterService.getHealthCenter(healthCenterId);
-
-        return new ModelMapper().map(healthCenterDto, HealthCenterNestedResponseModel.class);
-    }
-
-    @Override
-    public ContactDto nestedNetworkingGroups(ContactDto contactDto) {
-        List<NetworkingGroupResponseModel> networkGroupResponseList = new ArrayList<>();
-
-        for(NetworkingGroupEntity networkingGroup: contactDto.getNetworkingGroups()){
-
-            NetworkingGroupResponseModel networkingGroupResponseModel = new ModelMapper().map(networkingGroup, NetworkingGroupResponseModel.class);
-
-            networkGroupResponseList.add(networkingGroupResponseModel);
-        }
-        contactDto.setNetworkingGroupResponse(networkGroupResponseList);
-
-        return contactDto;
-    }
 
     @Override
     public ContactEntity getContactEntity(String contactId) {
 
         return this.contactRepository.findByContactId(contactId);
+    }
+
+    @Override
+    public ContactDto processContactEntity(ContactDto contactDto) {
+
+        //create contact entity
+        ContactEntity contactEntity = this.createContact(contactDto);
+        //get healthCenter
+        HealthCenterEntity healthCenterEntity = this.healthCenterService.getHealthCenterEntity(contactDto.getHealthCenter());
+        //check for health center
+        if(healthCenterEntity == null) throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        //set health Center
+        contactEntity.setHealthCenter(healthCenterEntity);
+
+        if(contactDto.getNetworkingGroups() != null){
+
+            //convert Ids(String) to entities
+            List<NetworkingGroupEntity> networkingGroupEntities = this.networkingGroupService.getMultipleNetworkingGroups(contactDto.getNetworkingGroups());
+
+            //loop through entities
+            for(NetworkingGroupEntity group: networkingGroupEntities){
+
+                //create assigned networking group
+                AssignedNetworkingGroupEntity assignedNetworkingGroupEntity = this.assignedNetworkingGroupService.createAssignedNetworkingGroupEntity();
+
+                AssignedNetworkingGroupEntity savedAssignNetworkingGroupSecurity = this.assignedNetworkingGroupService.createAssignedNetworkingGroupsContact()
+            }
+
+        }
+        return;
     }
 
     @Override
@@ -83,6 +109,31 @@ public class ContactServiceImpl implements ContactService {
         return returnValue;
     }
 
+    @Override
+    public Boolean dtoIsNull(ContactDto contactDto) {
+        return contactDto == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(ContactEntity contactEntity) {
+        return contactEntity == null;
+    }
+
+    @Override
+    public Boolean requestIsNull(ContactDetailsRequestModel contactDetailsRequestModel) {
+        return contactDetailsRequestModel == null;
+    }
+
+    @Override
+    public Boolean responseIsNull(ContactResponseModel contactResponseModel) {
+        return contactResponseModel == null;
+    }
+
+    @Override
+    public Boolean nestedResponseIsNull(ContactNestedResponseModel contactNestedResponseModel) {
+        return contactNestedResponseModel == null;
+    }
+
 
     @Override
     public ContactDto getContact(String contactId) {
@@ -94,99 +145,65 @@ public class ContactServiceImpl implements ContactService {
     	if(contactEntity == null) throw new RuntimeException(contactId);
 
 
-
-
-
         if(contactDto.getHealthCenter() != null){
 
             contactDto.setHealthCenterNestedResponse(new ModelMapper().map(contactDto.getHealthCenter(), HealthCenterNestedResponseModel.class));
 
         }
 
-
     	return contactDto;
         
     }
 
+    //contact entity mapper
     @Override
-    public ContactDto createContact(ContactDto contactDto) {
+    public ContactEntity DtoToEntity(ContactDto contactDto) {
 
-        ContactEntity contactEntity = new ModelMapper().map(contactDto, ContactEntity.class);
-
-
-
-        contactEntity.setContactId(utils.generateRandomID());
-
-        ContactEntity storedContact = this.contactRepository.save(contactEntity);
-        ContactDto contactDtoReturnValue = new ModelMapper().map(storedContact, ContactDto.class);
-
-
-            List<NetworkingGroupResponseModel> networkingGroupResponseList = new ArrayList<>();
-
-            for(NetworkingGroupEntity networkingGroup: contactDto.getNetworkingGroups()){
-
-                networkingGroupResponseList.add(new ModelMapper().map(networkingGroup, NetworkingGroupResponseModel.class));
-            }
-
-            contactDtoReturnValue.setNetworkingGroupResponse(networkingGroupResponseList);
-
-            if(contactDto.getHealthCenter() != null){
-
-                contactDtoReturnValue.setHealthCenterNestedResponse(new ModelMapper().map(contactDto.getHealthCenter(), HealthCenterNestedResponseModel.class));
-            }
-
-        return contactDtoReturnValue;
+        return utils.objectMapper().map(contactDto, ContactEntity.class);
     }
+
+
+
+    @Override
+    public ContactDto requestToDto(ContactDetailsRequestModel contactDetailsRequestModel) {
+
+
+        return utils.objectMapper().map(contactDetailsRequestModel, ContactDto.class);
+
+    }
+
+    @Override
+    public ContactDto EntityToDto(ContactEntity contactEntity) {
+
+        return utils.objectMapper().map(contactEntity, ContactDto.class);
+
+    }
+
+    @Override
+    public ContactResponseModel DtoToResponse(ContactDto contactDto) {
+
+        return utils.objectMapper().map(contactDto, ContactResponseModel.class);
+
+    }
+
+    @Override
+    public ContactEntity createContact(ContactDto contactDto) {
+
+        return utils.objectMapper().map(contactDto, ContactEntity.class);
+    }
+
+    @Override
+    public ContactEntity savedContactEntity(ContactEntity contactEntity) {
+
+        return this.contactRepository.save(contactEntity);
+    }
+
 
     @Override
     public ContactDto updateContact(String contactId, ContactDto contactDto) {
-        
-    	//get the contact entity
-    	ContactEntity contactEntity = this.contactRepository.findByContactId(contactId);
-    	
-    	// check if firstName is updated
-    	if(!contactEntity.getFirstName().equals(contactDto.getFirstName())) {
-    		
-    		contactEntity.setFirstName(contactDto.getFirstName());
-    	}
-    	
-    	//check if last name was updated
-    	if(!contactEntity.getLastName().equals(contactDto.getLastName())) {
-    		
-    		contactEntity.setLastName(contactDto.getLastName());
-    	}
-    	//check if the title is null
-    	if(contactEntity.getTitle() == null) {
-    		
-    		contactEntity.setTitle(contactDto.getTitle());
-    		
-    	}
-    	//check if the title is different from userInput
-    	if(!contactEntity.getTitle().equals(contactDto.getTitle())){
-    		
-    		contactEntity.setTitle(contactDto.getTitle());
-    		
-    	}
 
-        if(!contactEntity.getHealthCenter().getHealthCenterId().equals(contactDto.getHealthCenterId()) || contactEntity.getHealthCenter() == null){
-
-            contactDto.setHealthCenterNestedResponse(healthCenterDtoToNetworkingGroupResponse(contactDto.getHealthCenterId()));
-
-        }
-    	
-    	//check if the user updated the networking groups
-
-
-        ContactEntity updatedContact = this.contactRepository.save(contactEntity);
-
-
-    	return nestedNetworkingGroups(new ModelMapper().map(updatedContact, ContactDto.class));
+    	return contactDto;
     }
-
-
-
-
-
 
 
     @Override

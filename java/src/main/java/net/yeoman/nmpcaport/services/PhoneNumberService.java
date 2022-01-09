@@ -6,6 +6,7 @@ import net.yeoman.nmpcaport.shared.dto.PhoneNumberDto;
 public interface PhoneNumberService {
 
     public PhoneNumberEntity getPhoneNumberEntity(String phoneNumberId);
+    public PhoneNumberEntity createPhoneNumberProcess(PhoneNumberDto phoneNumberDto);
     public PhoneNumberDto getPhoneNumberDto(String phoneNumberId);
     public PhoneNumberEntity createPhoneNumber(PhoneNumberEntity phoneNumberEntity);
     public PhoneNumberDto deletePhoneNumber(String phoneNumberId);

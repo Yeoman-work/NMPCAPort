@@ -1,5 +1,8 @@
 package net.yeoman.nmpcaport.io.request.contact;
 
+import net.yeoman.nmpcaport.entities.PhoneNumberEntity;
+import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
+
 import java.util.List;
 
 public class ContactDetailsRequestModel {
@@ -8,8 +11,9 @@ public class ContactDetailsRequestModel {
     private String firstName;
     private String lastName;
     private String email;
-    private List<String> networkingGroupIds;
-    private String healthCenterId;
+    private List<String> networkingGroups;
+    private String healthCenter;
+    private List<PhoneNumberRequest> phoneNumbers;
 
 
     public String getTitle() {
@@ -44,19 +48,27 @@ public class ContactDetailsRequestModel {
         this.email = email;
     }
 
-    public List<String> getNetworkingGroupIds() {
-        return networkingGroupIds;
+    public List<String> getNetworkingGroups() {
+        return networkingGroups;
     }
 
-    public void setNetworkingGroupIds(List<String> networkingGroupIds) {
-        this.networkingGroupIds = networkingGroupIds;
+    public void setNetworkingGroups(List<String> networkingGroups) {
+        this.networkingGroups = networkingGroups;
     }
 
-    public String getHealthCenterId() {
-        return healthCenterId;
+    public List<PhoneNumberRequest> getPhoneNumbers() {
+        return phoneNumbers;
     }
 
-    public void setHealthCenterId(String healthCenterId) {
-        this.healthCenterId = healthCenterId;
+    public void setPhoneNumbers(List<PhoneNumberRequest> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
+    }
+
+    public String getHealthCenter() {
+        return healthCenter;
+    }
+
+    public void setHealthCenter(String healthCenter) {
+        this.healthCenter = healthCenter;
     }
 }
