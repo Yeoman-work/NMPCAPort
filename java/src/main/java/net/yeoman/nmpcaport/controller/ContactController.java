@@ -1,5 +1,6 @@
  package net.yeoman.nmpcaport.controller;
 
+import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -27,6 +28,9 @@ public class ContactController {
     @Autowired
     private ContactServiceImpl contactService;
 
+    @Autowired
+    private Utils utils;
+
     @GetMapping(path = {"/{contactId}"}, produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ContactResponseModel getContact(@PathVariable("contactId") String contactId){
 
@@ -43,13 +47,11 @@ public class ContactController {
     			 produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ContactResponseModel createContact(@RequestBody ContactDetailsRequestModel contactDetails){
 
-        ModelMapper modelMapper = new ModelMapper();
+        ContactDto incomingDto = this.contactService.requestToDto(contactDetails);
 
-        ContactDto contactDto = modelMapper.map(contactDetails, ContactDto.class);
+        ContactDto contactDto = this.contactService.processContactEntity(incomingDto);
 
-
-
-        return
+        return this.contactService.dtoToResponse(contactDto);
     }
     
 

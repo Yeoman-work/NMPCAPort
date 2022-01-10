@@ -11,9 +11,9 @@ import java.util.List;
 public interface AssignedNetworkingGroupRepository extends CrudRepository<AssignedNetworkingGroupEntity, Long> {
 
 
-    AssignedNetworkingGroupEntity findByAssignmentId(String assignmentId);
+    AssignedNetworkingGroupEntity findByPublicId(String assignmentId);
 
     List<AssignedNetworkingGroupEntity> findAll();
 
-    Boolean existsByAssignmentId(String assignmentId);
+    Boolean existsByPublicId(String publicId);
 }

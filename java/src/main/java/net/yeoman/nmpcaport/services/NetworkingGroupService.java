@@ -28,8 +28,7 @@ public interface NetworkingGroupService {
    public NetworkingGroupEntity DtoToEntity(NetworkingGroupDto networkingGroupDtoList);
    public NetworkingGroupResponseModel DtoToResponse(NetworkingGroupDto networkingGroupDto);
    public NetworkingGroupDto requestToDto(NetworkingGroupRequestModel networkingGroupRequestModel);
-   public Boolean entityIsNull(ContactEntity contactEntity);
-   public Boolean dtoIsNull(ContactDto contactDto);
-   public Boolean responseIsNull(ContactResponseModel contactResponseModel);
-   public Boolean nestedResponseIsNull(ContactNestedResponseModel contactNestedResponseModel);
+   public Boolean entityIsNull(NetworkingGroupEntity networkingGroupEntity);
+   public Boolean dtoIsNull(NetworkingGroupDto networkingGroupDto);
+   public Boolean responseIsNull(NetworkingGroupResponseModel networkingGroupResponseModel);
 }

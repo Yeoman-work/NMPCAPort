@@ -186,63 +186,96 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
     @Override
     public List<NetworkingGroupDto> entityArrayToDtoArray(List<NetworkingGroupEntity> networkingGroupEntities) {
-        return null;
+        List<NetworkingGroupDto> returnValue = new ArrayList<>();
+
+        for(NetworkingGroupEntity group: networkingGroupEntities){
+
+            returnValue.add(utils.objectMapper().map(group, NetworkingGroupDto.class));
+
+        }
+
+        return returnValue;
     }
 
     @Override
     public List<NetworkingGroupEntity> DtoArrayToEntityArray(List<NetworkingGroupDto> networkingGroupDtoList) {
-        return null;
+
+        List<NetworkingGroupEntity> returnValue = new ArrayList<>();
+
+        for(NetworkingGroupDto group: networkingGroupDtoList){
+
+            returnValue.add(utils.objectMapper().map(group, NetworkingGroupEntity.class));
+        }
+
+        return returnValue;
     }
 
     @Override
     public List<NetworkingGroupResponseModel> DtoArrayToResponseArray(List<NetworkingGroupDto> networkingGroupDtoList) {
-        return null;
+
+        List<NetworkingGroupResponseModel> returnValue = new ArrayList<>();
+
+        for(NetworkingGroupDto group: networkingGroupDtoList){
+
+            returnValue.add(utils.objectMapper().map(group, NetworkingGroupResponseModel.class));
+        }
+
+        return returnValue;
     }
 
     @Override
     public List<NetworkingGroupDto> requestArrayToDtoArray(List<NetworkingGroupRequestModel> networkingGroupRequestModelList) {
-        return null;
+
+        List<NetworkingGroupDto> returnValue = new ArrayList<>();
+
+        for(NetworkingGroupRequestModel group: networkingGroupRequestModelList){
+
+            returnValue.add(utils.objectMapper().map(group, NetworkingGroupDto.class));
+        }
+
+        return returnValue;
     }
 
     @Override
     public NetworkingGroupDto entityToDto(NetworkingGroupEntity networkingGroupEntity) {
-        return null;
+
+        return utils.objectMapper().map(networkingGroupEntity, NetworkingGroupDto.class);
     }
 
     @Override
-    public NetworkingGroupEntity DtoToEntity(NetworkingGroupDto networkingGroupDtoList) {
-        return null;
+    public NetworkingGroupEntity DtoToEntity(NetworkingGroupDto networkingGroupDto) {
+
+        return utils.objectMapper().map(networkingGroupDto, NetworkingGroupEntity.class);
     }
 
     @Override
     public NetworkingGroupResponseModel DtoToResponse(NetworkingGroupDto networkingGroupDto) {
-        return null;
+
+        return utils.objectMapper().map(networkingGroupDto, NetworkingGroupResponseModel.class);
     }
 
     @Override
     public NetworkingGroupDto requestToDto(NetworkingGroupRequestModel networkingGroupRequestModel) {
+
         return utils.objectMapper().map(networkingGroupRequestModel, NetworkingGroupDto.class);
     }
 
     @Override
-    public Boolean entityIsNull(ContactEntity contactEntity) {
-        return contactEntity == null;
+    public Boolean entityIsNull(NetworkingGroupEntity networkingGroupEntity) {
+
+        return networkingGroupEntity == null;
     }
 
     @Override
-    public Boolean dtoIsNull(ContactDto contactDto) {
-        return contactDto == null;
+    public Boolean dtoIsNull(NetworkingGroupDto networkingGroupDto) {
+
+        return networkingGroupDto == null;
     }
 
     @Override
-    public Boolean responseIsNull(ContactResponseModel contactResponseModel) {
-        return contactResponseModel == null;
-    }
+    public Boolean responseIsNull(NetworkingGroupResponseModel networkingGroupResponseModel) {
 
-    @Override
-    public Boolean nestedResponseIsNull(ContactNestedResponseModel contactNestedResponseModel) {
-        return contactNestedResponseModel == null;
+        return networkingGroupResponseModel == null;
     }
-
 
 }

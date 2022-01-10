@@ -12,7 +12,7 @@ public interface AssignedNetworkingGroupService {
     public AssignedNetworkingGroupEntity deleteAssignedNetworkingGroup(String assignedId);
     public AssignedNetworkingGroupEntity getAssignedNetworkingGroup(String assignedId);
     public Boolean existByNetworkingGroup(String assignedId);
-    public AssignedNetworkingGroupEntity createAssignedNetworkingGroupsContact(NetworkingGroupEntity networkingGroupEntity, ContactEntity contactEntity);
+    public AssignedNetworkingGroupEntity createAndSaveAssignedNetworkingGroupsContact(NetworkingGroupEntity networkingGroupEntity, ContactEntity contactEntity);
     public Boolean entityIsNull(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
 
 

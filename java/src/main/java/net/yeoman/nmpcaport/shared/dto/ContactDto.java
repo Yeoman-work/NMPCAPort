@@ -6,6 +6,7 @@ import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
+import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ public class ContactDto {
     private List<String> networkingGroups;
     private String healthCenter;
     private List<PhoneNumberRequest> phoneNumbers;
+    private List<PhoneNumberResponse> phoneNumberResponses;
     private HealthCenterNestedResponseModel healthCenterNestedResponse;
     private HealthCenterEntity healthCenterEntity;
     private List<NetworkingGroupEntity> networkingGroupEntities;
@@ -147,5 +149,13 @@ public class ContactDto {
 
     public void setNetworkingGroupResponses(List<NetworkingGroupResponseModel> networkingGroupResponses) {
         this.networkingGroupResponses = networkingGroupResponses;
+    }
+
+    public List<PhoneNumberResponse> getPhoneNumberResponses() {
+        return phoneNumberResponses;
+    }
+
+    public void setPhoneNumberResponses(List<PhoneNumberResponse> phoneNumberResponses) {
+        this.phoneNumberResponses = phoneNumberResponses;
     }
 }

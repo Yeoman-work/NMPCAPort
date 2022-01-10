@@ -18,7 +18,8 @@ public enum ErrorMessages {
     PICTURE_LENGTH("Picture URL must be 250 characters or less"),
     WEBSITE_URL("Website URL must be 300 characters or less"),
     FIRST_NAME_LENGTH("First name must be between 3 and 25 characters"),
-    LAST_NAME_LENGTH("Last name must be between 3 and 25 characters");
+    LAST_NAME_LENGTH("Last name must be between 3 and 25 characters"),
+    RECORD_IS_NULL("Selected Entity is null");
 
 
     private String errorMessage;

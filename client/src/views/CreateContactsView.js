@@ -324,6 +324,7 @@ const CreateContactsView = props =>{
 
 
     const submitContact = async (e) =>{
+
         e.preventDefault();
 
         try{

@@ -41,7 +41,7 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
         assignedNetworkingGroupEntity.setPublicId(utils.generateRandomID());
 
         //check if the assign network group entity public id is unique
-        while(this.assignedNetworkingGroupRepository.existsByAssignmentId(assignedNetworkingGroupEntity.getPublicId())){
+        while(this.assignedNetworkingGroupRepository.existsByPublicId(assignedNetworkingGroupEntity.getPublicId())){
 
             assignedNetworkingGroupEntity.setPublicId(utils.generateRandomID());
         }
@@ -79,20 +79,20 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
     @Override
     public Boolean existByNetworkingGroup(String assignedId){
 
-        return this.assignedNetworkingGroupRepository.existsByAssignmentId(assignedId);
+        return this.assignedNetworkingGroupRepository.existsByPublicId(assignedId);
     }
 
     @Override
-    public AssignedNetworkingGroupEntity createAssignedNetworkingGroupsContact(NetworkingGroupEntity networkingGroupEntity, ContactEntity contactEntity) {
+    public AssignedNetworkingGroupEntity createAndSaveAssignedNetworkingGroupsContact(NetworkingGroupEntity networkingGroupEntity, ContactEntity contactEntity) {
 
         //check networking group entity
-        if(this.networkingGroupService.) throw new NetworkingGroupServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        if(this.networkingGroupService.entityIsNull(networkingGroupEntity)) throw new NetworkingGroupServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         //check contact entity
-        if(contactEntity == null) throw new ContactServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        if(this.contactService.entityIsNull(contactEntity)) throw new ContactServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         //create assigned networking group entity
-        AssignedNetworkingGroupEntity assignedNetworkingGroupEntity = this.createAssignedNetworkingGroup();
+        AssignedNetworkingGroupEntity assignedNetworkingGroupEntity = this.createAssignedNetworkingGroupEntity();
 
         //set networking group relationship
         assignedNetworkingGroupEntity.setNetworkingGroupEntity(networkingGroupEntity);
@@ -106,7 +106,7 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
 
     @Override
     public Boolean entityIsNull(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity) {
-        return null;
+        return assignedNetworkingGroupEntity == null;
     }
 
 

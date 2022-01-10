@@ -14,6 +14,7 @@ import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 import net.yeoman.nmpcaport.services.ContactService;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
+import net.yeoman.nmpcaport.shared.dto.NetworkingGroupDto;
 import net.yeoman.nmpcaport.shared.dto.PhoneNumberDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
@@ -61,17 +62,29 @@ public class ContactServiceImpl implements ContactService {
     public ContactDto processContactEntity(ContactDto contactDto) {
 
         //create contact entity
-        ContactEntity contactEntity = this.createContact(contactDto);
+        ContactEntity contactEntity = this.dtoToEntity(contactDto);
+
         //get healthCenter
         HealthCenterEntity healthCenterEntity = this.healthCenterService.getHealthCenterEntity(contactDto.getHealthCenter());
+
         //check for health center
         if(healthCenterEntity == null) throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         //set health Center
         contactEntity.setHealthCenter(healthCenterEntity);
 
-        if(contactDto.getNetworkingGroups() != null){
+        //save contact entity
+        ContactEntity savedContact = this.savedContactEntity(contactEntity);
 
+        //save contact
+        ContactDto savedContactDto = this.EntityToDto(savedContact);
+
+        //check if dto is null
+        if(this.dtoIsNull(savedContactDto)) throw new ContactServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        //process networking groups
+        if(contactDto.getNetworkingGroups() != null){
+            List<NetworkingGroupEntity> savedNetworkingGroupEntities = new ArrayList<>();
             //convert Ids(String) to entities
             List<NetworkingGroupEntity> networkingGroupEntities = this.networkingGroupService.getMultipleNetworkingGroups(contactDto.getNetworkingGroups());
 
@@ -79,13 +92,45 @@ public class ContactServiceImpl implements ContactService {
             for(NetworkingGroupEntity group: networkingGroupEntities){
 
                 //create assigned networking group
-                AssignedNetworkingGroupEntity assignedNetworkingGroupEntity = this.assignedNetworkingGroupService.createAssignedNetworkingGroupEntity();
+                AssignedNetworkingGroupEntity savedAssignNetworkingGroup = this.assignedNetworkingGroupService.createAndSaveAssignedNetworkingGroupsContact(group, savedContact);
 
-                AssignedNetworkingGroupEntity savedAssignNetworkingGroupSecurity = this.assignedNetworkingGroupService.createAssignedNetworkingGroupsContact()
+                //check savedAssignmentGroup
+                if(this.assignedNetworkingGroupService.entityIsNull(savedAssignNetworkingGroup)) throw new AssignedNetworkingGroupServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+
+
             }
 
+            //convert networking group entities to DTO
+            List<NetworkingGroupDto> savedNetworkingGroupDtoList = this.networkingGroupService.entityArrayToDtoArray(savedNetworkingGroupEntities);
+
+            //convert DTO to response
+            contactDto.setNetworkingGroupResponses(this.networkingGroupService.DtoArrayToResponseArray(savedNetworkingGroupDtoList));
+
         }
-        return;
+
+        if(contactDto.getPhoneNumbers() != null){
+
+            //convert phone number request into DTO
+            List<PhoneNumberDto> phoneNumberDtoList = this.phoneNumberService.requestArrayToDto(contactDto.getPhoneNumbers());
+
+            //convert Phone numbers into Entities
+            List<PhoneNumberEntity> savedPhoneNumberList = this.phoneNumberService.dtoArrayToEntityArray(phoneNumberDtoList);
+
+            //create relationship between contact and phone numbers
+            List<AssignedNumberEntity> savedAssignments = this.assignedNumberService.savedAssignmentEntityBulk(savedContact,savedPhoneNumberList);
+
+            //convert phone number entity to dto
+            List<PhoneNumberEntity> phoneNumberEntityList = this.assignedNumberService.getPhoneNumberAssignments(savedAssignments);
+
+            //convert Entities to Dto
+            List<PhoneNumberDto> savedPhoneNumberDtoList = this.phoneNumberService.entityArrayToDtoArray(phoneNumberEntityList);
+
+            //convert dto to response
+            savedContactDto.setPhoneNumberResponses(this.phoneNumberService.dtoArrayToResponseArray(savedPhoneNumberDtoList));
+        }
+
+        return savedContactDto;
     }
 
     @Override
@@ -157,11 +202,43 @@ public class ContactServiceImpl implements ContactService {
 
     //contact entity mapper
     @Override
-    public ContactEntity DtoToEntity(ContactDto contactDto) {
+    public ContactEntity dtoToEntity(ContactDto contactDto) {
 
         return utils.objectMapper().map(contactDto, ContactEntity.class);
     }
 
+    @Override
+    public List<ContactEntity> dtoArrayToEntityArray(List<ContactDto> contactDtoList) {
+
+        List<ContactEntity> returnValue = new ArrayList<>();
+
+        if(contactDtoList == null) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        for(ContactDto contact: contactDtoList){
+
+            returnValue.add(this.dtoToEntity(contact));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public ContactResponseModel dtoToResponse(ContactDto contactDto) {
+        return utils.objectMapper().map(contactDto, ContactResponseModel.class);
+    }
+
+    @Override
+    public List<ContactResponseModel> dtoArrayToResponse(List<ContactDto> contactDtoList) {
+
+        List<ContactResponseModel> returnValue = new ArrayList<>();
+
+        for(ContactDto contactDto: contactDtoList){
+
+            returnValue.add(this.dtoToResponse(contactDto));
+        }
+
+        return returnValue;
+    }
 
 
     @Override
@@ -173,24 +250,25 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public List<ContactDto> requestArrayToDtoArray(List<ContactDetailsRequestModel> contactDetailsRequestModelList) {
+
+        List<ContactDto> returnValue = new ArrayList<>();
+
+        for(ContactDetailsRequestModel requestModel: contactDetailsRequestModelList){
+
+            returnValue.add(this.requestToDto(requestModel));
+        }
+
+        return returnValue;
+    }
+
+    @Override
     public ContactDto EntityToDto(ContactEntity contactEntity) {
 
         return utils.objectMapper().map(contactEntity, ContactDto.class);
 
     }
 
-    @Override
-    public ContactResponseModel DtoToResponse(ContactDto contactDto) {
-
-        return utils.objectMapper().map(contactDto, ContactResponseModel.class);
-
-    }
-
-    @Override
-    public ContactEntity createContact(ContactDto contactDto) {
-
-        return utils.objectMapper().map(contactDto, ContactEntity.class);
-    }
 
     @Override
     public ContactEntity savedContactEntity(ContactEntity contactEntity) {
