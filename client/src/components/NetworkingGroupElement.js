@@ -16,7 +16,23 @@ const NetworkingGroupElement = props =>{
                 </div>
             </div>
             <div className={'col'}>
-                <h4>Contacts <Link to={'/'}><IoIosContact/></Link></h4>
+                <h4 className={'m-auto'}>Contacts <Link to={'/yeoman/networkingGroup/addContact/' + group.networkingGroupId}><IoIosContact/></Link></h4>
+                <div className={'m-auto w-75 mt-3 height200 overflow-auto'}>
+                    <ul className={'w-50 m-auto'}>
+                        {
+                            group.contactNestedResponses?
+                                group.contactNestedResponses.map((contact, index)=>{
+
+                                    return(
+                                        <li key={index} className={'text-start'}><Link to={'/'}>{`${contact.firstName} ${contact.lastName}`}</Link></li>
+                                    )
+                                })
+
+                                :
+                                null
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
     )

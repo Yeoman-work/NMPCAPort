@@ -9,33 +9,49 @@ import java.util.List;
 
 public interface PhoneNumberService {
 
+
+    //return entity
     public PhoneNumberEntity getPhoneNumberEntity(String phoneNumberId);
     public List<PhoneNumberEntity> processBulkPhoneNumbers(List<PhoneNumberDto> phoneNumberDtoList);
     public PhoneNumberEntity savedPhoneNumber(PhoneNumberEntity phoneNumberEntity);
     public PhoneNumberEntity createPhoneNumberProcess(PhoneNumberDto phoneNumberDto);
-    public PhoneNumberDto getPhoneNumberDto(String phoneNumberId);
     public PhoneNumberEntity createPhoneNumber(PhoneNumberEntity phoneNumberEntity);
-    public PhoneNumberDto deletePhoneNumber(String phoneNumberId);
-    public PhoneNumberDto updatedPhoneNumber(PhoneNumberDto phoneNumberDto, String phoneNumberId);
-    public Boolean phoneNumberIdExist(String phoneNumberId);
-    public Boolean phoneNumberExist(String number);
     public PhoneNumberEntity savePhoneNumber(PhoneNumberEntity phoneNumber);
     public PhoneNumberEntity findByNumber(String number);
+    public PhoneNumberEntity dtoToEntity(PhoneNumberDto phoneNumberDto);
+    public List<PhoneNumberEntity> dtoArrayToEntityArray(List<PhoneNumberDto> phoneNumberDtoList);
+
+
+    //return dto
+    public PhoneNumberDto getPhoneNumberDto(String phoneNumberId);
+    public PhoneNumberDto deletePhoneNumber(String phoneNumberId);
+    public PhoneNumberDto updatedPhoneNumber(PhoneNumberDto phoneNumberDto, String phoneNumberId);
+    public PhoneNumberDto entityToDto(PhoneNumberEntity phoneNumberEntity);
+    public List<PhoneNumberDto> entityToDto(List<PhoneNumberEntity> phoneNumberEntityList);
+    public PhoneNumberDto responseToDto(PhoneNumberRequest phoneNumberRequest);
+    public List<PhoneNumberDto> responseToDto(List<PhoneNumberResponse> phoneNumberResponses);
+    public PhoneNumberDto requestToDto(PhoneNumberRequest phoneNumberRequest);
+    public List<PhoneNumberDto> requestToDto(List<PhoneNumberRequest> phoneNumberRequestList);
+
+
+    //boolean
+    public Boolean phoneNumberIdExist(String phoneNumberId);
+    public Boolean phoneNumberExist(String number);
     public Boolean entityIsNull(PhoneNumberEntity phoneNumberEntity);
     public Boolean dtoIsNull(PhoneNumberDto phoneNumberDto);
     public Boolean requestIsNull(PhoneNumberRequest phoneNumberRequest);
     public Boolean responseIsNull(PhoneNumberResponse phoneNumberResponse);
-    public PhoneNumberEntity dtoToEntity(PhoneNumberDto phoneNumberDto);
-    public List<PhoneNumberEntity> dtoArrayToEntityArray(List<PhoneNumberDto> phoneNumberDtoList);
+
+
+    //return response
     public PhoneNumberResponse dtoToResponse(PhoneNumberDto phoneNumberDto);
-    public List<PhoneNumberResponse> dtoArrayToResponseArray(List<PhoneNumberDto> phoneNumberDtoList);
+    public List<PhoneNumberResponse> dtoToResponse(List<PhoneNumberDto> phoneNumberDtoList);
+
+
+    //return request
     public PhoneNumberRequest dtoToRequest(PhoneNumberDto phoneNumberDto);
-    public List<PhoneNumberRequest> dtoArrayToRequestList(List<PhoneNumberDto> phoneNumberDtoList);
-    public PhoneNumberDto entityToDto(PhoneNumberEntity phoneNumberEntity);
-    public List<PhoneNumberDto> entityArrayToDtoArray(List<PhoneNumberEntity> phoneNumberEntityList);
-    public PhoneNumberDto responseToDto(PhoneNumberRequest phoneNumberRequest);
-    public List<PhoneNumberDto> responseArrayToDtoArray(List<PhoneNumberResponse> phoneNumberResponses);
-    public PhoneNumberDto requestToDto(PhoneNumberRequest phoneNumberRequest);
-    public List<PhoneNumberDto> requestArrayToDto(List<PhoneNumberRequest> phoneNumberRequestList);
+    public List<PhoneNumberRequest> dtoToRequestList(List<PhoneNumberDto> phoneNumberDtoList);
+
+
 
 }

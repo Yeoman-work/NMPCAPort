@@ -1,8 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.PhoneNumberEntity;
-import net.yeoman.nmpcaport.errormessages.ErrorMessages;
-import net.yeoman.nmpcaport.exception.PhoneNumberServiceException;
 import net.yeoman.nmpcaport.io.repositories.PhoneNumberRepository;
 import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
 import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
@@ -176,7 +174,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     }
 
     @Override
-    public List<PhoneNumberResponse> dtoArrayToResponseArray(List<PhoneNumberDto> phoneNumberDtoList) {
+    public List<PhoneNumberResponse> dtoToResponse(List<PhoneNumberDto> phoneNumberDtoList) {
 
         List<PhoneNumberResponse> returnValue = new ArrayList<>();
 
@@ -195,7 +193,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     }
 
     @Override
-    public List<PhoneNumberRequest> dtoArrayToRequestList(List<PhoneNumberDto> phoneNumberDtoList) {
+    public List<PhoneNumberRequest> dtoToRequestList(List<PhoneNumberDto> phoneNumberDtoList) {
 
         List<PhoneNumberRequest> returnValue = new ArrayList<>();
 
@@ -214,7 +212,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     }
 
     @Override
-    public List<PhoneNumberDto> entityArrayToDtoArray(List<PhoneNumberEntity> phoneNumberEntityList) {
+    public List<PhoneNumberDto> entityToDto(List<PhoneNumberEntity> phoneNumberEntityList) {
 
         List<PhoneNumberDto> returnValue = new ArrayList<>();
 
@@ -222,7 +220,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
 
             returnValue.add(this.utils.objectMapper().map(phoneNumber, PhoneNumberDto.class));
         }
-        return null;
+        return returnValue;
     }
 
     @Override
@@ -232,7 +230,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     }
 
     @Override
-    public List<PhoneNumberDto> responseArrayToDtoArray(List<PhoneNumberResponse> phoneNumberResponses) {
+    public List<PhoneNumberDto> responseToDto(List<PhoneNumberResponse> phoneNumberResponses) {
 
         List<PhoneNumberDto> returnValue = new ArrayList<>();
 
@@ -251,7 +249,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     }
 
     @Override
-    public List<PhoneNumberDto> requestArrayToDto(List<PhoneNumberRequest> phoneNumberRequestList) {
+    public List<PhoneNumberDto> requestToDto(List<PhoneNumberRequest> phoneNumberRequestList) {
 
         List<PhoneNumberDto> returnValue = new ArrayList<>();
 

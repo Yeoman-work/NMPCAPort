@@ -51,6 +51,7 @@ public class ContactController {
 
         ContactDto contactDto = this.contactService.processContactEntity(incomingDto);
 
+        //System.out.println(contactDto.getHealthCenterNestedResponse().getName());
         return this.contactService.dtoToResponse(contactDto);
     }
     

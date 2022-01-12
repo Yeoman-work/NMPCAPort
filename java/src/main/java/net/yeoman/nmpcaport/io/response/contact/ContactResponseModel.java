@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
+import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 
 public class ContactResponseModel {
 
@@ -14,8 +15,9 @@ public class ContactResponseModel {
     private String email;
     private String createdAt;
     private String updatedAt;
-    private List<NetworkingGroupResponseModel> networkingGroupResponse;
-    private HealthCenterNestedResponseModel healthCenterNestedResponseModel;
+    private List<NetworkingGroupResponseModel> networkingGroupResponses;
+    private HealthCenterNestedResponseModel healthCenterNestedResponse;
+    private List<PhoneNumberResponse> phoneNumberResponses;
 
 
     public String getContactId() {
@@ -58,13 +60,13 @@ public class ContactResponseModel {
         this.email = email;
     }
 
-	public List<NetworkingGroupResponseModel> getNetworkingGroupResponse() {
-		return networkingGroupResponse;
-	}
+    public List<NetworkingGroupResponseModel> getNetworkingGroupResponses() {
+        return networkingGroupResponses;
+    }
 
-	public void setNetworkingGroupResponse(List<NetworkingGroupResponseModel> networkingGroupResponse) {
-		this.networkingGroupResponse = networkingGroupResponse;
-	}
+    public void setNetworkingGroupResponses(List<NetworkingGroupResponseModel> networkingGroupResponses) {
+        this.networkingGroupResponses = networkingGroupResponses;
+    }
 
     public String getCreatedAt() {
         return createdAt;
@@ -82,11 +84,19 @@ public class ContactResponseModel {
         this.updatedAt = updatedAt;
     }
 
-    public HealthCenterNestedResponseModel getHealthCenterNestedResponseModel() {
-        return healthCenterNestedResponseModel;
+    public HealthCenterNestedResponseModel getHealthCenterNestedResponse() {
+        return healthCenterNestedResponse;
     }
 
-    public void setHealthCenterNestedResponseModel(HealthCenterNestedResponseModel healthCenterNestedResponseModel) {
-        this.healthCenterNestedResponseModel = healthCenterNestedResponseModel;
+    public void setHealthCenterNestedResponse(HealthCenterNestedResponseModel healthCenterNestedResponse) {
+        this.healthCenterNestedResponse = healthCenterNestedResponse;
+    }
+
+    public List<PhoneNumberResponse> getPhoneNumberResponses() {
+        return phoneNumberResponses;
+    }
+
+    public void setPhoneNumberResponses(List<PhoneNumberResponse> phoneNumberResponses) {
+        this.phoneNumberResponses = phoneNumberResponses;
     }
 }

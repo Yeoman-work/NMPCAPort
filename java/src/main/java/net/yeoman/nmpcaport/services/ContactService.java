@@ -11,24 +11,53 @@ import java.util.List;
 
 public interface ContactService {
 
-    ContactDto getContact(String contactId);
-    public ContactEntity dtoToEntity(ContactDto contactDto);
-    public List<ContactEntity> dtoArrayToEntityArray(List<ContactDto> contactDtoList);
-    public ContactResponseModel dtoToResponse(ContactDto contactDto);
-    public List<ContactResponseModel> dtoArrayToResponse(List<ContactDto> contactDtoList);
+    //get contact dto functions
+    public ContactDto getContact(String contactId);
     public ContactDto requestToDto(ContactDetailsRequestModel contactDetailsRequestModel);
-    public List<ContactDto> requestArrayToDtoArray(List<ContactDetailsRequestModel> contactDetailsRequestModelList);
-    public ContactDto EntityToDto(ContactEntity contactEntity);
-    ContactEntity savedContactEntity(ContactEntity contactEntity);
-    ContactDto updateContact(String contactId, ContactDto contactDto);
-    ContactDto deleteContact(String contactId);
-    ContactEntity getContactEntity(String contactId);
+    public List<ContactDto> requestToDto(List<ContactDetailsRequestModel> contactDetailsRequestModelList);
+    public ContactDto entityToDto(ContactEntity contactEntity);
+    public ContactDto updateContact(String contactId, ContactDto contactDto);
+    public ContactDto deleteContact(String contactId);
+    public List<ContactDto> entityToDto(List<ContactEntity> contactEntities);
     public ContactDto processContactEntity(ContactDto contactDto);
-    void saveContact(ContactEntity contact);
+
+
+    //nested response
+    public ContactNestedResponseModel dtoToNestedResponse(ContactDto contactDto) ;
+    public List<ContactNestedResponseModel> dtoToNestedResponse(List<ContactDto> contactDtoList);
+
+
+    //contact entity
+    public ContactEntity dtoToEntity(ContactDto contactDto);
+    public ContactEntity createContactEntity();
+    public List<ContactEntity> dtoToEntity(List<ContactDto> contactDtoList);
+    public ContactEntity savedContactEntity(ContactEntity contactEntity);
+    public ContactEntity getContactEntity(String contactId);
+    public List<ContactEntity> getAllContactEntities();
+
+
+
+    //contact response
+    public ContactResponseModel dtoToResponse(ContactDto contactDto);
+    public List<ContactResponseModel> dtoToResponse(List<ContactDto> contactDtoList);
+
+
+    //save
+    public void saveContact(ContactEntity contact);
     List<ContactResponseModel> getAllContacts();
+
+    //check object is null
     public Boolean dtoIsNull(ContactDto contactDto);
+    public Boolean dtoIsNull(List<ContactDto> contactDtoList);
+    public Boolean entityIsNull(List<ContactEntity> contactEntities);
     public Boolean entityIsNull(ContactEntity contactEntity);
     public Boolean requestIsNull(ContactDetailsRequestModel contactDetailsRequestModel);
+    public Boolean requestIsNull(List<ContactDetailsRequestModel> contactDetailsRequestModelList);
     public Boolean responseIsNull(ContactResponseModel contactResponseModel);
+    public Boolean responseIsNull(List<ContactResponseModel> contactResponseModels);
+    public Boolean nestedResponseIsNull(List<ContactNestedResponseModel> contactNestedResponseModels);
     public Boolean nestedResponseIsNull(ContactNestedResponseModel contactNestedResponseModel);
+
+    //generate contact entity
+    public ContactEntity generateUniqueContactId(ContactEntity contactEntity);
 }

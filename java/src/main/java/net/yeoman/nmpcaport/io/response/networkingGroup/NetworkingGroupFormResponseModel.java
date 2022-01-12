@@ -1,20 +1,21 @@
 package net.yeoman.nmpcaport.io.response.networkingGroup;
 
-import net.yeoman.nmpcaport.entities.UserEntity;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
 import java.util.Date;
 import java.util.List;
 
-
-public class NetworkingGroupResponseModel {
+public class NetworkingGroupFormResponseModel {
 
     private String networkingGroupId;
     private String name;
     private String description;
     private List<UserDetailsResponseModel> userResponses;
-    private List<ContactNestedResponseModel> contactNestedResponses;
+    private List<ContactNestedResponseModel> members;
+    private List<ContactNestedResponseModel> nonMembers;
+    private List<String> memberIds;
+    private List<String> nonMemberIds;
     private Date createdAt;
     private Date updatedAt;
 
@@ -50,6 +51,22 @@ public class NetworkingGroupResponseModel {
         this.userResponses = userResponses;
     }
 
+    public List<ContactNestedResponseModel> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<ContactNestedResponseModel> members) {
+        this.members = members;
+    }
+
+    public List<ContactNestedResponseModel> getNonMembers() {
+        return nonMembers;
+    }
+
+    public void setNonMembers(List<ContactNestedResponseModel> nonMembers) {
+        this.nonMembers = nonMembers;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -66,11 +83,4 @@ public class NetworkingGroupResponseModel {
         this.updatedAt = updatedAt;
     }
 
-    public List<ContactNestedResponseModel> getContactNestedResponses() {
-        return contactNestedResponses;
-    }
-
-    public void setContactNestedResponses(List<ContactNestedResponseModel> contactNestedResponses) {
-        this.contactNestedResponses = contactNestedResponses;
-    }
 }

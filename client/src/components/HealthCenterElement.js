@@ -17,7 +17,7 @@ const HealthCenterElement = props =>{
                         <h6>Service(s)</h6>
                         <ul>
                             {
-                                healthCenter?
+                                healthCenter.serviceResponses?
                                 healthCenter.serviceResponses.map(({name}, index)=>{
 
                                     return(

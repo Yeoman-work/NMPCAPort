@@ -160,6 +160,19 @@ public class AssignedNumberServiceImpl implements AssignedNumberService {
     }
 
     @Override
+    public List<PhoneNumberEntity> getPhoneNumberEntities(List<AssignedNumberEntity> assignedNumberEntityList) {
+
+        List<PhoneNumberEntity> returnValue = new ArrayList<>();
+
+        for(AssignedNumberEntity assignment: assignedNumberEntityList){
+
+            returnValue.add(assignment.getPhoneNumberEntity());
+        }
+
+        return returnValue;
+    }
+
+    @Override
     public List<PhoneNumberEntity> getPhoneNumberAssignments(List<AssignedNumberEntity> assignedNumberEntityList) {
 
         if(assignedNumberEntityList == null) throw new AssignedNumberServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());

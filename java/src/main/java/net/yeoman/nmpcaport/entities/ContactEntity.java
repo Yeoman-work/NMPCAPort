@@ -18,6 +18,7 @@ public class ContactEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "required")
     @Column(unique = true)
     private String contactId;
 
@@ -35,6 +36,7 @@ public class ContactEntity implements Serializable {
     @NotBlank(message = "required")
     @Email(message = "Please enter a valid email")
     @Size(max = 150)
+    @Column(unique = true)
     private String email;
 
     @Column(updatable = false)

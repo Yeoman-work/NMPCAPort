@@ -5,6 +5,7 @@ import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
 import net.yeoman.nmpcaport.io.request.networkingGroup.NetworkingGroupRequestModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
+import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupFormResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
 import net.yeoman.nmpcaport.shared.dto.NetworkingGroupDto;
@@ -13,21 +14,37 @@ import java.util.List;
 
 public interface NetworkingGroupService {
 
+   //get networking dto
    public NetworkingGroupDto getNetworkingGroupById(String netGrpId);
    public NetworkingGroupDto createNetworkingGroup(NetworkingGroupDto networkingGroup);
    public NetworkingGroupDto updateNetworkingGroup(NetworkingGroupDto networkingGroup, String networkingGroupId);
-   public NetworkingGroupResponseModel deleteNetworkingGroup(String networkingGroupId);
    public List<NetworkingGroupDto> getAllNetworkingGroups();
+   public NetworkingGroupDto entityToDto(NetworkingGroupEntity networkingGroupEntity);
+   public List<NetworkingGroupDto> entityToDto(List<NetworkingGroupEntity> networkingGroupEntities);
+   public NetworkingGroupDto entityToDtoBase(NetworkingGroupEntity networkingGroupEntity);
+   public List<NetworkingGroupDto> entityToDtoBase(List<NetworkingGroupEntity> networkingGroupEntities);
+   public NetworkingGroupDto requestToDto(NetworkingGroupRequestModel networkingGroupRequestModel);
+   public List<NetworkingGroupDto> requestToDto(List<NetworkingGroupRequestModel> networkingGroupRequestModelList);
+
+
+
+   //networking group form response
+   public NetworkingGroupFormResponseModel networkingGroupFrom(String netGrpId);
+   public NetworkingGroupFormResponseModel dtoToFormResponse(NetworkingGroupDto networkingGroupDto);
+
+
+   //networking group entity
    public NetworkingGroupEntity networkGroupEntityByNetworkingGroupId(String netGrpId);
    public List<NetworkingGroupEntity> getMultipleNetworkingGroups(List<String> networkingGroupIds);
-   public List<NetworkingGroupDto> entityArrayToDtoArray(List<NetworkingGroupEntity> networkingGroupEntities);
-   public List<NetworkingGroupEntity> DtoArrayToEntityArray(List<NetworkingGroupDto> networkingGroupDtoList);
-   public List<NetworkingGroupResponseModel> DtoArrayToResponseArray(List<NetworkingGroupDto> networkingGroupDtoList);
-   public List<NetworkingGroupDto> requestArrayToDtoArray(List<NetworkingGroupRequestModel> networkingGroupRequestModelList);
-   public NetworkingGroupDto entityToDto(NetworkingGroupEntity networkingGroupEntity);
-   public NetworkingGroupEntity DtoToEntity(NetworkingGroupDto networkingGroupDtoList);
-   public NetworkingGroupResponseModel DtoToResponse(NetworkingGroupDto networkingGroupDto);
-   public NetworkingGroupDto requestToDto(NetworkingGroupRequestModel networkingGroupRequestModel);
+   public NetworkingGroupEntity dtoToEntity(NetworkingGroupDto networkingGroupDtoList);
+   public List<NetworkingGroupEntity> dtoToEntity(List<NetworkingGroupDto> networkingGroupDtoList);
+
+   //networking group response
+   public List<NetworkingGroupResponseModel> dtoToResponse(List<NetworkingGroupDto> networkingGroupDtoList);
+   public NetworkingGroupResponseModel dtoToResponse(NetworkingGroupDto networkingGroupDto);
+   public NetworkingGroupResponseModel deleteNetworkingGroup(String networkingGroupId);
+
+   //is null
    public Boolean entityIsNull(NetworkingGroupEntity networkingGroupEntity);
    public Boolean dtoIsNull(NetworkingGroupDto networkingGroupDto);
    public Boolean responseIsNull(NetworkingGroupResponseModel networkingGroupResponseModel);

@@ -1,6 +1,9 @@
 package net.yeoman.nmpcaport.shared.dto;
 
+import net.yeoman.nmpcaport.entities.AssignedNetworkingGroupEntity;
+import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.entities.UserEntity;
+import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
 import java.util.Date;
@@ -13,7 +16,13 @@ public class NetworkingGroupDto {
     private String name;
     private String description;
     private List<UserEntity> users;
+    private List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities;
+    private List<ContactEntity> nonMemberContactEntities;
+    private List<ContactEntity> memberContactEntities;
     private List<UserDetailsResponseModel> userResponse;
+    private List<ContactNestedResponseModel> contactNestedResponses;
+    private List<ContactNestedResponseModel> members;
+    private List<ContactNestedResponseModel> nonMembers;
     private List<String> userIds;
     private Date createdAt;
     private Date updatedAt;
@@ -89,5 +98,53 @@ public class NetworkingGroupDto {
 
     public void setUserResponse(List<UserDetailsResponseModel> userResponse) {
         this.userResponse = userResponse;
+    }
+
+    public List<ContactNestedResponseModel> getContactNestedResponses() {
+        return contactNestedResponses;
+    }
+
+    public void setContactNestedResponses(List<ContactNestedResponseModel> contactNestedResponses) {
+        this.contactNestedResponses = contactNestedResponses;
+    }
+
+    public List<ContactNestedResponseModel> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<ContactNestedResponseModel> members) {
+        this.members = members;
+    }
+
+    public List<ContactNestedResponseModel> getNonMembers() {
+        return nonMembers;
+    }
+
+    public void setNonMembers(List<ContactNestedResponseModel> nonMembers) {
+        this.nonMembers = nonMembers;
+    }
+
+    public List<AssignedNetworkingGroupEntity> getAssignedNetworkingGroupEntities() {
+        return assignedNetworkingGroupEntities;
+    }
+
+    public void setAssignedNetworkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
+        this.assignedNetworkingGroupEntities = assignedNetworkingGroupEntities;
+    }
+
+    public List<ContactEntity> getNonMemberContactEntities() {
+        return nonMemberContactEntities;
+    }
+
+    public void setNonMemberContactEntities(List<ContactEntity> nonMemberContactEntities) {
+        this.nonMemberContactEntities = nonMemberContactEntities;
+    }
+
+    public List<ContactEntity> getMemberContactEntities() {
+        return memberContactEntities;
+    }
+
+    public void setMemberContactEntities(List<ContactEntity> memberContactEntities) {
+        this.memberContactEntities = memberContactEntities;
     }
 }

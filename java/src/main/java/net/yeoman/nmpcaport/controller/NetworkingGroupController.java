@@ -1,9 +1,9 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.networkingGroup.NetworkingGroupRequestModel;
+import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupFormResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 import net.yeoman.nmpcaport.services.Impl.NetworkingGroupServiceImpl;
-import net.yeoman.nmpcaport.services.NetworkingGroupService;
 import net.yeoman.nmpcaport.shared.dto.NetworkingGroupDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,27 +21,21 @@ public class NetworkingGroupController {
     private NetworkingGroupServiceImpl networkingGroupService;
 
 
+
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<NetworkingGroupResponseModel> getAllNetworkingGroups(){
-        ModelMapper modelMapper = new ModelMapper();
-        List<NetworkingGroupResponseModel> returnValue = new ArrayList<>();
 
         List<NetworkingGroupDto> networkingGroupDtoList = this.networkingGroupService.getAllNetworkingGroups();
 
-        for(NetworkingGroupDto netGrp: networkingGroupDtoList){
-
-            returnValue.add(modelMapper.map(netGrp, NetworkingGroupResponseModel.class));
-        }
-
-        return returnValue;
+        return this.networkingGroupService.dtoToResponse(networkingGroupDtoList);
     }
 
+
     @GetMapping(path = "/{networkingGrpId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public NetworkingGroupResponseModel getNetworkingGroup(@PathVariable("networkingGrpId") String networkingGrpId){
+    public NetworkingGroupFormResponseModel getNetworkingGroup(@PathVariable("networkingGrpId") String networkingGrpId){
 
-        NetworkingGroupDto networkingGroupDto = this.networkingGroupService.getNetworkingGroupById(networkingGrpId);
 
-        return new ModelMapper().map(networkingGroupDto, NetworkingGroupResponseModel.class);
+        return this.networkingGroupService.networkingGroupFrom(networkingGrpId);
     }
 
 

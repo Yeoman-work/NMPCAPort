@@ -17,13 +17,13 @@ const Header = props =>{
                     <div className="collapse  navbar-collapse ms-auto me-5" id="navbarSupportedContent">
                         <ul className="navbar-nav  mb-2 mb-lg-0 ms-auto">
                             <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to={'/yeoman/dashboard'}>Home</Link>
+                                <Link className="nav-link active" aria-current="page" to={'/yeoman/dashboard'}>HealthCenters</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to={'/yeoman/legislation/dashboard'}>Legislation</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to={'/yeoman/contacts/addContact'}>Contacts</Link>
+                                <Link className="nav-link" to={'/yeoman/contacts/dashboard'}>Contacts</Link>
                             </li>
                             <li className={"nav-item"}>
                                 <Link className={"nav-link"} to={'/yeoman/networkingGroup/dashboard'}>Networking Groups</Link>

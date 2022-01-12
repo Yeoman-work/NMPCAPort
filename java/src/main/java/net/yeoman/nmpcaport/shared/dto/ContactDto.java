@@ -1,7 +1,6 @@
 package net.yeoman.nmpcaport.shared.dto;
 
-import net.yeoman.nmpcaport.entities.HealthCenterEntity;
-import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
+import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
@@ -23,10 +22,13 @@ public class ContactDto {
     private Date updatedAt;
     private List<String> networkingGroups;
     private String healthCenter;
+    private List<PhoneNumberEntity> phoneNumberEntities;
     private List<PhoneNumberRequest> phoneNumbers;
     private List<PhoneNumberResponse> phoneNumberResponses;
     private HealthCenterNestedResponseModel healthCenterNestedResponse;
     private HealthCenterEntity healthCenterEntity;
+    private List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities;
+    private List<AssignedNumberEntity> assignedNumberEntities;
     private List<NetworkingGroupEntity> networkingGroupEntities;
     private List<NetworkingGroupResponseModel> networkingGroupResponses;
 
@@ -157,5 +159,29 @@ public class ContactDto {
 
     public void setPhoneNumberResponses(List<PhoneNumberResponse> phoneNumberResponses) {
         this.phoneNumberResponses = phoneNumberResponses;
+    }
+
+    public List<AssignedNetworkingGroupEntity> getAssignedNetworkingGroupEntities() {
+        return assignedNetworkingGroupEntities;
+    }
+
+    public void setAssignedNetworkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
+        this.assignedNetworkingGroupEntities = assignedNetworkingGroupEntities;
+    }
+
+    public List<AssignedNumberEntity> getAssignedNumberEntities() {
+        return assignedNumberEntities;
+    }
+
+    public void setAssignedNumberEntities(List<AssignedNumberEntity> assignedNumberEntities) {
+        this.assignedNumberEntities = assignedNumberEntities;
+    }
+
+    public List<PhoneNumberEntity> getPhoneNumberEntities() {
+        return phoneNumberEntities;
+    }
+
+    public void setPhoneNumberEntities(List<PhoneNumberEntity> phoneNumberEntities) {
+        this.phoneNumberEntities = phoneNumberEntities;
     }
 }

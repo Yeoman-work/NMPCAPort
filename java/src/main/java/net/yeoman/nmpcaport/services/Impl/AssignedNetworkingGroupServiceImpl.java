@@ -7,13 +7,15 @@ import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.AssignedNetworkingGroupServiceException;
 import net.yeoman.nmpcaport.exception.ContactServiceException;
-import net.yeoman.nmpcaport.exception.ErrorMessage;
 import net.yeoman.nmpcaport.exception.NetworkingGroupServiceException;
 import net.yeoman.nmpcaport.io.repositories.AssignedNetworkingGroupRepository;
 import net.yeoman.nmpcaport.services.AssignedNetworkingGroupService;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGroupService {
@@ -77,6 +79,37 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
     }
 
     @Override
+    public List<NetworkingGroupEntity> networkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
+
+        if(entityIsNull(assignedNetworkingGroupEntities)) throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<NetworkingGroupEntity> returnValue = new ArrayList<>();
+
+        for(AssignedNetworkingGroupEntity assignment: assignedNetworkingGroupEntities){
+
+            returnValue.add(assignment.getNetworkingGroupEntity());
+
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public List<ContactEntity> getContactEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
+
+        if(entityIsNull(assignedNetworkingGroupEntities)) throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ContactEntity> returnValue = new ArrayList<>();
+
+        for(AssignedNetworkingGroupEntity assignment: assignedNetworkingGroupEntities){
+
+            returnValue.add(assignment.getContactEntity());
+        }
+
+        return returnValue;
+    }
+
+    @Override
     public Boolean existByNetworkingGroup(String assignedId){
 
         return this.assignedNetworkingGroupRepository.existsByPublicId(assignedId);
@@ -107,6 +140,11 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
     @Override
     public Boolean entityIsNull(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity) {
         return assignedNetworkingGroupEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
+        return assignedNetworkingGroupEntities == null;
     }
 
 

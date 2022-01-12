@@ -1,7 +1,9 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.exception.*;
+import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseBaseModel;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
@@ -429,6 +431,208 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public HealthCenterEntity generateHealthCenterWithUniqueHealthCenterId(HealthCenterEntity healthCenter) {
+
+        //check if health center is null
+        if(healthCenter == null) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        //set health center id
+        healthCenter.setHealthCenterId(utils.generateRandomID());
+
+        while(this.healthCenterRepository.existsByHealthCenterId(healthCenter.getHealthCenterId())){
+
+            healthCenter.setHealthCenterId(utils.generateRandomID());
+        }
+
+        return healthCenter;
+    }
+
+    @Override
+    public HealthCenterDto entityToHealthCenterDto(HealthCenterEntity healthCenterEntity) {
+
+        if(this.entityIsNull(healthCenterEntity)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(healthCenterEntity, HealthCenterDto.class);
+    }
+
+    @Override
+    public List<HealthCenterDto> entityArrayToHealthCenterArray(List<HealthCenterEntity> healthCenterEntityList) {
+
+        if(this.entityArrayIsNull(healthCenterEntityList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<HealthCenterDto> returnValue = new ArrayList<>();
+
+        for(HealthCenterEntity healthCenter: healthCenterEntityList){
+
+            returnValue.add(this.utils.objectMapper().map(healthCenter, HealthCenterDto.class));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public HealthCenterEntity dtoToHealthCenterEntity(HealthCenterDto healthCenterDto) {
+
+
+        HealthCenterEntity healthCenterEntity = utils.objectMapper().map(healthCenterDto, HealthCenterEntity.class);
+
+        if(healthCenterEntity.getHealthCenterId() == null || healthCenterEntity.getHealthCenterId().length() < 30){
+
+            healthCenterEntity = this.generateHealthCenterWithUniqueHealthCenterId(healthCenterEntity);
+        }
+
+        return healthCenterEntity;
+    }
+
+    @Override
+    public List<HealthCenterEntity> dtoArrayToEntityArray(List<HealthCenterDto> healthCenterDtoList) {
+
+        List<HealthCenterEntity> returnValue = new ArrayList<>();
+
+        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
+
+            returnValue.add(this.dtoToHealthCenterEntity(healthCenterDto));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public HealthCenterResponseModel dtoToHealthCenterResponse(HealthCenterDto healthCenterDto) {
+
+        if(this.dtoIsNull(healthCenterDto)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(healthCenterDto, HealthCenterResponseModel.class);
+
+    }
+
+    @Override
+    public List<HealthCenterResponseModel> dtoToHealthCenterResponseModel(List<HealthCenterDto> healthCenterDtoList) {
+
+        if(this.dtoArrayIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<HealthCenterResponseModel> returnValue = new ArrayList<>();
+
+        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
+
+            returnValue.add(this.dtoToHealthCenterResponse(healthCenterDto));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public HealthCenterResponseBaseModel dtoToHealthCenterResponseBaseModel(HealthCenterDto healthCenterDto) {
+
+        if(this.dtoIsNull(healthCenterDto)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(healthCenterDto, HealthCenterResponseBaseModel.class);
+    }
+
+    @Override
+    public List<HealthCenterResponseBaseModel> dtoToHealthCenterResponseBaseModel(List<HealthCenterDto> healthCenterDtoList) {
+
+        if(this.dtoArrayIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<HealthCenterResponseBaseModel> returnValue = new ArrayList<>();
+
+        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
+
+            returnValue.add(this.utils.objectMapper().map(healthCenterDto, HealthCenterResponseBaseModel.class));
+        }
+        return null;
+    }
+
+    @Override
+    public HealthCenterNestedResponseModel dtoToHealthCenterNestedResponseModel(HealthCenterDto healthCenterDto) {
+
+        if(this.dtoIsNull(healthCenterDto)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(healthCenterDto, HealthCenterNestedResponseModel.class);
+    }
+
+
+
+
+    @Override
+    public List<HealthCenterNestedResponseModel> dtoToHealthCenterNestedResponseModelArray(List<HealthCenterDto> healthCenterDtoList) {
+
+        if(this.dtoArrayIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<HealthCenterNestedResponseModel> returnValue = new ArrayList<>();
+
+        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
+
+            returnValue.add(this.dtoToHealthCenterNestedResponseModel(healthCenterDto));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public HealthCenterDetailsRequestModel dtoToHealthCenterDetailsRequestModel(HealthCenterDto healthCenterDto) {
+
+        if(dtoIsNull(healthCenterDto)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(healthCenterDto, HealthCenterDetailsRequestModel.class);
+    }
+
+    @Override
+    public List<HealthCenterDetailsRequestModel> dtoToHealthCenterDetailsRequestModel(List<HealthCenterDto> healthCenterDtoList) {
+
+        if(dtoArrayIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<HealthCenterDetailsRequestModel> returnValue = new ArrayList<>();
+
+        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
+
+            returnValue.add(this.utils.objectMapper().map(healthCenterDto, HealthCenterDetailsRequestModel.class));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public Boolean entityIsNull(HealthCenterEntity healthCenter) {
+        return healthCenter == null;
+    }
+
+    @Override
+    public Boolean entityArrayIsNull(List<HealthCenterEntity> healthCenterEntityList) {
+        return healthCenterEntityList == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(HealthCenterDto healthCenterDto) {
+        return healthCenterDto == null;
+    }
+
+    @Override
+    public Boolean dtoArrayIsNull(List<HealthCenterDto> healthCenterDtoList) {
+        return healthCenterDtoList == null;
+    }
+
+    @Override
+    public Boolean responseArrayIsNull(List<HealthCenterResponseModel> healthCenterResponseModelList) {
+        return healthCenterResponseModelList == null;
+    }
+
+    @Override
+    public Boolean responseIsNull(HealthCenterResponseModel healthCenterResponseModel) {
+        return healthCenterResponseModel == null;
+    }
+
+    @Override
+    public Boolean requestIsNull(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel) {
+        return healthCenterDetailsRequestModel == null;
+    }
+
+    @Override
+    public Boolean requestArrayIsNull(List<HealthCenterDetailsRequestModel> healthCenterDetailsRequestModelList) {
+        return healthCenterDetailsRequestModelList == null;
     }
 
 }

@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import ContactForm from "../components/ContactForm";
 import PhoneNumberForm from "../components/PhoneNumberForm";
 import Button from "../components/Button";
+import {useParams} from "react-router";
 const { isValidCharacter, phoneNumberBuilder } = require('../helper/generalFunctions')
 const { isContact } = require('../helper/contactValidation')
 
@@ -212,16 +213,38 @@ const contactReducer = (contactState, action) =>{
 
                 draft.contact.phoneNumbers = [...contactState.contact.phoneNumbers, contactState.phoneNumber];
 
-                draft.phoneNumber = clearPhoneNumber;
+                draft.phoneNumber = clearData.phoneNumber;
+            })
+
+        case FORM_FIELDS.CLEAR_CONTACT:
+
+            return produce(contactState, draft=>{
+
+                draft.contact = clearData.contact;
             })
 
     }
 }
 
 
-const clearPhoneNumber={
+const clearData={
+
+
+    contact:{
+        firstName: ''.trim().toLowerCase(),
+        lastName: ''.trim().toLowerCase(),
+        email: ''.trim().toLowerCase(),
+        title: ''.trim().toLowerCase(),
+        healthCenter: ''.trim(),
+        phoneNumbers: [],
+        networkingGroups: []
+    },
+
+    phoneNumber:{
         number: ''.trim(),
         description: ''.trim()
+    }
+
 }
 
 
@@ -235,14 +258,15 @@ const FORM_FIELDS={
     HEALTH_CENTER_LIST: 'healthCenterList',
     NETWORK_GRP: 'networkGroup',
     NETWORK_GRP_LIST: 'networkGroupList',
+    CLEAR_CONTACT: 'clearContact',
     PHONE_NUMBER: 'phone numbers',
     PHONE_DESCRIPTION: 'phone description',
-    PHONE_NUMBER_LIST: 'phone number list'
+    PHONE_NUMBER_LIST: 'phone number list',
 
 }
 
 const CreateContactsView = props =>{
-
+    const { id } = useParams()
     const [contactInfo, dispatchContactInfo] = useReducer(contactReducer, {
 
         contact:{
@@ -265,6 +289,13 @@ const CreateContactsView = props =>{
         healthCenters: []
 
     })
+
+
+    useEffect(()=>{
+
+        if(id !== null) dispatchContactInfo({type: FORM_FIELDS.NETWORK_GRP, payload: {checked: true, value: id}})
+
+    }, [id])
 
 
     useEffect(()=>{
@@ -336,6 +367,10 @@ const CreateContactsView = props =>{
                     Authorization: localStorage.getItem('token')
                 }
             })
+
+            dispatchContactInfo({type: FORM_FIELDS.CLEAR_CONTACT})
+            console.log('read this')
+            console.log(savedContactResponse.data);
 
         }catch(error){
 
