@@ -1,5 +1,6 @@
  package net.yeoman.nmpcaport.controller;
 
+import net.yeoman.nmpcaport.io.response.contact.ContactFormListResponse;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class ContactController {
     @Autowired
     private Utils utils;
 
+
     @GetMapping(path = {"/{contactId}"}, produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ContactResponseModel getContact(@PathVariable("contactId") String contactId){
 
@@ -43,6 +45,12 @@ public class ContactController {
         return this.contactService.getAllContacts();
     }
 
+    @GetMapping(path="/formContacts", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ContactFormListResponse getContactsForm(){
+
+        return this.contactService.contactsForNetworkingGroup();
+    }
+
     @PostMapping(consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
     			 produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ContactResponseModel createContact(@RequestBody ContactDetailsRequestModel contactDetails){
@@ -51,7 +59,7 @@ public class ContactController {
 
         ContactDto contactDto = this.contactService.processContactEntity(incomingDto);
 
-        //System.out.println(contactDto.getHealthCenterNestedResponse().getName());
+
         return this.contactService.dtoToResponse(contactDto);
     }
     

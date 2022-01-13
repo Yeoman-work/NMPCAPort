@@ -1,13 +1,12 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.entities.AssignedNetworkingGroupEntity;
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.services.NetworkingGroupService;
 import net.yeoman.nmpcaport.exception.ContactServiceException;
 import net.yeoman.nmpcaport.exception.NetworkingGroupServiceException;
 import net.yeoman.nmpcaport.io.request.networkingGroup.NetworkingGroupRequestModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupFormResponseModel;
-import net.yeoman.nmpcaport.services.NetworkingGroupService;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
 import net.yeoman.nmpcaport.entities.UserEntity;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
@@ -89,9 +88,21 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
     @Override
     public NetworkingGroupDto createNetworkingGroup(NetworkingGroupDto networkingGroup) {
 
-        if(this.networkingGroupRepository.existsByName(networkingGroup.getName())) throw new RuntimeException(networkingGroup.getName());
+        //check dto is not null
+        if(this.dtoIsNull(networkingGroup)) throw new NetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        NetworkingGroupEntity networkingGroupEntity  = new ModelMapper().map(networkingGroup, NetworkingGroupEntity.class);
+        //checks if the group exist
+        if(networkingGroup.getName() != null){
+
+            if(this.networkingGroupRepository.existsByName(networkingGroup.getName().toLowerCase())){
+                throw new NetworkingGroupServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
+            }
+        }
+
+
+        NetworkingGroupEntity networkingGroupEntity  = this.dtoToEntity(networkingGroup);
+
+
 
         networkingGroupEntity.setNetworkingGroupId(utils.generateRandomID());
 
@@ -153,6 +164,34 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
     }
 
     @Override
+    public NetworkingGroupFormResponseModel getFormResponseModel(String id) {
+
+        // get networking group entity
+        NetworkingGroupEntity networkingGroupEntity = this.networkGroupEntityByNetworkingGroupId(id);
+
+        //check if entity is null
+        if(networkingGroupEntity == null) throw new NetworkingGroupServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        //get networking group dto
+        NetworkingGroupDto networkingGroupDto = this.entityToDto(networkingGroupEntity);
+
+        //check if dto is null
+        if(networkingGroupDto == null ) throw new NetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        if(networkingGroupEntity.getAssignedNetworkingGroupEntities() != null){
+
+            //get entities from relationships
+            List<ContactEntity> contactEntities = this.assignedNetworkingGroupService.getContactEntities(networkingGroupEntity.getAssignedNetworkingGroupEntities());
+
+            networkingGroupDto.setMemberIds(this.contactService.peelOffContactIds(contactEntities));
+
+        }
+
+        this.dtoToFormResponse(networkingGroupDto);
+        return this.dtoToFormResponse(networkingGroupDto);
+    }
+
+    @Override
     public List<NetworkingGroupDto> getAllNetworkingGroups() {
 
         List<NetworkingGroupDto> networkingGroupDtoList = this.entityToDto(this.networkingGroupRepository.findAll());
@@ -183,6 +222,35 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public NetworkingGroupEntity dtoToEntity(NetworkingGroupDto networkingGroupDto) {
+
+        NetworkingGroupEntity networkingGroupEntity = this.utils.objectMapper().map(networkingGroupDto, NetworkingGroupEntity.class);
+
+        networkingGroupEntity.setNetworkingGroupId(utils.generateRandomID());
+
+        while(this.networkingGroupRepository.existsByNetworkingGroupId(networkingGroupEntity.getNetworkingGroupId())){
+
+            networkingGroupEntity.setNetworkingGroupId(utils.generateRandomID());
+
+        }
+
+        NetworkingGroupEntity savedNetworkingGroup = this.saveNetworkingGroupEntity(networkingGroupEntity);
+
+
+
+        if(networkingGroupDto.getMemberIds().size() > 0 || networkingGroupDto.getMemberIds() != null){
+
+            List<ContactEntity> contactEntities = this.contactService.getMultipleContacts(networkingGroupDto.getMemberIds());
+
+            this.assignedNetworkingGroupService.assignNetworkingGroupToContact(contactEntities, savedNetworkingGroup);
+
+        }
+
+
+        return savedNetworkingGroup;
     }
 
     @Override
@@ -244,6 +312,14 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
     }
 
     @Override
+    public NetworkingGroupEntity saveNetworkingGroupEntity(NetworkingGroupEntity networkingGroupEntity) {
+
+        return this.networkingGroupRepository.save(networkingGroupEntity);
+    }
+
+
+
+    @Override
     public List<NetworkingGroupResponseModel> dtoToResponse(List<NetworkingGroupDto> networkingGroupDtoList) {
 
         List<NetworkingGroupResponseModel> returnValue = new ArrayList<>();
@@ -269,6 +345,8 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
         return returnValue;
     }
 
+
+
     @Override
     public NetworkingGroupFormResponseModel networkingGroupFrom(String netGrpId) {
 
@@ -285,21 +363,9 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
         List<ContactEntity> contactEntities = this.contactService.getAllContactEntities();
 
-        for(ContactEntity contactEntity: contactEntities){
-
-            List<ContactEntity> nonMembers = new ArrayList<>();
-
-            if(!networkingGroupDto.getMemberContactEntities().contains(contactEntity)){
-
-                nonMembers.add(contactEntity);
-
-            }
-
-            networkingGroupDto.setNonMemberContactEntities(nonMembers);
-        }
 
         networkingGroupDto.setMembers(this.contactService.dtoToNestedResponse(this.contactService.entityToDto(networkingGroupDto.getMemberContactEntities())));
-        networkingGroupDto.setNonMembers(this.contactService.dtoToNestedResponse(this.contactService.entityToDto(networkingGroupDto.getNonMemberContactEntities())));
+
 
         return this.dtoToFormResponse(networkingGroupDto);
     }
@@ -328,11 +394,6 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
     }
 
-    @Override
-    public NetworkingGroupEntity dtoToEntity(NetworkingGroupDto networkingGroupDto) {
-
-        return utils.objectMapper().map(networkingGroupDto, NetworkingGroupEntity.class);
-    }
 
     @Override
     public NetworkingGroupResponseModel dtoToResponse(NetworkingGroupDto networkingGroupDto) {

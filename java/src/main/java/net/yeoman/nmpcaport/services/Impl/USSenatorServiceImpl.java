@@ -1,9 +1,9 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.services.USSenatorService;
 import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 import net.yeoman.nmpcaport.io.response.staff.StaffResponse;
-import net.yeoman.nmpcaport.services.USSenatorService;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.PoliticalPartyServiceException;
 import net.yeoman.nmpcaport.exception.UsSenatorServiceException;

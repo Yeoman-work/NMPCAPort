@@ -8,7 +8,9 @@ public class NetworkingGroupRequestModel {
 
     private String name;
     private String description;
+    private List<String> memberIds;
     private List<String> userIds;
+
 
 
     public String getName() {
@@ -33,5 +35,13 @@ public class NetworkingGroupRequestModel {
 
     public void setUserIds(List<String> userIds) {
         this.userIds = userIds;
+    }
+
+    public List<String> getMemberIds() {
+        return memberIds;
+    }
+
+    public void setMemberIds(List<String> memberIds) {
+        this.memberIds = memberIds;
     }
 }

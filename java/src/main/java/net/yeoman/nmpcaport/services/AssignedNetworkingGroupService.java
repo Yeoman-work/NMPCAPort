@@ -13,8 +13,9 @@ public interface AssignedNetworkingGroupService {
     public AssignedNetworkingGroupEntity createAssignedNetworkingGroupEntity();
     public AssignedNetworkingGroupEntity savedAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
     public AssignedNetworkingGroupEntity updateAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity, String assignmentId);
-    public AssignedNetworkingGroupEntity deleteAssignedNetworkingGroup(String assignedId);
+    public void deleteAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
     public AssignedNetworkingGroupEntity getAssignedNetworkingGroup(String assignedId);
+    public List<AssignedNetworkingGroupEntity> assignNetworkingGroupToContact(List<ContactEntity> contactEntities, NetworkingGroupEntity networkingGroupEntity);
 
     //get networking group entities
     public List<NetworkingGroupEntity>  networkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);

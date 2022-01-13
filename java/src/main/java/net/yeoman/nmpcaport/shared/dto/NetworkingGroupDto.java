@@ -15,9 +15,9 @@ public class NetworkingGroupDto {
     private String networkingGroupId;
     private String name;
     private String description;
+    private List<String> memberIds;
     private List<UserEntity> users;
     private List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities;
-    private List<ContactEntity> nonMemberContactEntities;
     private List<ContactEntity> memberContactEntities;
     private List<UserDetailsResponseModel> userResponse;
     private List<ContactNestedResponseModel> contactNestedResponses;
@@ -132,13 +132,6 @@ public class NetworkingGroupDto {
         this.assignedNetworkingGroupEntities = assignedNetworkingGroupEntities;
     }
 
-    public List<ContactEntity> getNonMemberContactEntities() {
-        return nonMemberContactEntities;
-    }
-
-    public void setNonMemberContactEntities(List<ContactEntity> nonMemberContactEntities) {
-        this.nonMemberContactEntities = nonMemberContactEntities;
-    }
 
     public List<ContactEntity> getMemberContactEntities() {
         return memberContactEntities;
@@ -146,5 +139,13 @@ public class NetworkingGroupDto {
 
     public void setMemberContactEntities(List<ContactEntity> memberContactEntities) {
         this.memberContactEntities = memberContactEntities;
+    }
+
+    public List<String> getMemberIds() {
+        return memberIds;
+    }
+
+    public void setMemberIds(List<String> memberIds) {
+        this.memberIds = memberIds;
     }
 }

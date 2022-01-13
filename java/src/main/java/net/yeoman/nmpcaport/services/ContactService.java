@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.io.request.contact.ContactDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.contact.ContactFormListResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
@@ -12,7 +13,6 @@ import java.util.List;
 public interface ContactService {
 
     //get contact dto functions
-    public ContactDto getContact(String contactId);
     public ContactDto requestToDto(ContactDetailsRequestModel contactDetailsRequestModel);
     public List<ContactDto> requestToDto(List<ContactDetailsRequestModel> contactDetailsRequestModelList);
     public ContactDto entityToDto(ContactEntity contactEntity);
@@ -26,6 +26,11 @@ public interface ContactService {
     public ContactNestedResponseModel dtoToNestedResponse(ContactDto contactDto) ;
     public List<ContactNestedResponseModel> dtoToNestedResponse(List<ContactDto> contactDtoList);
 
+    //contactsNetworkingGroupForm
+    public ContactFormListResponse contactsForNetworkingGroup();
+    public String peelOffContactIds(ContactEntity contactEntity);
+    public List<String> peelOffContactIds(List<ContactEntity> contactEntities);
+
 
     //contact entity
     public ContactEntity dtoToEntity(ContactDto contactDto);
@@ -34,6 +39,8 @@ public interface ContactService {
     public ContactEntity savedContactEntity(ContactEntity contactEntity);
     public ContactEntity getContactEntity(String contactId);
     public List<ContactEntity> getAllContactEntities();
+    public ContactEntity getContact(String contactId);
+    public List<ContactEntity> getMultipleContacts(List<String> memberIds);
 
 
 

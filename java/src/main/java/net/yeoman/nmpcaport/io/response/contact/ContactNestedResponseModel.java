@@ -6,6 +6,7 @@ public class ContactNestedResponseModel {
     private String title;
     private String firstName;
     private String lastName;
+    private String healthCenter;
     private String email;
     private String createdAt;
     private String updatedAt;
@@ -64,5 +65,13 @@ public class ContactNestedResponseModel {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getHealthCenter() {
+        return healthCenter;
+    }
+
+    public void setHealthCenter(String healthCenter) {
+        this.healthCenter = healthCenter;
     }
 }

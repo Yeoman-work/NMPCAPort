@@ -38,11 +38,16 @@ public interface NetworkingGroupService {
    public List<NetworkingGroupEntity> getMultipleNetworkingGroups(List<String> networkingGroupIds);
    public NetworkingGroupEntity dtoToEntity(NetworkingGroupDto networkingGroupDtoList);
    public List<NetworkingGroupEntity> dtoToEntity(List<NetworkingGroupDto> networkingGroupDtoList);
+   public NetworkingGroupEntity saveNetworkingGroupEntity(NetworkingGroupEntity networkingGroupEntity);
 
    //networking group response
    public List<NetworkingGroupResponseModel> dtoToResponse(List<NetworkingGroupDto> networkingGroupDtoList);
    public NetworkingGroupResponseModel dtoToResponse(NetworkingGroupDto networkingGroupDto);
    public NetworkingGroupResponseModel deleteNetworkingGroup(String networkingGroupId);
+
+   //networking group form response
+   public NetworkingGroupFormResponseModel getFormResponseModel(String id);
+
 
    //is null
    public Boolean entityIsNull(NetworkingGroupEntity networkingGroupEntity);

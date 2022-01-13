@@ -1,7 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.AssignedNetworkingGroupEntity;
-import net.yeoman.nmpcaport.entities.AssignedNumberEntity;
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
@@ -52,15 +51,37 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
     }
 
     @Override
+    public List<AssignedNetworkingGroupEntity> assignNetworkingGroupToContact(List<ContactEntity> contactEntities, NetworkingGroupEntity networkingGroupEntity) {
+
+        if(contactEntities == null) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        if(networkingGroupEntity == null) throw new NetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        List<AssignedNetworkingGroupEntity> returnValue = new ArrayList<>();
+
+        for(ContactEntity contactEntity: contactEntities){
+
+            AssignedNetworkingGroupEntity assignedNetworkingGroupEntity = this.createAssignedNetworkingGroupEntity();
+
+            assignedNetworkingGroupEntity.setNetworkingGroupEntity(networkingGroupEntity);
+            assignedNetworkingGroupEntity.setContactEntity(contactEntity);
+
+             returnValue.add(this.savedAssignedNetworkingGroup(assignedNetworkingGroupEntity));
+        }
+
+        return returnValue;
+
+    }
+
+    @Override
     public AssignedNetworkingGroupEntity savedAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity) {
 
         //check assignment entity is not null
         if(assignedNetworkingGroupEntity == null) throw new AssignedNetworkingGroupServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         //save entity
-        AssignedNetworkingGroupEntity savedAssignmentEntity = this.assignedNetworkingGroupRepository.save(assignedNetworkingGroupEntity);
+         return this.assignedNetworkingGroupRepository.save(assignedNetworkingGroupEntity);
 
-        return savedAssignmentEntity;
+
     }
 
     @Override
@@ -69,14 +90,19 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
     }
 
     @Override
-    public AssignedNetworkingGroupEntity deleteAssignedNetworkingGroup(String assignedId) {
-        return null;
+    public void deleteAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity){
+
+        this.assignedNetworkingGroupRepository.delete(assignedNetworkingGroupEntity);
+
+        return;
     }
 
     @Override
     public AssignedNetworkingGroupEntity getAssignedNetworkingGroup(String assignedId) {
-        return null;
+
+        return this.assignedNetworkingGroupRepository.findByPublicId(assignedId);
     }
+
 
     @Override
     public List<NetworkingGroupEntity> networkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
@@ -133,7 +159,10 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
         //set contact entity
         assignedNetworkingGroupEntity.setContactEntity(contactEntity);
 
-        return this.savedAssignedNetworkingGroup(assignedNetworkingGroupEntity);
+        //save assignment
+        this.savedAssignedNetworkingGroup(assignedNetworkingGroupEntity);
+
+        return assignedNetworkingGroupEntity;
 
     }
 

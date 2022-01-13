@@ -93,7 +93,7 @@ public class NetworkingGroupEntity implements Serializable {
     }
 
     public void setDescription(String description) {
-        this.description = description.trim().toLowerCase();
+        this.description = description;
     }
 
     public Date getCreatedAt() {

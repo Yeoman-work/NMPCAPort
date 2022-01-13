@@ -83,4 +83,19 @@ public class NetworkingGroupFormResponseModel {
         this.updatedAt = updatedAt;
     }
 
+    public List<String> getMemberIds() {
+        return memberIds;
+    }
+
+    public void setMemberIds(List<String> memberIds) {
+        this.memberIds = memberIds;
+    }
+
+    public List<String> getNonMemberIds() {
+        return nonMemberIds;
+    }
+
+    public void setNonMemberIds(List<String> nonMemberIds) {
+        this.nonMemberIds = nonMemberIds;
+    }
 }

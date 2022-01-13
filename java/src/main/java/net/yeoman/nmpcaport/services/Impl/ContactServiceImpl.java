@@ -5,18 +5,17 @@ import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.request.contact.ContactDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.contact.ContactFormListResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 import net.yeoman.nmpcaport.io.repositories.ContactRepository;
-import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 import net.yeoman.nmpcaport.services.ContactService;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
 import net.yeoman.nmpcaport.shared.dto.NetworkingGroupDto;
 import net.yeoman.nmpcaport.shared.dto.PhoneNumberDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -175,6 +174,39 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public ContactFormListResponse contactsForNetworkingGroup() {
+
+        List<ContactEntity> contactEntities = this.getAllContactEntities();
+
+        ContactFormListResponse returnValue = new ContactFormListResponse();
+
+        returnValue.setContactNestedResponses(this.dtoToNestedResponse(this.entityToDto(contactEntities)));
+
+        returnValue.setNonMemberIds(this.peelOffContactIds(contactEntities));
+
+        return returnValue;
+    }
+
+    @Override
+    public String peelOffContactIds(ContactEntity contactEntity) {
+
+        return contactEntity.getContactId();
+    }
+
+    @Override
+    public List<String> peelOffContactIds(List<ContactEntity> contactEntities) {
+
+        List<String> returnValue = new ArrayList<>();
+
+        for(ContactEntity contactEntity: contactEntities){
+
+            returnValue.add(this.peelOffContactIds(contactEntity));
+        }
+
+        return returnValue;
+    }
+
+    @Override
     public void saveContact(ContactEntity contact) {
          this.contactRepository.save(contact);
     }
@@ -257,23 +289,30 @@ public class ContactServiceImpl implements ContactService {
 
 
     @Override
-    public ContactDto getContact(String contactId) {
+    public ContactEntity getContact(String contactId) {
+
+        if(contactId == null || contactId.length() < 30 ) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+    	return this.contactRepository.findByContactId(contactId);
         
-    	ContactEntity contactEntity = this.contactRepository.findByContactId(contactId);
+    }
 
-    	ContactDto contactDto = new ModelMapper().map(contactEntity, ContactDto.class);
+    @Override
+    public List<ContactEntity> getMultipleContacts(List<String> memberIds) {
 
-    	if(contactEntity == null) throw new RuntimeException(contactId);
+        List<ContactEntity> returnValue = new ArrayList<>();
 
+        for(String memberId: memberIds){
 
-        if(contactDto.getHealthCenter() != null){
+            ContactEntity contactEntity = this.getContactEntity(memberId);
 
-            contactDto.setHealthCenterNestedResponse(new ModelMapper().map(contactDto.getHealthCenter(), HealthCenterNestedResponseModel.class));
+            if(contactEntity != null){
 
+                returnValue.add(contactEntity);
+            }
         }
 
-    	return contactDto;
-        
+        return returnValue;
     }
 
     //contact entity mapper

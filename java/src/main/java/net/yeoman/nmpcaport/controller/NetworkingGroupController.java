@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -35,7 +34,7 @@ public class NetworkingGroupController {
     public NetworkingGroupFormResponseModel getNetworkingGroup(@PathVariable("networkingGrpId") String networkingGrpId){
 
 
-        return this.networkingGroupService.networkingGroupFrom(networkingGrpId);
+        return this.networkingGroupService.getFormResponseModel(networkingGrpId);
     }
 
 
@@ -44,11 +43,10 @@ public class NetworkingGroupController {
                  produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public NetworkingGroupResponseModel createNetworkingGroup(@RequestBody NetworkingGroupRequestModel networkingGroupDetails){
 
-        NetworkingGroupDto networkingGroupDto = new ModelMapper().map(networkingGroupDetails, NetworkingGroupDto.class);
 
-        NetworkingGroupDto storedNetworkingGroup = this.networkingGroupService.createNetworkingGroup(networkingGroupDto);
+        NetworkingGroupDto storedNetworkingGroup = this.networkingGroupService.createNetworkingGroup(this.networkingGroupService.requestToDto(networkingGroupDetails));
 
-        return new ModelMapper().map(storedNetworkingGroup, NetworkingGroupResponseModel.class);
+        return this.networkingGroupService.dtoToResponse(storedNetworkingGroup);
     }
 
 
