@@ -182,8 +182,6 @@ public class ContactServiceImpl implements ContactService {
 
         returnValue.setContactNestedResponses(this.dtoToNestedResponse(this.entityToDto(contactEntities)));
 
-        returnValue.setNonMemberIds(this.peelOffContactIds(contactEntities));
-
         return returnValue;
     }
 

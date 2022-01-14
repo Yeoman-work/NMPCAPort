@@ -14,13 +14,15 @@ const networkGroupReducer = (netGrp, action) =>{
     switch(action.type){
 
         case FORM_FIELDS.NAME:
-            console.log(netGrp);
+
             if(isValidCharacter(action.payload)){
 
                 if(action.payload.length <= 50){
 
                     return produce(netGrp, draft=>{
-                        console.log(netGrp);
+
+                        console.log(netGrp)
+
                         draft.group.name = action.payload;
                     })
 
@@ -45,7 +47,7 @@ const networkGroupReducer = (netGrp, action) =>{
         case FORM_FIELDS.GRP_DESCRIPTION:
 
             if(isValidCharacter(action.payload)){
-
+                console.log(netGrp)
                 if(action.payload.length <= 250){
 
                     return produce(netGrp, draft=>{
@@ -107,6 +109,13 @@ const networkGroupReducer = (netGrp, action) =>{
             })
 
 
+        case FORM_FIELDS.EDIT_GROUP:
+
+            return produce(netGrp, draft=>{
+
+                draft.group = {...action.payload}
+            })
+
     }
 
 
@@ -119,7 +128,7 @@ const FORM_FIELDS={
     CONTACTS: 'contacts',
     MEMBER_IDS: 'member ids',
     POPULATE_CONTACTS: 'populate contacts',
-    CURRENT_GROUP: ''
+    EDIT_GROUP: ''
 
 
 }
@@ -164,7 +173,7 @@ const CreateNetworkingGroupView = props =>{
                     dispatchNetGrp({type: FORM_FIELDS.POPULATE_CONTACTS, payload: {...contactResponse.data}})
 
 
-                } catch (error) {
+                } catch(error) {
 
                     console.log(error.response);
 
@@ -193,7 +202,10 @@ const CreateNetworkingGroupView = props =>{
                     })
 
 
-                    dispatchNetGrp()
+                    console.log(networkingGroupResponse.data)
+
+                    dispatchNetGrp({type: FORM_FIELDS.EDIT_GROUP, payload: {...networkingGroupResponse.data}})
+
 
 
                 }catch (error){
@@ -239,31 +251,40 @@ const CreateNetworkingGroupView = props =>{
     }
 
     return(
-        <div>
-            <Header/>
-            <div className={'m-auto mt-5 w-50'}>
-                <NetworkingGroupForm
-                    label={"New Group"}
-                    grp={netGrp.group}
-                    onChange={dispatchNetGrp}
-                    handler={submitHandler}
-                    fields={FORM_FIELDS}
-                />
-            </div>
-            <div>
-                <NetworkingGroupWithContacts
-                    contacts={netGrp.contacts}
-                    memberIds={netGrp.group.memberIds}
-                    formField={FORM_FIELDS}
-                    dispatchFunction={dispatchNetGrp}
-                    divProps={'m-auto w-50 border'}
-                />
-            </div>
-            <Button
-                action={submitHandler}
-                label={'Create Group'}
-            />
-        </div>
+
+
+            netGrp.group?
+                <div>
+                    <Header/>
+                    <div className={'m-auto mt-5 w-50'}>
+                        <NetworkingGroupForm
+                            label={id? 'Update Group' : 'New Group'}
+                            grp={netGrp.group}
+                            id={id}
+                            onChange={dispatchNetGrp}
+                            handler={submitHandler}
+                            fields={FORM_FIELDS}
+                        />
+                    </div>
+                    <div>
+                        <NetworkingGroupWithContacts
+                            contacts={netGrp.contacts}
+                            memberIds={netGrp.group.memberIds}
+                            formField={FORM_FIELDS}
+                            dispatchFunction={dispatchNetGrp}
+                            divProps={'m-auto w-50 border'}
+                        />
+                    </div>
+                    <Button
+                        action={submitHandler}
+                        label={id? 'Update Group': 'Create Group' }
+                    />
+                </div>
+
+                :
+                null
+
+
     )
 }
 

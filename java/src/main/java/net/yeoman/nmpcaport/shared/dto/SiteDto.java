@@ -7,9 +7,11 @@ import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
+import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
+import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
@@ -42,6 +44,8 @@ public class SiteDto {
     private List<FundEntity> fundEntities;
     private List<FundRequestModel> fundRequestModels;
     private List<FundResponseModel> fundResponseModels;
+    private List<FundNestedResponse> fundNestedResponses;
+    private List<ServiceNestedResponse> serviceNestedResponses;
     private List<ServiceEntity> serviceEntities;
     private List<ServiceDetailsRequestModel> serviceDetailsRequestModels;
     private List<SiteServiceDetailsEntity> siteServiceDetailsEntities;
@@ -351,5 +355,21 @@ public class SiteDto {
 
     public void setSiteFundingDetailsEntities(List<SiteFundingDetailsEntity> siteFundingDetailsEntities) {
         this.siteFundingDetailsEntities = siteFundingDetailsEntities;
+    }
+
+    public List<ServiceNestedResponse> getServiceNestedResponses() {
+        return serviceNestedResponses;
+    }
+
+    public void setServiceNestedResponses(List<ServiceNestedResponse> serviceNestedResponses) {
+        this.serviceNestedResponses = serviceNestedResponses;
+    }
+
+    public List<FundNestedResponse> getFundNestedResponses() {
+        return fundNestedResponses;
+    }
+
+    public void setFundNestedResponses(List<FundNestedResponse> fundNestedResponses) {
+        this.fundNestedResponses = fundNestedResponses;
     }
 }

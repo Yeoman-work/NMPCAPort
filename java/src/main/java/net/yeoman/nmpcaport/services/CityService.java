@@ -20,4 +20,16 @@ public interface CityService {
     public CityDto updateCity(String cityId, CityDto cityDto);
 
     public List<CityResponse> allCities();
+
+    public CityDto entityToDto(CityEntity cityDto);
+    public List<CityDto> entityToDto(List<CityEntity> cityEntityList);
+
+    public CityResponse dtoToResponse(CityDto cityDto);
+    public List<CityResponse> dtoToResponse(List<CityDto> cityDtoList);
+
+    public Boolean entityIsNull(CityEntity cityEntity);
+    public Boolean entityIsNull(List<CityEntity> cityEntityList);
+    public Boolean dtoIsNull(CityDto cityDto);
+    public Boolean dtoIsNull(List<CityDto> cityDtoList);
+
 }

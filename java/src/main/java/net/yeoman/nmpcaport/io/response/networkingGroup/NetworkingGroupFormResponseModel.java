@@ -7,25 +7,12 @@ import java.util.Date;
 import java.util.List;
 
 public class NetworkingGroupFormResponseModel {
-
-    private String networkingGroupId;
     private String name;
     private String description;
-    private List<UserDetailsResponseModel> userResponses;
-    private List<ContactNestedResponseModel> members;
-    private List<ContactNestedResponseModel> nonMembers;
     private List<String> memberIds;
-    private List<String> nonMemberIds;
     private Date createdAt;
     private Date updatedAt;
 
-    public String getNetworkingGroupId() {
-        return networkingGroupId;
-    }
-
-    public void setNetworkingGroupId(String networkingGroupId) {
-        this.networkingGroupId = networkingGroupId;
-    }
 
     public String getName() {
         return name;
@@ -43,29 +30,6 @@ public class NetworkingGroupFormResponseModel {
         this.description = description;
     }
 
-    public List<UserDetailsResponseModel> getUserResponses() {
-        return userResponses;
-    }
-
-    public void setUserResponses(List<UserDetailsResponseModel> userResponses) {
-        this.userResponses = userResponses;
-    }
-
-    public List<ContactNestedResponseModel> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<ContactNestedResponseModel> members) {
-        this.members = members;
-    }
-
-    public List<ContactNestedResponseModel> getNonMembers() {
-        return nonMembers;
-    }
-
-    public void setNonMembers(List<ContactNestedResponseModel> nonMembers) {
-        this.nonMembers = nonMembers;
-    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -91,11 +55,5 @@ public class NetworkingGroupFormResponseModel {
         this.memberIds = memberIds;
     }
 
-    public List<String> getNonMemberIds() {
-        return nonMemberIds;
-    }
 
-    public void setNonMemberIds(List<String> nonMemberIds) {
-        this.nonMemberIds = nonMemberIds;
-    }
 }

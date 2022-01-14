@@ -7,7 +7,7 @@ const { characterCount } = require('../helper/generalFunctions')
 
 
 const NetworkingGroupForm = props =>{
-   const {grp, label, onChange, fields} = props;
+   const {grp, label, onChange, fields, id} = props;
 
 
 
@@ -19,14 +19,14 @@ const NetworkingGroupForm = props =>{
                 type={'text'}
                 label={'Group Name'}
                 fieldClass={'form-control'}
-                fieldValue={grp.group.name}
+                fieldValue={grp.name}
                 name={fields.NAME}
                 onChange={onChange}
             />
             <div>
                 <textarea className={'form-control'}
                           name={fields.GRP_DESCRIPTION}
-                          value={grp.group.description}
+                          value={grp.description}
                           cols="30" rows="10"
                           onChange={(e)=>onChange({type: e.target.name, payload: e.target.value})}
                 ></textarea>

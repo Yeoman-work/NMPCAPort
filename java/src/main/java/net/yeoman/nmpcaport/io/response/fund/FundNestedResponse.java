@@ -1,18 +1,13 @@
 package net.yeoman.nmpcaport.io.response.fund;
 
-import net.yeoman.nmpcaport.entities.SiteEntity;
-
 import java.util.Date;
-import java.util.List;
 
-public class FundResponseModel {
+public class FundNestedResponse {
 
     private String fundId;
     private String name;
-    private List<SiteEntity> siteEntities;
     private Date createdAt;
     private Date updatedAt;
-
 
     public String getFundId() {
         return fundId;
@@ -44,13 +39,5 @@ public class FundResponseModel {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public List<SiteEntity> getSiteEntities() {
-        return siteEntities;
-    }
-
-    public void setSiteEntities(List<SiteEntity> siteEntities) {
-        this.siteEntities = siteEntities;
     }
 }

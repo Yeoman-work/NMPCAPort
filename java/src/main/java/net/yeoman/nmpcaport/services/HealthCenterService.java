@@ -11,19 +11,24 @@ import java.util.List;
 
 public interface HealthCenterService {
 
+
+    //return dto
     public HealthCenterDto getHealthCenter(String healthCenterId);
     public HealthCenterResponseModel createHealthCenter(HealthCenterDto healthCenterDto);
     public HealthCenterDto updateHealthCenter(String healthCenterId, HealthCenterDto healthCenterDto);
     public HealthCenterDto deleteHealthCenter(String healthCenterId);
-    public HealthCenterEntity getHealthCenterEntity(String healthCenterId);
-    public HealthCenterEntity savedHealthCenterEntity(HealthCenterEntity healthCenterEntity);
     public List<HealthCenterDto> getHealthCenters(int page, int limit);
     public List<HealthCenterDto> getAllHealthCenters();
+
+
+    //return entity
     public HealthCenterEntity generateHealthCenterWithUniqueHealthCenterId(HealthCenterEntity healthCenter);
+    public HealthCenterEntity getHealthCenterEntity(String healthCenterId);
+    public HealthCenterEntity savedHealthCenterEntity(HealthCenterEntity healthCenterEntity);
 
     //convert entity to DTO
-    public HealthCenterDto entityToHealthCenterDto(HealthCenterEntity healthCenterEntity);
-    public List<HealthCenterDto> entityArrayToHealthCenterArray(List<HealthCenterEntity> healthCenterEntityList);
+    public HealthCenterDto entityToDto(HealthCenterEntity healthCenterEntity);
+    public List<HealthCenterDto> entityToDto(List<HealthCenterEntity> healthCenterEntityList);
 
     //convert dto to entity
     public HealthCenterEntity dtoToHealthCenterEntity(HealthCenterDto healthCenterDto);

@@ -64,7 +64,7 @@ function App() {
                         <Route path={'dashboard'} element={<NetworkingGroupDashboard/>}/>
                         <Route path={'editGroup/:id'} element={<CreateNetworkingGroupView/>}/>
                         <Route path={'createNetworkingGroup'} element={<CreateNetworkingGroupView/>}/>
-                        <Route path={'addContact/:id'} element={<CreateContactsView/>}/>
+                        <Route path={'addContact/:id'} element={<CreateNetworkingGroupView/>}/>
                     </Route>
                     <Route path={'contacts'}>
                         <Route path={'dashboard'} element={<ContactDashboardView/>}/>

@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.services.SiteService;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
@@ -249,6 +250,86 @@ public class SiteServiceImpl implements SiteService {
             }
 
         return returnValue;
+    }
+
+    @Override
+    public SiteDto entityToDto(SiteEntity siteEntity) {
+
+        if(entityIsNull(siteEntity)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        SiteDto siteDto = this.utils.objectMapper().map(siteEntity, SiteDto.class);
+
+        if(siteDto.getSiteServiceDetailsEntities() != null) {
+
+            siteDto.setServiceNestedResponses(this.serviceService.dtoToNestedResponse(
+                    this.serviceService.entityToDto(
+                            this.siteServiceDetailsService.getServiceEntities(
+                                    siteDto.getSiteServiceDetailsEntities()))));
+        }
+
+        if(!this.siteFundingDetailsService.entityIsNull(siteDto.getSiteFundingDetailsEntities())){
+
+            siteDto.setFundNestedResponses(this.fundService.dtoToNestedResponse(
+                    this.fundService.entityToDto(
+                            this.siteFundingDetailsService.getFundEntities(
+                                    siteDto.getSiteFundingDetailsEntities()))));
+        }
+
+        if(!this.cityService.entityIsNull(siteDto.getCityEntity())){
+
+            siteDto.setCityResponse(this.cityService.dtoToResponse(this.cityService.entityToDto(siteDto.getCityEntity())));
+        }
+
+        if()
+        return null;
+    }
+
+    @Override
+    public List<SiteDto> entityToDto(List<SiteEntity> siteEntities) {
+        return null;
+    }
+
+    @Override
+    public SiteDetailsNestedResponse dtoToNestedResponse(SiteDto siteDto) {
+
+        if(this.dtoIsNull(siteDto)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return utils.objectMapper().map(siteDto, SiteDetailsNestedResponse.class);
+    }
+
+    @Override
+    public List<SiteDetailsNestedResponse> dtoNestedResponse(List<SiteDto> siteDtoList) {
+
+        if(this.dtoIsNull(siteDtoList)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SiteDetailsNestedResponse> returnValue = new ArrayList<>();
+
+        for(SiteDto siteDto: siteDtoList){
+
+            returnValue.add(this.dtoToNestedResponse(siteDto));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public Boolean entityIsNull(SiteEntity siteEntity) {
+        return siteEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<SiteEntity> siteEntities) {
+        return siteEntities == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(SiteDto siteDto) {
+        return siteDto == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(List<SiteDto> siteDtoList) {
+        return siteDtoList == null;
     }
 
     @Override

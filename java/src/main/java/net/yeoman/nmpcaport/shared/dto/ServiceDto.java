@@ -1,6 +1,9 @@
 package net.yeoman.nmpcaport.shared.dto;
 
+import net.yeoman.nmpcaport.entities.ServiceEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
+import net.yeoman.nmpcaport.entities.SiteServiceDetailsEntity;
+import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 
 import java.util.List;
 
@@ -14,6 +17,8 @@ public class ServiceDto {
     private String updatedAt;
     private List<String> siteIdentifier;
     private List<SiteEntity> sites;
+    private List<SiteServiceDetailsEntity> siteServiceDetailsEntities;
+    private List<SiteDetailsNestedResponse> siteDetailsNestedResponses;
 
     public Long getId() {
         return id;
@@ -77,5 +82,21 @@ public class ServiceDto {
 
     public void setSites(List<SiteEntity> sites) {
         this.sites = sites;
+    }
+
+    public List<SiteServiceDetailsEntity> getSiteServiceDetailsEntities() {
+        return siteServiceDetailsEntities;
+    }
+
+    public void setSiteServiceDetailsEntities(List<SiteServiceDetailsEntity> siteServiceDetailsEntities) {
+        this.siteServiceDetailsEntities = siteServiceDetailsEntities;
+    }
+
+    public List<SiteDetailsNestedResponse> getSiteDetailsNestedResponses() {
+        return siteDetailsNestedResponses;
+    }
+
+    public void setSiteDetailsNestedResponses(List<SiteDetailsNestedResponse> siteDetailsNestedResponses) {
+        this.siteDetailsNestedResponses = siteDetailsNestedResponses;
     }
 }

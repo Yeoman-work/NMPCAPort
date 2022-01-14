@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.services.NetworkingGroupService;
 import net.yeoman.nmpcaport.exception.ContactServiceException;
 import net.yeoman.nmpcaport.exception.NetworkingGroupServiceException;
@@ -184,6 +185,7 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
             List<ContactEntity> contactEntities = this.assignedNetworkingGroupService.getContactEntities(networkingGroupEntity.getAssignedNetworkingGroupEntities());
 
             networkingGroupDto.setMemberIds(this.contactService.peelOffContactIds(contactEntities));
+
 
         }
 

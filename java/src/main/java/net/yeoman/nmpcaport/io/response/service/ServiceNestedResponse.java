@@ -1,17 +1,12 @@
 package net.yeoman.nmpcaport.io.response.service;
 
-import net.yeoman.nmpcaport.entities.SiteEntity;
-
-import java.util.List;
-
-public class ServiceResponse {
+public class ServiceNestedResponse {
 
     private String serviceId;
     private String name;
     private String ABBR;
     private String createdAt;
     private String updatedAt;
-    private List<SiteEntity> sites;
 
     public String getServiceId() {
         return serviceId;
@@ -51,13 +46,5 @@ public class ServiceResponse {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public List<SiteEntity> getSites() {
-        return sites;
-    }
-
-    public void setSites(List<SiteEntity> sites) {
-        this.sites = sites;
     }
 }
