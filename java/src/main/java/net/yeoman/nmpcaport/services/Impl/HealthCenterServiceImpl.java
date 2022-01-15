@@ -1,5 +1,9 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
 import net.yeoman.nmpcaport.services.HealthCenterService;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
@@ -23,6 +27,7 @@ import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.io.repositories.HealthCenterRepository;
+import net.yeoman.nmpcaport.services.SiteServiceDetailsService;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
 import net.yeoman.nmpcaport.shared.dto.SiteDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -45,6 +50,8 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     @Autowired
     private SiteServiceImpl siteService;
 
+    @Autowired
+    private ServiceServiceImpl serviceService;
 
     @Autowired
     private SiteFundingDetailsServiceImpl siteFundingDetailsService;
@@ -87,100 +94,36 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         HealthCenterEntity healthCenterEntity = this.healthCenterRepository.findByHealthCenterId(healthCenterId);
 
-        HealthCenterDto healthCenterDto = new ModelMapper().map(healthCenterEntity, HealthCenterDto.class);
 
-        if(healthCenterDto.getUsers() != null){
-
-            List<UserDetailsResponseModel> userResponseList = new ArrayList<>();
-
-            for(UserEntity user: healthCenterDto.getUserEntities()){
-
-                userResponseList.add(new ModelMapper().map(user, UserDetailsResponseModel.class));
-            }
-
-            healthCenterDto.setUserDetailsResponseList(userResponseList);
-        }
-
-        if(healthCenterDto.getContactEntities() != null){
-
-            List<ContactNestedResponseModel> contactNestedResponseList = new ArrayList<>();
-
-            for(ContactEntity contact: healthCenterDto.getContactEntities()){
-
-                contactNestedResponseList.add(new ModelMapper().map(contact, ContactNestedResponseModel.class));
-            }
-
-            healthCenterDto.setContactNestedResponseList(contactNestedResponseList);
-        }
-
-        if(healthCenterDto.getSites() != null){
-
-            List<SiteDetailsResponse> siteDetails = new ArrayList<>();
-
-            for(SiteEntity site: healthCenterDto.getSiteEntities()){
-
-                SiteDetailsResponse siteResponse = new ModelMapper().map(site, SiteDetailsResponse.class);
-
-                siteResponse.setCityResponse(new ModelMapper().map(site.getCityEntity(), CityResponse.class));
-                siteResponse.setCountyResponse(new ModelMapper().map(site.getCountyEntity(), CountyResponse.class));
-                siteResponse.setZipCodeResponse(new ModelMapper().map(site.getZipCodeEntity(), ZipCodeResponse.class));
-                siteResponse.setHealthCenterResponse(new ModelMapper().map(site.getHealthCenterEntity(), HealthCenterNestedResponseModel.class));
-
-                siteDetails.add(siteResponse);
-            }
-
-            healthCenterDto.setSiteResponse(siteDetails);
-        }
-
-        return healthCenterDto;
+        return this.entityToDto(healthCenterEntity);
     }
 
     @Override
-    public HealthCenterResponseModel createHealthCenter(HealthCenterDto healthCenterDto) {
-        System.out.println("Inside health care service");
-        ModelMapper modelMapper = new ModelMapper();
-        HealthCenterEntity healthCenterEntity = new ModelMapper().map(healthCenterDto, HealthCenterEntity.class);
+    public HealthCenterDto requestToDto(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel) {
 
-        healthCenterEntity.setHealthCenterId(utils.generateRandomID());
-        System.out.println("after health Center public assignment");
-        while(this.healthCenterRepository.existsByHealthCenterId(healthCenterEntity.getHealthCenterId())){
+        if(this.requestIsNull(healthCenterDetailsRequestModel))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-            healthCenterEntity.setHealthCenterId(utils.generateRandomID());
-        }
+        return this.utils.objectMapper().map(healthCenterDetailsRequestModel, HealthCenterDto.class);
+    }
 
+    @Override
+    public HealthCenterResponseModel createHealthCenter(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel) {
 
-        HealthCenterEntity newHealthCenter = this.healthCenterRepository.save(healthCenterEntity);
+        if(this.requestIsNull(healthCenterDetailsRequestModel))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        HealthCenterDto savedHealthCenterDto = modelMapper.map(newHealthCenter, HealthCenterDto.class);
+         HealthCenterEntity healthCenterEntity = this.generateHealthCenterWithUniqueHealthCenterId(
+                 this.dtoToEntity(this.requestToDto(healthCenterDetailsRequestModel)));
 
-        if(newHealthCenter == null) throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
-        if(healthCenterDto.getSitesRequest() != null){
-            System.out.println("in here");
-            List<SiteDto> siteDtoList = new ArrayList<>();
-
-            for(SiteDetailsRequestModel site: healthCenterDto.getSitesRequest()){
-
-                siteDtoList.add(modelMapper.map(site, SiteDto.class));
-            }
-
-            List<SiteDto> savedSiteDtoList = this.siteService.createSiteBulk(siteDtoList, newHealthCenter.getHealthCenterId());
-
-            if(savedSiteDtoList == null) throw new SiteServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
-            List<SiteDetailsResponse> siteDetailsResponses = new ArrayList<>();
-
-            for(SiteDto siteDto: savedSiteDtoList){
-
-                siteDetailsResponses.add(modelMapper.map(siteDto, SiteDetailsResponse.class));
-
-            }
-
-            savedHealthCenterDto.setSiteResponse(siteDetailsResponses);
-        }
+         Heal
 
 
-        return modelMapper.map(savedHealthCenterDto, HealthCenterResponseModel.class);
+
+
+
+
+        return ;
 
     }
 
@@ -227,11 +170,6 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     public List<HealthCenterDto> getHealthCenters(int page, int limit) {
 
         List<HealthCenterDto> returnValue = new ArrayList<>();
-        List<NMHouseDistrictEntity> nmHouseDistrictEntities = new ArrayList<>();
-        List<CongressionalDistrictEntity> congressionalDistrictEntities = new ArrayList<>();
-        List<SenateDistrictEntity> senateDistrictEntities = new ArrayList<>();
-        List<ServiceEntity> serviceEntities = new ArrayList<>();
-        List<FundEntity> fundEntities = new ArrayList<>();
 
         if (page > 0) page -= 1;
 
@@ -241,9 +179,9 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         List<HealthCenterEntity> healthCenters = healthCenterPage.getContent();
 
+        for(HealthCenterEntity healthCenterEntity: healthCenters){
 
-
-
+        }
         return returnValue;
     }
 
@@ -260,6 +198,8 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         return returnValue;
     }
+
+
 
     @Override
     public HealthCenterEntity generateHealthCenterWithUniqueHealthCenterId(HealthCenterEntity healthCenter) {
@@ -278,12 +218,214 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return healthCenter;
     }
 
+    //get NM house districts from sites
+    @Override
+    public List<NMHouseDistrictNestedResponse> getHealthCenterNMHouseDistrictsFromSites(List<SiteEntity> siteEntities) {
+
+        if(this.siteService.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<NMHouseDistrictEntity> districtEntities = new ArrayList<>();
+        List<NMHouseDistrictNestedResponse> returnValue = new ArrayList<>();
+
+
+        for(SiteEntity siteEntity: siteEntities){
+
+            if(!this.nmHouseDistrictService.entityIsNull(siteEntity.getNmHouseDistrictEntity())){
+
+                if(!districtEntities.contains(siteEntity.getNmHouseDistrictEntity())){
+
+                    districtEntities.add(siteEntity.getNmHouseDistrictEntity());
+                }
+            }
+        }
+
+
+        if(districtEntities != null && districtEntities.size() > 0){
+
+            returnValue = this.nmHouseDistrictService.dtoToNestedResponse(this.nmHouseDistrictService.entityToDto(districtEntities));
+
+        }
+
+        return returnValue;
+    }
+
+    //get senate district from sites
+    @Override
+    public List<SenateDistrictNestedResponse> getHealthCenterSenateDistrictFromSites(List<SiteEntity> siteEntities) {
+
+        if(this.siteService.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SenateDistrictNestedResponse> returnValue = new ArrayList<>();
+        List<SenateDistrictEntity> senateDistrictEntities = new ArrayList<>();
+
+        for(SiteEntity siteEntity: siteEntities){
+
+            if(!this.senateDistrictService.entityIsNull(siteEntity.getSenateDistrictEntity())){
+
+                if(!senateDistrictEntities.contains(siteEntity.getSenateDistrictEntity())){
+
+                    senateDistrictEntities.add(siteEntity.getSenateDistrictEntity());
+                }
+            }
+
+        }
+
+        if(siteEntities != null && siteEntities.size() > 0){
+
+            returnValue = this.senateDistrictService.dtoToNestedResponse(this.senateDistrictService.entityToDto(senateDistrictEntities));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public List<CongressionalDistrictNestedResponse> getHealthCenterCongressionalDistrictFromSites(List<SiteEntity> siteEntities) {
+
+        if(this.siteService.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<CongressionalDistrictNestedResponse> returnValue = new ArrayList<>();
+        List<CongressionalDistrictEntity> congressionalDistrictEntities = new ArrayList<>();
+
+        for(SiteEntity siteEntity: siteEntities){
+
+            if(!this.congressionalDistrictService.entityIsNull(siteEntity.getCongressionalDistrictEntity())){
+
+                if(!congressionalDistrictEntities.contains(siteEntity.getCongressionalDistrictEntity())){
+
+                    congressionalDistrictEntities.add(siteEntity.getCongressionalDistrictEntity());
+                }
+            }
+        }
+
+
+        if(congressionalDistrictEntities != null && congressionalDistrictEntities.size() > 0){
+
+            returnValue = this.congressionalDistrictService.dtoToNestedResponse(this.congressionalDistrictService.entityToDto(congressionalDistrictEntities));
+        }
+
+
+        return returnValue;
+    }
+
+    @Override
+    public List<ServiceNestedResponse> getHealthCenterServicesFromSites(List<SiteEntity> siteEntities) {
+
+        if(this.siteService.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ServiceEntity> serviceEntityList =  new ArrayList<>();
+        List<ServiceNestedResponse> returnValue = new ArrayList<>();
+
+        for(SiteEntity site: siteEntities){
+
+            if(!this.siteService.entityIsNull(site)){
+
+                if(!this.siteServiceDetailsService.entityIsNull(site.getServiceDetailsEntities())){
+
+
+                    for(ServiceEntity serviceEntity: this.siteServiceDetailsService.getServiceEntities(site.getServiceDetailsEntities())){
+
+                        if(!serviceEntityList.contains(serviceEntity)){
+
+                            serviceEntityList.add(serviceEntity);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(serviceEntityList != null && serviceEntityList.size() > 0){
+
+            returnValue = this.serviceService.dtoToNestedResponse(this.serviceService.entityToDto(serviceEntityList));
+        }
+
+        return returnValue;
+    }
+
+
+
+    @Override
+    public List<FundNestedResponse> getHealthCenterFundingFromSites(List<SiteEntity> siteEntities) {
+
+        if(this.siteService.entityIsNull(siteEntities)) throw new  SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<FundNestedResponse> returnValue = new ArrayList<>();
+        List<FundEntity> fundEntityList = new ArrayList<>();
+
+
+        for(SiteEntity siteEntity: siteEntities){
+
+            if(this.siteService.entityIsNull(siteEntities)){
+                if(!this.siteFundingDetailsService.entityIsNull(siteEntity.getSiteFundingDetailsEntities())){
+
+                    for(FundEntity fundEntity: this.siteFundingDetailsService.getFundEntities(siteEntity.getSiteFundingDetailsEntities())){
+
+                        if(!fundEntityList.contains(fundEntity)){
+
+                            fundEntityList.add(fundEntity);
+                        }
+                    }
+                }
+            }
+
+            if(fundEntityList != null && fundEntityList.size() > 0){
+
+                returnValue =  this.fundService.dtoToNestedResponse(this.fundService.entityToDto(fundEntityList));
+            }
+
+        }
+
+        return returnValue;
+    }
+
     @Override
     public HealthCenterDto entityToDto(HealthCenterEntity healthCenterEntity) {
 
         if(this.entityIsNull(healthCenterEntity)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        return this.utils.objectMapper().map(healthCenterEntity, HealthCenterDto.class);
+        HealthCenterDto healthCenterDto = this.entityToDto(healthCenterEntity);
+
+        if(!this.contactService.entityIsNull(healthCenterDto.getContactEntities())){
+
+            healthCenterDto.setContactNestedResponseList(this.contactService.dtoToNestedResponse(
+                    this.contactService.entityToDto(
+                            healthCenterEntity.getContacts())));
+        }
+
+        if(!this.siteService.entityIsNull(healthCenterDto.getSiteEntities())){
+
+            //get sites
+            healthCenterDto.setSiteDetailsNestedResponseList(this.siteService.dtoNestedResponse(
+                    this.siteService.entityToDto(
+                            healthCenterDto.getSiteEntities())));
+
+            //get services from sites
+            healthCenterDto.setServiceNestedResponses(
+                    this.getHealthCenterServicesFromSites(
+                            healthCenterDto.getSiteEntities()));
+
+            //get funding from sites
+            healthCenterDto.setFundNestedResponses(
+                    this.getHealthCenterFundingFromSites(
+                            healthCenterDto.getSiteEntities()));
+
+            healthCenterDto.setNmHouseDistrictNestedResponses(
+                    this.getHealthCenterNMHouseDistrictsFromSites(
+                            healthCenterDto.getSiteEntities()));
+
+
+            healthCenterDto.setSenateDistrictNestedResponses(
+                    this.getHealthCenterSenateDistrictFromSites(
+                            healthCenterDto.getSiteEntities()));
+
+
+            healthCenterDto.setCongressionalDistrictNestedResponses(
+                    this.getHealthCenterCongressionalDistrictFromSites(
+                            healthCenterDto.getSiteEntities()));
+
+
+        }
+
+        return healthCenterDto;
     }
 
     @Override
@@ -302,7 +444,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
-    public HealthCenterEntity dtoToHealthCenterEntity(HealthCenterDto healthCenterDto) {
+    public HealthCenterEntity dtoToEntity(HealthCenterDto healthCenterDto) {
 
 
         HealthCenterEntity healthCenterEntity = utils.objectMapper().map(healthCenterDto, HealthCenterEntity.class);
@@ -316,13 +458,13 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
-    public List<HealthCenterEntity> dtoArrayToEntityArray(List<HealthCenterDto> healthCenterDtoList) {
+    public List<HealthCenterEntity> dtoToEntity(List<HealthCenterDto> healthCenterDtoList) {
 
         List<HealthCenterEntity> returnValue = new ArrayList<>();
 
         for(HealthCenterDto healthCenterDto: healthCenterDtoList){
 
-            returnValue.add(this.dtoToHealthCenterEntity(healthCenterDto));
+            returnValue.add(this.dtoToEntity(healthCenterDto));
         }
 
         return returnValue;
@@ -351,6 +493,8 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         return returnValue;
     }
+
+
 
     @Override
     public HealthCenterResponseBaseModel dtoToHealthCenterResponseBaseModel(HealthCenterDto healthCenterDto) {
@@ -444,7 +588,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
-    public Boolean responseArrayIsNull(List<HealthCenterResponseModel> healthCenterResponseModelList) {
+    public Boolean responseIsNull(List<HealthCenterResponseModel> healthCenterResponseModelList) {
         return healthCenterResponseModelList == null;
     }
 
@@ -458,8 +602,9 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return healthCenterDetailsRequestModel == null;
     }
 
+
     @Override
-    public Boolean requestArrayIsNull(List<HealthCenterDetailsRequestModel> healthCenterDetailsRequestModelList) {
+    public Boolean requestIsNull(List<HealthCenterDetailsRequestModel> healthCenterDetailsRequestModelList) {
         return healthCenterDetailsRequestModelList == null;
     }
 

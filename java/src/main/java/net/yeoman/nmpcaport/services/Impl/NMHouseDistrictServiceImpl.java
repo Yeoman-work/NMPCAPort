@@ -4,6 +4,7 @@ import net.yeoman.nmpcaport.entities.NMHouseDistrictEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.NMHouseDistrictServiceException;
 import net.yeoman.nmpcaport.io.repositories.NMHouseDistrictRepository;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.services.NMHouseDistrictService;
 import net.yeoman.nmpcaport.shared.dto.NMHouseDistrictDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -83,6 +84,73 @@ public class NMHouseDistrictServiceImpl implements NMHouseDistrictService {
     public NMHouseDistrictEntity findNMHouseDistrictEntity(String nmHouseDistrictId) {
 
         return this.nmHouseDistrictRepository.findByHouseDistrictId(nmHouseDistrictId);
+    }
+
+    @Override
+    public NMHouseDistrictDto entityToDto(NMHouseDistrictEntity nmHouseDistrictEntity) {
+
+        if(this.entityIsNull(nmHouseDistrictEntity)) throw new NMHouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+
+        return this.utils.objectMapper().map(nmHouseDistrictEntity, NMHouseDistrictDto.class);
+    }
+
+    @Override
+    public List<NMHouseDistrictDto> entityToDto(List<NMHouseDistrictEntity> nmHouseDistrictEntities) {
+
+        if(this.entityIsNull(nmHouseDistrictEntities)) throw new NMHouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<NMHouseDistrictDto> returnValue = new ArrayList<>();
+
+        for(NMHouseDistrictEntity nmHouseDistrictEntity: nmHouseDistrictEntities){
+
+            returnValue.add(this.entityToDto(nmHouseDistrictEntity));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public NMHouseDistrictNestedResponse dtoToNestedResponse(NMHouseDistrictDto nmHouseDistrictDto) {
+
+        if(this.dtoIsNull(nmHouseDistrictDto)) throw new NMHouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(nmHouseDistrictDto, NMHouseDistrictNestedResponse.class);
+    }
+
+    @Override
+    public List<NMHouseDistrictNestedResponse> dtoToNestedResponse(List<NMHouseDistrictDto> nmHouseDistrictDtoList) {
+
+        if(this.dtoIsNull(nmHouseDistrictDtoList)) throw new NMHouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<NMHouseDistrictNestedResponse> returnValue = new ArrayList<>();
+
+        for(NMHouseDistrictDto nmHouseDistrictDto: nmHouseDistrictDtoList){
+
+            returnValue.add(this.dtoToNestedResponse(nmHouseDistrictDto));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public Boolean entityIsNull(NMHouseDistrictEntity nmHouseDistrictEntity) {
+        return nmHouseDistrictEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<NMHouseDistrictEntity> nmHouseDistrictEntities) {
+        return nmHouseDistrictEntities == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(NMHouseDistrictDto nmHouseDistrictDto) {
+        return nmHouseDistrictDto == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(List<NMHouseDistrictDto> houseDistrictDtoList) {
+        return houseDistrictDtoList == null;
     }
 
     @Override

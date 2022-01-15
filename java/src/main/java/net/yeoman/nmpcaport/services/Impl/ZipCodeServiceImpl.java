@@ -1,5 +1,7 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.exception.ZipCodeServiceException;
 import net.yeoman.nmpcaport.services.ZipCodeService;
 import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
@@ -71,6 +73,72 @@ public class ZipCodeServiceImpl implements ZipCodeService {
         }
 
         return zipCodeResponseList;
+    }
+
+    @Override
+    public ZipCodeDto entityToDto(ZipCodeEntity zipCodeEntity) {
+
+        if(this.entityIsNull(zipCodeEntity)) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(zipCodeEntity, ZipCodeDto.class);
+    }
+
+    @Override
+    public List<ZipCodeDto> entityToDto(List<ZipCodeEntity> zipCodeDtoEntityList) {
+
+        if(this.entityIsNull(zipCodeDtoEntityList)) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ZipCodeDto> returnValue = new ArrayList<>();
+
+        for(ZipCodeEntity zipCodeEntity: zipCodeDtoEntityList){
+
+            returnValue.add(this.entityToDto(zipCodeEntity));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public ZipCodeResponse dtoToResponse(ZipCodeDto zipCodeDto) {
+
+        if(this.dtoIsNull(zipCodeDto)) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(zipCodeDto, ZipCodeResponse.class);
+    }
+
+    @Override
+    public List<ZipCodeResponse> dtoToResponse(List<ZipCodeDto> zipCodeDtoList) {
+
+        if(this.dtoIsNull(zipCodeDtoList)) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ZipCodeResponse> returnValue = new ArrayList<>();
+
+        for(ZipCodeDto zipCodeDto: zipCodeDtoList){
+
+            returnValue.add(this.dtoToResponse(zipCodeDto));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public Boolean entityIsNull(ZipCodeEntity zipCodeEntity) {
+        return  zipCodeEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<ZipCodeEntity> zipCodeEntities) {
+        return zipCodeEntities == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(ZipCodeDto zipCodeDto) {
+        return zipCodeDto == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(List<ZipCodeDto> zipCodeDtoList) {
+        return zipCodeDtoList == null;
     }
 
 

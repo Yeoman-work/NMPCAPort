@@ -4,6 +4,7 @@ import net.yeoman.nmpcaport.entities.CongressionalDistrictEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.CongressionalDistrictServiceException;
 import net.yeoman.nmpcaport.io.repositories.CongressionalDistrictRepository;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
 import net.yeoman.nmpcaport.services.CongressionalDistrictService;
 import net.yeoman.nmpcaport.shared.dto.CongressionalDistrictDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -85,6 +86,57 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
             returnValue.add(new ModelMapper().map(district, CongressionalDistrictDto.class));
         }
         return returnValue;
+    }
+
+    @Override
+    public CongressionalDistrictDto entityToDto(CongressionalDistrictEntity congressionalDistrictEntity) {
+        return null;
+    }
+
+    @Override
+    public List<CongressionalDistrictDto> entityToDto(List<CongressionalDistrictEntity> congressionalDistrictEntityList) {
+        return null;
+    }
+
+    @Override
+    public CongressionalDistrictNestedResponse dtoToNestedResponse(CongressionalDistrictDto congressionalDistrictDto) {
+
+
+        return null;
+    }
+
+    @Override
+    public List<CongressionalDistrictNestedResponse> dtoToNestedResponse(List<CongressionalDistrictDto> congressionalDistrictDtoList) {
+
+        return null;
+    }
+
+    @Override
+    public Boolean entityIsNull(CongressionalDistrictEntity congressionalDistrictEntity) {
+        return congressionalDistrictEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<CongressionalDistrictEntity> congressionalDistrictEntityList) {
+        return congressionalDistrictEntityList == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(CongressionalDistrictDto congressionalDistrictDto) {
+        return congressionalDistrictDto == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(List<CongressionalDistrictDto> congressionalDistrictDtoList) {
+        return congressionalDistrictDtoList == null;
+    }
+
+    @Override
+    public CongressionalDistrictServiceException isNullError(Boolean isNull) {
+
+        if(isNull) throw new CongressionalDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return null;
     }
 
     public CongressionalDistrictEntity getCongressionalDistrictEntity(String congressionalId){

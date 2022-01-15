@@ -2,12 +2,16 @@ package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
+import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
+import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
@@ -39,14 +43,18 @@ public class HealthCenterDto {
     private List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponses;
     private List<CongressionalDistrictResponse> congressionalDistrictResponseList;
     private List<SenateDistrictResponseModel> senateDistrictResponseModelList;
+    private List<SenateDistrictNestedResponse> senateDistrictNestedResponses;
     private List<NMHouseDistrictEntity> nmHouseDistrictsEntities;
     private List<CongressionalDistrictEntity> congressionalDistrictEntities;
+    private List<CongressionalDistrictNestedResponse> congressionalDistrictNestedResponses;
     private List<ServiceEntity> serviceEntities;
     private List<SenateDistrictEntity> senateDistrictEntities;
     private List<FundEntity> fundEntities;
+    private List<FundNestedResponse> fundNestedResponses;
     private List<ServiceResponse> serviceResponseList;
     private List<FundResponseModel> fundResponseList;
     private List<ServiceResponse> serviceResponses;
+    private List<ServiceNestedResponse> serviceNestedResponses;
     private List<FundResponseModel> fundResponseModels;
 
 
@@ -288,5 +296,37 @@ public class HealthCenterDto {
 
     public void setFundResponseModels(List<FundResponseModel> fundResponseModels) {
         this.fundResponseModels = fundResponseModels;
+    }
+
+    public List<ServiceNestedResponse> getServiceNestedResponses() {
+        return serviceNestedResponses;
+    }
+
+    public void setServiceNestedResponses(List<ServiceNestedResponse> serviceNestedResponses) {
+        this.serviceNestedResponses = serviceNestedResponses;
+    }
+
+    public List<FundNestedResponse> getFundNestedResponses() {
+        return fundNestedResponses;
+    }
+
+    public void setFundNestedResponses(List<FundNestedResponse> fundNestedResponses) {
+        this.fundNestedResponses = fundNestedResponses;
+    }
+
+    public List<SenateDistrictNestedResponse> getSenateDistrictNestedResponses() {
+        return senateDistrictNestedResponses;
+    }
+
+    public void setSenateDistrictNestedResponses(List<SenateDistrictNestedResponse> senateDistrictNestedResponses) {
+        this.senateDistrictNestedResponses = senateDistrictNestedResponses;
+    }
+
+    public List<CongressionalDistrictNestedResponse> getCongressionalDistrictNestedResponses() {
+        return congressionalDistrictNestedResponses;
+    }
+
+    public void setCongressionalDistrictNestedResponses(List<CongressionalDistrictNestedResponse> congressionalDistrictNestedResponses) {
+        this.congressionalDistrictNestedResponses = congressionalDistrictNestedResponses;
     }
 }

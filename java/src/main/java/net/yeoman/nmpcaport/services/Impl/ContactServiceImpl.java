@@ -86,7 +86,7 @@ public class ContactServiceImpl implements ContactService {
         ContactDto savedContactDto = this.entityToDto(savedContact);
 
         //health center entity to nested response
-        HealthCenterDto healthCenterDto = this.healthCenterService.entityToHealthCenterDto(savedContact.getHealthCenter());
+        HealthCenterDto healthCenterDto = this.healthCenterService.entityToDto(savedContact.getHealthCenter());
 
 
         //check health center dto
@@ -416,7 +416,7 @@ public class ContactServiceImpl implements ContactService {
         ContactDto contactDto = utils.objectMapper().map(contactEntity, ContactDto.class);
 
         //convert health center entity
-        HealthCenterDto healthCenterDto = this.healthCenterService.entityToHealthCenterDto(contactEntity.getHealthCenter());
+        HealthCenterDto healthCenterDto = this.healthCenterService.entityToDto(contactEntity.getHealthCenter());
 
         //convert dto to response
         contactDto.setHealthCenterNestedResponse(this.healthCenterService.dtoToHealthCenterNestedResponseModel(healthCenterDto));

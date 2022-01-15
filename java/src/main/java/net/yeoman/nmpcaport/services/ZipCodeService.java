@@ -16,4 +16,16 @@ public interface ZipCodeService {
 
     public List<ZipCodeResponse> createZipCodesFromList(List<String> zipCodes);
 
+
+    public ZipCodeDto entityToDto(ZipCodeEntity zipCodeEntity);
+    public List<ZipCodeDto> entityToDto(List<ZipCodeEntity> zipCodeEntityList);
+
+    public ZipCodeResponse dtoToResponse(ZipCodeDto zipCodeDto);
+    public List<ZipCodeResponse> dtoToResponse(List<ZipCodeDto> zipCodeDtoList);
+
+    public Boolean entityIsNull(ZipCodeEntity zipCodeEntity);
+    public Boolean entityIsNull(List<ZipCodeEntity> zipCodeEntities);
+
+    public Boolean dtoIsNull(ZipCodeDto zipCodeDto);
+    public Boolean dtoIsNull(List<ZipCodeDto> zipCodeDtoList);
 }

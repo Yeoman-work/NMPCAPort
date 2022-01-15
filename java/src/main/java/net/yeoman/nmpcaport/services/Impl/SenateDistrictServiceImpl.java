@@ -1,6 +1,9 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
+import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.exception.SenateDistrictServiceException;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
 import net.yeoman.nmpcaport.io.repositories.SenateDistrictRepository;
 import net.yeoman.nmpcaport.services.SenateDistrictService;
@@ -111,5 +114,71 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public SenateDistrictDto entityToDto(SenateDistrictEntity senateDistrictEntity) {
+
+        if(this.entityIsNull(senateDistrictEntity)) throw new SenateDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(senateDistrictEntity, SenateDistrictDto.class);
+    }
+
+    @Override
+    public List<SenateDistrictDto> entityToDto(List<SenateDistrictEntity> senateDistrictEntities) {
+
+        if(this.entityIsNull(senateDistrictEntities)) throw new SenateDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SenateDistrictDto> returnValue = new ArrayList<>();
+
+        for(SenateDistrictEntity senateDistrictEntity: senateDistrictEntities){
+
+            returnValue.add(this.entityToDto(senateDistrictEntity));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public SenateDistrictNestedResponse dtoToNestedResponse(SenateDistrictDto senateDistrictDto) {
+
+        if(this.dtoIsNull(senateDistrictDto)) throw new SenateDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(senateDistrictDto, SenateDistrictNestedResponse.class);
+    }
+
+    @Override
+    public List<SenateDistrictNestedResponse> dtoToNestedResponse(List<SenateDistrictDto> senateDistrictDtoList) {
+
+        if(this.dtoIsNull(senateDistrictDtoList)) throw new SenateDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SenateDistrictNestedResponse> returnValue = new ArrayList<>();
+
+        for(SenateDistrictDto senateDistrictDto: senateDistrictDtoList){
+
+            returnValue.add(this.dtoToNestedResponse(senateDistrictDto));
+        }
+
+        return null;
+    }
+
+    @Override
+    public Boolean entityIsNull(SenateDistrictEntity senateDistrictEntity) {
+        return senateDistrictEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<SenateDistrictEntity> senateDistrictEntities) {
+        return senateDistrictEntities == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(SenateDistrictDto senateDistrictDto) {
+        return senateDistrictDto == null;
+    }
+
+    @Override
+    public Boolean dtoIsNull(List<SenateDistrictDto> senateDistrictDtoList) {
+        return senateDistrictDtoList == null;
     }
 }

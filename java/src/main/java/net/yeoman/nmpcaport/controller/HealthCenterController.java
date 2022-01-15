@@ -66,24 +66,9 @@ public class HealthCenterController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
                  produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public HealthCenterResponseModel createHealthCenter(@RequestBody HealthCenterDetailsRequestModel healthCenterDetails){
-        ModelMapper modelMapper = new ModelMapper();
-        System.out.println("Post in controller");
 
-        HealthCenterDto healthCenterDto = modelMapper.map(healthCenterDetails, HealthCenterDto.class);
 
-        for(SiteDetailsRequestModel site: healthCenterDto.getSitesRequest()){
 
-            if(site.getCity() != null){
-                System.out.println("city");
-                System.out.println(site.getCity());
-            }
-
-            System.out.println("county");
-            System.out.println(site.getCounty());
-        }
-        System.out.println("after loop");
-
-        HealthCenterResponseModel healthCenterResponseModel = this.healthCenterService.createHealthCenter(healthCenterDto);
 
         return healthCenterResponseModel;
 

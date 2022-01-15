@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.services.SiteService;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
@@ -88,25 +89,18 @@ public class SiteServiceImpl implements SiteService {
 
 
     @Override
-    public List<SiteDto> createSiteBulk(List<SiteDto> siteDtoList, String healthCenterId) {
-            List<SiteDto> returnValue = new ArrayList<>();
-            ModelMapper modelMapper = new ModelMapper();
+    public List<SiteDto> createSiteBulk(List<SiteDetailsRequestModel> siteDetailsRequestModels,
+                                        HealthCenterEntity healthCenterEntity) {
 
-            HealthCenterEntity healthCenterEntity = this.healthCenterService.getHealthCenterEntity(healthCenterId);
+        if(this.healthCenterService.entityIsNull(healthCenterEntity)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        if(this.requestIsNull(siteDetailsRequestModels)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
             //loop through site DTO
-            for(SiteDto siteDto: siteDtoList){
+            for(SiteDto siteDto: this.requestToDto(siteDetailsRequestModels)){
 
-                //convert dto to entity
-                SiteEntity siteEntity = modelMapper.map(siteDto, SiteEntity.class);
 
-                //set public id
-                siteEntity.setSiteId(utils.generateRandomID());
-                //check public id is unique
-                while(this.siteRepository.existsBySiteId(siteEntity.getSiteId())){
 
-                    siteEntity.setSiteId(utils.generateRandomID());
-                }
 
                 System.out.println("read this");
                 System.out.println(siteDto.getCity());
@@ -257,36 +251,117 @@ public class SiteServiceImpl implements SiteService {
 
         if(entityIsNull(siteEntity)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
+        //convert entity to DTO
         SiteDto siteDto = this.utils.objectMapper().map(siteEntity, SiteDto.class);
 
+        //check for services
         if(siteDto.getSiteServiceDetailsEntities() != null) {
 
+            //convert services from entity to response
             siteDto.setServiceNestedResponses(this.serviceService.dtoToNestedResponse(
                     this.serviceService.entityToDto(
                             this.siteServiceDetailsService.getServiceEntities(
                                     siteDto.getSiteServiceDetailsEntities()))));
         }
 
+        //check for funding
         if(!this.siteFundingDetailsService.entityIsNull(siteDto.getSiteFundingDetailsEntities())){
 
+            //convert fund entity to response
             siteDto.setFundNestedResponses(this.fundService.dtoToNestedResponse(
                     this.fundService.entityToDto(
                             this.siteFundingDetailsService.getFundEntities(
                                     siteDto.getSiteFundingDetailsEntities()))));
         }
 
+        //check for city entity
         if(!this.cityService.entityIsNull(siteDto.getCityEntity())){
 
-            siteDto.setCityResponse(this.cityService.dtoToResponse(this.cityService.entityToDto(siteDto.getCityEntity())));
+            //convert entity to response
+            siteDto.setCityResponse(this.cityService.dtoToResponse(
+                    this.cityService.entityToDto(siteDto.getCityEntity())));
         }
 
-        if()
-        return null;
+        //check for county entity
+        if(!this.countyService.entityIsNull(siteDto.getCountyEntity())){
+
+            //convert entity to response
+            siteDto.setCountyResponse(this.countyService.dtoToResponse(
+                    this.countyService.entityToDto(siteDto.getCountyEntity())));
+        }
+
+        //check for zip code entity
+        if(this.zipCodeService.entityIsNull(siteDto.getZipCodeEntity())){
+
+            //convert entity to response
+            siteDto.setZipCodeResponse(this.zipCodeService.dtoToResponse(
+                    this.zipCodeService.entityToDto(siteDto.getZipCodeEntity())));
+        }
+
+        //check for nm house entity
+        if(!this.nmHouseDistrictService.entityIsNull(siteDto.getNmHouseDistrictEntity())){
+            //convert entity to nested response
+            siteDto.setNmHouseDistrictNestedResponse(this.nmHouseDistrictService.dtoToNestedResponse(
+                    this.nmHouseDistrictService.entityToDto(
+                            siteDto.getNmHouseDistrictEntity())));
+        }
+
+        //check for senate entity
+        if(!this.senateDistrictService.entityIsNull(siteDto.getSenateDistrictEntity())){
+            //convert entity to nested response
+            siteDto.setSenateDistrictNestedResponse(this.senateDistrictService.dtoToNestedResponse(
+                    this.senateDistrictService.entityToDto(
+                            siteDto.getSenateDistrictEntity())));
+        }
+
+        //check for congressional entity
+        if(!this.congressionalDistrictService.entityIsNull(siteDto.getCongressionalDistrictEntity())){
+            //convert entity to nested response
+            siteDto.setCongressionalDistrictNestedResponse(this.congressionalDistrictService.dtoToNestedResponse(
+                    this.congressionalDistrictService.entityToDto(
+                            siteDto.getCongressionalDistrictEntity())));
+        }
+
+        return siteDto;
     }
 
     @Override
     public List<SiteDto> entityToDto(List<SiteEntity> siteEntities) {
-        return null;
+
+        if(this.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SiteDto> returnValue = new ArrayList<>();
+
+        for(SiteEntity siteEntity: siteEntities){
+
+            returnValue.add(this.entityToDto(siteEntity));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public SiteDto requestToDto(SiteDetailsRequestModel siteDetailsRequestModel) {
+
+        if(this.requestIsNull(siteDetailsRequestModel)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(siteDetailsRequestModel, SiteDto.class);
+    }
+
+    @Override
+    public List<SiteDto> requestToDto(List<SiteDetailsRequestModel> siteDetailsRequestModels) {
+
+        if(this.requestIsNull(siteDetailsRequestModels)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SiteDto> returnValue = new ArrayList<>();
+
+        for(SiteDetailsRequestModel siteRequest: siteDetailsRequestModels){
+
+            returnValue.add(this.requestToDto(siteRequest));
+        }
+
+
+        return returnValue;
     }
 
     @Override
@@ -330,6 +405,16 @@ public class SiteServiceImpl implements SiteService {
     @Override
     public Boolean dtoIsNull(List<SiteDto> siteDtoList) {
         return siteDtoList == null;
+    }
+
+    @Override
+    public Boolean requestIsNull(SiteDetailsRequestModel siteDetailsRequestModel) {
+        return siteDetailsRequestModel == null;
+    }
+
+    @Override
+    public Boolean requestIsNull(List<SiteDetailsRequestModel> siteDetailsRequestModels) {
+        return siteDetailsRequestModels == null;
     }
 
     @Override
