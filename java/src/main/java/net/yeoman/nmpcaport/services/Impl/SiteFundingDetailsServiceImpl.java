@@ -4,7 +4,9 @@ import net.yeoman.nmpcaport.entities.FundEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.entities.SiteFundingDetailsEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.exception.FundServiceException;
 import net.yeoman.nmpcaport.exception.ServiceException;
+import net.yeoman.nmpcaport.exception.SiteFundingServiceException;
 import net.yeoman.nmpcaport.io.repositories.SiteFundingDetailsRepository;
 import net.yeoman.nmpcaport.services.SiteFundingDetailsService;
 import net.yeoman.nmpcaport.shared.dto.SiteFundingDetailsDto;
@@ -21,6 +23,13 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
 
     @Autowired
     private SiteFundingDetailsRepository siteFundingDetailsRepository;
+
+
+    @Autowired
+    private FundServiceImpl fundService;
+
+    @Autowired
+    private SiteServiceImpl siteService;
 
     @Autowired
     private Utils utils;
@@ -48,16 +57,43 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
     }
 
     @Override
-    public SiteFundingDetailsDto createSiteFunding(SiteFundingDetailsEntity siteFundingDetailsServiceEntity) {
+    public void savedSiteFundDetails(SiteFundingDetailsEntity siteFundingDetailsEntity) {
 
-        SiteFundingDetailsEntity siteFundingDetails = this.siteFundingDetailsRepository.save(siteFundingDetailsServiceEntity);
-        return new ModelMapper().map(siteFundingDetails, SiteFundingDetailsDto.class);
+        this.siteFundingDetailsRepository.save(siteFundingDetailsEntity);
+
+        return;
     }
 
     @Override
-    public SiteFundingDetailsEntity createSiteFundingEntity(SiteFundingDetailsEntity siteFundingDetailsEntity) {
+    public SiteFundingDetailsEntity saveSiteFundDetailsWithReturnEntity(
+            SiteFundingDetailsEntity siteFundingDetailsServiceEntity
+    ) {
 
-        return this.siteFundingDetailsRepository.save(siteFundingDetailsEntity);
+        return this.siteFundingDetailsRepository.save(siteFundingDetailsServiceEntity);
+    }
+
+
+
+    @Override
+    public SiteFundingDetailsEntity createSiteFundingEntity() {
+
+        return new SiteFundingDetailsEntity();
+    }
+
+    @Override
+    public SiteFundingDetailsEntity generateUniqueId(SiteFundingDetailsEntity siteFundingDetailsEntity) {
+
+        if(this.entityIsNull(siteFundingDetailsEntity))
+            throw new SiteFundingServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        siteFundingDetailsEntity.setSiteFundingDetailsId(this.utils.generateRandomID());
+
+        while(this.existByPublicId(siteFundingDetailsEntity.getSiteFundingDetailsId())){
+
+            siteFundingDetailsEntity.setSiteFundingDetailsId(this.utils.generateRandomID());
+        }
+
+        return siteFundingDetailsEntity;
     }
 
     @Override
@@ -87,6 +123,27 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
         }
 
         return returnValue;
+    }
+
+    @Override
+    public void linkFundingToSites(List<FundEntity> fundEntityList, SiteEntity siteEntity) {
+
+        if(this.fundService.entityIsNull(fundEntityList))
+            throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+
+        for(FundEntity fundEntity: fundEntityList){
+
+            SiteFundingDetailsEntity siteFundingDetailsEntity = this.generateUniqueId(this.createSiteFundingEntity());
+
+            siteFundingDetailsEntity.setSiteEntity(siteEntity);
+            siteFundingDetailsEntity.setFundEntity(fundEntity);
+
+            savedSiteFundDetails(siteFundingDetailsEntity);
+
+        }
+
+        return;
     }
 
     @Override

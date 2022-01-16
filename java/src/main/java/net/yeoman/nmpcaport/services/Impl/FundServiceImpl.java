@@ -8,6 +8,7 @@ import net.yeoman.nmpcaport.io.request.fund.FundRequestModel;
 import net.yeoman.nmpcaport.io.repositories.FundRepository;
 import net.yeoman.nmpcaport.io.repositories.SiteRepository;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
+import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.services.FundService;
 import net.yeoman.nmpcaport.shared.dto.FundDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -29,10 +30,38 @@ public class FundServiceImpl implements FundService {
     private Utils utils;
 
     @Override
-    public FundDto getFund(String fundId) {
+    public FundEntity getFund(String fundId) {
 
-        return new ModelMapper().map(this.fundRepository.findByFundId(fundId), FundDto.class);
+        if(fundId == null) throw new  FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.fundRepository.findByFundId(fundId);
     }
+
+    @Override
+    public List<FundEntity> getFunds(List<String> fundIds) {
+
+        if(fundIds == null) throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<FundEntity> returnValue = new ArrayList<>();
+
+        for(String fundId: fundIds){
+
+            returnValue.add(this.getFund(fundId));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public FundResponseModel getFundResponse(String fundId) {
+
+        return this.dtoToResponse(
+                this.entityToDto(
+                        this.fundRepository.findByFundId(fundId)
+                )
+        );
+    }
+
 
     @Override
     public FundDto createFund(FundDto fundDto) {
@@ -109,6 +138,8 @@ public class FundServiceImpl implements FundService {
         return fundDtoList;
     }
 
+
+
     @Override
     public FundDto entityToDto(FundEntity fundEntity) {
 
@@ -152,6 +183,28 @@ public class FundServiceImpl implements FundService {
             returnValue.add(dtoToNestedResponse(fundDto));
         }
 
+        return returnValue;
+    }
+
+    @Override
+    public FundResponseModel dtoToResponse(FundDto fundDto) {
+
+        if(this.dtoIsNull(fundDto)) throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(fundDto, FundResponseModel.class);
+    }
+
+    @Override
+    public List<FundResponseModel> dtoToResponse(List<FundDto> fundDtoList) {
+
+        if(this.dtoIsNull(fundDtoList)) throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<FundResponseModel> returnValue = new ArrayList<>();
+
+        for(FundDto fundDto: fundDtoList){
+
+            returnValue.add(this.dtoToResponse(fundDto));
+        }
         return returnValue;
     }
 

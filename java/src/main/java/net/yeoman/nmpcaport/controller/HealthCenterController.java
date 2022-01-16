@@ -29,7 +29,7 @@ public class HealthCenterController {
         //return this.healthCenterService.getHealthCenterEntity(healthCenterId);
     }
 
-    @GetMapping(path="base")
+    @GetMapping(path="/base")
     public List<HealthCenterResponseBaseModel> getAllHealthCenter(){
         ModelMapper modelMapper = new ModelMapper();
         List<HealthCenterResponseBaseModel> returnValue = new ArrayList<>();
@@ -49,29 +49,18 @@ public class HealthCenterController {
     public List<HealthCenterResponseFull> getHealthCenters(@RequestParam(value ="page", defaultValue = "0") int page,
                                                            @RequestParam(value= "limit", defaultValue = "25") int limit){
 
-        List<HealthCenterResponseFull> returnValue = new ArrayList<>();
 
-        List<HealthCenterDto> healthCenters = healthCenterService.getHealthCenters(page, limit);
-
-
-        for(HealthCenterDto healthCenter: healthCenters){
-
-            returnValue.add(new ModelMapper().map(healthCenter, HealthCenterResponseFull.class));
-        }
-
-        return returnValue;
+        return this.healthCenterService.dtoToResponseFull(this.healthCenterService.getHealthCenters(page, limit));
     }
 
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
                  produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public HealthCenterResponseModel createHealthCenter(@RequestBody HealthCenterDetailsRequestModel healthCenterDetails){
+    public void createHealthCenter(@RequestBody HealthCenterDetailsRequestModel healthCenterDetails){
 
+        this.healthCenterService.createHealthCenter(healthCenterDetails);
 
-
-
-        return healthCenterResponseModel;
-
+        return;
     }
 
     @PutMapping

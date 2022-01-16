@@ -6,10 +6,12 @@ import net.yeoman.nmpcaport.entities.SiteServiceDetailsEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.ServiceException;
 import net.yeoman.nmpcaport.exception.SiteServiceException;
+import net.yeoman.nmpcaport.exception.SiteServiceServiceException;
 import net.yeoman.nmpcaport.io.repositories.SiteServiceDetailsRepository;
 import net.yeoman.nmpcaport.services.ServiceService;
 import net.yeoman.nmpcaport.services.SiteServiceDetailsService;
 import net.yeoman.nmpcaport.shared.dto.SiteServiceDetailsDto;
+import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,15 @@ public class SiteServiceDetailsServiceImpl implements SiteServiceDetailsService 
 
     @Autowired
     private SiteServiceDetailsRepository siteServiceDetailsRepository;
+
+    @Autowired
+    private ServiceServiceImpl serviceService;
+
+    @Autowired
+    private SiteServiceImpl siteService;
+
+    @Autowired
+    private Utils utils;
 
 
     @Override
@@ -41,12 +52,9 @@ public class SiteServiceDetailsServiceImpl implements SiteServiceDetailsService 
     }
 
     @Override
-    public SiteServiceDetailsDto createSiteService(SiteServiceDetailsDto siteServiceDetailsDto) {
+    public SiteServiceDetailsEntity createSiteService() {
 
-        SiteServiceDetailsEntity serviceDetailsEntity = new ModelMapper().map(siteServiceDetailsDto, SiteServiceDetailsEntity.class);
-        SiteServiceDetailsEntity savedServiceDetailsEntity = this.siteServiceDetailsRepository.save(serviceDetailsEntity);
-
-        return new ModelMapper().map(savedServiceDetailsEntity, SiteServiceDetailsDto.class);
+        return this.generateUniqueId(new SiteServiceDetailsEntity());
     }
 
     @Override
@@ -56,10 +64,27 @@ public class SiteServiceDetailsServiceImpl implements SiteServiceDetailsService 
     }
 
     @Override
-    public SiteServiceDetailsEntity createSiteServiceEntity(SiteServiceDetailsEntity serviceDetailsEntity) {
+    public void saveSiteServiceEntity(SiteServiceDetailsEntity serviceDetailsEntity) {
 
-        return this.siteServiceDetailsRepository.save(serviceDetailsEntity);
+        this.siteServiceDetailsRepository.save(serviceDetailsEntity);
 
+        return;
+    }
+
+    @Override
+    public SiteServiceDetailsEntity generateUniqueId(SiteServiceDetailsEntity siteServiceDetailsEntity) {
+
+        if(this.entityIsNull(siteServiceDetailsEntity)) throw new SiteServiceServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        siteServiceDetailsEntity.setSiteServiceDetailsId(this.utils.generateRandomID());
+
+        while(this.siteServiceDetailsRepository.existsBySiteServiceDetailsId(
+                siteServiceDetailsEntity.getSiteServiceDetailsId())){
+
+            siteServiceDetailsEntity.setSiteServiceDetailsId(this.utils.generateRandomID());
+        }
+
+        return siteServiceDetailsEntity;
     }
 
     @Override
@@ -116,6 +141,27 @@ public class SiteServiceDetailsServiceImpl implements SiteServiceDetailsService 
         }
 
         return returnValue;
+    }
+
+    @Override
+    public void linkServicesToSites(List<ServiceEntity> serviceEntities, SiteEntity siteEntity) {
+
+        if(this.serviceService.entityIsNull(serviceEntities)) throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        if(this.siteService.entityIsNull(siteEntity)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+
+        for(ServiceEntity serviceEntity: serviceEntities){
+
+            SiteServiceDetailsEntity siteServiceDetailsEntity = this.createSiteService();
+
+            siteServiceDetailsEntity.setSiteEntity(siteEntity);
+            siteServiceDetailsEntity.setServiceEntity(serviceEntity);
+
+            this.saveSiteServiceEntity(siteServiceDetailsEntity);
+        }
+
+        return;
     }
 
 

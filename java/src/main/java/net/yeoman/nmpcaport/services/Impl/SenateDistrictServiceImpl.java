@@ -159,7 +159,7 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
             returnValue.add(this.dtoToNestedResponse(senateDistrictDto));
         }
 
-        return null;
+        return returnValue;
     }
 
     @Override

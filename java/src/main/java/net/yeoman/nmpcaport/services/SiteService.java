@@ -14,13 +14,23 @@ public interface SiteService {
     //get site DTO
     public SiteDto getSite(String siteId);
     public SiteDto updatedSite(SiteDto site);
-    public List<SiteDto> createSiteBulk(List<SiteDetailsRequestModel> siteDetailsRequestModels, HealthCenterEntity healthCenterEntity);
+    public void createSiteBulk(List<SiteDetailsRequestModel> siteDetailsRequestModels, HealthCenterEntity healthCenterEntity);
 
-    public
+    //generated public id
+    public SiteEntity generateUniqueSiteId(SiteEntity siteEntity);
+
+    //save site
+    public SiteEntity saveSite(SiteEntity siteEntity);
+
+
 
     //convert entity to dto
     public SiteDto entityToDto(SiteEntity siteEntity);
     public List<SiteDto> entityToDto(List<SiteEntity> siteEntities);
+
+    //convert dto to entity
+    public void dtoToEntity(SiteDto siteDto, HealthCenterEntity healthCenterEntity);
+    public void dtoToEntity(List<SiteDto> siteDtoList, HealthCenterEntity healthCenterEntity);
 
     //convert request to dto
     public SiteDto requestToDto(SiteDetailsRequestModel siteDetailsRequestModel);

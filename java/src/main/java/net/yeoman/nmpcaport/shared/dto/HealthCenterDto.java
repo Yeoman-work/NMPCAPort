@@ -43,10 +43,10 @@ public class HealthCenterDto {
     private List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponses;
     private List<CongressionalDistrictResponse> congressionalDistrictResponseList;
     private List<SenateDistrictResponseModel> senateDistrictResponseModelList;
-    private List<SenateDistrictNestedResponse> senateDistrictNestedResponses;
+    private List<SenateDistrictNestedResponse> senateDistrictNestedResponseList;
     private List<NMHouseDistrictEntity> nmHouseDistrictsEntities;
     private List<CongressionalDistrictEntity> congressionalDistrictEntities;
-    private List<CongressionalDistrictNestedResponse> congressionalDistrictNestedResponses;
+    private List<CongressionalDistrictNestedResponse> congressionalDistrictNestedResponseList;
     private List<ServiceEntity> serviceEntities;
     private List<SenateDistrictEntity> senateDistrictEntities;
     private List<FundEntity> fundEntities;
@@ -314,19 +314,19 @@ public class HealthCenterDto {
         this.fundNestedResponses = fundNestedResponses;
     }
 
-    public List<SenateDistrictNestedResponse> getSenateDistrictNestedResponses() {
-        return senateDistrictNestedResponses;
+    public List<SenateDistrictNestedResponse> getSenateDistrictNestedResponseList() {
+        return senateDistrictNestedResponseList;
     }
 
-    public void setSenateDistrictNestedResponses(List<SenateDistrictNestedResponse> senateDistrictNestedResponses) {
-        this.senateDistrictNestedResponses = senateDistrictNestedResponses;
+    public void setSenateDistrictNestedResponseList(List<SenateDistrictNestedResponse> senateDistrictNestedResponseList) {
+        this.senateDistrictNestedResponseList = senateDistrictNestedResponseList;
     }
 
-    public List<CongressionalDistrictNestedResponse> getCongressionalDistrictNestedResponses() {
-        return congressionalDistrictNestedResponses;
+    public List<CongressionalDistrictNestedResponse> getCongressionalDistrictNestedResponseList() {
+        return congressionalDistrictNestedResponseList;
     }
 
-    public void setCongressionalDistrictNestedResponses(List<CongressionalDistrictNestedResponse> congressionalDistrictNestedResponses) {
-        this.congressionalDistrictNestedResponses = congressionalDistrictNestedResponses;
+    public void setCongressionalDistrictNestedResponseList(List<CongressionalDistrictNestedResponse> congressionalDistrictNestedResponseList) {
+        this.congressionalDistrictNestedResponseList = congressionalDistrictNestedResponseList;
     }
 }

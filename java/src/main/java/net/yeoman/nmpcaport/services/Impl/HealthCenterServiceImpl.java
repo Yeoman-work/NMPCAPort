@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseFull;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
@@ -108,25 +109,61 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
-    public HealthCenterResponseModel createHealthCenter(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel) {
+    public List<HealthCenterDto> requestToDto(List<HealthCenterDetailsRequestModel> healthCenterDetailsRequestModelList) {
+
+        if(this.requestIsNull(healthCenterDetailsRequestModelList))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return null;
+    }
+
+    @Override
+    public HealthCenterResponseFull dtoToResponseFull(HealthCenterDto healthCenterDto) {
+
+        if(this.dtoIsNull(healthCenterDto))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(healthCenterDto, HealthCenterResponseFull.class);
+    }
+
+    @Override
+    public List<HealthCenterResponseFull> dtoToResponseFull(List<HealthCenterDto> healthCenterDtoList) {
+
+        if(this.dtoIsNull(healthCenterDtoList))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<HealthCenterResponseFull> returnValue = new ArrayList<>();
+
+        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
+
+            returnValue.add(this.dtoToResponseFull(healthCenterDto));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public void createHealthCenter(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel) {
 
         if(this.requestIsNull(healthCenterDetailsRequestModel))
             throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-         HealthCenterEntity healthCenterEntity = this.generateHealthCenterWithUniqueHealthCenterId(
-                 this.dtoToEntity(this.requestToDto(healthCenterDetailsRequestModel)));
+        HealthCenterEntity healthCenterEntity = this.savedHealthCenterEntityWithReturn(
+                this.dtoToEntity(
+                        this.requestToDto(
+                                healthCenterDetailsRequestModel)
+                )
+        );
 
-         Heal
-
-
-
-
-
+        if(!this.siteService.requestIsNull(
+                healthCenterDetailsRequestModel.getSitesRequest())
+        ){
+            this.siteService.createSiteBulk(healthCenterDetailsRequestModel.getSitesRequest(), healthCenterEntity);
+        }
 
         return ;
 
     }
-
 
 
     @Override
@@ -160,8 +197,25 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return this.healthCenterRepository.findByHealthCenterId(healthCenterId);
     }
 
+
+
     @Override
-    public HealthCenterEntity savedHealthCenterEntity(HealthCenterEntity healthCenterEntity) {
+    public void savedHealthCenterEntity(HealthCenterEntity healthCenterEntity) {
+
+        if(this.entityIsNull(healthCenterEntity))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        this.healthCenterRepository.save(healthCenterEntity);
+
+         return;
+    }
+
+    @Override
+    public HealthCenterEntity savedHealthCenterEntityWithReturn(HealthCenterEntity healthCenterEntity) {
+
+        if(this.entityIsNull(healthCenterEntity))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
         return this.healthCenterRepository.save(healthCenterEntity);
     }
 
@@ -177,12 +231,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         Page<HealthCenterEntity> healthCenterPage = this.healthCenterRepository.findAll(pageableRequest);
 
-        List<HealthCenterEntity> healthCenters = healthCenterPage.getContent();
-
-        for(HealthCenterEntity healthCenterEntity: healthCenters){
-
-        }
-        return returnValue;
+        return this.entityToDto(healthCenterPage.getContent());
     }
 
     @Override
@@ -240,7 +289,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         }
 
 
-        if(districtEntities != null && districtEntities.size() > 0){
+        if(districtEntities.size() > 0){
 
             returnValue = this.nmHouseDistrictService.dtoToNestedResponse(this.nmHouseDistrictService.entityToDto(districtEntities));
 
@@ -292,6 +341,8 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
                 if(!congressionalDistrictEntities.contains(siteEntity.getCongressionalDistrictEntity())){
 
+
+                    System.out.println(siteEntity.getCongressionalDistrictEntity().getName());
                     congressionalDistrictEntities.add(siteEntity.getCongressionalDistrictEntity());
                 }
             }
@@ -300,6 +351,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         if(congressionalDistrictEntities != null && congressionalDistrictEntities.size() > 0){
 
+            System.out.println(" where are in here");
             returnValue = this.congressionalDistrictService.dtoToNestedResponse(this.congressionalDistrictService.entityToDto(congressionalDistrictEntities));
         }
 
@@ -380,9 +432,10 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     @Override
     public HealthCenterDto entityToDto(HealthCenterEntity healthCenterEntity) {
 
-        if(this.entityIsNull(healthCenterEntity)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(this.entityIsNull(healthCenterEntity))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        HealthCenterDto healthCenterDto = this.entityToDto(healthCenterEntity);
+        HealthCenterDto healthCenterDto = this.utils.objectMapper().map(healthCenterEntity, HealthCenterDto.class);
 
         if(!this.contactService.entityIsNull(healthCenterDto.getContactEntities())){
 
@@ -413,12 +466,12 @@ public class HealthCenterServiceImpl implements HealthCenterService {
                             healthCenterDto.getSiteEntities()));
 
 
-            healthCenterDto.setSenateDistrictNestedResponses(
+            healthCenterDto.setSenateDistrictNestedResponseList(
                     this.getHealthCenterSenateDistrictFromSites(
                             healthCenterDto.getSiteEntities()));
 
 
-            healthCenterDto.setCongressionalDistrictNestedResponses(
+            healthCenterDto.setCongressionalDistrictNestedResponseList(
                     this.getHealthCenterCongressionalDistrictFromSites(
                             healthCenterDto.getSiteEntities()));
 
@@ -431,7 +484,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     @Override
     public List<HealthCenterDto> entityToDto(List<HealthCenterEntity> healthCenterEntityList) {
 
-        if(this.entityArrayIsNull(healthCenterEntityList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(this.entityIsNull(healthCenterEntityList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<HealthCenterDto> returnValue = new ArrayList<>();
 
@@ -482,7 +535,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     @Override
     public List<HealthCenterResponseModel> dtoToHealthCenterResponseModel(List<HealthCenterDto> healthCenterDtoList) {
 
-        if(this.dtoArrayIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(this.dtoIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<HealthCenterResponseModel> returnValue = new ArrayList<>();
 
@@ -507,7 +560,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     @Override
     public List<HealthCenterResponseBaseModel> dtoToHealthCenterResponseBaseModel(List<HealthCenterDto> healthCenterDtoList) {
 
-        if(this.dtoArrayIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(this.dtoIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<HealthCenterResponseBaseModel> returnValue = new ArrayList<>();
 
@@ -532,7 +585,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     @Override
     public List<HealthCenterNestedResponseModel> dtoToHealthCenterNestedResponseModelArray(List<HealthCenterDto> healthCenterDtoList) {
 
-        if(this.dtoArrayIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(this.dtoIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<HealthCenterNestedResponseModel> returnValue = new ArrayList<>();
 
@@ -555,7 +608,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     @Override
     public List<HealthCenterDetailsRequestModel> dtoToHealthCenterDetailsRequestModel(List<HealthCenterDto> healthCenterDtoList) {
 
-        if(dtoArrayIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(dtoIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<HealthCenterDetailsRequestModel> returnValue = new ArrayList<>();
 
@@ -573,7 +626,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
-    public Boolean entityArrayIsNull(List<HealthCenterEntity> healthCenterEntityList) {
+    public Boolean entityIsNull(List<HealthCenterEntity> healthCenterEntityList) {
         return healthCenterEntityList == null;
     }
 
@@ -583,7 +636,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
-    public Boolean dtoArrayIsNull(List<HealthCenterDto> healthCenterDtoList) {
+    public Boolean dtoIsNull(List<HealthCenterDto> healthCenterDtoList) {
         return healthCenterDtoList == null;
     }
 

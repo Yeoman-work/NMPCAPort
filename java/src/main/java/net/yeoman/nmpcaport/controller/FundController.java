@@ -23,9 +23,7 @@ public class FundController {
     @GetMapping("/{fundId}")
     public FundResponseModel getOneFund(@PathVariable("fundId") String fundId){
 
-        FundDto fundDto = this.fundService.getFund(fundId);
-
-        return new ModelMapper().map(fundDto, FundResponseModel.class);
+        return this.fundService.getFundResponse(fundId);
     }
 
     @GetMapping

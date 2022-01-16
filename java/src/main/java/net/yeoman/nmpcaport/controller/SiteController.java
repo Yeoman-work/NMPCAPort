@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.controller;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestListModel;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
+import net.yeoman.nmpcaport.services.Impl.HealthCenterServiceImpl;
 import net.yeoman.nmpcaport.services.Impl.SiteServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.SiteDto;
 import org.modelmapper.ModelMapper;
@@ -18,6 +19,9 @@ public class SiteController {
 
     @Autowired
     private SiteServiceImpl siteService;
+
+    @Autowired
+    private HealthCenterServiceImpl healthCenterService;
 
     @GetMapping
     public String getSite(){
@@ -36,21 +40,14 @@ public class SiteController {
 //    }
 
     @PostMapping("/bulk/{healthCenterId}")
-    public List<SiteDetailsNestedResponse> createSitesWithOutId(@PathVariable("healthCenterId") String healthCenterId, @RequestBody SiteDetailsRequestListModel siteDetailsRequestListModel){
-        List<SiteDetailsNestedResponse> returnValue = new ArrayList<>();
-        List<SiteDto> serviceInput = new ArrayList<>();
+    public void createSitesWithOutId(@PathVariable("healthCenterId") String healthCenterId, @RequestBody SiteDetailsRequestListModel siteDetailsRequestListModel){
 
-        for(SiteDetailsRequestModel site: siteDetailsRequestListModel.getSiteDetailsRequestModelList()){
-            serviceInput.add(new ModelMapper().map(site, SiteDto.class));
-        }
 
-        List<SiteDto> siteDtoList = this.siteService.createSiteBulk(serviceInput, healthCenterId);
+        this.siteService.createSiteBulk(
+                siteDetailsRequestListModel.getSiteDetailsRequestModelList(), this.healthCenterService.getHealthCenterEntity(healthCenterId)
+        );
 
-        for(SiteDto site: siteDtoList){
-            returnValue.add(new ModelMapper().map(site, SiteDetailsNestedResponse.class));
-        }
-
-        return returnValue;
+        return;
     }
 
     @PutMapping

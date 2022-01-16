@@ -36,9 +36,10 @@ public interface ServiceService {
     public Boolean dtoIsNull(ServiceDto serviceDto);
     public Boolean dtoIsNull(List<ServiceDto> serviceDtoList);
 
-    public ServiceDto getService(String serviceId);
-
-    public ServiceDto deleteUser(String serviceId);
+    //find service by id
+    public ServiceEntity getService(String serviceId);
+    public List<ServiceEntity> getServices(List<String> serviceIds);
+    public ServiceEntity deleteUser(String serviceId);
 
     public List<ServiceDto> createServiceBulk(ServiceRequestListModel serviceRequestList);
 

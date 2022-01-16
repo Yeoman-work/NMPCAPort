@@ -14,13 +14,20 @@ public interface SiteFundingDetailsService {
     public SiteFundingDetailsDto getSiteFunding(String id);
     public SiteFundingDetailsDto deleteSiteFunding(String id);
     public List<SiteFundingDetailsDto> getAllSiteFunding();
-    public SiteFundingDetailsDto createSiteFunding(SiteFundingDetailsEntity siteFundingDetailsServiceEntity);
-    public SiteFundingDetailsEntity createSiteFundingEntity(SiteFundingDetailsEntity siteFundingDetailsEntity);
+    public void savedSiteFundDetails(SiteFundingDetailsEntity siteFundingDetailsEntity);
+    public SiteFundingDetailsEntity saveSiteFundDetailsWithReturnEntity(SiteFundingDetailsEntity siteFundingDetailsServiceEntity);
+    public SiteFundingDetailsEntity createSiteFundingEntity();
+    public SiteFundingDetailsEntity generateUniqueId(SiteFundingDetailsEntity siteFundingDetailsEntity);
     public Boolean existByPublicId(String publicId);
 
     //get fund entity
     public FundEntity getFundEntity(SiteFundingDetailsEntity siteFundingDetailsEntity);
     public List<FundEntity> getFundEntities(List<SiteFundingDetailsEntity> siteFundingDetailsEntities);
+
+
+
+    //create funding relationship to site
+    public void linkFundingToSites(List<FundEntity> fundEntityList, SiteEntity siteEntity);
 
     //get site entity
     public SiteEntity getSiteEntity(SiteFundingDetailsEntity siteFundingDetailsEntity);

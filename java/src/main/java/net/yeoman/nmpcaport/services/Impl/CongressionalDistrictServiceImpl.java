@@ -90,25 +90,51 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
 
     @Override
     public CongressionalDistrictDto entityToDto(CongressionalDistrictEntity congressionalDistrictEntity) {
-        return null;
+
+        if(this.entityIsNull(congressionalDistrictEntity))
+            throw new CongressionalDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(congressionalDistrictEntity, CongressionalDistrictDto.class);
     }
 
     @Override
     public List<CongressionalDistrictDto> entityToDto(List<CongressionalDistrictEntity> congressionalDistrictEntityList) {
-        return null;
+
+        if(this.entityIsNull(congressionalDistrictEntityList))
+            throw new CongressionalDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<CongressionalDistrictDto> returnValue = new ArrayList<>();
+
+        for(CongressionalDistrictEntity congressionalDistrictEntity: congressionalDistrictEntityList){
+
+            returnValue.add(this.entityToDto(congressionalDistrictEntity));
+        }
+
+        return returnValue;
     }
 
     @Override
     public CongressionalDistrictNestedResponse dtoToNestedResponse(CongressionalDistrictDto congressionalDistrictDto) {
 
+        if(this.dtoIsNull(congressionalDistrictDto)) throw new CongressionalDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        return null;
+        return this.utils.objectMapper().map(congressionalDistrictDto, CongressionalDistrictNestedResponse.class);
     }
 
     @Override
     public List<CongressionalDistrictNestedResponse> dtoToNestedResponse(List<CongressionalDistrictDto> congressionalDistrictDtoList) {
 
-        return null;
+        if(this.dtoIsNull(congressionalDistrictDtoList))
+            throw new CongressionalDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<CongressionalDistrictNestedResponse> returnValue = new ArrayList<>();
+
+        for(CongressionalDistrictDto districtDto: congressionalDistrictDtoList){
+
+            returnValue.add(this.dtoToNestedResponse(districtDto));
+        }
+
+        return returnValue;
     }
 
     @Override

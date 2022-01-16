@@ -9,6 +9,7 @@ import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.repositories.SiteRepository;
+import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
 import net.yeoman.nmpcaport.shared.dto.SiteDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
@@ -89,161 +90,37 @@ public class SiteServiceImpl implements SiteService {
 
 
     @Override
-    public List<SiteDto> createSiteBulk(List<SiteDetailsRequestModel> siteDetailsRequestModels,
+    public void createSiteBulk(List<SiteDetailsRequestModel> siteDetailsRequestModels,
                                         HealthCenterEntity healthCenterEntity) {
 
-        if(this.healthCenterService.entityIsNull(healthCenterEntity)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(this.healthCenterService.entityIsNull(healthCenterEntity))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        if(this.requestIsNull(siteDetailsRequestModels)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(this.requestIsNull(siteDetailsRequestModels))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-            //loop through site DTO
-            for(SiteDto siteDto: this.requestToDto(siteDetailsRequestModels)){
+        this.dtoToEntity(this.requestToDto(siteDetailsRequestModels), healthCenterEntity);
 
+    }
 
+    @Override
+    public SiteEntity generateUniqueSiteId(SiteEntity siteEntity) {
 
+        if(this.entityIsNull(siteEntity)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-                System.out.println("read this");
-                System.out.println(siteDto.getCity());
-                //check for city id
-                if(siteDto.getCity() != null){
+        siteEntity.setSiteId(utils.generateRandomID());
 
-                    //fetch city
-                    CityEntity cityEntity = this.cityService.findCity(siteDto.getCity());
-                    // check is entity is present
-                    if(cityEntity == null) throw new CityServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-                    //set city entity
-                    siteEntity.setCityEntity(cityEntity);
-                }
-                //check for county id
-                if(siteDto.getCounty() != null){
-                    //get county entity
-                    CountyEntity countyEntity = this.countyService.findCountyEntity(siteDto.getCounty());
-                    //check for county entity
-                    if(countyEntity == null) throw new CountyServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-                    //set county entity
-                    siteEntity.setCountyEntity(countyEntity);
-                }
-                //check zip code id
-                if(siteDto.getZipCode() != null){
-                    //get the zip code entity
-                    ZipCodeEntity zipCodeEntity = this.zipCodeService.getZipCodeEntity(siteDto.getZipCode());
-                    //check if zip code eneity is present
-                    if(zipCodeEntity == null) throw new ZipCodeServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-                    //set zip code entity
-                    siteEntity.setZipCodeEntity(zipCodeEntity);
-                }
+        while(this.siteRepository.existsBySiteId(siteEntity.getSiteId())){
 
-                //check for nm house district id
-                if(siteDto.getNmHouseDistrict() != null){
+            siteEntity.setSiteId(utils.generateRandomID());
+        }
 
-                    //get district
-                    NMHouseDistrictEntity nmHouseDistrict = this.nmHouseDistrictService.findNMHouseDistrictEntity(siteDto.getNmHouseDistrict());
-                    //check if entity is present
-                    if(nmHouseDistrict == null) throw new NMHouseDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-                    //set nm house district entity
-                    siteEntity.setNmHouseDistrictEntity(nmHouseDistrict);
-                }
+        return siteEntity;
+    }
 
-                //set senate district entity
-                if(siteDto.getSenateDistrict() != null){
-                    //check if senate district
-                    SenateDistrictEntity senateDistrict = this.senateDistrictService.findSenateDistrictEntity(siteDto.getSenateDistrict());
-                    //check if senate district is present
-                    if(senateDistrict == null) throw new SenateDistrictServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-                    //set senate district entity
-                    siteEntity.setSenateDistrictEntity(senateDistrict);
-                }
-
-                //check for congressional district id
-                if(siteDto.getCongressionalDistrict() != null){
-                    // get congressional district entity
-                    CongressionalDistrictEntity congressionalDistrictEntity = this.congressionalDistrictService.getCongressionalDistrictEntity(siteDto.getCongressionalDistrict());
-                    //get congressional district is present
-                    if(congressionalDistrictEntity == null) throw new CongressionalRepServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
-                    //set congressional district
-                    siteEntity.setCongressionalDistrictEntity(congressionalDistrictEntity);
-                }
-
-
-                //set health center
-                siteEntity.setHealthCenterEntity(healthCenterEntity);
-                //save site entity
-                SiteEntity savedSiteEntity = this.siteRepository.save(siteEntity);
-
-                SiteDto savedSiteDto = modelMapper.map(savedSiteEntity, SiteDto.class);
-
-
-                //check for site funding
-                if(siteDto.getFund() != null){
-                    List<FundResponseModel> fundResponseModelList = new ArrayList<>();
-                    //loop through funding Ids
-                    for(String id: siteDto.getFund()){
-                        //get fund entity
-                        FundEntity fundEntity = this.fundService.getFundEntity(id);
-                        //check if fund entity is present
-                        if(fundEntity == null) throw new FundServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-                        //create siteFunding details entity
-                        SiteFundingDetailsEntity siteFundingDetailsEntity = new SiteFundingDetailsEntity();
-                        //set public id
-                        siteFundingDetailsEntity.setSiteFundingDetailsId(utils.generateRandomID());
-                        //check public id is unique
-                        while(this.siteFundingDetailsService.existByPublicId(siteFundingDetailsEntity.getSiteFundingDetailsId())){
-
-                            siteFundingDetailsEntity.setSiteFundingDetailsId(utils.generateRandomID());
-                        }
-                        //assign site
-                        siteFundingDetailsEntity.setSiteEntity(savedSiteEntity);
-                        //assign fund
-                        siteFundingDetailsEntity.setFundEntity(fundEntity);
-                        //convert fund to fund response model
-                        fundResponseModelList.add(modelMapper.map(fundEntity, FundResponseModel.class));
-                    }
-                    //fund response
-                    savedSiteDto.setFundResponseModels(fundResponseModelList);
-
-                }
-                //check for service(s)
-                if(siteDto.getService() != null){
-
-                    //list to collect Service responses
-                    List<ServiceResponse> serviceResponses = new ArrayList<>();
-
-                    //loop through service Id
-                    for(String id: siteDto.getService()){
-                        //get service entity
-                        ServiceEntity serviceEntity = this.serviceService.getServiceEntity(id);
-                        //check service entity exist
-                        if(serviceEntity == null) throw new ServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-                        //create site service entity
-                        SiteServiceDetailsEntity siteServiceDetailsEntity = new SiteServiceDetailsEntity();
-                        //create public id
-                        siteServiceDetailsEntity.setSiteServiceDetailsId(utils.generateRandomID());
-
-                        //check if public id is unique
-                        while(this.siteServiceDetailsService.existByPublicId(siteServiceDetailsEntity.getSiteServiceDetailsId())){
-
-                            siteServiceDetailsEntity.setSiteServiceDetailsId(utils.generateRandomID());
-                        }
-                        //save site and service to entity
-                        siteServiceDetailsEntity.setServiceEntity(serviceEntity);
-                        siteServiceDetailsEntity.setSiteEntity(savedSiteEntity);
-
-                        //save entity
-                        SiteServiceDetailsEntity savedSiteServiceDetailsEntity = this.siteServiceDetailsService.createSiteServiceEntity(siteServiceDetailsEntity);
-
-                        //convert service response to service class
-                        serviceResponses.add(modelMapper.map(savedSiteServiceDetailsEntity.getServiceEntity(), ServiceResponse.class));
-                    }
-
-                    //add list of responses to saved dto
-                    savedSiteDto.setServiceResponses(serviceResponses);
-                }
-
-                returnValue.add(savedSiteDto);
-            }
-
-        return returnValue;
+    @Override
+    public SiteEntity saveSite(SiteEntity siteEntity) {
+        return this.siteRepository.save(siteEntity);
     }
 
     @Override
@@ -291,7 +168,7 @@ public class SiteServiceImpl implements SiteService {
         }
 
         //check for zip code entity
-        if(this.zipCodeService.entityIsNull(siteDto.getZipCodeEntity())){
+        if(!this.zipCodeService.entityIsNull(siteDto.getZipCodeEntity())){
 
             //convert entity to response
             siteDto.setZipCodeResponse(this.zipCodeService.dtoToResponse(
@@ -340,6 +217,109 @@ public class SiteServiceImpl implements SiteService {
         return returnValue;
     }
 
+
+    @Override
+    public void dtoToEntity(SiteDto siteDto, HealthCenterEntity healthCenterEntity) {
+
+        if(this.dtoIsNull(siteDto)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        if(this.healthCenterService.entityIsNull(healthCenterEntity))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        SiteEntity siteEntity = this.generateUniqueSiteId(
+                this.utils.objectMapper().map(siteDto, SiteEntity.class)
+        );
+
+        if(siteDto.getCity() != null){
+
+            siteEntity.setCityEntity(
+                    this.cityService.findCity(
+                            siteDto.getCity()));
+        }
+
+        if(siteDto.getCounty() != null){
+
+            siteEntity.setCountyEntity(
+                    this.countyService.findCountyEntity(
+                            siteDto.getCity()
+                    )
+            );
+        }
+
+        if(siteDto.getZipCode() != null){
+
+            siteEntity.setZipCodeEntity(
+                    this.zipCodeService.getZipCodeEntity(
+                            siteDto.getZipCode()
+                    )
+            );
+        }
+
+        if(siteDto.getNmHouseDistrict() != null){
+
+            siteEntity.setNmHouseDistrictEntity(
+                    this.nmHouseDistrictService.findNMHouseDistrictEntity(
+                            siteDto.getNmHouseDistrict()
+                    )
+            );
+        }
+
+        if(siteDto.getSenateDistrict() != null){
+
+            siteEntity.setSenateDistrictEntity(
+                    this.senateDistrictService.findSenateDistrictEntity(
+                            siteDto.getSenateDistrict()
+                    )
+            );
+        }
+
+        if(siteDto.getCongressionalDistrict() != null){
+
+            siteEntity.setCongressionalDistrictEntity(
+                    this.congressionalDistrictService.getCongressionalDistrictEntity(
+                            siteDto.getCongressionalDistrict()
+                    )
+            );
+        }
+
+        siteEntity.setHealthCenterEntity(healthCenterEntity);
+
+        SiteEntity savedSiteEntity = this.saveSite(siteEntity);
+
+        if(siteDto.getService() != null){
+
+            this.siteServiceDetailsService.linkServicesToSites(
+                    this.serviceService.getServices(siteDto.getService()), savedSiteEntity
+            );
+        }
+
+        if(siteDto.getFund() != null){
+
+            this.siteFundingDetailsService.linkFundingToSites(
+                    this.fundService.getFunds(siteDto.getFund()), savedSiteEntity
+            );
+        }
+
+
+        return;
+    }
+
+
+    @Override
+    public void dtoToEntity(List<SiteDto> siteDtoList, HealthCenterEntity healthCenterEntity) {
+
+        if(this.dtoIsNull(siteDtoList)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+
+        for(SiteDto siteDto: siteDtoList){
+
+            this.dtoToEntity(siteDto, healthCenterEntity);
+        }
+
+        return;
+    }
+
+
     @Override
     public SiteDto requestToDto(SiteDetailsRequestModel siteDetailsRequestModel) {
 
@@ -347,6 +327,7 @@ public class SiteServiceImpl implements SiteService {
 
         return this.utils.objectMapper().map(siteDetailsRequestModel, SiteDto.class);
     }
+
 
     @Override
     public List<SiteDto> requestToDto(List<SiteDetailsRequestModel> siteDetailsRequestModels) {

@@ -165,37 +165,46 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Boolean entityIsNull(ServiceEntity serviceEntity) {
-        return null;
+        return serviceEntity == null;
     }
 
     @Override
     public Boolean entityIsNull(List<ServiceEntity> serviceEntities) {
-        return null;
+        return serviceEntities == null;
     }
 
     @Override
     public Boolean dtoIsNull(ServiceDto serviceDto) {
-        return null;
+        return serviceDto == null;
     }
 
     @Override
     public Boolean dtoIsNull(List<ServiceDto> serviceDtoList) {
-        return null;
+        return serviceDtoList == null;
     }
 
     @Override
-    public ServiceDto getService(String serviceId) {
+    public ServiceEntity getService(String serviceId) {
 
-        ServiceEntity serviceEntity = this.serviceRepository.findByServiceId(serviceId);
+        return this.serviceRepository.findByServiceId(serviceId);
+    }
 
-        return new ModelMapper().map(serviceEntity, ServiceDto.class);
+    @Override
+    public List<ServiceEntity> getServices(List<String> serviceIds) {
+
+        List<ServiceEntity> returnValue = new ArrayList<>();
+
+        for(String serviceId: serviceIds){
+
+            returnValue.add(this.getService(serviceId));
+        }
+
+        return returnValue;
     }
 
 
-
-
     @Override
-    public ServiceDto deleteUser(String serviceId) {
+    public ServiceEntity deleteUser(String serviceId) {
         return null;
     }
 

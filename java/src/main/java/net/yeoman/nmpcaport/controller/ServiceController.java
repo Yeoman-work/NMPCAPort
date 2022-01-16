@@ -23,9 +23,11 @@ public class ServiceController {
     @GetMapping("/{serviceId}")
     public ServiceResponse getService(@PathVariable("serviceId") String serviceId){
 
-        ServiceDto serviceDto = this.serviceImpl.getService(serviceId);
-
-        return new ModelMapper().map(serviceDto, ServiceResponse.class);
+        return this.serviceImpl.dtoToResponse(
+                this.serviceImpl.entityToDto(
+                        this.serviceImpl.getServiceEntity(serviceId)
+                )
+        );
     }
 
     @GetMapping

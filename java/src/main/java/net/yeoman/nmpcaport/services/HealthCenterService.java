@@ -8,6 +8,7 @@ import net.yeoman.nmpcaport.io.repositories.SiteServiceDetailsRepository;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseBaseModel;
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseFull;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
@@ -30,19 +31,28 @@ public interface HealthCenterService {
 
     //convert request
     public HealthCenterDto requestToDto(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel);
+    public List<HealthCenterDto> requestToDto(List<HealthCenterDetailsRequestModel> healthCenterDetailsRequestModelList);
 
+    //convert Dto to request
+    public HealthCenterResponseFull dtoToResponseFull(HealthCenterDto healthCenterDto);
+    public List<HealthCenterResponseFull> dtoToResponseFull(List<HealthCenterDto> healthCenterDtoList);
 
     //create healthCenter
-    public HealthCenterResponseModel createHealthCenter(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel);
+    public void createHealthCenter(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel);
 
     //return entity
     public HealthCenterEntity generateHealthCenterWithUniqueHealthCenterId(HealthCenterEntity healthCenter);
     public HealthCenterEntity getHealthCenterEntity(String healthCenterId);
-    public HealthCenterEntity savedHealthCenterEntity(HealthCenterEntity healthCenterEntity);
+    public void savedHealthCenterEntity(HealthCenterEntity healthCenterEntity);
+    public HealthCenterEntity savedHealthCenterEntityWithReturn(HealthCenterEntity healthCenterEntity);
 
     //convert entity to DTO
     public HealthCenterDto entityToDto(HealthCenterEntity healthCenterEntity);
     public List<HealthCenterDto> entityToDto(List<HealthCenterEntity> healthCenterEntityList);
+
+
+    //Response Full health Center
+
 
     //convert dto to entity
     public HealthCenterEntity dtoToEntity(HealthCenterDto healthCenterDto);
@@ -78,9 +88,9 @@ public interface HealthCenterService {
 
     //check if object is null
     public Boolean entityIsNull(HealthCenterEntity healthCenter);
-    public Boolean entityArrayIsNull(List<HealthCenterEntity> healthCenterEntityList);
+    public Boolean entityIsNull(List<HealthCenterEntity> healthCenterEntityList);
     public Boolean dtoIsNull(HealthCenterDto healthCenterDto);
-    public Boolean dtoArrayIsNull(List<HealthCenterDto> healthCenterDtoList);
+    public Boolean dtoIsNull(List<HealthCenterDto> healthCenterDtoList);
     public Boolean responseIsNull(List<HealthCenterResponseModel> healthCenterResponseModelList);
     public Boolean responseIsNull(HealthCenterResponseModel healthCenterResponseModel);
     public Boolean requestIsNull(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel);
