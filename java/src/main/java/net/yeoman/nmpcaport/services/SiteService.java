@@ -40,6 +40,9 @@ public interface SiteService {
     public SiteDetailsNestedResponse dtoToNestedResponse(SiteDto siteDto);
     public List<SiteDetailsNestedResponse> dtoNestedResponse(List<SiteDto> siteDtoList);
 
+    //convert entity to response
+    public List<SiteDetailsNestedResponse> entityToNestedResponse(List<SiteEntity> siteEntities);
+
 
     //object is null
     public Boolean entityIsNull(SiteEntity siteEntity);

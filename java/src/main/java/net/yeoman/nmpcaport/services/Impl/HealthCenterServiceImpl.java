@@ -223,7 +223,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     @Override
     public List<HealthCenterDto> getHealthCenters(int page, int limit) {
 
-        List<HealthCenterDto> returnValue = new ArrayList<>();
+
 
         if (page > 0) page -= 1;
 
@@ -231,7 +231,9 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         Page<HealthCenterEntity> healthCenterPage = this.healthCenterRepository.findAll(pageableRequest);
 
-        return this.entityToDto(healthCenterPage.getContent());
+        List<HealthCenterEntity> healthCenterEntities = healthCenterPage.getContent();
+
+        return this.entityToDto(healthCenterEntities);
     }
 
     @Override
@@ -447,14 +449,16 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         if(!this.siteService.entityIsNull(healthCenterDto.getSiteEntities())){
 
             //get sites
-            healthCenterDto.setSiteDetailsNestedResponseList(this.siteService.dtoNestedResponse(
-                    this.siteService.entityToDto(
-                            healthCenterDto.getSiteEntities())));
+            healthCenterDto.setSiteDetailsNestedResponseList(
+                    this.siteService.entityToNestedResponse(
+                            healthCenterDto.getSiteEntities()
+                    )
+            );
 
-            //get services from sites
-            healthCenterDto.setServiceNestedResponses(
-                    this.getHealthCenterServicesFromSites(
-                            healthCenterDto.getSiteEntities()));
+//            //get services from sites
+//            healthCenterDto.setServiceNestedResponses(
+//                    this.getHealthCenterServicesFromSites(
+//                            healthCenterDto.getSiteEntities()));
 
             //get funding from sites
             healthCenterDto.setFundNestedResponses(

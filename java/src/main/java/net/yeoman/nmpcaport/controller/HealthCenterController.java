@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.controller;
 
+import net.yeoman.nmpcaport.entities.HealthCenterEntity;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseBaseModel;
@@ -46,11 +47,11 @@ public class HealthCenterController {
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<HealthCenterResponseFull> getHealthCenters(@RequestParam(value ="page", defaultValue = "0") int page,
-                                                           @RequestParam(value= "limit", defaultValue = "25") int limit){
+    public List<HealthCenterDto> getHealthCenters(@RequestParam(value ="page", defaultValue = "0") int page,
+                                                     @RequestParam(value= "limit", defaultValue = "25") int limit){
 
 
-        return this.healthCenterService.dtoToResponseFull(this.healthCenterService.getHealthCenters(page, limit));
+        return this.healthCenterService.getHealthCenters(page, limit);
     }
 
 

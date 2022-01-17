@@ -109,18 +109,37 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
+    public ServiceNestedResponse entityToNestedResponse(ServiceEntity serviceEntity) {
+
+        if(this.entityIsNull(serviceEntity)) throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        ServiceDto serviceDto = this.entityToDto(serviceEntity);
+
+        return this.dtoToNestedResponse(serviceDto);
+    }
+
+    @Override
+    public List<ServiceNestedResponse> entityToNestedResponse(List<ServiceEntity> serviceEntities) {
+
+        if(this.entityIsNull(serviceEntities))
+            throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ServiceNestedResponse> returnValue = new ArrayList<>();
+
+        for(ServiceEntity serviceEntity: serviceEntities){
+
+            returnValue.add(this.entityToNestedResponse(serviceEntity));
+        }
+
+        return returnValue;
+    }
+
+    @Override
     public ServiceDto entityToDto(ServiceEntity serviceEntity) {
 
         if(this.entityIsNull(serviceEntity)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         ServiceDto returnValue = this.utils.objectMapper().map(serviceEntity, ServiceDto.class);
-
-        if(returnValue.getSiteServiceDetailsEntities() != null){
-
-            returnValue.setSiteDetailsNestedResponses(this.siteService.dtoNestedResponse(
-                    this.siteService.entityToDto(this.siteServiceDetailsService.getSiteEntities(
-                            returnValue.getSiteServiceDetailsEntities()))));
-        }
 
         return returnValue;
     }

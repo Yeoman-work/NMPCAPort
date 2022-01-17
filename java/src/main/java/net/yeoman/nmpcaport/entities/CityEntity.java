@@ -50,6 +50,7 @@ public class CityEntity implements Serializable {
 
 
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cityEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SiteEntity> site;
 

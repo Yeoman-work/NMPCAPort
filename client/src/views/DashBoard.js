@@ -12,13 +12,19 @@ const DashBoard = props =>{
     useEffect(()=>{
 
         (async ()=>{
+
             try{
 
+                console.log('inside effect')
+
                 const healthCentersResponse = await axios.get('http://localhost:8080/healthCenters', {
+
                     headers:{
                         Authorization: localStorage.getItem('token')
                     }
                 })
+
+                console.log('after promise')
                 console.log(healthCentersResponse.data);
                 setHealthCenters(healthCentersResponse.data);
 

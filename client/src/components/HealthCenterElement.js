@@ -110,8 +110,8 @@ const HealthCenterElement = props =>{
                                 <h6>Senate</h6>
                                 <ul className={'w-25 m-auto'}>
                                     {
-                                        healthCenter?
-                                            healthCenter.senateDistrictResponseModelList.map((district, index)=>{
+                                        healthCenter.senateDistrictNestedResponseList?
+                                            healthCenter.senateDistrictNestedResponseList.map((district, index)=>{
 
 
                                                 return(
@@ -127,8 +127,8 @@ const HealthCenterElement = props =>{
                                 <h6>Congressional</h6>
                                 <ul className={'w-25 m-auto'}>
                                     {
-                                        healthCenter?
-                                            healthCenter.congressionalDistrictResponseList.map((district, index)=>{
+                                        healthCenter.congressionalDistrictNestedResponseList?
+                                            healthCenter.congressionalDistrictNestedResponseList.map((district, index)=>{
 
 
                                                 return(

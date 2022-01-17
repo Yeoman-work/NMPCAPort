@@ -241,7 +241,7 @@ public class SiteServiceImpl implements SiteService {
 
             siteEntity.setCountyEntity(
                     this.countyService.findCountyEntity(
-                            siteDto.getCity()
+                            siteDto.getCounty()
                     )
             );
         }
@@ -366,6 +366,17 @@ public class SiteServiceImpl implements SiteService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public List<SiteDetailsNestedResponse> entityToNestedResponse(List<SiteEntity> siteEntities) {
+
+        if(this.entityIsNull(siteEntities))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SiteDto> siteDtoList = this.entityToDto(siteEntities);
+
+        return this.dtoNestedResponse(siteDtoList);
     }
 
     @Override

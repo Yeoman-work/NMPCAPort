@@ -8,7 +8,8 @@ const SiteListComponent = props =>{
            healthCenterName,
            siteListing,
            dispatchHealthCenterInfo,
-           removeField
+           removeField,
+           formData
     } = props;
 
     return(
@@ -38,28 +39,64 @@ const SiteListComponent = props =>{
                                     <span className={'fw-bold me-1'}>Service(s):</span>
                                     <ul>
                                         {
-                                            site.service.map(({name}, index)=>{
+                                            formData?
+                                            formData.service_list.map(({name, serviceId}, index)=>{
 
                                                 return(
+
+                                                        site.service.includes(serviceId)?
+
                                                     <li key={index}>{name}</li>
+
+                                                            : null
                                                 )
                                             })
+                                                : null
                                         }
                                     </ul>
                                     <span className={'fw-bold me-1'}>Funding:</span>
                                     <ul>
                                         {
-                                            site.funding.map(({name}, index)=>{
+                                            formData?
+                                            formData.funding_list.map(({name, fundId}, index)=>{
 
                                                 return (
+                                                    site.funding.includes(fundId)?
+
                                                     <li key={index}>{name}</li>
+                                                        : null
                                                 )
                                             })
+
+                                                : null
                                         }
                                     </ul>
-                                    <span className={'fw-bold me-1'}>NM House District:</span>{site.nmHouseDistrict.name}<br/>
-                                    <span className={'fw-bold me-1'}>NM Senate District:</span>{site.senateDistrict.name}<br/>
-                                    <span className={'fw-bold me-1'}>Congressional District:</span>{site.congressionalDistrict.name}
+                                    <span className={'fw-bold me-1'}>NM House District:</span>{formData.nmHouse_districts.map((district, index)=>{
+
+                                        return(
+                                            site.nmHouseDistrict === district.houseDistrictId?
+                                                district.name
+                                                :null
+                                        )
+                                })}<br/>
+                                    <span className={'fw-bold me-1'}>NM Senate District:</span>{formData.senate_districts.map((district, index)=>{
+
+                                        return(
+                                            site.senateDistrict === district.senateDistrictId?
+                                                district.name
+
+                                                : null
+                                        )
+                                })}<br/>
+                                    <span className={'fw-bold me-1'}>Congressional District:</span>{ formData.congressional_districts.map((district, index)=>{
+
+                                        return(
+                                            site.congressionalDistrict === district.congressionalDistrictId?
+
+                                                district.name
+                                                : null
+                                        )
+                                })}
                                 </div>
 
                             )

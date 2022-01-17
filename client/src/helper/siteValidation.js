@@ -167,6 +167,26 @@ const addSite = (siteJson, formData) =>{
 
 }
 
+const removeServiceFromSiteDisplay = (id, serviceList) =>{
+
+    let serviceObjList = serviceList;
+
+    for(let i = 0; i < serviceList.length; i++){
+
+        if(serviceList[i] === id){
+
+            serviceObjList.splice(i, 1);
+        }
+    }
+
+    return serviceObjList;
+
+}
+
+
+
+
+
 
 module.exports={
     addSite,
@@ -175,5 +195,6 @@ module.exports={
     cityIdValidation,
     congressionalDistrictNotRequired,
     senateDistrictIdValidationNotRequired,
-    houseDistrictIdValidationNotRequired
+    houseDistrictIdValidationNotRequired,
+    removeServiceFromSiteDisplay
 }

@@ -8,6 +8,7 @@ const { addSite } = require('../helper/siteValidation')
 const SiteForm = props =>{
 
    const {siteState,
+          healthCenter,
           siteJson,
           siteDataFields,
           dispatchSite,
@@ -18,12 +19,9 @@ const SiteForm = props =>{
 
 
 
-
-
-
-   const saveHealthCenter = (formData) =>{
+   const saveHealthCenter = (healthCenter) =>{
        let disable = true;
-       const siteList = formData.newSites.length;
+       const siteList = healthCenter.sitesRequest.length;
 
 
        if(siteList > 0) {
@@ -45,12 +43,15 @@ const SiteForm = props =>{
                     <div className={'row'}>
                         <div className={'col'}>
                             <label>Site name</label>
+
                             <input type="text"
                                    className={'form-control w-50 m-auto'}
-                                   value={siteState.name}
+                                   value={siteJson.name}
                                    name={siteDataFields.SITE_NAME}
-                                   onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}
+                                   onChange={(e)=>dispatchSite(
+                                       {type: e.target.name, payload: e.target.value})}
                             />
+
                         </div>
                     </div>
                     <div className={'row'}>
@@ -58,26 +59,29 @@ const SiteForm = props =>{
                             <label>Street Address</label>
                             <input type="text"
                                    className={'form-control'}
-                                   value={siteState.streetAddress}
+                                   value={siteJson.streetAddress}
                                    name={siteDataFields.STREET_ADDRESS}
-                                   onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}
+                                   onChange={(e)=>dispatchSite(
+                                       {type: e.target.name, payload: e.target.value})}
                             />
                         </div>
                         <div className={'col'}>
                             <label>City</label>
                             <select className={'form-control'}
                                     name={siteDataFields.CITY}
-                                    value={siteState.city.id + '/' + siteState.city.name}
-                                    onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})} >
+                                    value={ siteJson.city }
+                                    onChange={(e)=>dispatchSite(
+                                        {type: e.target.name, payload: e.target.value})}>
                                 <option>Choose a City</option>
                                 {
                                     formData?
                                         formData.city_list.map(({name, cityId}, index)=>{
 
                                             return(
-                                                <option key={index} value={cityId + '/' + name}>{name}</option>
+                                                <option key={index} value={ cityId }>{name}</option>
                                             )
                                         })
+
                                         : null
                                 }
                             </select>
@@ -87,8 +91,9 @@ const SiteForm = props =>{
                                 <label>County</label>
                                 <select className={'form-control'}
                                         name={siteDataFields.COUNTY}
-                                        value={siteState.county.id + '/' + siteState.county.name}
-                                        onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}>
+                                        value={siteJson.county}
+                                        onChange={(e)=>dispatchSite(
+                                            {type: e.target.name, payload: e.target.value})}>
                                     <option>Choose a County</option>
                                     {
 
@@ -96,7 +101,7 @@ const SiteForm = props =>{
                                             formData.county_list.map(({countyId, name}, index)=>{
 
                                                 return(
-                                                    <option key={index} value={countyId + '/' + name}>{name}</option>
+                                                    <option key={index} value={countyId}>{name}</option>
                                                 )
                                             })
                                             : null
@@ -107,20 +112,23 @@ const SiteForm = props =>{
                                 <label>Zip Code</label>
                                 <select name={siteDataFields.ZIP_CODE}
                                         className={'form-control'}
-                                        value={siteState.zipCode.id + '/' + siteState.zipCode.name}
-                                        onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}>
+                                        value={siteJson.zipCode}
+                                        onChange={(e)=>dispatchSite(
+                                            {type: e.target.name, payload: e.target.value})}>
                                     <option>Select a zip Code</option>
                                     {
                                         formData?
                                             formData.zipCode_list.map(({zipCodeId, name}, index)=>{
 
                                                 return(
-                                                    <option key={index} value={zipCodeId + '/' + name}>{name}</option>
+                                                    <option key={index} value={ zipCodeId }>{name}</option>
                                                 )
                                             })
+
                                             : null
                                     }
                                 </select>
+
                             </div>
                         </div>
                         <div className={'row mb-2 p-3'}>
@@ -138,9 +146,12 @@ const SiteForm = props =>{
                                                                    itemID={serviceId}
                                                                    name={siteDataFields.SITE_SERVICES}
                                                                    className={'form-check-input me-2'}
-                                                                   checked={InList(siteJson.service, serviceId)}
-                                                                   value={serviceId + '/' + name}
-                                                                   onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target})}
+                                                                   checked={siteJson.service.includes(serviceId)}
+                                                                   value={ serviceId }
+                                                                   onChange={
+                                                                (e)=>dispatchSite(
+                                                                    {type: e.target.name, payload: e.target.value})
+                                                                   }
                                                             />
                                                             {name}</label>
                                                     </div>
@@ -163,16 +174,18 @@ const SiteForm = props =>{
                                                             type="checkbox"
                                                             name={siteDataFields.SITE_FUNDING}
                                                             className={'form-check-input me-2'}
-                                                            checked={InList(siteState.funding, fundId)}
+                                                            checked={siteJson.fund.includes(fundId)}
                                                             value={fundId}
                                                             itemID={fundId}
-                                                            onChange={(e)=>dispatchSite({type: e.target.name,
-                                                                payload: {target: e.target , name: name}})}
+                                                            onChange={(e)=>dispatchSite(
+                                                                {type: e.target.name, payload: e.target.value})}
                                                         />
+
                                                         {name}</label>
                                                 </div>
                                             )
                                         })
+
                                         : null
                                 }
                             </div>
@@ -181,10 +194,10 @@ const SiteForm = props =>{
                             <div className={'col'}>
                                 <label> NM House district</label>
                                 <select name={siteDataFields.NM_HOUSE_DISTRICT}
-                                        value={siteState.nmHouseDistrict.id + '/' + siteState.nmHouseDistrict.name}
+                                        value={ siteJson.nmHouseDistrict }
                                         className={'form-control'}
-                                        onChange={(e)=>dispatchSite({type: e.target.name,
-                                                                                        payload: e.target.value})}
+                                        onChange={(e)=>dispatchSite(
+                                            {type: e.target.name, payload: e.target.value})}
                                 >
                                     <option>Choose a District</option>
                                     {
@@ -192,9 +205,10 @@ const SiteForm = props =>{
                                             formData.nmHouse_districts.map(({houseDistrictId, name}, index)=>{
 
                                                 return(
-                                                    <option key={index} value={houseDistrictId + '/' + name}>{name}</option>
+                                                    <option key={index} value={ houseDistrictId }>{name}</option>
                                                 )
                                             })
+
                                             : null
                                     }
                                 </select>
@@ -203,7 +217,7 @@ const SiteForm = props =>{
                                 <label>Senate District</label>
                                 <select name={siteDataFields.SENATE_DISTRICT}
                                         className={'form-control'}
-                                        value={siteState.senateDistrict.id + '/' + siteState.senateDistrict.name}
+                                        value={ siteJson.senateDistrict }
                                         onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}
                                 >
                                     <option >Choose a Senate District</option>
@@ -212,7 +226,7 @@ const SiteForm = props =>{
                                             formData.senate_districts.map(({senateDistrictId, name}, index)=>{
 
                                                 return(
-                                                    <option key={index} value={senateDistrictId + '/' + name}>{name}</option>
+                                                    <option key={index} value={ senateDistrictId }>{name}</option>
                                                 )
                                             })
                                             : null
@@ -223,7 +237,7 @@ const SiteForm = props =>{
                                 <label>Congressional District</label>
                                 <select name={siteDataFields.CONGRESSIONAL_DISTRICT}
                                         className={'form-control'}
-                                        value={siteState.congressionalDistrict.id + '/' + siteState.congressionalDistrict.name}
+                                        value={siteJson.congressionalDistrict}
                                         onChange={(e)=>dispatchSite({type: e.target.name, payload: e.target.value})}
                                 >
                                     <option>Choose a district</option>
@@ -232,9 +246,10 @@ const SiteForm = props =>{
                                             formData.congressional_districts.map(({congressionalDistrictId, name}, index)=>{
 
                                                 return(
-                                                    <option key={index} value={congressionalDistrictId + '/' + name}>{name}</option>
+                                                    <option key={index} value={ congressionalDistrictId }>{name}</option>
                                                 )
                                             })
+
                                             : null
                                     }
                                 </select>
@@ -243,8 +258,8 @@ const SiteForm = props =>{
                     </div>
                 </form>
                 <button onClick={(e)=>dispatchSite({type: siteDataFields.FORM_DECREMENT})}>Back</button>
-                <button disabled={addSite(siteJson, formData)} onClick={(e)=>dispatchSite({ type: siteDataFields.NEW_SITE_LIST })}>Add Another Site</button>
-                <button disabled={saveHealthCenter(formData)} onClick={(e)=>healthCenterHandler(e)}>Finish</button>
+                <button disabled={addSite(siteJson, formData)} onClick={(e)=>dispatchSite({ type: siteDataFields.NEW_SITE_REQUEST })}>Add Another Site</button>
+                <button disabled={saveHealthCenter(healthCenter)} onClick={(e)=>healthCenterHandler(e)}>Finish</button>
             </div>
         </div>
 
