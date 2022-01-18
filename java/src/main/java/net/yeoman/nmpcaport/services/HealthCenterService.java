@@ -51,7 +51,11 @@ public interface HealthCenterService {
     public List<HealthCenterDto> entityToDto(List<HealthCenterEntity> healthCenterEntityList);
 
 
-    //Response Full health Center
+    //entity to response full
+    public HealthCenterResponseFull entityToResponseFull(HealthCenterEntity healthCenterEntity);
+    public List<HealthCenterResponseFull> entityToResponseFull(List<HealthCenterEntity> healthCenterEntity);
+
+    public List<HealthCenterResponseFull> getHealthCenterResponse(int page, int index);
 
 
     //convert dto to entity

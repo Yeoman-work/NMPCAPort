@@ -1,6 +1,8 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.PhoneNumberEntity;
+import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.exception.PhoneNumberServiceException;
 import net.yeoman.nmpcaport.io.repositories.PhoneNumberRepository;
 import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
 import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
@@ -26,28 +28,39 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
 
 
     @Override
+    public PhoneNumberEntity generateUniqueId(PhoneNumberEntity phoneNumberEntity) {
+
+        if(this.entityIsNull(phoneNumberEntity))
+            throw new PhoneNumberServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        phoneNumberEntity.setPhoneNumberId(this.utils.generateRandomID());
+
+        while(this.phoneNumberIdExist(phoneNumberEntity.getPhoneNumberId())){
+
+            phoneNumberEntity.setPhoneNumberId(this.utils.generateRandomID());
+        }
+
+        return phoneNumberEntity;
+    }
+
+    @Override
     public PhoneNumberEntity getPhoneNumberEntity(String phoneNumberId) {
 
         return this.phoneNumberRepository.findByPhoneNumberId(phoneNumberId);
     }
 
     @Override
-    public List<PhoneNumberEntity> processBulkPhoneNumbers(List<PhoneNumberDto> phoneNumberRequestList) {
+    public List<PhoneNumberEntity> processBulkPhoneNumbers(List<PhoneNumberRequest> phoneNumberRequestList) {
 
-        List<PhoneNumberEntity> returnValue = new ArrayList<>();
+        if(this.requestIsNull(phoneNumberRequestList))
+            throw new PhoneNumberServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        for(PhoneNumberDto phoneNumber: phoneNumberRequestList){
+        List<PhoneNumberDto> phoneNumberDtoList = this.requestToDto(phoneNumberRequestList);
 
-            returnValue.add(this.utils.objectMapper().map(phoneNumber, PhoneNumberEntity.class));
-        }
-        return returnValue;
+        return this.dtoToEntity(phoneNumberDtoList);
     }
 
-    @Override
-    public PhoneNumberEntity savedPhoneNumber(PhoneNumberEntity phoneNumberEntity) {
 
-        return this.phoneNumberRepository.save(phoneNumberEntity);
-    }
 
     @Override
     public PhoneNumberEntity createPhoneNumberProcess(PhoneNumberDto phoneNumberDto){
@@ -63,13 +76,6 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
         return new ModelMapper().map(phoneNumberEntity, PhoneNumberDto.class);
     }
 
-    @Override
-    public PhoneNumberEntity createPhoneNumber(PhoneNumberEntity phoneNumberEntity) {
-
-        PhoneNumberEntity phoneNumber = this.phoneNumberRepository.save(phoneNumberEntity);
-
-        return phoneNumber;
-    }
 
     @Override
     public PhoneNumberDto deletePhoneNumber(String phoneNumberId) {
@@ -119,6 +125,11 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     }
 
     @Override
+    public Boolean entityIsNull(List<PhoneNumberEntity> phoneNumberEntityList) {
+        return phoneNumberEntityList == null;
+    }
+
+    @Override
     public Boolean dtoIsNull(PhoneNumberDto phoneNumberDto) {
 
         return phoneNumberDto == null;
@@ -131,6 +142,11 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     }
 
     @Override
+    public Boolean requestIsNull(List<PhoneNumberRequest> phoneNumberRequestList) {
+        return phoneNumberRequestList == null;
+    }
+
+    @Override
     public Boolean responseIsNull(PhoneNumberResponse phoneNumberResponse) {
 
         return phoneNumberResponse == null;
@@ -139,33 +155,31 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     @Override
     public PhoneNumberEntity dtoToEntity(PhoneNumberDto phoneNumberDto) {
 
-        return this.utils.objectMapper().map(phoneNumberDto, PhoneNumberEntity.class);
+        if(this.dtoIsNull(phoneNumberDto))
+            throw new PhoneNumberServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        PhoneNumberEntity phoneNumberEntity = this.generateUniqueId(
+                this.utils.objectMapper().map(phoneNumberDto, PhoneNumberEntity.class)
+        );
+
+        return this.savePhoneNumber(phoneNumberEntity);
     }
 
     @Override
-    public List<PhoneNumberEntity> dtoArrayToEntityArray(List<PhoneNumberDto> phoneNumberDtoList) {
+    public List<PhoneNumberEntity> dtoToEntity(List<PhoneNumberDto> phoneNumberDtoList) {
 
         List<PhoneNumberEntity> returnValue = new ArrayList<>();
 
         for(PhoneNumberDto phoneNumberDto: phoneNumberDtoList){
 
-            PhoneNumberEntity phoneNumberEntity = this.utils.objectMapper().map(phoneNumberDto, PhoneNumberEntity.class);
-
-            phoneNumberEntity.setPhoneNumberId(utils.generateRandomID());
-
-            while(this.phoneNumberIdExist(phoneNumberEntity.getPhoneNumberId())){
-
-                phoneNumberEntity.setPhoneNumberId(utils.generateRandomID());
-            }
-
-            PhoneNumberEntity savedPhoneNumberEntity = this.savePhoneNumber(phoneNumberEntity);
-
-            returnValue.add(savedPhoneNumberEntity);
+           returnValue.add(this.dtoToEntity(phoneNumberDto));
 
         }
 
         return returnValue;
     }
+
+
 
     @Override
     public PhoneNumberResponse dtoToResponse(PhoneNumberDto phoneNumberDto) {
@@ -186,24 +200,6 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
         return returnValue;
     }
 
-    @Override
-    public PhoneNumberRequest dtoToRequest(PhoneNumberDto phoneNumberDto) {
-
-        return this.utils.objectMapper().map(phoneNumberDto, PhoneNumberRequest.class) ;
-    }
-
-    @Override
-    public List<PhoneNumberRequest> dtoToRequestList(List<PhoneNumberDto> phoneNumberDtoList) {
-
-        List<PhoneNumberRequest> returnValue = new ArrayList<>();
-
-        for(PhoneNumberDto phoneNumberDto: phoneNumberDtoList){
-
-            returnValue.add(this.utils.objectMapper().map(phoneNumberDto, PhoneNumberRequest.class));
-        }
-
-        return returnValue;
-    }
 
     @Override
     public PhoneNumberDto entityToDto(PhoneNumberEntity phoneNumberEntity) {
@@ -245,11 +241,17 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     @Override
     public PhoneNumberDto requestToDto(PhoneNumberRequest phoneNumberRequest) {
 
+        if(this.requestIsNull(phoneNumberRequest))
+            throw new PhoneNumberServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
         return this.utils.objectMapper().map(phoneNumberRequest, PhoneNumberDto.class);
     }
 
     @Override
     public List<PhoneNumberDto> requestToDto(List<PhoneNumberRequest> phoneNumberRequestList) {
+
+        if(this.requestIsNull(phoneNumberRequestList))
+            throw new PhoneNumberServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<PhoneNumberDto> returnValue = new ArrayList<>();
 

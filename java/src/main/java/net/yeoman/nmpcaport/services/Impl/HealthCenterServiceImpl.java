@@ -367,6 +367,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         if(this.siteService.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<ServiceEntity> serviceEntityList =  new ArrayList<>();
+
         List<ServiceNestedResponse> returnValue = new ArrayList<>();
 
         for(SiteEntity site: siteEntities){
@@ -376,7 +377,10 @@ public class HealthCenterServiceImpl implements HealthCenterService {
                 if(!this.siteServiceDetailsService.entityIsNull(site.getServiceDetailsEntities())){
 
 
-                    for(ServiceEntity serviceEntity: this.siteServiceDetailsService.getServiceEntities(site.getServiceDetailsEntities())){
+                    List<ServiceEntity> serviceEntities = this.siteServiceDetailsService.getServiceEntities(
+                            site.getServiceDetailsEntities());
+
+                    for(ServiceEntity serviceEntity: serviceEntities){
 
                         if(!serviceEntityList.contains(serviceEntity)){
 
@@ -389,7 +393,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         if(serviceEntityList != null && serviceEntityList.size() > 0){
 
-            returnValue = this.serviceService.dtoToNestedResponse(this.serviceService.entityToDto(serviceEntityList));
+            returnValue = this.serviceService.entityToNestedResponse(serviceEntityList);
         }
 
         return returnValue;
@@ -455,10 +459,10 @@ public class HealthCenterServiceImpl implements HealthCenterService {
                     )
             );
 
-//            //get services from sites
-//            healthCenterDto.setServiceNestedResponses(
-//                    this.getHealthCenterServicesFromSites(
-//                            healthCenterDto.getSiteEntities()));
+            //get services from sites
+            healthCenterDto.setServiceNestedResponses(
+                    this.getHealthCenterServicesFromSites(
+                            healthCenterDto.getSiteEntities()));
 
             //get funding from sites
             healthCenterDto.setFundNestedResponses(
@@ -498,6 +502,42 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public HealthCenterResponseFull entityToResponseFull(HealthCenterEntity healthCenterEntity) {
+
+        if(this.entityIsNull(healthCenterEntity))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        HealthCenterDto healthCenterDto = this.entityToDto(healthCenterEntity);
+
+        return this.dtoToResponseFull(healthCenterDto);
+    }
+
+    @Override
+    public List<HealthCenterResponseFull> entityToResponseFull(List<HealthCenterEntity> healthCenterEntityList) {
+
+        if(this.entityIsNull(healthCenterEntityList))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<HealthCenterResponseFull> returnValue = new ArrayList<>();
+
+        for(HealthCenterEntity healthCenterEntity: healthCenterEntityList){
+
+            HealthCenterResponseFull healthCenterResponseFull = this.entityToResponseFull(healthCenterEntity);
+            returnValue.add(healthCenterResponseFull);
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public List<HealthCenterResponseFull> getHealthCenterResponse(int page, int index) {
+
+        List<HealthCenterDto> healthCenterEntities = this.getHealthCenters(page, index);
+
+        return this.dtoToResponseFull(healthCenterEntities);
     }
 
     @Override

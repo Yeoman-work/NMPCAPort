@@ -53,14 +53,11 @@ public class ContactController {
 
     @PostMapping(consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
     			 produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ContactResponseModel createContact(@RequestBody ContactDetailsRequestModel contactDetails){
+    public void createContact(@RequestBody ContactDetailsRequestModel contactDetails){
+        //process single contact
+        this.contactService.createContact(contactDetails);
 
-        ContactDto incomingDto = this.contactService.requestToDto(contactDetails);
-
-        ContactDto contactDto = this.contactService.processContactEntity(incomingDto);
-
-
-        return this.contactService.dtoToResponse(contactDto);
+        return;
     }
     
 

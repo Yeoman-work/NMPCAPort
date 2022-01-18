@@ -51,6 +51,7 @@ public interface NetworkingGroupService {
 
    //is null
    public Boolean entityIsNull(NetworkingGroupEntity networkingGroupEntity);
+   public Boolean entityIsNull(List<NetworkingGroupEntity> networkingGroupEntities);
    public Boolean dtoIsNull(NetworkingGroupDto networkingGroupDto);
    public Boolean responseIsNull(NetworkingGroupResponseModel networkingGroupResponseModel);
 }

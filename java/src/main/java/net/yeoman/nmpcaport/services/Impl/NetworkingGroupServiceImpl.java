@@ -218,7 +218,8 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
             NetworkingGroupEntity networkingGroupEntity = this.networkingGroupRepository.findByNetworkingGroupId(id);
 
-            if(networkingGroupEntity == null) throw new NetworkingGroupServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            if(networkingGroupEntity == null)
+                throw new NetworkingGroupServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
             returnValue.add(networkingGroupEntity);
         }
@@ -229,7 +230,8 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
     @Override
     public NetworkingGroupEntity dtoToEntity(NetworkingGroupDto networkingGroupDto) {
 
-        NetworkingGroupEntity networkingGroupEntity = this.utils.objectMapper().map(networkingGroupDto, NetworkingGroupEntity.class);
+        NetworkingGroupEntity networkingGroupEntity = this.utils.objectMapper().map(
+                networkingGroupDto, NetworkingGroupEntity.class);
 
         networkingGroupEntity.setNetworkingGroupId(utils.generateRandomID());
 
@@ -413,6 +415,11 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
     public Boolean entityIsNull(NetworkingGroupEntity networkingGroupEntity) {
 
         return networkingGroupEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<NetworkingGroupEntity> networkingGroupEntities) {
+        return networkingGroupEntities == null;
     }
 
     @Override

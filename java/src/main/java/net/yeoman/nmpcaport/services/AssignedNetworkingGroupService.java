@@ -11,10 +11,14 @@ public interface AssignedNetworkingGroupService {
 
     //assignment networking group
     public AssignedNetworkingGroupEntity createAssignedNetworkingGroupEntity();
+    public void savedAssignedNetworkingGroupNoReturn(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
     public AssignedNetworkingGroupEntity savedAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
     public AssignedNetworkingGroupEntity updateAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity, String assignmentId);
     public void deleteAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
     public AssignedNetworkingGroupEntity getAssignedNetworkingGroup(String assignedId);
+
+    //create Relationships
+    public void assignNetworkingGroupsToContact(ContactEntity contactEntity, List<NetworkingGroupEntity> networkingGroupEntities);
     public List<AssignedNetworkingGroupEntity> assignNetworkingGroupToContact(List<ContactEntity> contactEntities, NetworkingGroupEntity networkingGroupEntity);
 
     //get networking group entities
@@ -22,6 +26,7 @@ public interface AssignedNetworkingGroupService {
 
     //get contact entity
     public List<ContactEntity> getContactEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
+
 
     //exist
     public Boolean existByNetworkingGroup(String assignedId);
@@ -31,7 +36,7 @@ public interface AssignedNetworkingGroupService {
 
 
     //saved
-    public AssignedNetworkingGroupEntity createAndSaveAssignedNetworkingGroupsContact(NetworkingGroupEntity networkingGroupEntity, ContactEntity contactEntity);
+    public void createAndSaveAssignedNetworkingGroupsContact(NetworkingGroupEntity networkingGroupEntity, ContactEntity contactEntity);
 
 
 

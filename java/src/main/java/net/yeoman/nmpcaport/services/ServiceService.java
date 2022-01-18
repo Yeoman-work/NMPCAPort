@@ -27,6 +27,7 @@ public interface ServiceService {
     public ServiceNestedResponse entityToNestedResponse(ServiceEntity serviceEntity);
     public List<ServiceNestedResponse> entityToNestedResponse(List<ServiceEntity> serviceEntities);
 
+
     //convert entity to dto
     public ServiceDto entityToDto(ServiceEntity serviceEntity);
     public List<ServiceDto> entityToDto(List<ServiceEntity> serviceEntities);

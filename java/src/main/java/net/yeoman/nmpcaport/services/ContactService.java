@@ -19,8 +19,10 @@ public interface ContactService {
     public ContactDto updateContact(String contactId, ContactDto contactDto);
     public ContactDto deleteContact(String contactId);
     public List<ContactDto> entityToDto(List<ContactEntity> contactEntities);
-    public ContactDto processContactEntity(ContactDto contactDto);
+    public void processContact(ContactDto contactDto);
 
+    //create contact
+    public void createContact(ContactDetailsRequestModel contactDetailsRequestModel);
 
     //nested response
     public ContactNestedResponseModel dtoToNestedResponse(ContactDto contactDto) ;

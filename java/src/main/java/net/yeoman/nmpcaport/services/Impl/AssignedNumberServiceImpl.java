@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.entities.AssignedNetworkingGroupEntity;
 import net.yeoman.nmpcaport.entities.AssignedNumberEntity;
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.entities.PhoneNumberEntity;
@@ -38,13 +39,7 @@ public class AssignedNumberServiceImpl implements AssignedNumberService {
         return this.assignedNumberRepository.findByAssignmentId(assignmentId);
     }
 
-    @Override
-    public AssignedNumberEntity createAssignedNumber(AssignedNumberEntity assignedNumberEntity) {
 
-        assignedNumberEntity.setAssignmentId(utils.generateRandomID());
-
-        return this.assignedNumberRepository.save(assignedNumberEntity);
-    }
 
     @Override
     public AssignedNumberEntity updateAssignedNumber(String assignmentId) {
@@ -93,6 +88,32 @@ public class AssignedNumberServiceImpl implements AssignedNumberService {
 
         return savedAssignedNumberEntity;
     }
+
+    @Override
+    public void assignmentNumberContactProcess(List<PhoneNumberEntity> phoneNumberEntityList, ContactEntity contactEntity) {
+
+        if(this.phoneNumberService.entityIsNull(phoneNumberEntityList))
+            throw new PhoneNumberServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        if(this.contactService.entityIsNull(contactEntity))
+            throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+
+        for(PhoneNumberEntity phoneNumber: phoneNumberEntityList){
+
+            AssignedNumberEntity assignmentEntity = this.createAssignedEntity();
+
+            assignmentEntity.setContactEntity(contactEntity);
+            assignmentEntity.setPhoneNumberEntity(phoneNumber);
+
+            this.savedAssignedNumberEntity(assignmentEntity);
+
+        }
+
+        return;
+    }
+
+
 
     @Override
     public AssignedNumberEntity createAssignedEntity() {

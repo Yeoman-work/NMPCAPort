@@ -17,8 +17,8 @@ const HealthCenterElement = props =>{
                         <h6>Service(s)</h6>
                         <ul>
                             {
-                                healthCenter.serviceResponses?
-                                healthCenter.serviceResponses.map(({name}, index)=>{
+                                healthCenter.serviceNestedResponses?
+                                healthCenter.serviceNestedResponses.map(({name}, index)=>{
 
                                     return(
                                         <li key={index} className={'text-start'}>{name}</li>
@@ -69,23 +69,6 @@ const HealthCenterElement = props =>{
             </div>
             <div className={'col overflow-auto height200'}>
                 <div className={'row'}>
-                    {/*<div className={'col overflow-auto'}>*/}
-                    {/*    <h4 className={'m-auto'}>Location(s):</h4>*/}
-                    {/*    <ul className={'w-25 m-auto'}>*/}
-                    {/*        {*/}
-                    {/*            healthCenter?*/}
-                    {/*                healthCenter.siteDetailsNestedResponseList.map((site, index)=>{*/}
-
-
-                    {/*                    return(*/}
-                    {/*                        <li key={index}>{site.name}</li>*/}
-                    {/*                    )*/}
-                    {/*                })*/}
-                    {/*                : null*/}
-                    {/*        }*/}
-
-                    {/*    </ul>*/}
-                    {/*</div>*/}
                     <div className={'col'}>
                         <h4>District(s)</h4>
                         <div className={'row'}>

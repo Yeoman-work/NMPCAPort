@@ -107,7 +107,7 @@ public class StaffServiceImpl implements StaffService {
 
                     assignedNumberEntity.setStaffEntity(storedStaffMember);
 
-                    AssignedNumberEntity saveAssignedNumberEntity = this.assignedNumberService.createAssignedNumber(assignedNumberEntity);
+                    //AssignedNumberEntity saveAssignedNumberEntity = this.assignedNumberService.createAssignedNumber(assignedNumberEntity);
 
                 }else{
 
@@ -126,7 +126,7 @@ public class StaffServiceImpl implements StaffService {
                     //set staff member
                     assignedNumberEntity.setStaffEntity(storedStaffMember);
 
-                    this.assignedNumberService.createAssignedNumber(assignedNumberEntity);
+                    //this.assignedNumberService.createAssignedNumber(assignedNumberEntity);
 
                 }
             }
@@ -215,10 +215,10 @@ public class StaffServiceImpl implements StaffService {
                 //saved phone number
                 assignedNumberEntity.setPhoneNumberEntity(savedPhoneNumber);
                 //save assignment
-                AssignedNumberEntity savedAssignmentEntity = this.assignedNumberService.createAssignedNumber(assignedNumberEntity);
+                //AssignedNumberEntity savedAssignmentEntity = this.assignedNumberService.createAssignedNumber(assignedNumberEntity);
 
                 //add assignment to list
-                phoneNumberResponses.add(modelMapper.map(savedAssignmentEntity.getPhoneNumberEntity(), PhoneNumberResponse.class));
+                //phoneNumberResponses.add(modelMapper.map(savedAssignmentEntity.getPhoneNumberEntity(), PhoneNumberResponse.class));
             }
 
 

@@ -10,16 +10,20 @@ import java.util.List;
 public interface PhoneNumberService {
 
 
+    //generate unique id
+    public PhoneNumberEntity generateUniqueId(PhoneNumberEntity phoneNumberEntity);
+
     //return entity
     public PhoneNumberEntity getPhoneNumberEntity(String phoneNumberId);
-    public List<PhoneNumberEntity> processBulkPhoneNumbers(List<PhoneNumberDto> phoneNumberDtoList);
-    public PhoneNumberEntity savedPhoneNumber(PhoneNumberEntity phoneNumberEntity);
+    public List<PhoneNumberEntity> processBulkPhoneNumbers(List<PhoneNumberRequest> phoneNumberRequestList);
     public PhoneNumberEntity createPhoneNumberProcess(PhoneNumberDto phoneNumberDto);
-    public PhoneNumberEntity createPhoneNumber(PhoneNumberEntity phoneNumberEntity);
     public PhoneNumberEntity savePhoneNumber(PhoneNumberEntity phoneNumber);
     public PhoneNumberEntity findByNumber(String number);
     public PhoneNumberEntity dtoToEntity(PhoneNumberDto phoneNumberDto);
-    public List<PhoneNumberEntity> dtoArrayToEntityArray(List<PhoneNumberDto> phoneNumberDtoList);
+    public List<PhoneNumberEntity> dtoToEntity(List<PhoneNumberDto> phoneNumberDtoList);
+
+
+
 
 
     //return dto
@@ -34,12 +38,15 @@ public interface PhoneNumberService {
     public List<PhoneNumberDto> requestToDto(List<PhoneNumberRequest> phoneNumberRequestList);
 
 
+
     //boolean
     public Boolean phoneNumberIdExist(String phoneNumberId);
     public Boolean phoneNumberExist(String number);
     public Boolean entityIsNull(PhoneNumberEntity phoneNumberEntity);
+    public Boolean entityIsNull(List<PhoneNumberEntity> phoneNumberEntityList);
     public Boolean dtoIsNull(PhoneNumberDto phoneNumberDto);
     public Boolean requestIsNull(PhoneNumberRequest phoneNumberRequest);
+    public Boolean requestIsNull(List<PhoneNumberRequest> phoneNumberRequest);
     public Boolean responseIsNull(PhoneNumberResponse phoneNumberResponse);
 
 
@@ -48,9 +55,6 @@ public interface PhoneNumberService {
     public List<PhoneNumberResponse> dtoToResponse(List<PhoneNumberDto> phoneNumberDtoList);
 
 
-    //return request
-    public PhoneNumberRequest dtoToRequest(PhoneNumberDto phoneNumberDto);
-    public List<PhoneNumberRequest> dtoToRequestList(List<PhoneNumberDto> phoneNumberDtoList);
 
 
 
