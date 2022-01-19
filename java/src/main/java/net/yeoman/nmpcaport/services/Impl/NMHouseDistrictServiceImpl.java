@@ -4,6 +4,7 @@ import net.yeoman.nmpcaport.entities.NMHouseDistrictEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.NMHouseDistrictServiceException;
 import net.yeoman.nmpcaport.io.repositories.NMHouseDistrictRepository;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.services.NMHouseDistrictService;
 import net.yeoman.nmpcaport.shared.dto.NMHouseDistrictDto;
@@ -84,6 +85,15 @@ public class NMHouseDistrictServiceImpl implements NMHouseDistrictService {
     public NMHouseDistrictEntity findNMHouseDistrictEntity(String nmHouseDistrictId) {
 
         return this.nmHouseDistrictRepository.findByHouseDistrictId(nmHouseDistrictId);
+    }
+
+    @Override
+    public NMHouseDistrictEssentialResponse entityToEssentials(NMHouseDistrictEntity nmHouseDistrictEntity) {
+
+        if(this.entityIsNull(nmHouseDistrictEntity))
+            throw new NMHouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(nmHouseDistrictEntity, NMHouseDistrictEssentialResponse.class);
     }
 
     @Override

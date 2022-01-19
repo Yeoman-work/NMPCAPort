@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.ZipCodeEntity;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentials;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.shared.dto.ZipCodeDto;
 
@@ -16,6 +17,8 @@ public interface ZipCodeService {
 
     public List<ZipCodeResponse> createZipCodesFromList(List<String> zipCodes);
 
+    public ZipCodeEssentials entityToEssentials(ZipCodeEntity zipCodeEntity);
+    public List<ZipCodeEssentials> entityToEssentials(List<ZipCodeEntity> zipCodeEntities);
 
     public ZipCodeDto entityToDto(ZipCodeEntity zipCodeEntity);
     public List<ZipCodeDto> entityToDto(List<ZipCodeEntity> zipCodeEntityList);

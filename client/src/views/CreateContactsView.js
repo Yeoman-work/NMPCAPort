@@ -18,6 +18,7 @@ const contactReducer = (contactState, action) =>{
 
                 if(action.payload.length <= 25){
 
+                    console.log(contactState);
                     return produce(contactState, draft=>{
 
                         draft.contact.firstName = action.payload;
@@ -293,7 +294,11 @@ const CreateContactsView = props =>{
 
     useEffect(()=>{
 
-        if(id !== null) dispatchContactInfo({type: FORM_FIELDS.NETWORK_GRP, payload: {checked: true, value: id}})
+        console.log('top')
+        console.log(id);
+        console.log('bottom')
+        if(id !== undefined && id !== null)
+            dispatchContactInfo({type: FORM_FIELDS.NETWORK_GRP, payload: {checked: true, value: id}})
 
     }, [id])
 

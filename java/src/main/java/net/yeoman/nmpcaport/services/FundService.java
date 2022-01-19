@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.FundEntity;
 import net.yeoman.nmpcaport.io.request.fund.FundRequestListModel;
+import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.shared.dto.FundDto;
@@ -19,6 +20,10 @@ public interface FundService {
     public List<FundDto> createFundBulk(FundRequestListModel fundRequestListModel);
     public List<FundEntity> getFunds(List<String> fundIds);
     public FundResponseModel getFundResponse(String fundId);
+
+    public FundEssentialsResponse entityToEssential(FundEntity fundEntity);
+    public List<FundEssentialsResponse> entityToEssential(List<FundEntity> fundList);
+
 
     public FundDto entityToDto(FundEntity fundEntity);
     public List<FundDto> entityToDto(List<FundEntity> fundEntityList);

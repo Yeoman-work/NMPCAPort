@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
+import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
 import net.yeoman.nmpcaport.services.SiteService;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
@@ -377,6 +378,107 @@ public class SiteServiceImpl implements SiteService {
         List<SiteDto> siteDtoList = this.entityToDto(siteEntities);
 
         return this.dtoNestedResponse(siteDtoList);
+    }
+
+    @Override
+    public SiteEssentialsResponse dtoToEssentials(SiteDto siteDto) {
+
+        if(this.dtoIsNull(siteDto))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        SiteEssentialsResponse siteEssentialsResponse =
+                this.utils.objectMapper().map(siteDto, SiteEssentialsResponse.class);
+
+        if(siteDto.getSiteFundingDetailsEntities() != null){
+
+            siteEssentialsResponse.setFundEssentialsResponses(
+                    this.fundService.entityToEssential(
+                            this.siteFundingDetailsService.getFundEntities(
+                                    siteDto.getSiteFundingDetailsEntities()
+                            )
+                    )
+            );
+        }
+
+        if(siteDto.getSiteServiceDetailsEntities() != null){
+
+            siteEssentialsResponse.setServiceEssentialsResponses(
+                    this.serviceService.entityToEssential(
+                            this.siteServiceDetailsService.getServiceEntities(
+                                    siteDto.getSiteServiceDetailsEntities()
+                            )
+                    )
+            );
+        }
+
+        if(siteDto.getZipCodeEntity() != null){
+
+            siteEssentialsResponse.setZipCodeEssentials(
+                    this.zipCodeService.entityToEssentials(
+                            siteDto.getZipCodeEntity()
+                    )
+            );
+        }
+
+        if(siteDto.getCountyEntity() != null){
+
+            siteEssentialsResponse.setCountyEssentials(
+                    this.countyService.entityToEssentials(
+                            siteDto.getCountyEntity()
+                    )
+            );
+        }
+
+        if(siteDto.getCityEntity() != null){
+
+            siteEssentialsResponse.setCityEssentials(
+                    this.cityService.entityToEssentials(
+                            siteDto.getCityEntity()
+                    )
+            );
+        }
+
+        if(siteDto.getNmHouseDistrictEntity() != null){
+
+            siteEssentialsResponse.setNmHouseDistrictEssentialResponse(
+                    this.nmHouseDistrictService.entityToEssentials(
+                            siteDto.getNmHouseDistrictEntity()));
+        }
+
+        if(siteDto.getSenateDistrictEntity() != null){
+
+            siteEssentialsResponse.setSenateDistrictEssentialResponse(
+                    this.senateDistrictService.essentialsToEntity(
+                            siteDto.getSenateDistrictEntity()
+                    )
+            );
+        }
+
+        if(siteDto.getCongressionalDistrictEntity() != null){
+
+            siteEssentialsResponse.setCongressionalDistrictEssentialsResponse(
+                    this.congressionalDistrictService.entityToEssentials(
+                            siteDto.getCongressionalDistrictEntity()
+                    )
+            );
+        }
+
+        return siteEssentialsResponse;
+    }
+
+    @Override
+    public List<SiteEssentialsResponse> dtoToEssentials(List<SiteDto> siteDtoList) {
+
+        if(dtoIsNull(siteDtoList)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SiteEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(SiteDto site: siteDtoList){
+
+            returnValue.add(this.dtoToEssentials(site));
+        }
+
+        return returnValue;
     }
 
     @Override

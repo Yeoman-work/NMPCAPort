@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.ZipCodeServiceException;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentials;
 import net.yeoman.nmpcaport.services.ZipCodeService;
 import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
@@ -73,6 +74,31 @@ public class ZipCodeServiceImpl implements ZipCodeService {
         }
 
         return zipCodeResponseList;
+    }
+
+    @Override
+    public ZipCodeEssentials entityToEssentials(ZipCodeEntity zipCodeEntity) {
+
+        if(entityIsNull(zipCodeEntity))
+            throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(zipCodeEntity, ZipCodeEssentials.class);
+    }
+
+    @Override
+    public List<ZipCodeEssentials> entityToEssentials(List<ZipCodeEntity> zipCodeEntities) {
+
+        if(this.entityIsNull(zipCodeEntities))
+            throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ZipCodeEssentials> returnValue = new ArrayList<>();
+
+        for(ZipCodeEntity zipCode: zipCodeEntities){
+
+            returnValue.add(this.entityToEssentials(zipCode));
+        }
+
+        return returnValue;
     }
 
     @Override

@@ -6,15 +6,18 @@ import net.yeoman.nmpcaport.entities.ServiceEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.io.repositories.SiteServiceDetailsRepository;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseBaseModel;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseFull;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
+import net.yeoman.nmpcaport.io.response.HealthCenter.*;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
+import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
 
 import java.util.List;
@@ -27,7 +30,16 @@ public interface HealthCenterService {
     public HealthCenterDto updateHealthCenter(String healthCenterId, HealthCenterDto healthCenterDto);
     public HealthCenterDto deleteHealthCenter(String healthCenterId);
     public List<HealthCenterDto> getHealthCenters(int page, int limit);
+    public List<HealthCenterEntity> getHealthCenterEntities(int page, int limit);
     public List<HealthCenterDto> getAllHealthCenters();
+
+    //dash board
+    public List<ServiceEssentialsResponse> getServiceEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
+    public List<FundEssentialsResponse> getFundingEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
+    public List<NMHouseDistrictEssentialResponse> getNMHouseDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
+    public List<SenateDistrictEssentialResponse> getSenateDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
+    public List<CongressionalDistrictEssentialsResponse>
+    congressionalDistrictEssentials(List<CongressionalDistrictEssentialsResponse> congressionalDistrictEssentialsResponses);
 
     //convert request
     public HealthCenterDto requestToDto(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel);
@@ -50,12 +62,24 @@ public interface HealthCenterService {
     public HealthCenterDto entityToDto(HealthCenterEntity healthCenterEntity);
     public List<HealthCenterDto> entityToDto(List<HealthCenterEntity> healthCenterEntityList);
 
+    //entity to dashboard view
+    public HealthCenterDashBoard entityToDashBoardData(HealthCenterEntity healthCenterEntity);
+    public List<HealthCenterDashBoard> entityToDashBoardData(List<HealthCenterEntity> healthCenterEntityList);
+
+    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(SiteEssentialsResponse siteEssentialsResponse);
+    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
+
+
 
     //entity to response full
     public HealthCenterResponseFull entityToResponseFull(HealthCenterEntity healthCenterEntity);
     public List<HealthCenterResponseFull> entityToResponseFull(List<HealthCenterEntity> healthCenterEntity);
 
+
     public List<HealthCenterResponseFull> getHealthCenterResponse(int page, int index);
+
+    //get dashboard data
+    public List<HealthCenterDashBoard> healthCenterDashBoard(int page, int limit);
 
 
     //convert dto to entity
@@ -81,6 +105,8 @@ public interface HealthCenterService {
 
     //get congressional districts from sites
     public List<CongressionalDistrictNestedResponse> getHealthCenterCongressionalDistrictFromSites(List<SiteEntity> siteEntities);
+
+
 
     public HealthCenterResponseBaseModel dtoToHealthCenterResponseBaseModel(HealthCenterDto healthCenterDto);
     public List<HealthCenterResponseBaseModel> dtoToHealthCenterResponseBaseModel(List<HealthCenterDto> healthCenterDtoList);

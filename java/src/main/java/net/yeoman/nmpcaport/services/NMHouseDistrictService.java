@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.NMHouseDistrictEntity;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.shared.dto.NMHouseDistrictDto;
 
@@ -17,6 +18,7 @@ public interface NMHouseDistrictService {
     public NMHouseDistrictEntity findNMHouseDistrictEntity(String nmHouseDistrictId);
 
 
+    public NMHouseDistrictEssentialResponse entityToEssentials(NMHouseDistrictEntity nmHouseDistrictEntity);
 
     public NMHouseDistrictDto entityToDto(NMHouseDistrictEntity nmHouseDistrictEntity);
     public List<NMHouseDistrictDto> entityToDto(List<NMHouseDistrictEntity> nmHouseDistrictEntities);

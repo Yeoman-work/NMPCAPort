@@ -12,7 +12,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @Component
-public class Utils {
+public class   Utils {
 
     private final Random RANDOM = new SecureRandom();
     private final String ALPHABET = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqurtuvwxyz";

@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.CountyServiceException;
+import net.yeoman.nmpcaport.io.response.County.CountyEssentials;
 import net.yeoman.nmpcaport.services.CountyService;
 import net.yeoman.nmpcaport.entities.CountyEntity;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
@@ -43,6 +44,7 @@ public class CountyServiceImpl implements CountyService {
 
     @Override
     public List<CountyResponse> createCounties(List<String> countiesList) {
+
         List<CountyResponse> counties = new ArrayList<>();
 
         for(String county: countiesList){
@@ -71,6 +73,31 @@ public class CountyServiceImpl implements CountyService {
         for(CountyEntity county: counties){
 
             returnValue.add(new ModelMapper().map(county, CountyResponse.class));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public CountyEssentials entityToEssentials(CountyEntity countyEntity) {
+
+        if(this.entityIsNull(countyEntity))
+            throw new CountyServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(countyEntity, CountyEssentials.class);
+    }
+
+    @Override
+    public List<CountyEssentials> entityToEssentials(List<CountyEntity> countyEntities) {
+
+        if(this.entityIsNull(countyEntities))
+            throw new CountyServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<CountyEssentials> returnValue = new ArrayList<>();
+
+        for(CountyEntity county: countyEntities){
+
+            returnValue.add(this.entityToEssentials(county));
         }
 
         return returnValue;

@@ -8,7 +8,9 @@ import net.yeoman.nmpcaport.exception.AssignedNetworkingGroupServiceException;
 import net.yeoman.nmpcaport.exception.ContactServiceException;
 import net.yeoman.nmpcaport.exception.NetworkingGroupServiceException;
 import net.yeoman.nmpcaport.io.repositories.AssignedNetworkingGroupRepository;
+import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.services.AssignedNetworkingGroupService;
+import net.yeoman.nmpcaport.shared.dto.ContactDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -159,7 +161,10 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
     @Override
     public List<ContactEntity> getContactEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
 
-        if(entityIsNull(assignedNetworkingGroupEntities)) throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        final long start = System.currentTimeMillis();
+
+        if(entityIsNull(assignedNetworkingGroupEntities))
+            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<ContactEntity> returnValue = new ArrayList<>();
 
@@ -168,7 +173,32 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
             returnValue.add(assignment.getContactEntity());
         }
 
+        final long stop = System.currentTimeMillis();
+
+        System.out.println("get contact entities total time: " + (stop - start));
+
         return returnValue;
+    }
+
+    @Override
+    public List<ContactNestedResponseModel> getNestedContactResponse(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntityList) {
+
+         final long start = System.currentTimeMillis();
+
+         if(this.entityIsNull(assignedNetworkingGroupEntityList))
+            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ContactEntity> contactEntities = this.getContactEntities(assignedNetworkingGroupEntityList);
+
+        List<ContactDto> contactDtoList = this.contactService.partialEntityToDto(contactEntities);
+
+        List<ContactNestedResponseModel> nestedResponse = this.contactService.dtoToNestedResponse(contactDtoList);
+
+        final  long stop = System.currentTimeMillis();
+
+        System.out.println("nested contact time: " + ( stop - start));
+
+        return nestedResponse;
     }
 
     @Override

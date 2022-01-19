@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.services;
 import net.yeoman.nmpcaport.entities.ServiceEntity;
 import net.yeoman.nmpcaport.io.request.service.ServiceDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.service.ServiceRequestListModel;
+import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.shared.dto.ServiceDto;
@@ -27,6 +28,9 @@ public interface ServiceService {
     public ServiceNestedResponse entityToNestedResponse(ServiceEntity serviceEntity);
     public List<ServiceNestedResponse> entityToNestedResponse(List<ServiceEntity> serviceEntities);
 
+    //convert entity to essential
+    public ServiceEssentialsResponse entityToEssential(ServiceEntity serviceEntity);
+    public List<ServiceEssentialsResponse> entityToEssential(List<ServiceEntity> serviceEntities);
 
     //convert entity to dto
     public ServiceDto entityToDto(ServiceEntity serviceEntity);
@@ -40,6 +44,8 @@ public interface ServiceService {
     public Boolean entityIsNull(List<ServiceEntity> serviceEntities);
     public Boolean dtoIsNull(ServiceDto serviceDto);
     public Boolean dtoIsNull(List<ServiceDto> serviceDtoList);
+    public Boolean essentialIsNull(ServiceEssentialsResponse serviceEssentialsResponse);
+    public Boolean essentialIsNull(List<ServiceEssentialsResponse> serviceEssentialsResponses);
 
     //find service by id
     public ServiceEntity getService(String serviceId);

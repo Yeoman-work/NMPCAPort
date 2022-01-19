@@ -259,7 +259,13 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
     @Override
     public List<NetworkingGroupDto> entityToDto(List<NetworkingGroupEntity> networkingGroupEntities) {
+
+        if(this.entityIsNull(networkingGroupEntities))
+            throw new NetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
         List<NetworkingGroupDto> returnValue = new ArrayList<>();
+
+        final long start = System.currentTimeMillis();
 
         for(NetworkingGroupEntity group: networkingGroupEntities){
 
@@ -267,19 +273,27 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
             if(group.getAssignedNetworkingGroupEntities() != null){
 
-                List<ContactEntity> contactEntities = this.assignedNetworkingGroupService.getContactEntities(group.getAssignedNetworkingGroupEntities());
+//                List<ContactEntity> contactEntities = this.assignedNetworkingGroupService.getContactEntities(group.getAssignedNetworkingGroupEntities());
+//
+//                if(this.contactService.entityIsNull(contactEntities)) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+//
+//                networkingGroupDto.setContactNestedResponses(this.contactService.dtoToNestedResponse(this.contactService.entityToDto(contactEntities)));
 
-                if(this.contactService.entityIsNull(contactEntities)) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-                networkingGroupDto.setContactNestedResponses(this.contactService.dtoToNestedResponse(this.contactService.entityToDto(contactEntities)));
+                networkingGroupDto.setContactNestedResponses(
+                        this.assignedNetworkingGroupService.getNestedContactResponse(
+                                group.getAssignedNetworkingGroupEntities()
+                        )
+                );
 
             }
 
-            System.out.println(networkingGroupDto);
 
             returnValue.add(networkingGroupDto);
-
         }
+
+        final long stop = System.currentTimeMillis();
+
+        System.out.println("total time: " + (stop-start));
 
         return returnValue;
     }
@@ -330,7 +344,7 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
         for(NetworkingGroupDto group: networkingGroupDtoList){
 
-            returnValue.add(utils.objectMapper().map(group, NetworkingGroupResponseModel.class));
+            returnValue.add(this.utils.objectMapper().map(group, NetworkingGroupResponseModel.class));
         }
 
         return returnValue;

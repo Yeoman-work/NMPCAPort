@@ -165,18 +165,30 @@ public class StateRepServiceImpl implements StateRepService {
 
             if(stateRepDto.getCityEntity() != null){
 
-                stateRepDto.setCityResponse(new ModelMapper().map(stateRepDto.getCityEntity(), CityResponse.class));
+                stateRepDto.setCityResponse(
+                        this.cityService.dtoToResponse(
+                                this.cityService.entityToDto(
+                                        stateRepDto.getCityEntity()
+                                )
+                        )
+                );
             }
 
             if(stateRepDto.getZipCodeEntity() != null){
 
-                stateRepDto.setZipCodeResponse(new ModelMapper().map(stateRepDto.getZipCodeEntity(), ZipCodeResponse.class));
+                stateRepDto.setZipCodeResponse(
+                        this.zipCodeService.dtoToResponse(
+                                this.zipCodeService.entityToDto(
+                                        stateRepDto.getZipCodeEntity()
+                                )
+                        )
+                );
 
             }
 
             if(stateRepDto.getPoliticalParty() != null){
 
-                stateRepDto.setPoliticalPartyResponse(new ModelMapper().map(stateRepDto.getPoliticalParty(), PoliticalPartyResponse.class));
+                stateRepDto.setPoliticalPartyResponse(this.politicalPartyService.dtoToResponse(this.politicalPartyService.entityToDto(stateRepDto.getPoliticalParty())));
 
             }
 

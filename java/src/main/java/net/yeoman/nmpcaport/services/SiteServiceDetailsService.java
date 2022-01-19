@@ -25,6 +25,8 @@ public interface SiteServiceDetailsService {
 
     public Boolean existByPublicId(String publicId);
 
+
+
     //get sitesFrom site details
     public SiteEntity getSiteEntity(SiteServiceDetailsEntity siteServiceDetailsEntity);
     public List<SiteEntity> getSiteEntities(List<SiteServiceDetailsEntity> siteServiceDetailsEntities);

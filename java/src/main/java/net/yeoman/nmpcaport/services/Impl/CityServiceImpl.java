@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.services.Impl;
 import net.yeoman.nmpcaport.entities.CityEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.CityServiceException;
+import net.yeoman.nmpcaport.io.response.city.CityEssentials;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.repositories.CityRepository;
 import net.yeoman.nmpcaport.services.CityService;
@@ -93,6 +94,31 @@ public class CityServiceImpl implements CityService {
 
             returnValue.add(new ModelMapper().map(city, CityResponse.class));
 
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public CityEssentials entityToEssentials(CityEntity cityEntity) {
+
+        if(this.entityIsNull(cityEntity))
+            throw new CityServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(cityEntity, CityEssentials.class);
+    }
+
+    @Override
+    public List<CityEssentials> entityToEssentials(List<CityEntity> cityEntityList) {
+
+        if(this.entityIsNull(cityEntityList))
+            throw new CityServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<CityEssentials> returnValue = new ArrayList<>();
+
+        for(CityEntity city: cityEntityList){
+
+            returnValue.add(this.entityToEssentials(city));
         }
 
         return returnValue;

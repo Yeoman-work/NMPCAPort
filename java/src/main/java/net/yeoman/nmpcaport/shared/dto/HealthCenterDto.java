@@ -2,19 +2,26 @@ package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.LocationResponse.LocationEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
+import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
+import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
+import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
 import java.util.Date;
@@ -22,21 +29,32 @@ import java.util.List;
 
 public class HealthCenterDto {
 
+    //health Center info
     private Long id;
     private String healthCenterId;
     private String name;
     private String nameAbbr;
     private Date createdAt;
     private Date updatedAt;
+
+    //health Center relationships
+    //new site request
     private List<SiteDetailsRequestModel> sitesRequest;
+
+    //user, contact and site ids
     private List<String> users;
     private List<String> contacts;
     private List<String> sites;
+
+
+    //contacts
     private List<ContactResponseModel> contactResponseList;
     private List<ContactNestedResponseModel> contactNestedResponseList;
+
     private List<UserDetailsResponseModel> userDetailsResponseList;
     private List<SiteDetailsResponse> siteResponse;
     private List<SiteDetailsNestedResponse> siteDetailsNestedResponseList;
+
     private List<SiteEntity> siteEntities;
     private List<UserEntity> userEntities;
     private List<ContactEntity> contactEntities;
@@ -56,6 +74,16 @@ public class HealthCenterDto {
     private List<ServiceResponse> serviceResponses;
     private List<ServiceNestedResponse> serviceNestedResponses;
     private List<FundResponseModel> fundResponseModels;
+
+    //healthCenter dashboard
+    private List<SiteEssentialsResponse> siteEssentialsResponses;
+    private List<ServiceEssentialsResponse> serviceEssentialsResponses;
+    private List<FundEssentialsResponse> fundEssentialsResponses;
+    private List<LocationEssentialsResponse> locationEssentialsResponseList;
+    private List<NMHouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses;
+    private List<SenateDistrictEssentialResponse> senateDistrictEssentialResponses;
+    private List<CongressionalDistrictEssentialsResponse> congressionalEssentialsResponses;
+
 
 
     public Long getId() {
@@ -328,5 +356,61 @@ public class HealthCenterDto {
 
     public void setCongressionalDistrictNestedResponseList(List<CongressionalDistrictNestedResponse> congressionalDistrictNestedResponseList) {
         this.congressionalDistrictNestedResponseList = congressionalDistrictNestedResponseList;
+    }
+
+    public List<ServiceEssentialsResponse> getServiceEssentialsResponses() {
+        return serviceEssentialsResponses;
+    }
+
+    public void setServiceEssentialsResponses(List<ServiceEssentialsResponse> serviceEssentialsResponses) {
+        this.serviceEssentialsResponses = serviceEssentialsResponses;
+    }
+
+    public List<FundEssentialsResponse> getFundEssentialsResponses() {
+        return fundEssentialsResponses;
+    }
+
+    public void setFundEssentialsResponses(List<FundEssentialsResponse> fundEssentialsResponses) {
+        this.fundEssentialsResponses = fundEssentialsResponses;
+    }
+
+    public List<LocationEssentialsResponse> getLocationEssentialsResponseList() {
+        return locationEssentialsResponseList;
+    }
+
+    public void setLocationEssentialsResponseList(List<LocationEssentialsResponse> locationEssentialsResponseList) {
+        this.locationEssentialsResponseList = locationEssentialsResponseList;
+    }
+
+    public List<NMHouseDistrictEssentialResponse> getNmHouseDistrictEssentialResponses() {
+        return nmHouseDistrictEssentialResponses;
+    }
+
+    public void setNmHouseDistrictEssentialResponses(List<NMHouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses) {
+        this.nmHouseDistrictEssentialResponses = nmHouseDistrictEssentialResponses;
+    }
+
+    public List<SenateDistrictEssentialResponse> getSenateDistrictEssentialResponses() {
+        return senateDistrictEssentialResponses;
+    }
+
+    public void setSenateDistrictEssentialResponses(List<SenateDistrictEssentialResponse> senateDistrictEssentialResponses) {
+        this.senateDistrictEssentialResponses = senateDistrictEssentialResponses;
+    }
+
+    public List<CongressionalDistrictEssentialsResponse> getCongressionalEssentialsResponses() {
+        return congressionalEssentialsResponses;
+    }
+
+    public void setCongressionalEssentialsResponses(List<CongressionalDistrictEssentialsResponse> congressionalEssentialsResponses) {
+        this.congressionalEssentialsResponses = congressionalEssentialsResponses;
+    }
+
+    public List<SiteEssentialsResponse> getSiteEssentialsResponses() {
+        return siteEssentialsResponses;
+    }
+
+    public void setSiteEssentialsResponses(List<SiteEssentialsResponse> siteEssentialsResponses) {
+        this.siteEssentialsResponses = siteEssentialsResponses;
     }
 }

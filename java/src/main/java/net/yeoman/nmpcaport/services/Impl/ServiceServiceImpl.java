@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.services.Impl;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.ServiceException;
 import net.yeoman.nmpcaport.exception.SiteServiceException;
+import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.services.ServiceService;
@@ -135,6 +136,31 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
+    public ServiceEssentialsResponse entityToEssential(ServiceEntity serviceEntity) {
+
+        if(this.entityIsNull(serviceEntity))
+            throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(serviceEntity, ServiceEssentialsResponse.class);
+    }
+
+    @Override
+    public List<ServiceEssentialsResponse> entityToEssential(List<ServiceEntity> serviceEntities) {
+
+        if(this.entityIsNull(serviceEntities))
+            throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ServiceEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(ServiceEntity serviceEntity: serviceEntities){
+
+            returnValue.add(this.entityToEssential(serviceEntity));
+        }
+
+        return returnValue;
+    }
+
+    @Override
     public ServiceDto entityToDto(ServiceEntity serviceEntity) {
 
         if(this.entityIsNull(serviceEntity)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
@@ -200,6 +226,16 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public Boolean dtoIsNull(List<ServiceDto> serviceDtoList) {
         return serviceDtoList == null;
+    }
+
+    @Override
+    public Boolean essentialIsNull(ServiceEssentialsResponse serviceEssentialsResponse) {
+        return  serviceEssentialsResponse == null;
+    }
+
+    @Override
+    public Boolean essentialIsNull(List<ServiceEssentialsResponse> serviceEssentialsResponses) {
+        return serviceEssentialsResponses == null;
     }
 
     @Override

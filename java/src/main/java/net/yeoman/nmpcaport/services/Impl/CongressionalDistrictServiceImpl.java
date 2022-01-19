@@ -4,6 +4,7 @@ import net.yeoman.nmpcaport.entities.CongressionalDistrictEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.CongressionalDistrictServiceException;
 import net.yeoman.nmpcaport.io.repositories.CongressionalDistrictRepository;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
 import net.yeoman.nmpcaport.services.CongressionalDistrictService;
 import net.yeoman.nmpcaport.shared.dto.CongressionalDistrictDto;
@@ -86,6 +87,15 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
             returnValue.add(new ModelMapper().map(district, CongressionalDistrictDto.class));
         }
         return returnValue;
+    }
+
+    @Override
+    public CongressionalDistrictEssentialsResponse entityToEssentials(CongressionalDistrictEntity congressionalDistrictEntity) {
+
+        if(this.entityIsNull(congressionalDistrictEntity))
+            throw new CongressionalDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(congressionalDistrictEntity, CongressionalDistrictEssentialsResponse.class);
     }
 
     @Override

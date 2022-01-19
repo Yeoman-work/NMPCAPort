@@ -5,6 +5,7 @@ import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.request.location.LocationDetailsRequestWithRep;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
+import net.yeoman.nmpcaport.io.response.LocationResponse.LocationEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
 import net.yeoman.nmpcaport.io.repositories.LocationRepository;
 import net.yeoman.nmpcaport.io.response.USSenator.USSenatorResponse;
@@ -333,5 +334,39 @@ public class LocationServiceImpl implements LocationService {
 
         }
         return returnValue;
+    }
+
+    @Override
+    public LocationEssentialsResponse entityToEssential(LocationEntity locationEntity) {
+
+        if(this.entityIsNull(locationEntity))
+            throw new LocationServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(locationEntity, LocationEssentialsResponse.class);
+    }
+
+    @Override
+    public List<LocationEssentialsResponse> entityToEssential(List<LocationEntity> locationEntities) {
+
+        if(this.entityIsNull(locationEntities))
+            throw new LocationServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<LocationEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(LocationEntity locationEntity: locationEntities){
+
+            returnValue.add(this.entityToEssential(locationEntity));
+        }
+        return returnValue;
+    }
+
+    @Override
+    public Boolean entityIsNull(LocationEntity locationEntity) {
+        return locationEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<LocationEntity> locationEntities) {
+        return locationEntities == null;
     }
 }

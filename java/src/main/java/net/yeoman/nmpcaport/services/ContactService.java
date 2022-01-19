@@ -21,6 +21,10 @@ public interface ContactService {
     public List<ContactDto> entityToDto(List<ContactEntity> contactEntities);
     public void processContact(ContactDto contactDto);
 
+    //entity dto
+    public ContactDto partialEntityToDto(ContactEntity contactEntity);
+    public List<ContactDto> partialEntityToDto(List<ContactEntity> contactEntity);
+
     //create contact
     public void createContact(ContactDetailsRequestModel contactDetailsRequestModel);
 

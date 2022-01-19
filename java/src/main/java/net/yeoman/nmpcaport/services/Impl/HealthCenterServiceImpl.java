@@ -1,23 +1,26 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseFull;
+import net.yeoman.nmpcaport.io.response.HealthCenter.*;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
+import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
 import net.yeoman.nmpcaport.services.HealthCenterService;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseBaseModel;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
@@ -41,6 +44,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HealthCenterServiceImpl implements HealthCenterService {
@@ -224,7 +228,6 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     public List<HealthCenterDto> getHealthCenters(int page, int limit) {
 
 
-
         if (page > 0) page -= 1;
 
         Pageable pageableRequest = PageRequest.of(page, limit);
@@ -234,6 +237,19 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         List<HealthCenterEntity> healthCenterEntities = healthCenterPage.getContent();
 
         return this.entityToDto(healthCenterEntities);
+    }
+
+    @Override
+    public List<HealthCenterEntity> getHealthCenterEntities(int page, int limit) {
+
+        if (page > 0) page -= 1;
+
+        Pageable pageableRequest = PageRequest.of(page, limit);
+
+        Page<HealthCenterEntity> healthCenterPage = this.healthCenterRepository.findAll(pageableRequest);
+
+
+        return healthCenterPage.getContent();
     }
 
     @Override
@@ -250,6 +266,69 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return returnValue;
     }
 
+    @Override
+    public List<ServiceEssentialsResponse> getServiceEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
+
+        List<ServiceEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(SiteEssentialsResponse site: siteEssentialsResponses){
+
+            for(ServiceEssentialsResponse service: site.getServiceEssentialsResponses()){
+
+                if(!returnValue.contains(service)){
+
+                    returnValue.add(service);
+                }
+            }
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public List<FundEssentialsResponse> getFundingEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
+
+        List<FundEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(SiteEssentialsResponse site: siteEssentialsResponses){
+
+            for(FundEssentialsResponse fund: site.getFundEssentialsResponses()){
+
+                if(!returnValue.contains(fund)){
+
+                    returnValue.add(fund);
+                }
+
+            }
+        }
+        return returnValue;
+    }
+
+    @Override
+    public List<NMHouseDistrictEssentialResponse> getNMHouseDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
+
+        List<NMHouseDistrictEssentialResponse> returnValue = new ArrayList<>();
+
+        for(SiteEssentialsResponse site: siteEssentialsResponses){
+
+            returnValue.add(site.getNmHouseDistrictEssentialResponse());
+        }
+
+
+        return returnValue.stream()
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SenateDistrictEssentialResponse> getSenateDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
+        return null;
+    }
+
+    @Override
+    public List<CongressionalDistrictEssentialsResponse> congressionalDistrictEssentials(List<CongressionalDistrictEssentialsResponse> congressionalDistrictEssentialsResponses) {
+        return null;
+    }
 
 
     @Override
@@ -505,6 +584,63 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
+    public HealthCenterDashBoard entityToDashBoardData(HealthCenterEntity healthCenterEntity) {
+
+        if(this.entityIsNull(healthCenterEntity))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        HealthCenterDto healthCenterDto = this.utils.objectMapper().map(healthCenterEntity, HealthCenterDto.class);
+
+        List<SiteEssentialsResponse> siteEssentialsResponses = this.siteService.dtoToEssentials(
+                this.siteService.entityToDto(healthCenterDto.getSiteEntities()
+                )
+        );
+
+        healthCenterDto.setSiteEssentialsResponses(siteEssentialsResponses);
+
+        healthCenterDto.setServiceEssentialsResponses(this.healthCenterServiceEssentials(siteEssentialsResponses));
+
+
+
+
+
+        return null;
+    }
+
+    @Override
+    public List<HealthCenterDashBoard> entityToDashBoardData(List<HealthCenterEntity> healthCenterEntityList) {
+        if(this.entityIsNull(healthCenterEntityList))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return null;
+    }
+
+    @Override
+    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(SiteEssentialsResponse siteEssentialsResponse) {
+
+
+    }
+
+    @Override
+    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
+
+        List<ServiceEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(SiteEssentialsResponse site: siteEssentialsResponses){
+
+            for(ServiceEssentialsResponse service: site.getServiceEssentialsResponses()){
+
+                returnValue.add(service);
+            }
+        }
+
+
+        return returnValue.stream()
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public HealthCenterResponseFull entityToResponseFull(HealthCenterEntity healthCenterEntity) {
 
         if(this.entityIsNull(healthCenterEntity))
@@ -538,6 +674,16 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         List<HealthCenterDto> healthCenterEntities = this.getHealthCenters(page, index);
 
         return this.dtoToResponseFull(healthCenterEntities);
+    }
+
+    @Override
+    public List<HealthCenterDashBoard> healthCenterDashBoard(int page, int limit) {
+
+        List<HealthCenterEntity> healthCenterDtoList = this.getHealthCenterEntities(page, limit);
+
+        HealthCenterDashBoard healthCenterDashBoard = this.
+
+        return;
     }
 
     @Override

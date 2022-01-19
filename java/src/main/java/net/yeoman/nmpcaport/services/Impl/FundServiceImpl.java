@@ -7,6 +7,7 @@ import net.yeoman.nmpcaport.io.request.fund.FundRequestListModel;
 import net.yeoman.nmpcaport.io.request.fund.FundRequestModel;
 import net.yeoman.nmpcaport.io.repositories.FundRepository;
 import net.yeoman.nmpcaport.io.repositories.SiteRepository;
+import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.services.FundService;
@@ -60,6 +61,30 @@ public class FundServiceImpl implements FundService {
                         this.fundRepository.findByFundId(fundId)
                 )
         );
+    }
+
+    @Override
+    public FundEssentialsResponse entityToEssential(FundEntity fundEntity) {
+
+        if(this.entityIsNull(fundEntity))
+            throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.utils.objectMapper().map(fundEntity, FundEssentialsResponse.class);
+    }
+
+    @Override
+    public List<FundEssentialsResponse> entityToEssential(List<FundEntity> fundList) {
+
+        if(this.entityIsNull(fundList)) throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<FundEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(FundEntity fund: fundList){
+
+            returnValue.add(this.entityToEssential(fund));
+        }
+
+        return returnValue;
     }
 
 

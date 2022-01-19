@@ -4,6 +4,7 @@ import net.yeoman.nmpcaport.entities.AssignedNetworkingGroupEntity;
 import net.yeoman.nmpcaport.entities.AssignedNumberEntity;
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
+import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 
 import java.util.List;
 
@@ -17,6 +18,9 @@ public interface AssignedNetworkingGroupService {
     public void deleteAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
     public AssignedNetworkingGroupEntity getAssignedNetworkingGroup(String assignedId);
 
+
+
+
     //create Relationships
     public void assignNetworkingGroupsToContact(ContactEntity contactEntity, List<NetworkingGroupEntity> networkingGroupEntities);
     public List<AssignedNetworkingGroupEntity> assignNetworkingGroupToContact(List<ContactEntity> contactEntities, NetworkingGroupEntity networkingGroupEntity);
@@ -26,6 +30,9 @@ public interface AssignedNetworkingGroupService {
 
     //get contact entity
     public List<ContactEntity> getContactEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
+
+    //get nested contact response
+    public List<ContactNestedResponseModel> getNestedContactResponse(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntityList);
 
 
     //exist

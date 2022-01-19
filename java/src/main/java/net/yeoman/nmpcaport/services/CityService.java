@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.CityEntity;
+import net.yeoman.nmpcaport.io.response.city.CityEssentials;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.shared.dto.CityDto;
 
@@ -20,6 +21,10 @@ public interface CityService {
     public CityDto updateCity(String cityId, CityDto cityDto);
 
     public List<CityResponse> allCities();
+
+    //convert entity to essentials
+    public CityEssentials entityToEssentials(CityEntity cityEntity);
+    public List<CityEssentials> entityToEssentials(List<CityEntity> cityEntityList);
 
     public CityDto entityToDto(CityEntity cityDto);
     public List<CityDto> entityToDto(List<CityEntity> cityEntityList);

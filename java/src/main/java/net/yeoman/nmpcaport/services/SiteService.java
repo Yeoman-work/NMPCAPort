@@ -5,6 +5,7 @@ import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestListModel;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
+import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
 import net.yeoman.nmpcaport.shared.dto.SiteDto;
 
 import java.util.List;
@@ -42,6 +43,10 @@ public interface SiteService {
 
     //convert entity to response
     public List<SiteDetailsNestedResponse> entityToNestedResponse(List<SiteEntity> siteEntities);
+
+    //site for health Center dashboard
+    public SiteEssentialsResponse dtoToEssentials(SiteDto siteDto);
+    public List<SiteEssentialsResponse> dtoToEssentials(List<SiteDto> siteDtoList);
 
 
     //object is null

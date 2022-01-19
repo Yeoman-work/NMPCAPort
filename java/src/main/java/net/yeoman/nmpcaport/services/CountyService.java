@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.CountyEntity;
 import net.yeoman.nmpcaport.exception.CountyServiceException;
+import net.yeoman.nmpcaport.io.response.County.CountyEssentials;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
 import net.yeoman.nmpcaport.shared.dto.CountyDto;
@@ -16,6 +17,9 @@ public interface CountyService {
     public List<CountyResponse> createCounties(List<String> countiesList);
     public List<CountyResponse> countyResponse();
 
+
+    public CountyEssentials entityToEssentials(CountyEntity countyEntity);
+    public List<CountyEssentials> entityToEssentials(List<CountyEntity> countyEntities);
 
     public CountyDto entityToDto(CountyEntity countyEntity);
     public List<CountyDto> entityToDto(List<CountyEntity> countyEntities);

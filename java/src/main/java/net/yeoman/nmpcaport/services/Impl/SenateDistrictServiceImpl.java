@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.services.Impl;
 import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.SenateDistrictServiceException;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
 import net.yeoman.nmpcaport.io.repositories.SenateDistrictRepository;
@@ -114,6 +115,16 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public SenateDistrictEssentialResponse essentialsToEntity(SenateDistrictEntity senateDistrictEntity) {
+
+        if(this.entityIsNull(senateDistrictEntity))
+            throw new SenateDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+
+        return this.utils.objectMapper().map(senateDistrictEntity, SenateDistrictEssentialResponse.class);
     }
 
     @Override
