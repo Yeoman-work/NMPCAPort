@@ -43,6 +43,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -583,6 +584,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return returnValue;
     }
 
+    //get health center for dashboard
     @Override
     public HealthCenterDashBoard entityToDashBoardData(HealthCenterEntity healthCenterEntity) {
 
@@ -591,52 +593,189 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         HealthCenterDto healthCenterDto = this.utils.objectMapper().map(healthCenterEntity, HealthCenterDto.class);
 
-        List<SiteEssentialsResponse> siteEssentialsResponses = this.siteService.dtoToEssentials(
-                this.siteService.entityToDto(healthCenterDto.getSiteEntities()
-                )
-        );
+        List<SiteEssentialsResponse> siteEssentialsResponses = this.siteService.entityToEssential(healthCenterDto.getSiteEntities());
 
         healthCenterDto.setSiteEssentialsResponses(siteEssentialsResponses);
 
-        healthCenterDto.setServiceEssentialsResponses(this.healthCenterServiceEssentials(siteEssentialsResponses));
+          healthCenterDto.setServiceEssentialsResponses(this.healthCenterServiceEssentials(healthCenterEntity.getSiteEntities()));
+        healthCenterDto.setFundEssentialsResponses(this.healthCenterFundEssentials(healthCenterEntity.getSiteEntities()));
+        healthCenterDto.setNmHouseDistrictEssentialResponses(this.healthCenterNMDistrictEssentials(healthCenterEntity.getSiteEntities()));
+        healthCenterDto.setSenateDistrictEssentialResponses(this.healthCenterSenateDistrictEssentials(healthCenterEntity.getSiteEntities()));
+        healthCenterDto.setCongressionalEssentialsResponses(this.healthCenterCongressionalEssentials(healthCenterEntity.getSiteEntities()));
 
 
-
-
-
-        return null;
+        return this.utils.objectMapper().map(healthCenterDto, HealthCenterDashBoard.class);
     }
 
     @Override
     public List<HealthCenterDashBoard> entityToDashBoardData(List<HealthCenterEntity> healthCenterEntityList) {
+
         if(this.entityIsNull(healthCenterEntityList))
             throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        return null;
+        List<HealthCenterDashBoard> returnValue = new ArrayList<>();
+
+        for(HealthCenterEntity healthCenterEntity: healthCenterEntityList){
+
+            returnValue.add(this.entityToDashBoardData(healthCenterEntity));
+        }
+
+        return returnValue;
     }
 
-    @Override
-    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(SiteEssentialsResponse siteEssentialsResponse) {
 
 
-    }
 
     @Override
-    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
+    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEntity> siteEntities) {
 
+        List<ServiceEntity> serviceEntities = new ArrayList<>();
         List<ServiceEssentialsResponse> returnValue = new ArrayList<>();
 
-        for(SiteEssentialsResponse site: siteEssentialsResponses){
+        for(SiteEntity siteEntity: siteEntities){
 
-            for(ServiceEssentialsResponse service: site.getServiceEssentialsResponses()){
+            for(SiteServiceDetailsEntity serviceDetailsEntity: siteEntity.getServiceDetailsEntities()){
 
-                returnValue.add(service);
+                if(!serviceEntities.contains(serviceDetailsEntity.getServiceEntity())){
+
+                    serviceEntities.add(serviceDetailsEntity.getServiceEntity());
+                }
             }
         }
 
+        for(ServiceEntity service: serviceEntities){
+
+            ServiceEssentialsResponse serviceEssentialsResponse = new ServiceEssentialsResponse();
+
+            serviceEssentialsResponse.setName(service.getName());
+            serviceEssentialsResponse.setServiceId(service.getServiceId());
+            returnValue.add(serviceEssentialsResponse);
+        }
 
         return returnValue.stream()
-                .distinct()
+                .sorted(Comparator.comparing(ServiceEssentialsResponse::getName))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FundEssentialsResponse> healthCenterFundEssentials(List<SiteEntity> siteEntities) {
+
+        List<FundEntity> fundEntities = new ArrayList<>();
+        List<FundEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(SiteEntity siteEntity: siteEntities){
+
+            for(SiteFundingDetailsEntity fund: siteEntity.getSiteFundingDetailsEntities()){
+
+                if(!fundEntities.contains(fund.getFundEntity())){
+
+                    fundEntities.add(fund.getFundEntity());
+                }
+            }
+        }
+
+        for(FundEntity fund: fundEntities){
+
+            FundEssentialsResponse fundEssentialsResponse = new FundEssentialsResponse();
+
+            fundEssentialsResponse.setFundId(fund.getFundId());
+            fundEssentialsResponse.setName(fund.getName());
+
+            returnValue.add(fundEssentialsResponse);
+        }
+
+        return returnValue.stream()
+                .sorted(Comparator.comparing(FundEssentialsResponse :: getName))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NMHouseDistrictEssentialResponse> healthCenterNMDistrictEssentials(List<SiteEntity> siteEntities) {
+
+        List<NMHouseDistrictEntity> nmHouseDistrictEntities = new ArrayList<>();
+        List<NMHouseDistrictEssentialResponse> returnValue = new ArrayList<>();
+
+        for(SiteEntity site: siteEntities){
+
+            if(!nmHouseDistrictEntities.contains(site.getNmHouseDistrictEntity())){
+
+                nmHouseDistrictEntities.add(site.getNmHouseDistrictEntity());
+            }
+        }
+
+        for(NMHouseDistrictEntity district: nmHouseDistrictEntities){
+
+            NMHouseDistrictEssentialResponse nmHouseDistrictEssentialResponse = new NMHouseDistrictEssentialResponse();
+
+            nmHouseDistrictEssentialResponse.setName(district.getName());
+            nmHouseDistrictEssentialResponse.setHouseDistrictId(district.getHouseDistrictId());
+
+            returnValue.add(nmHouseDistrictEssentialResponse);
+
+        }
+
+        return returnValue.stream()
+                .sorted(Comparator.comparing(NMHouseDistrictEssentialResponse :: getName))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SenateDistrictEssentialResponse> healthCenterSenateDistrictEssentials(List<SiteEntity> siteEntities) {
+
+        List<SenateDistrictEntity> senateDistrictEntities = new ArrayList<>();
+        List<SenateDistrictEssentialResponse> returnValue = new ArrayList<>();
+
+        for(SiteEntity site: siteEntities){
+
+            if(!senateDistrictEntities.contains(site.getSenateDistrictEntity())){
+
+                senateDistrictEntities.add(site.getSenateDistrictEntity());
+            }
+        }
+
+        for(SenateDistrictEntity district: senateDistrictEntities){
+
+            SenateDistrictEssentialResponse senateDistrictEssentialResponse = new SenateDistrictEssentialResponse();
+
+            senateDistrictEssentialResponse.setSenateDistrictId(district.getSenateDistrictId());
+            senateDistrictEssentialResponse.setName(district.getName());
+
+            returnValue.add(senateDistrictEssentialResponse);
+        }
+
+        return returnValue.stream()
+                .sorted(Comparator.comparing(SenateDistrictEssentialResponse :: getName))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CongressionalDistrictEssentialsResponse> healthCenterCongressionalEssentials(List<SiteEntity> siteEntities) {
+
+        List<CongressionalDistrictEntity> congressionalDistrictEntities = new ArrayList<>();
+        List<CongressionalDistrictEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(SiteEntity site: siteEntities){
+
+            if(!congressionalDistrictEntities.contains(site.getCongressionalDistrictEntity())){
+
+                congressionalDistrictEntities.add(site.getCongressionalDistrictEntity());
+            }
+
+        }
+
+        for(CongressionalDistrictEntity district: congressionalDistrictEntities){
+
+            CongressionalDistrictEssentialsResponse congressionalDistrictEssentialsResponse =
+                    new CongressionalDistrictEssentialsResponse();
+
+            congressionalDistrictEssentialsResponse.setCongressionalDistrictId(district.getCongressionalDistrictId());
+            congressionalDistrictEssentialsResponse.setName(district.getName());
+
+            returnValue.add(congressionalDistrictEssentialsResponse);
+        }
+
+        return returnValue.stream()
+                .sorted(Comparator.comparing(CongressionalDistrictEssentialsResponse :: getName))
                 .collect(Collectors.toList());
     }
 
@@ -669,6 +808,21 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
+    public HealthCenterEssentials healthCenterEssentials(HealthCenterEntity healthCenterEntity) {
+
+        if(this.entityIsNull(healthCenterEntity))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        HealthCenterEssentials healthCenterEssentials = new HealthCenterEssentials();
+
+        healthCenterEssentials.setName(healthCenterEntity.getName());
+        healthCenterEssentials.setNameAbbr(healthCenterEntity.getNameAbbr());
+        healthCenterEssentials.setHealthCenterId(healthCenterEntity.getHealthCenterId());
+
+        return healthCenterEssentials;
+    }
+
+    @Override
     public List<HealthCenterResponseFull> getHealthCenterResponse(int page, int index) {
 
         List<HealthCenterDto> healthCenterEntities = this.getHealthCenters(page, index);
@@ -681,9 +835,8 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         List<HealthCenterEntity> healthCenterDtoList = this.getHealthCenterEntities(page, limit);
 
-        HealthCenterDashBoard healthCenterDashBoard = this.
 
-        return;
+        return this.entityToDashBoardData(healthCenterDtoList);
     }
 
     @Override

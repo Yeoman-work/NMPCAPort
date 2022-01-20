@@ -5,6 +5,7 @@ import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.request.contact.ContactDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.contact.ContactEssentials;
 import net.yeoman.nmpcaport.io.response.contact.ContactFormListResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
@@ -45,6 +46,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Autowired
     private Utils utils;
+
 
 
 
@@ -138,6 +140,59 @@ public class ContactServiceImpl implements ContactService {
         final long stop = System.currentTimeMillis();
 
         System.out.println("convert contact entity to DTO total time: " + (stop - start));
+
+        return returnValue;
+    }
+
+    @Override
+    public ContactEssentials contactDashboardData(ContactEntity contactEntity) {
+
+        if(this.entityIsNull(contactEntity)) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        ContactEssentials contactEssentials = new ContactEssentials();
+
+
+        contactEssentials.setEmail(contactEntity.getEmail());
+
+        contactEssentials.setFirstName(contactEntity.getFirstName());
+
+        contactEssentials.setLastName(contactEntity.getLastName());
+
+        contactEssentials.setTitle(contactEntity.getTitle());
+
+        contactEssentials.setHealthCenterEssentials(
+                this.healthCenterService.healthCenterEssentials
+                        (contactEntity.getHealthCenter()
+                        )
+        );
+
+        contactEssentials.setNetworkingGroupEssentials(
+                this.assignedNetworkingGroupService.getNetworkingEssentials(
+                        contactEntity.getAssignedNetworkingGroupEntities()
+                )
+        );
+
+        contactEssentials.setPhoneNumbers(
+                this.assignedNumberService.getPhoneNumberEssentials(
+                        contactEntity.getAssignedNumberEntities()
+                )
+        );
+
+        return contactEssentials;
+    }
+
+    @Override
+    public List<ContactEssentials> contactDashboardData(List<ContactEntity> contactEntities) {
+
+        if(this.entityIsNull(contactEntities))
+            throw  new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ContactEssentials> returnValue = new ArrayList<>();
+
+       for(ContactEntity contactEntity: contactEntities){
+
+           returnValue.add(this.contactDashboardData(contactEntity));
+       }
 
         return returnValue;
     }

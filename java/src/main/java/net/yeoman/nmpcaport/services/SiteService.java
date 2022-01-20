@@ -47,6 +47,8 @@ public interface SiteService {
     //site for health Center dashboard
     public SiteEssentialsResponse dtoToEssentials(SiteDto siteDto);
     public List<SiteEssentialsResponse> dtoToEssentials(List<SiteDto> siteDtoList);
+    public SiteEssentialsResponse entityToEssential(SiteEntity siteEntity);
+    public List<SiteEssentialsResponse> entityToEssential(List<SiteEntity> siteEntities);
 
 
     //object is null

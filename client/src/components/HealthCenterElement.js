@@ -17,8 +17,8 @@ const HealthCenterElement = props =>{
                         <h6>Service(s)</h6>
                         <ul>
                             {
-                                healthCenter.serviceNestedResponses?
-                                healthCenter.serviceNestedResponses.map(({name}, index)=>{
+                                healthCenter.serviceEssentialsResponses?
+                                healthCenter.serviceEssentialsResponses.map(({name}, index)=>{
 
                                     return(
                                         <li key={index} className={'text-start'}>{name}</li>
@@ -32,8 +32,8 @@ const HealthCenterElement = props =>{
                         <h6>Funding</h6>
                         <ul>
                             {
-                                healthCenter.fundResponseModels?
-                                healthCenter.fundResponseModels.map(({name}, index)=>{
+                                healthCenter.fundEssentialsResponses.length > 0?
+                                healthCenter.fundEssentialsResponses.map(({name}, index)=>{
 
                                     return(
                                         <li key={index}>{name}</li>
@@ -50,16 +50,16 @@ const HealthCenterElement = props =>{
                 <h4 className={'m-auto'}>Location(s)</h4>
                 <div className={' overflow-auto height200'}>
                     {
-                        healthCenter?
-                            healthCenter.siteDetailsNestedResponseList.map((site, index)=>{
+                        healthCenter.siteEssentialsResponses?
+                            healthCenter.siteEssentialsResponses.map((site, index)=>{
 
 
                                 return(
                                     <div key={index} className={'w-100 m-auto'}>
                                         <span><strong>{site.name}</strong></span><br/>
                                         <p>{site.streetAddress}<br/>
-                                        {`${site.cityResponse.name}, ${site.zipCodeResponse.name}`}<br/>
-                                        {`${site.countyResponse.name} county`}</p>
+                                        {`${site.cityEssentials.name}, ${site.zipCodeEssentials.name}`}<br/>
+                                        {`${site.countyEssentials.name} county`}</p>
                                     </div>
                                 )
                             })
@@ -76,8 +76,8 @@ const HealthCenterElement = props =>{
                                 <h6>House</h6>
                                 <ul className={'w-25 m-auto'}>
                                     {
-                                        healthCenter?
-                                            healthCenter.nmHouseDistrictNestedResponses.map((district, index)=>{
+                                        healthCenter.nmHouseDistrictEssentialResponses?
+                                            healthCenter.nmHouseDistrictEssentialResponses.map((district, index)=>{
 
 
                                                 return(
@@ -93,8 +93,8 @@ const HealthCenterElement = props =>{
                                 <h6>Senate</h6>
                                 <ul className={'w-25 m-auto'}>
                                     {
-                                        healthCenter.senateDistrictNestedResponseList?
-                                            healthCenter.senateDistrictNestedResponseList.map((district, index)=>{
+                                        healthCenter.senateDistrictEssentialResponses?
+                                            healthCenter.senateDistrictEssentialResponses.map((district, index)=>{
 
 
                                                 return(
@@ -110,8 +110,8 @@ const HealthCenterElement = props =>{
                                 <h6>Congressional</h6>
                                 <ul className={'w-25 m-auto'}>
                                     {
-                                        healthCenter.congressionalDistrictNestedResponseList?
-                                            healthCenter.congressionalDistrictNestedResponseList.map((district, index)=>{
+                                        healthCenter.congressionalEssentialsResponses?
+                                            healthCenter.congressionalEssentialsResponses.map((district, index)=>{
 
 
                                                 return(

@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterDashBoard;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseBaseModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseFull;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
@@ -46,18 +47,20 @@ public class HealthCenterController {
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<HealthCenterResponseFull> getHealthCenters(@RequestParam(value ="page", defaultValue = "0") int page,
-                                                           @RequestParam(value= "limit", defaultValue = "25") int limit){
+    public List<HealthCenterDashBoard> getHealthCenters(@RequestParam(value ="page", defaultValue = "0") int page,
+                                                        @RequestParam(value= "limit", defaultValue = "25") int limit){
 
         final long startTime = System.currentTimeMillis();
 
-        List<HealthCenterResponseFull> healthCenters = this.healthCenterService.getHealthCenterResponse(page, limit);
+
+
+        List<HealthCenterDashBoard> healthCenterDashBoards = this.healthCenterService.healthCenterDashBoard(page, limit);
 
         final long stopTime = System.currentTimeMillis();
-
+        
         System.out.println("Total time: " + (stopTime - startTime));
 
-        return healthCenters;
+        return healthCenterDashBoards;
     }
 
 

@@ -82,7 +82,12 @@ public class ZipCodeServiceImpl implements ZipCodeService {
         if(entityIsNull(zipCodeEntity))
             throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        return this.utils.objectMapper().map(zipCodeEntity, ZipCodeEssentials.class);
+        ZipCodeEssentials zipCodeEssentials = new ZipCodeEssentials();
+
+        zipCodeEssentials.setName(zipCodeEntity.getName());
+        zipCodeEssentials.setZipCodeId(zipCodeEntity.getZipCodeId());
+
+        return zipCodeEssentials;
     }
 
     @Override

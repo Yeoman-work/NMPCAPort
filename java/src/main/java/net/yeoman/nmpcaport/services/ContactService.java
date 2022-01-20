@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.io.request.contact.ContactDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.contact.ContactEssentials;
 import net.yeoman.nmpcaport.io.response.contact.ContactFormListResponse;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
@@ -24,6 +25,12 @@ public interface ContactService {
     //entity dto
     public ContactDto partialEntityToDto(ContactEntity contactEntity);
     public List<ContactDto> partialEntityToDto(List<ContactEntity> contactEntity);
+
+    //contact dashboard
+    //contact essentials
+    public ContactEssentials contactDashboardData(ContactEntity contactEntity);
+    public List<ContactEssentials> contactDashboardData(List<ContactEntity> contactEntities);
+
 
     //create contact
     public void createContact(ContactDetailsRequestModel contactDetailsRequestModel);

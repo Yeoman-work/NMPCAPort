@@ -1,5 +1,6 @@
  package net.yeoman.nmpcaport.controller;
 
+import net.yeoman.nmpcaport.io.response.contact.ContactEssentials;
 import net.yeoman.nmpcaport.io.response.contact.ContactFormListResponse;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
@@ -40,9 +41,19 @@ public class ContactController {
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<ContactResponseModel> getAllContacts(){
+    public List<ContactEssentials> getAllContacts(){
 
-        return this.contactService.getAllContacts();
+
+
+        List<ContactEssentials> contactEssentials = this.contactService.contactDashboardData(
+                this.contactService.getAllContactEntities()
+        );
+
+
+
+
+
+        return this.contactService.contactDashboardData(this.contactService.getAllContactEntities());
     }
 
     @GetMapping(path="/formContacts", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

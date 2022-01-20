@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
 import net.yeoman.nmpcaport.services.SiteService;
@@ -386,82 +387,83 @@ public class SiteServiceImpl implements SiteService {
         if(this.dtoIsNull(siteDto))
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        SiteEssentialsResponse siteEssentialsResponse =
-                this.utils.objectMapper().map(siteDto, SiteEssentialsResponse.class);
+        SiteEssentialsResponse siteEssentialsResponse = new SiteEssentialsResponse();
 
-        if(siteDto.getSiteFundingDetailsEntities() != null){
+        siteEssentialsResponse.setName(siteDto.getName());
 
-            siteEssentialsResponse.setFundEssentialsResponses(
-                    this.fundService.entityToEssential(
-                            this.siteFundingDetailsService.getFundEntities(
-                                    siteDto.getSiteFundingDetailsEntities()
-                            )
-                    )
-            );
-        }
+//        if(siteDto.getSiteFundingDetailsEntities() != null){
+//
+//            siteEssentialsResponse.setFundEssentialsResponses(
+//                    this.fundService.entityToEssential(
+//                            this.siteFundingDetailsService.getFundEntities(
+//                                    siteDto.getSiteFundingDetailsEntities()
+//                            )
+//                    )
+//            );
+//        }
+//
+//        if(siteDto.getSiteServiceDetailsEntities() != null){
+//
+//            siteEssentialsResponse.setServiceEssentialsResponses(
+//                    this.serviceService.entityToEssential(
+//                            this.siteServiceDetailsService.getServiceEntities(
+//                                    siteDto.getSiteServiceDetailsEntities()
+//                            )
+//                    )
+//            );
+//        }
+//
+//        if(siteDto.getZipCodeEntity() != null){
+//
+//            siteEssentialsResponse.setZipCodeEssentials(
+//                    this.zipCodeService.entityToEssentials(
+//                            siteDto.getZipCodeEntity()
+//                    )
+//            );
+//        }
 
-        if(siteDto.getSiteServiceDetailsEntities() != null){
+//        if(siteDto.getCountyEntity() != null){
+//
+//            siteEssentialsResponse.setCountyEssentials(
+//                    this.countyService.entityToEssentials(
+//                            siteDto.getCountyEntity()
+//                    )
+//            );
+//        }
 
-            siteEssentialsResponse.setServiceEssentialsResponses(
-                    this.serviceService.entityToEssential(
-                            this.siteServiceDetailsService.getServiceEntities(
-                                    siteDto.getSiteServiceDetailsEntities()
-                            )
-                    )
-            );
-        }
+//        if(siteDto.getCityEntity() != null){
+//
+//            siteEssentialsResponse.setCityEssentials(
+//                    this.cityService.entityToEssentials(
+//                            siteDto.getCityEntity()
+//                    )
+//            );
+//        }
 
-        if(siteDto.getZipCodeEntity() != null){
+//        if(siteDto.getNmHouseDistrictEntity() != null){
+//
+//            siteEssentialsResponse.setNmHouseDistrictEssentialResponse(
+//                    this.nmHouseDistrictService.entityToEssentials(
+//                            siteDto.getNmHouseDistrictEntity()));
+//        }
+//
+//        if(siteDto.getSenateDistrictEntity() != null){
+//
+//            siteEssentialsResponse.setSenateDistrictEssentialResponse(
+//                    this.senateDistrictService.essentialsToEntity(
+//                            siteDto.getSenateDistrictEntity()
+//                    )
+//            );
+//        }
 
-            siteEssentialsResponse.setZipCodeEssentials(
-                    this.zipCodeService.entityToEssentials(
-                            siteDto.getZipCodeEntity()
-                    )
-            );
-        }
-
-        if(siteDto.getCountyEntity() != null){
-
-            siteEssentialsResponse.setCountyEssentials(
-                    this.countyService.entityToEssentials(
-                            siteDto.getCountyEntity()
-                    )
-            );
-        }
-
-        if(siteDto.getCityEntity() != null){
-
-            siteEssentialsResponse.setCityEssentials(
-                    this.cityService.entityToEssentials(
-                            siteDto.getCityEntity()
-                    )
-            );
-        }
-
-        if(siteDto.getNmHouseDistrictEntity() != null){
-
-            siteEssentialsResponse.setNmHouseDistrictEssentialResponse(
-                    this.nmHouseDistrictService.entityToEssentials(
-                            siteDto.getNmHouseDistrictEntity()));
-        }
-
-        if(siteDto.getSenateDistrictEntity() != null){
-
-            siteEssentialsResponse.setSenateDistrictEssentialResponse(
-                    this.senateDistrictService.essentialsToEntity(
-                            siteDto.getSenateDistrictEntity()
-                    )
-            );
-        }
-
-        if(siteDto.getCongressionalDistrictEntity() != null){
-
-            siteEssentialsResponse.setCongressionalDistrictEssentialsResponse(
-                    this.congressionalDistrictService.entityToEssentials(
-                            siteDto.getCongressionalDistrictEntity()
-                    )
-            );
-        }
+//        if(siteDto.getCongressionalDistrictEntity() != null){
+//
+//            siteEssentialsResponse.setCongressionalDistrictEssentialsResponse(
+//                    this.congressionalDistrictService.entityToEssentials(
+//                            siteDto.getCongressionalDistrictEntity()
+//                    )
+//            );
+//        }
 
         return siteEssentialsResponse;
     }
@@ -476,6 +478,43 @@ public class SiteServiceImpl implements SiteService {
         for(SiteDto site: siteDtoList){
 
             returnValue.add(this.dtoToEssentials(site));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public SiteEssentialsResponse entityToEssential(SiteEntity siteEntity) {
+
+        if(this.entityIsNull(siteEntity)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        SiteEssentialsResponse siteEssentialsResponse = new SiteEssentialsResponse();
+
+        siteEssentialsResponse.setName(siteEntity.getName());
+        siteEssentialsResponse.setSiteId(siteEntity.getSiteId());
+        siteEssentialsResponse.setStreetAddress(siteEntity.getStreetAddress());
+        siteEssentialsResponse.setCityEssentials(this.cityService.entityToEssentials(siteEntity.getCityEntity()));
+        siteEssentialsResponse.setCountyEssentials(this.countyService.entityToEssentials(siteEntity.getCountyEntity()));
+        siteEssentialsResponse.setZipCodeEssentials(this.zipCodeService.entityToEssentials(siteEntity.getZipCodeEntity()));
+
+        List<ServiceEntity> serviceEntities = this.siteServiceDetailsService.getServiceEntities(
+                siteEntity.getServiceDetailsEntities()
+        );
+
+
+        return siteEssentialsResponse;
+    }
+
+    @Override
+    public List<SiteEssentialsResponse> entityToEssential(List<SiteEntity> siteEntities) {
+
+        if(this.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SiteEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(SiteEntity siteEntity: siteEntities){
+
+            returnValue.add(this.entityToEssential(siteEntity));
         }
 
         return returnValue;

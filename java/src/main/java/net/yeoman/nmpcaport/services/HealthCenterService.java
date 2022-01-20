@@ -66,14 +66,20 @@ public interface HealthCenterService {
     public HealthCenterDashBoard entityToDashBoardData(HealthCenterEntity healthCenterEntity);
     public List<HealthCenterDashBoard> entityToDashBoardData(List<HealthCenterEntity> healthCenterEntityList);
 
-    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(SiteEssentialsResponse siteEssentialsResponse);
-    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
 
 
+    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEntity> siteEntities);
+    public List<FundEssentialsResponse>  healthCenterFundEssentials(List<SiteEntity> siteEntities);
+    public List<NMHouseDistrictEssentialResponse> healthCenterNMDistrictEssentials(List<SiteEntity> siteEntities);
+    public List<SenateDistrictEssentialResponse> healthCenterSenateDistrictEssentials(List<SiteEntity> siteEntities);
+    public List<CongressionalDistrictEssentialsResponse> healthCenterCongressionalEssentials(List<SiteEntity> siteEntities);
 
     //entity to response full
     public HealthCenterResponseFull entityToResponseFull(HealthCenterEntity healthCenterEntity);
     public List<HealthCenterResponseFull> entityToResponseFull(List<HealthCenterEntity> healthCenterEntity);
+
+    //health center essentials
+    public HealthCenterEssentials healthCenterEssentials(HealthCenterEntity healthEntity);
 
 
     public List<HealthCenterResponseFull> getHealthCenterResponse(int page, int index);

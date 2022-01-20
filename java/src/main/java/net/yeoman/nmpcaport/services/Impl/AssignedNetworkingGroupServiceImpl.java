@@ -9,6 +9,7 @@ import net.yeoman.nmpcaport.exception.ContactServiceException;
 import net.yeoman.nmpcaport.exception.NetworkingGroupServiceException;
 import net.yeoman.nmpcaport.io.repositories.AssignedNetworkingGroupRepository;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
+import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupEssentials;
 import net.yeoman.nmpcaport.services.AssignedNetworkingGroupService;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -117,6 +118,42 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
     public AssignedNetworkingGroupEntity getAssignedNetworkingGroup(String assignedId) {
 
         return this.assignedNetworkingGroupRepository.findByPublicId(assignedId);
+    }
+
+    @Override
+    public NetworkingGroupEssentials getNetworkingGroupEssentials(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity) {
+
+        if(this.entityIsNull(assignedNetworkingGroupEntity))
+            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        NetworkingGroupEssentials networkingGroupEssentials = new NetworkingGroupEssentials();
+
+        networkingGroupEssentials.setNetworkingGroupId(
+                assignedNetworkingGroupEntity.getNetworkingGroupEntity().getNetworkingGroupId()
+        );
+
+        networkingGroupEssentials.setName(
+                assignedNetworkingGroupEntity.getNetworkingGroupEntity().getName()
+        );
+
+
+        return networkingGroupEssentials;
+    }
+
+    @Override
+    public List<NetworkingGroupEssentials> getNetworkingEssentials(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntityList) {
+
+        if(this.entityIsNull(assignedNetworkingGroupEntityList))
+            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<NetworkingGroupEssentials> returnValue = new ArrayList<>();
+
+        for(AssignedNetworkingGroupEntity assignment: assignedNetworkingGroupEntityList){
+
+            returnValue.add(this.getNetworkingGroupEssentials(assignment));
+        }
+
+        return returnValue;
     }
 
     @Override

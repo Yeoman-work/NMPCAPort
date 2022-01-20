@@ -1,14 +1,16 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.entities.AssignedNetworkingGroupEntity;
+
 import net.yeoman.nmpcaport.entities.AssignedNumberEntity;
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.entities.PhoneNumberEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.exception.AssignedNetworkingGroupServiceException;
 import net.yeoman.nmpcaport.exception.AssignedNumberServiceException;
 import net.yeoman.nmpcaport.exception.ContactServiceException;
 import net.yeoman.nmpcaport.exception.PhoneNumberServiceException;
 import net.yeoman.nmpcaport.io.repositories.AssignedNumberRepository;
+import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberEssentials;
 import net.yeoman.nmpcaport.services.AssignedNumberService;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,11 +84,9 @@ public class AssignedNumberServiceImpl implements AssignedNumberService {
         //assign phone number entity
         assignedNumberEntity.setPhoneNumberEntity(phoneNumberEntity);
 
-        AssignedNumberEntity savedAssignedNumberEntity = this.assignedNumberRepository.save(assignedNumberEntity);
 
-        if(savedAssignedNumberEntity == null) throw new AssignedNumberServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-        return savedAssignedNumberEntity;
+        return this.assignedNumberRepository.save(assignedNumberEntity);
     }
 
     @Override
@@ -110,9 +110,46 @@ public class AssignedNumberServiceImpl implements AssignedNumberService {
 
         }
 
-        return;
     }
 
+    @Override
+    public PhoneNumberEssentials getPhoneNumberEssentials(AssignedNumberEntity assignedNumberEntity) {
+
+        if(this.entityIsNull(assignedNumberEntity))
+            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        PhoneNumberEssentials phoneNumberEssentials = new PhoneNumberEssentials();
+
+        phoneNumberEssentials.setNumber(
+                assignedNumberEntity.getPhoneNumberEntity().getNumber()
+        );
+
+        phoneNumberEssentials.setDescription(
+                assignedNumberEntity.getPhoneNumberEntity().getDescription()
+        );
+
+        phoneNumberEssentials.setPhoneNumberId(
+                assignedNumberEntity.getPhoneNumberEntity().getPhoneNumberId()
+        );
+
+        return phoneNumberEssentials;
+    }
+
+    @Override
+    public List<PhoneNumberEssentials> getPhoneNumberEssentials(List<AssignedNumberEntity> assignedNumberEntityList) {
+
+        if(this.entityIsNull(assignedNumberEntityList))
+            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<PhoneNumberEssentials> returnValue = new ArrayList<>();
+
+        for(AssignedNumberEntity assignment: assignedNumberEntityList){
+
+            returnValue.add(this.getPhoneNumberEssentials(assignment));
+        }
+
+        return returnValue;
+    }
 
 
     @Override
@@ -140,6 +177,11 @@ public class AssignedNumberServiceImpl implements AssignedNumberService {
     public Boolean entityIsNull(AssignedNumberEntity assignedNumberEntity) {
 
         return assignedNumberEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<AssignedNumberEntity> assignedNumberEntityList) {
+        return assignedNumberEntityList == null;
     }
 
     @Override
@@ -182,16 +224,9 @@ public class AssignedNumberServiceImpl implements AssignedNumberService {
 
     @Override
     public List<PhoneNumberEntity> getPhoneNumberEntities(List<AssignedNumberEntity> assignedNumberEntityList) {
-
-        List<PhoneNumberEntity> returnValue = new ArrayList<>();
-
-        for(AssignedNumberEntity assignment: assignedNumberEntityList){
-
-            returnValue.add(assignment.getPhoneNumberEntity());
-        }
-
-        return returnValue;
+        return null;
     }
+
 
     @Override
     public List<PhoneNumberEntity> getPhoneNumberAssignments(List<AssignedNumberEntity> assignedNumberEntityList) {

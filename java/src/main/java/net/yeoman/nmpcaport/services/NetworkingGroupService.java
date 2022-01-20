@@ -1,13 +1,10 @@
 package net.yeoman.nmpcaport.services;
 
-import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
 import net.yeoman.nmpcaport.io.request.networkingGroup.NetworkingGroupRequestModel;
-import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
+import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupEssentials;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupFormResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
-import net.yeoman.nmpcaport.shared.dto.ContactDto;
 import net.yeoman.nmpcaport.shared.dto.NetworkingGroupDto;
 
 import java.util.List;
@@ -25,6 +22,11 @@ public interface NetworkingGroupService {
    public List<NetworkingGroupDto> entityToDtoBase(List<NetworkingGroupEntity> networkingGroupEntities);
    public NetworkingGroupDto requestToDto(NetworkingGroupRequestModel networkingGroupRequestModel);
    public List<NetworkingGroupDto> requestToDto(List<NetworkingGroupRequestModel> networkingGroupRequestModelList);
+
+   //networking Group essentials
+//   public NetworkingGroupEssentials networkingGroupEssentials(AssignedNetworkingGroupService assignedNetworkingGroupService);
+//   public List<NetworkingGroupEssentials> networkingGroupsEssentials(List<AssignedNetworkingGroupService> assignedNetworkingGroupServiceList);
+
 
 
 

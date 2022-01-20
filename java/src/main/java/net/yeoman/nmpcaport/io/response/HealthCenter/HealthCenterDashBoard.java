@@ -6,6 +6,7 @@ import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
+import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ public class HealthCenterDashBoard {
     private String healthCenterId;
     private String name;
     private String nameAbbr;
+    private List<SiteEssentialsResponse> siteEssentialsResponses;
     private List<ServiceEssentialsResponse> serviceEssentialsResponses;
     private List<FundEssentialsResponse> fundEssentialsResponses;
     private List<LocationEssentialsResponse> locationEssentialsResponseList;
@@ -95,6 +97,14 @@ public class HealthCenterDashBoard {
 
     public void setCongressionalEssentialsResponses(List<CongressionalDistrictEssentialsResponse> congressionalEssentialsResponses) {
         this.congressionalEssentialsResponses = congressionalEssentialsResponses;
+    }
+
+    public List<SiteEssentialsResponse> getSiteEssentialsResponses() {
+        return siteEssentialsResponses;
+    }
+
+    public void setSiteEssentialsResponses(List<SiteEssentialsResponse> siteEssentialsResponses) {
+        this.siteEssentialsResponses = siteEssentialsResponses;
     }
 
     public Date getCreatedAt() {
