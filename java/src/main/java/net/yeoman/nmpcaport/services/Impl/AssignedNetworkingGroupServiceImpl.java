@@ -8,6 +8,7 @@ import net.yeoman.nmpcaport.exception.AssignedNetworkingGroupServiceException;
 import net.yeoman.nmpcaport.exception.ContactServiceException;
 import net.yeoman.nmpcaport.exception.NetworkingGroupServiceException;
 import net.yeoman.nmpcaport.io.repositories.AssignedNetworkingGroupRepository;
+import net.yeoman.nmpcaport.io.response.contact.ContactEssentials;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupEssentials;
 import net.yeoman.nmpcaport.services.AssignedNetworkingGroupService;
@@ -153,6 +154,37 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
             returnValue.add(this.getNetworkingGroupEssentials(assignment));
         }
 
+        return returnValue;
+    }
+
+    @Override
+    public ContactEssentials getContactEssentials(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity) {
+
+        if(this.entityIsNull(assignedNetworkingGroupEntity))
+            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        ContactEssentials contactEssentials = new ContactEssentials();
+        contactEssentials.setContactId(assignedNetworkingGroupEntity.getContactEntity().getContactId());
+        contactEssentials.setFirstName(assignedNetworkingGroupEntity.getContactEntity().getFirstName());
+        contactEssentials.setLastName(assignedNetworkingGroupEntity.getContactEntity().getLastName());
+        contactEssentials.setTitle(assignedNetworkingGroupEntity.getContactEntity().getTitle());
+        contactEssentials.setEmail(assignedNetworkingGroupEntity.getContactEntity().getEmail());
+
+        return contactEssentials;
+    }
+
+    @Override
+    public List<ContactEssentials> getContactEssentials(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
+
+        if(this.entityIsNull(assignedNetworkingGroupEntities))
+            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ContactEssentials> returnValue = new ArrayList<>();
+
+        for(AssignedNetworkingGroupEntity assignment: assignedNetworkingGroupEntities){
+
+            returnValue.add(this.getContactEssentials(assignment));
+        }
         return returnValue;
     }
 

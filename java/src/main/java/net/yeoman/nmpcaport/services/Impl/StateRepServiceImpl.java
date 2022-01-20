@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.io.response.stateRep.StateRepNestedResponse;
 import net.yeoman.nmpcaport.services.StateRepService;
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
@@ -202,5 +203,61 @@ public class StateRepServiceImpl implements StateRepService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public List<StateRepEntity> getAllEntities() {
+        return this.stateRepRepository.findAll();
+    }
+
+    @Override
+    public StateRepNestedResponse getStateRepNestedReps(StateRepEntity stateRepEntity) {
+
+        if(this.entityIsNull(stateRepEntity))
+            throw new StateRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        StateRepNestedResponse stateRepNestedResponse = new StateRepNestedResponse();
+
+        stateRepNestedResponse.setFirstName(stateRepEntity.getFirstName());
+        stateRepNestedResponse.setLastName(stateRepEntity.getLastName());
+        stateRepNestedResponse.setEmail(stateRepEntity.getEmail());
+        stateRepNestedResponse.setPicture(stateRepEntity.getPicture());
+        stateRepNestedResponse.setCapitolRoom(stateRepEntity.getCapitolRoom());
+        stateRepNestedResponse.setStreetAddress(stateRepEntity.getStreetAddress());
+        stateRepNestedResponse.setStateRepId(stateRepEntity.getStateRepId());
+        stateRepNestedResponse.setCity(stateRepEntity.getCityEntity().getName());
+        stateRepNestedResponse.setZipCode(stateRepEntity.getZipCodeEntity().getName());
+        stateRepNestedResponse.setNmHouseDistrictEssentialResponse(
+                this.nmHouseDistrictService.entityToEssentials(stateRepEntity.getNmHouseDistrict()
+                )
+        );
+
+        return stateRepNestedResponse;
+    }
+
+    @Override
+    public List<StateRepNestedResponse> getStateRepNestedReps(List<StateRepEntity> stateRepEntities) {
+
+        if(this.entityIsNull(stateRepEntities))
+            throw new StateRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<StateRepNestedResponse> returnValue = new ArrayList<>();
+
+        for(StateRepEntity stateRepEntity: stateRepEntities){
+
+            returnValue.add(this.getStateRepNestedReps(stateRepEntity));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public Boolean entityIsNull(StateRepEntity stateRepEntity) {
+        return stateRepEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<StateRepEntity> stateRepEntities) {
+        return  stateRepEntities == null;
     }
 }

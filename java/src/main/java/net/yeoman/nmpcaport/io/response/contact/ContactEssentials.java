@@ -1,21 +1,12 @@
 package net.yeoman.nmpcaport.io.response.contact;
 
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterEssentials;
-import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
-import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupEssentials;
-import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberEssentials;
-
-import java.util.List;
-
 public class ContactEssentials {
 
+    private String contactId;
     private String title;
     private String firstName;
     private String lastName;
     private String email;
-    private List<NetworkingGroupEssentials> networkingGroupEssentials;
-    private HealthCenterEssentials healthCenterEssentials;
-    private List<PhoneNumberEssentials> phoneNumbers;
 
 
     public String getTitle() {
@@ -50,27 +41,11 @@ public class ContactEssentials {
         this.email = email;
     }
 
-    public List<NetworkingGroupEssentials> getNetworkingGroupEssentials() {
-        return networkingGroupEssentials;
+    public String getContactId() {
+        return contactId;
     }
 
-    public void setNetworkingGroupEssentials(List<NetworkingGroupEssentials> networkingGroupEssentials) {
-        this.networkingGroupEssentials = networkingGroupEssentials;
-    }
-
-    public HealthCenterEssentials getHealthCenterEssentials() {
-        return healthCenterEssentials;
-    }
-
-    public void setHealthCenterEssentials(HealthCenterEssentials healthCenterEssentials) {
-        this.healthCenterEssentials = healthCenterEssentials;
-    }
-
-    public List<PhoneNumberEssentials> getPhoneNumbers() {
-        return phoneNumbers;
-    }
-
-    public void setPhoneNumbers(List<PhoneNumberEssentials> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 }

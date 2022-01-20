@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.services.Impl;
 import net.yeoman.nmpcaport.entities.AssignedNetworkingGroupEntity;
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupDashBoard;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupEssentials;
 import net.yeoman.nmpcaport.services.NetworkingGroupService;
 import net.yeoman.nmpcaport.exception.NetworkingGroupServiceException;
@@ -174,23 +175,26 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
         if(networkingGroupEntity == null) throw new NetworkingGroupServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         //get networking group dto
-        NetworkingGroupDto networkingGroupDto = this.entityToDto(networkingGroupEntity);
+        NetworkingGroupFormResponseModel networkingGroupFormResponseModel = new NetworkingGroupFormResponseModel();
 
-        //check if dto is null
-        if(networkingGroupDto == null ) throw new NetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        networkingGroupFormResponseModel.setName(networkingGroupEntity.getName());
+        networkingGroupFormResponseModel.setDescription(networkingGroupEntity.getDescription());
+
 
         if(networkingGroupEntity.getAssignedNetworkingGroupEntities() != null){
 
             //get entities from relationships
-            List<ContactEntity> contactEntities = this.assignedNetworkingGroupService.getContactEntities(networkingGroupEntity.getAssignedNetworkingGroupEntities());
-
-            networkingGroupDto.setMemberIds(this.contactService.peelOffContactIds(contactEntities));
-
+            networkingGroupFormResponseModel.setMemberIds(
+                    this.contactService.peelOffContactIds(
+                            this.assignedNetworkingGroupService.getContactEntities(
+                                    networkingGroupEntity.getAssignedNetworkingGroupEntities()
+                            )
+                    )
+            );
 
         }
 
-        this.dtoToFormResponse(networkingGroupDto);
-        return this.dtoToFormResponse(networkingGroupDto);
+        return networkingGroupFormResponseModel;
     }
 
     @Override
@@ -363,6 +367,51 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
         return returnValue;
     }
 
+    @Override
+    public List<NetworkingGroupEntity> getNetworkingGroupEntities() {
+
+        return this.networkingGroupRepository.findAll();
+    }
+
+    @Override
+    public NetworkingGroupDashBoard getNetworkingGroupEssential(NetworkingGroupEntity networkingGroupEntity) {
+
+        if(this.entityIsNull(networkingGroupEntity))
+            throw new NetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        NetworkingGroupDashBoard networkingGroupDashBoard = new NetworkingGroupDashBoard();
+
+        networkingGroupDashBoard.setCreatedAt(networkingGroupEntity.getCreatedAt());
+        networkingGroupDashBoard.setName(networkingGroupEntity.getName());
+        networkingGroupDashBoard.setDescription(networkingGroupEntity.getDescription());
+        networkingGroupDashBoard.setUpdatedAt(networkingGroupEntity.getUpdatedAt());
+        networkingGroupDashBoard.setUpdatedAt(networkingGroupEntity.getUpdatedAt());
+        networkingGroupDashBoard.setCreatedAt(networkingGroupEntity.getCreatedAt());
+        networkingGroupDashBoard.setNetworkingGroupId(networkingGroupEntity.getNetworkingGroupId());
+        networkingGroupDashBoard.setContactEssentials(
+                this.assignedNetworkingGroupService.getContactEssentials(
+                        networkingGroupEntity.getAssignedNetworkingGroupEntities()
+                )
+        );
+
+        return networkingGroupDashBoard;
+    }
+
+    @Override
+    public List<NetworkingGroupDashBoard> getNetworkingGroupEssential(List<NetworkingGroupEntity> networkingGroupEntities) {
+
+        if(this.entityIsNull(networkingGroupEntities))
+            throw new NetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<NetworkingGroupDashBoard> returnValue = new ArrayList<>();
+
+        for(NetworkingGroupEntity networkingGroup: networkingGroupEntities){
+
+            returnValue.add(this.getNetworkingGroupEssential(networkingGroup));
+        }
+
+        return returnValue;
+    }
 
 
     @Override

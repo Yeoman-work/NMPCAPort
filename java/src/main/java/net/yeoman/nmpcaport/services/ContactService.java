@@ -2,12 +2,8 @@ package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.io.request.contact.ContactDetailsRequestModel;
-import net.yeoman.nmpcaport.io.response.contact.ContactEssentials;
-import net.yeoman.nmpcaport.io.response.contact.ContactFormListResponse;
-import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
+import net.yeoman.nmpcaport.io.response.contact.*;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
-import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
@@ -27,9 +23,14 @@ public interface ContactService {
     public List<ContactDto> partialEntityToDto(List<ContactEntity> contactEntity);
 
     //contact dashboard
+    public ContactDashBoard contactDashboardData(ContactEntity contactEntity);
+    public List<ContactDashBoard> contactDashboardData(List<ContactEntity> contactEntities);
+
     //contact essentials
-    public ContactEssentials contactDashboardData(ContactEntity contactEntity);
-    public List<ContactEssentials> contactDashboardData(List<ContactEntity> contactEntities);
+    public ContactEssentials getContactEssentials(ContactEntity contactEntity);
+    public List<ContactEssentials> getContactEssentials(List<ContactEntity> contactEntities);
+
+    //get memberIds
 
 
     //create contact

@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
 import net.yeoman.nmpcaport.io.request.networkingGroup.NetworkingGroupRequestModel;
+import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupDashBoard;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupEssentials;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupFormResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
@@ -23,9 +24,11 @@ public interface NetworkingGroupService {
    public NetworkingGroupDto requestToDto(NetworkingGroupRequestModel networkingGroupRequestModel);
    public List<NetworkingGroupDto> requestToDto(List<NetworkingGroupRequestModel> networkingGroupRequestModelList);
 
+   public List<NetworkingGroupEntity> getNetworkingGroupEntities();
+
    //networking Group essentials
-//   public NetworkingGroupEssentials networkingGroupEssentials(AssignedNetworkingGroupService assignedNetworkingGroupService);
-//   public List<NetworkingGroupEssentials> networkingGroupsEssentials(List<AssignedNetworkingGroupService> assignedNetworkingGroupServiceList);
+   public NetworkingGroupDashBoard getNetworkingGroupEssential(NetworkingGroupEntity networkingGroupEntity);
+   public List<NetworkingGroupDashBoard> getNetworkingGroupEssential(List<NetworkingGroupEntity> networkingGroupEntities);
 
 
 

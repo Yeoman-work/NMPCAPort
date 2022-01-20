@@ -4,6 +4,7 @@ import net.yeoman.nmpcaport.entities.AssignedNetworkingGroupEntity;
 import net.yeoman.nmpcaport.entities.AssignedNumberEntity;
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.entities.NetworkingGroupEntity;
+import net.yeoman.nmpcaport.io.response.contact.ContactEssentials;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupEssentials;
 
@@ -23,6 +24,10 @@ public interface AssignedNetworkingGroupService {
     //get networking group essentials
     public NetworkingGroupEssentials getNetworkingGroupEssentials(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
     public List<NetworkingGroupEssentials> getNetworkingEssentials(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntityList);
+
+    //get contact essentials
+    public ContactEssentials getContactEssentials(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
+    public List<ContactEssentials> getContactEssentials(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
 
 
     //create Relationships

@@ -13,16 +13,16 @@ const ContactElement = props =>{
                 <h4 className={'text-start mb-5'}><strong>Name: </strong>{`${contact.firstName} ${contact.lastName}`}</h4>
                 <h4 className={'text-start mb-5'}><strong>Title: </strong>{contact.title}</h4>
                 <h4 className={'text-start mb-5'}><strong>Email: </strong>{contact.email}</h4>
-                <h4 className={'text-start mb-5'}><strong>Health Center: </strong>{contact.healthCenterNestedResponse.name}</h4>
-                <h6 className={'text-start mt-5 pt-4'}>updated: {contact.updatedAt? dateAndTime(contact.updatedAt): dateAndTime(contact.createdAt)}</h6>
+                <h4 className={'text-start mb-5'}><strong>Health Center: </strong>{contact.healthCenterEssentials.name}</h4>
+                {/*<h6 className={'text-start mt-5 pt-4'}>updated: {contact.updatedAt? dateAndTime(contact.updatedAt): dateAndTime(contact.createdAt)}</h6>*/}
             </div>
             <div className={'col p-3'}>
                 <h4>Networking Group(s)</h4>
                 <div className={'m-auto w-50'}>
                     <ul>
                         {
-                            contact.networkingGroupResponses?
-                                contact.networkingGroupResponses.map(({name, networkingGroupId}, index)=>{
+                            contact.networkingGroupEssentials?
+                                contact.networkingGroupEssentials.map(({name, networkingGroupId}, index)=>{
 
                                     return(
                                         <li key={index} className={'text-start'}><Link to={'/'}>{name.toUpperCase()}</Link></li>
@@ -39,8 +39,8 @@ const ContactElement = props =>{
                 <h4>Phone Number(s)</h4>
                     <div className={'height200 overflow-auto'}>
                         {
-                            contact.phoneNumberResponses?
-                                contact.phoneNumberResponses.map((phone, index)=>{
+                            contact.phoneNumbers?
+                                contact.phoneNumbers.map((phone, index)=>{
 
                                     return(
                                         <div key={index}>

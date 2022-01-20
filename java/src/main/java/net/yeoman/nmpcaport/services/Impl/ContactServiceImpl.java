@@ -4,18 +4,11 @@ import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.request.contact.ContactDetailsRequestModel;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.contact.ContactEssentials;
-import net.yeoman.nmpcaport.io.response.contact.ContactFormListResponse;
-import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
-import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
+import net.yeoman.nmpcaport.io.response.contact.*;
 import net.yeoman.nmpcaport.io.repositories.ContactRepository;
 import net.yeoman.nmpcaport.services.ContactService;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
-import net.yeoman.nmpcaport.shared.dto.NetworkingGroupDto;
-import net.yeoman.nmpcaport.shared.dto.PhoneNumberDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -145,11 +138,11 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public ContactEssentials contactDashboardData(ContactEntity contactEntity) {
+    public ContactDashBoard contactDashboardData(ContactEntity contactEntity) {
 
         if(this.entityIsNull(contactEntity)) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        ContactEssentials contactEssentials = new ContactEssentials();
+        ContactDashBoard contactEssentials = new ContactDashBoard();
 
 
         contactEssentials.setEmail(contactEntity.getEmail());
@@ -182,12 +175,12 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<ContactEssentials> contactDashboardData(List<ContactEntity> contactEntities) {
+    public List<ContactDashBoard> contactDashboardData(List<ContactEntity> contactEntities) {
 
         if(this.entityIsNull(contactEntities))
             throw  new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        List<ContactEssentials> returnValue = new ArrayList<>();
+        List<ContactDashBoard> returnValue = new ArrayList<>();
 
        for(ContactEntity contactEntity: contactEntities){
 
@@ -196,6 +189,42 @@ public class ContactServiceImpl implements ContactService {
 
         return returnValue;
     }
+
+    @Override
+    public ContactEssentials getContactEssentials(ContactEntity contactEntity) {
+
+        if(this.entityIsNull(contactEntity))
+            throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        ContactEssentials contactEssentials = new ContactEssentials();
+
+        contactEssentials.setContactId(contactEntity.getContactId());
+        contactEssentials.setTitle(contactEntity.getTitle());
+        contactEssentials.setFirstName(contactEntity.getFirstName());
+        contactEssentials.setLastName(contactEntity.getLastName());
+        contactEssentials.setEmail(contactEntity.getEmail());
+
+
+        return contactEssentials;
+    }
+
+    @Override
+    public List<ContactEssentials> getContactEssentials(List<ContactEntity> contactEntities) {
+
+        if(this.entityIsNull(contactEntities))
+            throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ContactEssentials> returnValue = new ArrayList<>();
+
+        for(ContactEntity contactEntity: contactEntities){
+
+            returnValue.add(this.getContactEssentials(contactEntity));
+        }
+
+        return returnValue;
+    }
+
+
 
     @Override
     public void createContact(ContactDetailsRequestModel contactDetailsRequestModel) {

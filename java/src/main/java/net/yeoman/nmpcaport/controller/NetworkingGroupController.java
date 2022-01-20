@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.networkingGroup.NetworkingGroupRequestModel;
+import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupDashBoard;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupFormResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
 import net.yeoman.nmpcaport.services.Impl.NetworkingGroupServiceImpl;
@@ -22,11 +23,19 @@ public class NetworkingGroupController {
 
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<NetworkingGroupResponseModel> getAllNetworkingGroups(){
+    public List<NetworkingGroupDashBoard> getAllNetworkingGroups(){
 
-        List<NetworkingGroupDto> networkingGroupDtoList = this.networkingGroupService.getAllNetworkingGroups();
+        final long start = System.currentTimeMillis();
 
-        return this.networkingGroupService.dtoToResponse(networkingGroupDtoList);
+        List<NetworkingGroupDashBoard> networkingGroupDashBoards =
+                this.networkingGroupService.getNetworkingGroupEssential(
+                        this.networkingGroupService.getNetworkingGroupEntities()
+                );
+        final long stop = System.currentTimeMillis();
+
+        System.out.println("total time: " + (stop - start));
+
+        return networkingGroupDashBoards;
     }
 
 

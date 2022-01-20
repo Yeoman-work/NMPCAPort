@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.stateRep.StateRepDetailsRequest;
+import net.yeoman.nmpcaport.io.response.stateRep.StateRepNestedResponse;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepResponse;
 import net.yeoman.nmpcaport.services.Impl.StateRepServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.StateRepDto;
@@ -20,17 +21,10 @@ public class StateRepController {
 
 
     @GetMapping
-    public List<StateRepResponse> getAllStateReps(){
-        List<StateRepResponse> returnValue = new ArrayList<>();
+    public List<StateRepNestedResponse> getAllStateReps(){
 
-        List<StateRepDto> stateRepDtoList = this.stateRepService.findAllStateReps();
 
-        for(StateRepDto rep: stateRepDtoList){
-
-            returnValue.add(new ModelMapper().map(rep, StateRepResponse.class));
-        }
-
-        return returnValue;
+        return this.stateRepService.getStateRepNestedReps(this.stateRepService.getAllEntities());
     }
 
     @GetMapping("/{stateRepId}")

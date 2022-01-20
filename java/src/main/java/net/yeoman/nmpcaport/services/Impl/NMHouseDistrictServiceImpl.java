@@ -93,7 +93,12 @@ public class NMHouseDistrictServiceImpl implements NMHouseDistrictService {
         if(this.entityIsNull(nmHouseDistrictEntity))
             throw new NMHouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        return this.utils.objectMapper().map(nmHouseDistrictEntity, NMHouseDistrictEssentialResponse.class);
+        NMHouseDistrictEssentialResponse nmHouseDistrictEssentialResponse = new NMHouseDistrictEssentialResponse();
+
+        nmHouseDistrictEssentialResponse.setHouseDistrictId(nmHouseDistrictEntity.getHouseDistrictId());
+        nmHouseDistrictEssentialResponse.setName(nmHouseDistrictEntity.getName());
+
+        return nmHouseDistrictEssentialResponse;
     }
 
     @Override

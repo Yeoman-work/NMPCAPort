@@ -23,6 +23,7 @@ const ContactDashboardView = props =>{
                     }
                 })
 
+                console.log('this')
                 console.log(contactResponses.data);
                 setContacts(contactResponses.data);
 

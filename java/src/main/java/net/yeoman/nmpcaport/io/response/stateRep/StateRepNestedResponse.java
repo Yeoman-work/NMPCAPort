@@ -1,5 +1,7 @@
 package net.yeoman.nmpcaport.io.response.stateRep;
 
+import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
+
 public class StateRepNestedResponse {
 
 
@@ -10,6 +12,9 @@ public class StateRepNestedResponse {
     private String picture;
     private String capitolRoom;
     private String streetAddress;
+    private String city;
+    private String zipCode;
+    private NMHouseDistrictEssentialResponse nmHouseDistrictEssentialResponse;
 
 
     public String getStateRepId() {
@@ -66,5 +71,30 @@ public class StateRepNestedResponse {
 
     public void setStreetAddress(String streetAddress) {
         this.streetAddress = streetAddress;
+    }
+
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public NMHouseDistrictEssentialResponse getNmHouseDistrictEssentialResponse() {
+        return nmHouseDistrictEssentialResponse;
+    }
+
+    public void setNmHouseDistrictEssentialResponse(NMHouseDistrictEssentialResponse nmHouseDistrictEssentialResponse) {
+        this.nmHouseDistrictEssentialResponse = nmHouseDistrictEssentialResponse;
     }
 }
