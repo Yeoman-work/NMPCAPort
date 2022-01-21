@@ -100,11 +100,10 @@ const networkGroupReducer = (netGrp, action) =>{
 
         case FORM_FIELDS.POPULATE_CONTACTS:
 
-            const {contactNestedResponses} = action.payload;
 
             return produce(netGrp, draft=>{
 
-                draft.contacts = [...contactNestedResponses];
+                draft.contacts = [...action.payload];
 
             })
 
@@ -160,7 +159,7 @@ const CreateNetworkingGroupView = props =>{
 
                 try {
 
-                    const contactResponse = await axios.get('http://localhost:8080/contacts/formContacts', {
+                    const contactResponse = await axios.get('http://localhost:8080/contacts/essentials', {
 
 
                         headers: {
@@ -170,7 +169,7 @@ const CreateNetworkingGroupView = props =>{
 
 
                     console.log(contactResponse.data);
-                    dispatchNetGrp({type: FORM_FIELDS.POPULATE_CONTACTS, payload: {...contactResponse.data}})
+                    dispatchNetGrp({type: FORM_FIELDS.POPULATE_CONTACTS, payload: [...contactResponse.data]})
 
 
                 } catch(error) {

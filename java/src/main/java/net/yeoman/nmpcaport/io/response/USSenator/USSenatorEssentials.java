@@ -7,12 +7,10 @@ import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.staff.StaffEssentials;
 import net.yeoman.nmpcaport.io.response.staff.StaffResponse;
 
-
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
-public class USSenatorResponse {
+public class USSenatorEssentials {
 
     private String senatorId;
     private String firstName;
@@ -25,8 +23,6 @@ public class USSenatorResponse {
     private List<StaffEssentials> staffEssentials;
     private PoliticalPartyEssentials politicalPartyEssentials;
     private List<LocationEssentialsResponse> locationEssentialsResponses;
-    private Date createdAt;
-    private Date updatedAt;
 
     public String getSenatorId() {
         return senatorId;
@@ -50,22 +46,6 @@ public class USSenatorResponse {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public String getEmail() {
@@ -108,14 +88,6 @@ public class USSenatorResponse {
         this.nextElection = nextElection;
     }
 
-    public List<LocationEssentialsResponse> getLocationEssentialsResponses() {
-        return locationEssentialsResponses;
-    }
-
-    public void setLocationEssentialsResponses(List<LocationEssentialsResponse> locationEssentialsResponses) {
-        this.locationEssentialsResponses = locationEssentialsResponses;
-    }
-
     public List<StaffEssentials> getStaffEssentials() {
         return staffEssentials;
     }
@@ -130,5 +102,13 @@ public class USSenatorResponse {
 
     public void setPoliticalPartyEssentials(PoliticalPartyEssentials politicalPartyEssentials) {
         this.politicalPartyEssentials = politicalPartyEssentials;
+    }
+
+    public List<LocationEssentialsResponse> getLocationEssentialsResponses() {
+        return locationEssentialsResponses;
+    }
+
+    public void setLocationEssentialsResponses(List<LocationEssentialsResponse> locationEssentialsResponses) {
+        this.locationEssentialsResponses = locationEssentialsResponses;
     }
 }

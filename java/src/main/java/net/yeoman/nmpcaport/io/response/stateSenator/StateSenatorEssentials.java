@@ -2,23 +2,16 @@ package net.yeoman.nmpcaport.io.response.stateSenator;
 
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyEssentials;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
-import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 
 import java.util.Date;
 
-public class StateSenatorNestedResponse {
+public class StateSenatorEssentials {
 
     private String stateSenatorId;
     private String firstName;
     private String lastName;
     private String email;
     private String picture;
-    private String capitolRoom;
-    private String StreetAddress;
-    private String city;
-    private String zipCode;
-    private Date createdAt;
-    private Date updatedAt;
     private PoliticalPartyEssentials politicalPartyEssentials;
     private SenateDistrictEssentialResponse senateDistrictEssentialResponse;
 
@@ -62,38 +55,6 @@ public class StateSenatorNestedResponse {
         this.picture = picture;
     }
 
-    public String getCapitolRoom() {
-        return capitolRoom;
-    }
-
-    public void setCapitolRoom(String capitolRoom) {
-        this.capitolRoom = capitolRoom;
-    }
-
-    public String getStreetAddress() {
-        return StreetAddress;
-    }
-
-    public void setStreetAddress(String streetAddress) {
-        StreetAddress = streetAddress;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public PoliticalPartyEssentials getPoliticalPartyEssentials() {
         return politicalPartyEssentials;
     }
@@ -108,21 +69,5 @@ public class StateSenatorNestedResponse {
 
     public void setSenateDistrictEssentialResponse(SenateDistrictEssentialResponse senateDistrictEssentialResponse) {
         this.senateDistrictEssentialResponse = senateDistrictEssentialResponse;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
     }
 }

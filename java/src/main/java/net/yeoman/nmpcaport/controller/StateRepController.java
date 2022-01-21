@@ -7,6 +7,7 @@ import net.yeoman.nmpcaport.services.Impl.StateRepServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.StateRepDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class StateRepController {
     private StateRepServiceImpl stateRepService;
 
 
-    @GetMapping
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<StateRepNestedResponse> getAllStateReps(){
 
 

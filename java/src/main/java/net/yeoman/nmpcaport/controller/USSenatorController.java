@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.UsSenator.USSenatorDetailsRequest;
+import net.yeoman.nmpcaport.io.response.USSenator.USSenatorEssentials;
 import net.yeoman.nmpcaport.io.response.USSenator.USSenatorResponse;
 import net.yeoman.nmpcaport.services.Impl.USSenatorServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.USSenatorDto;
@@ -16,27 +17,25 @@ import java.util.List;
 @RequestMapping("/usSenators")
 public class USSenatorController {
 
-    @Autowired
-    private USSenatorServiceImpl usSenatorService;
+
+    private final USSenatorServiceImpl usSenatorService;
+
+    public USSenatorController(USSenatorServiceImpl usSenatorService){
+
+        this.usSenatorService = usSenatorService;
+    }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<USSenatorResponse> getAllSenators(){
-        List<USSenatorResponse> returnValue = new ArrayList<>();
 
-        List<USSenatorDto> USSenatorDtoList = this.usSenatorService.getAllSenators();
 
-        for(USSenatorDto senator: USSenatorDtoList){
-
-            returnValue.add(new ModelMapper().map(senator, USSenatorResponse.class));
-        }
-
-        return returnValue;
+        return this.usSenatorService.getUsSenatorResponse(this.usSenatorService.getUSSenatorEntities());
     }
 
     @GetMapping(path="/{senatorId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public USSenatorResponse getSenator(@PathVariable("senatorId") String senatorId){
+    public USSenatorEssentials getSenator(@PathVariable("senatorId") String senatorId){
 
-        return new ModelMapper().map(this.usSenatorService.getSenator(senatorId), USSenatorResponse.class);
+        return this.usSenatorService.getUSSenatorEssentials(this.usSenatorService.getUSSenatorEntity(senatorId));
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},

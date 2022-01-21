@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.congressionalRep.CongressionalRepDetailsRequest;
+import net.yeoman.nmpcaport.io.response.CongressionalRepResponse.CongressionalRepEssentials;
 import net.yeoman.nmpcaport.io.response.CongressionalRepResponse.CongressionalRepResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.services.Impl.CongressionalRepServiceImpl;
@@ -17,32 +18,29 @@ import java.util.List;
 @RequestMapping("/congressionalReps")
 public class CongressionalRepController {
 
-    @Autowired
-    private CongressionalRepServiceImpl congressionalRepService;
+
+    private final CongressionalRepServiceImpl congressionalRepService;
+
+    public CongressionalRepController(CongressionalRepServiceImpl congressionalRepService){
+
+        this.congressionalRepService = congressionalRepService;
+    }
 
     @GetMapping(path = "/{congressionalRepId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public CongressionalRepResponse getCongressionalRep(@PathVariable("congressionalRepId") String congressionalRepId){
+    public CongressionalRepEssentials getCongressionalRep(@PathVariable("congressionalRepId") String congressionalRepId){
 
-        CongressionalRepDto congressionalRepDto = this.congressionalRepService.getCongressionalRep(congressionalRepId);
-
-
-        return new ModelMapper().map(congressionalRepDto, CongressionalRepResponse.class);
+       return this.congressionalRepService.getAllCongressionalRepEssentials(
+               this.congressionalRepService.getCongressionalRepEntity(congressionalRepId)
+       );
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<CongressionalRepResponse> getAllCongressionalReps(){
+    public List<CongressionalRepEssentials> getAllCongressionalReps(){
 
-        List<CongressionalRepResponse> returnValue = new ArrayList<>();
 
-        List<CongressionalRepDto> congressionalRepDtoList = this.congressionalRepService.getAllCongressionalReps();
-
-        for(CongressionalRepDto rep: congressionalRepDtoList){
-
-            returnValue.add(new ModelMapper().map(rep, CongressionalRepResponse.class));
-
-        }
-
-        return returnValue;
+        return this.congressionalRepService.getAllCongressionalRepEssentials(
+                this.congressionalRepService.getAllCongressionalRepEntities()
+        );
     }
 
 

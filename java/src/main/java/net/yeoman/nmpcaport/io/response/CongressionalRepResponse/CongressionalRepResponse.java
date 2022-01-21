@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.io.response.CongressionalRepResponse;
 
 import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
+import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
@@ -17,7 +18,7 @@ public class CongressionalRepResponse {
     private String email;
     private String picture;
     private String website;
-    private CongressionalDistrictResponse districtResponse;
+    private CongressionalDistrictEssentialsResponse congressionalDistrictEssentialsResponse;
     private PhoneNumberResponse phoneNumberResponse;
     private List<StaffResponse> staffResponses;
     private PoliticalPartyResponse politicalPartyResponse;
@@ -89,12 +90,12 @@ public class CongressionalRepResponse {
         this.updatedAt = updatedAt;
     }
 
-    public CongressionalDistrictResponse getDistrictResponse() {
-        return districtResponse;
+    public CongressionalDistrictEssentialsResponse getCongressionalDistrictEssentialsResponse() {
+        return congressionalDistrictEssentialsResponse;
     }
 
-    public void setDistrictResponse(CongressionalDistrictResponse districtResponse) {
-        this.districtResponse = districtResponse;
+    public void setCongressionalDistrictEssentialsResponse(CongressionalDistrictEssentialsResponse congressionalDistrictEssentialsResponse) {
+        this.congressionalDistrictEssentialsResponse = congressionalDistrictEssentialsResponse;
     }
 
     public PhoneNumberResponse getPhoneNumberResponse() {

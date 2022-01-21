@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.PhoneNumberEntity;
 import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
+import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberEssentials;
 import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 import net.yeoman.nmpcaport.shared.dto.PhoneNumberDto;
 
@@ -23,6 +24,9 @@ public interface PhoneNumberService {
     public List<PhoneNumberEntity> dtoToEntity(List<PhoneNumberDto> phoneNumberDtoList);
 
 
+    //Phone number essentials
+    public PhoneNumberEssentials getPhoneNumberEssentials(PhoneNumberEntity phoneNumberEntity);
+    public List<PhoneNumberEssentials> getPhoneNumberEssentials(List<PhoneNumberEntity> phoneNumberEntityList);
 
 
 

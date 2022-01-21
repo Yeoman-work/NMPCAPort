@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.io.response.stateRep.StateRepEssentials;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepNestedResponse;
 import net.yeoman.nmpcaport.services.StateRepService;
 import net.yeoman.nmpcaport.entities.*;
@@ -13,7 +14,6 @@ import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.shared.dto.StateRepDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,28 +22,32 @@ import java.util.List;
 @Service
 public class StateRepServiceImpl implements StateRepService {
 
-    @Autowired
-    private StateRepRepository stateRepRepository;
 
-    @Autowired
-    private NMHouseDistrictServiceImpl nmHouseDistrictService;
+    private final StateRepRepository stateRepRepository;
+    private final NMHouseDistrictServiceImpl nmHouseDistrictService;
+    private final PoliticalPartyServiceImpl politicalPartyService;
+    private final  CityServiceImpl cityService;
+    private final  ZipCodeServiceImpl zipCodeService;
+    private final Utils utils;
 
-    @Autowired
-    private PoliticalPartyServiceImpl politicalPartyService;
+    public StateRepServiceImpl(StateRepRepository stateRepRepository,
+                               NMHouseDistrictServiceImpl nmHouseDistrictService,
+                               PoliticalPartyServiceImpl politicalPartyService,
+                               CityServiceImpl cityService,
+                               ZipCodeServiceImpl zipCodeService,
+                               Utils utils
+    ){
 
-    @Autowired
-    private CityServiceImpl cityService;
-
-    @Autowired
-    private CountyServiceImpl countyService;
-
-    @Autowired
-    private ZipCodeServiceImpl zipCodeService;
-
+        this.stateRepRepository = stateRepRepository;
+        this.nmHouseDistrictService = nmHouseDistrictService;
+        this.politicalPartyService = politicalPartyService;
+        this.cityService = cityService;
+        this.zipCodeService = zipCodeService;
+        this.utils = utils;
+    }
 
 
-    @Autowired
-    private Utils utils;
+
 
     @Override
     public StateRepDto getStateRep(String stateRepId) {
@@ -211,6 +215,16 @@ public class StateRepServiceImpl implements StateRepService {
     }
 
     @Override
+    public StateRepEssentials getStateRepEssentials(StateRepEntity stateRepEntity) {
+        return null;
+    }
+
+    @Override
+    public List<StateRepEssentials> getStateRepEssentials(List<StateRepEntity> stateRepEntities) {
+        return null;
+    }
+
+    @Override
     public StateRepNestedResponse getStateRepNestedReps(StateRepEntity stateRepEntity) {
 
         if(this.entityIsNull(stateRepEntity))
@@ -229,6 +243,12 @@ public class StateRepServiceImpl implements StateRepService {
         stateRepNestedResponse.setZipCode(stateRepEntity.getZipCodeEntity().getName());
         stateRepNestedResponse.setNmHouseDistrictEssentialResponse(
                 this.nmHouseDistrictService.entityToEssentials(stateRepEntity.getNmHouseDistrict()
+                )
+        );
+
+        stateRepNestedResponse.setPoliticalPartyEssentials(
+                this.politicalPartyService.getPoliticalPartyEssentials(
+                        stateRepEntity.getPoliticalParty()
                 )
         );
 

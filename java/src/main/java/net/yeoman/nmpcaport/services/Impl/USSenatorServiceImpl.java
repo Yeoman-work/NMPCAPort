@@ -1,6 +1,8 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.io.response.USSenator.USSenatorEssentials;
+import net.yeoman.nmpcaport.io.response.USSenator.USSenatorResponse;
 import net.yeoman.nmpcaport.services.USSenatorService;
 import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 import net.yeoman.nmpcaport.io.response.staff.StaffResponse;
@@ -29,72 +31,33 @@ import java.util.List;
 @Service
 public class USSenatorServiceImpl implements USSenatorService {
 
-    @Autowired
-    private USSenatorRepository usSenatorRepository;
 
-    @Autowired
-    private PoliticalPartyServiceImpl politicalPartyService;
+    private final USSenatorRepository usSenatorRepository;
 
-    @Autowired
-    private Utils utils;
+    private final PoliticalPartyServiceImpl politicalPartyService;
 
-    @Override
-    public USSenatorDto getSenator(String senatorId){
+    private final StaffServiceImpl staffService;
 
-        ModelMapper modelMapper = new ModelMapper();
-        //get senator entity
-        USSenatorEntity usSenatorEntity = this.usSenatorRepository.findBySenatorId(senatorId);
+    private final OfficeAssignmentServiceImpl officeAssignmentService;
 
-        //convert to Dto
-        USSenatorDto usSenatorDto = modelMapper.map(usSenatorEntity, USSenatorDto.class);
+    private final Utils utils;
 
-        //convert political party entity to response object
-        usSenatorDto.setPoliticalPartyResponse(new ModelMapper().map(usSenatorDto.getPoliticalPartyEntity(), PoliticalPartyResponse.class));
+    public USSenatorServiceImpl(USSenatorRepository usSenatorRepository,
+                                PoliticalPartyServiceImpl politicalPartyService,
+                                StaffServiceImpl staffService,
+                                OfficeAssignmentServiceImpl officeAssignmentService,
+                                Utils utils
+                                ){
 
-        List<LocationResponse> locationResponseList = new ArrayList<>();
-        for(OfficeAssignmentEntity assignment: usSenatorDto.getOfficeAssignmentEntities()){
-
-            LocationResponse locationResponse = modelMapper.map(assignment.getLocationEntity(), LocationResponse.class);
-
-            locationResponse.setCityResponse(modelMapper.map(assignment.getLocationEntity().getCityEntity(), CityResponse.class));
-            locationResponse.setCountyResponse(modelMapper.map(assignment.getLocationEntity().getCountyEntity(), CountyResponse.class));
-            locationResponse.setZipCodeResponse(modelMapper.map(assignment.getLocationEntity().getZipCodeEntity(), ZipCodeResponse.class));
-
-            locationResponseList.add(locationResponse);
-        }
-
-        if(usSenatorDto.getStaffEntities() != null){
-
-            List<StaffResponse> staffResponses = new ArrayList<>();
-
-            for(StaffEntity staff: usSenatorDto.getStaffEntities()){
-
-                StaffDto staffDto = modelMapper.map(staff, StaffDto.class);
-
-                if(staffDto.getAssignedNumberEntities() != null){
-
-                    List<PhoneNumberResponse> phoneNumberResponses = new ArrayList<>();
-
-                    for(AssignedNumberEntity assignedNumber: staffDto.getAssignedNumberEntities()){
-
-                        phoneNumberResponses.add(modelMapper.map(assignedNumber.getPhoneNumberEntity(), PhoneNumberResponse.class));
-
-                    }
-
-                    staffDto.setPhoneNumberResponses(phoneNumberResponses);
-                }
-
-                staffResponses.add(modelMapper.map(staffDto, StaffResponse.class));
-            }
-
-            usSenatorDto.setStaffResponses(staffResponses);
-
-        }
-
-        usSenatorDto.setLocationResponses(locationResponseList);
-
-        return usSenatorDto;
+        this.usSenatorRepository = usSenatorRepository;
+        this.politicalPartyService = politicalPartyService;
+        this.staffService = staffService;
+        this.officeAssignmentService = officeAssignmentService;
+        this.utils = utils;
     }
+
+
+
 
     @Override
     public USSenatorDto createSenator(USSenatorDto senatorDto) {
@@ -183,66 +146,125 @@ public class USSenatorServiceImpl implements USSenatorService {
     }
 
     @Override
-    public List<USSenatorDto> getAllSenators() {
-        ModelMapper modelMapper = new ModelMapper();
-        List<USSenatorDto> returnValue = new ArrayList<>();
+    public USSenatorResponse getUsSenatorResponse(USSenatorEntity usSenatorEntity) {
 
-        List<USSenatorEntity> fromRepo = this.usSenatorRepository.findAll();
+        if(this.entityIsNull(usSenatorEntity))
+            throw new UsSenatorServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        for(USSenatorEntity senator: fromRepo){
+        USSenatorResponse usSenatorResponse = new USSenatorResponse();
 
-            USSenatorDto usSenatorDto = modelMapper.map(senator, USSenatorDto.class);
+        usSenatorResponse.setSenatorId(usSenatorEntity.getSenatorId());
+        usSenatorResponse.setFirstName(usSenatorEntity.getFirstName());
+        usSenatorResponse.setLastName(usSenatorEntity.getLastName());
+        usSenatorResponse.setEmail(usSenatorEntity.getEmail());
+        usSenatorResponse.setPicture(usSenatorEntity.getPicture());
+        usSenatorResponse.setElected(usSenatorEntity.getElected());
+        usSenatorResponse.setWebsite(usSenatorEntity.getWebsite());
+        usSenatorResponse.setNextElection(usSenatorEntity.getNextElection());
 
-            usSenatorDto.setPoliticalPartyResponse(new ModelMapper().map(usSenatorDto.getPoliticalPartyEntity(), PoliticalPartyResponse.class));
+        usSenatorResponse.setLocationEssentialsResponses(
+                this.officeAssignmentService.getLocationEssentials(
+                        usSenatorEntity.getOfficeAssignmentEntities()
+                )
+        );
 
-            if(usSenatorDto.getOfficeAssignmentEntities() != null || usSenatorDto.getOfficeAssignmentEntities().size() > 0){
+        usSenatorResponse.setStaffEssentials(
+                this.staffService.getStaffEssentials(
+                        usSenatorEntity.getStaffEntities()
+                )
+        );
 
-                List<LocationResponse> officeLocations = new ArrayList<>();
+        usSenatorResponse.setPoliticalPartyEssentials(
+                this.politicalPartyService.getPoliticalPartyEssentials(
+                        usSenatorEntity.getPoliticalPartyEntity()
+                )
+        );
 
-                for(OfficeAssignmentEntity officeAssignment: usSenatorDto.getOfficeAssignmentEntities()){
+        return usSenatorResponse;
+    }
 
-                    LocationResponse locationResponse = modelMapper.map(officeAssignment.getLocationEntity(), LocationResponse.class);
-                    locationResponse.setCityResponse(modelMapper.map(officeAssignment.getLocationEntity().getCityEntity(), CityResponse.class));
-                    locationResponse.setCountyResponse(modelMapper.map(officeAssignment.getLocationEntity().getCountyEntity(), CountyResponse.class));
-                    locationResponse.setZipCodeResponse(modelMapper.map(officeAssignment.getLocationEntity().getZipCodeEntity(), ZipCodeResponse.class));
+    @Override
+    public List<USSenatorResponse> getUsSenatorResponse(List<USSenatorEntity> usSenatorEntities) {
 
-                    officeLocations.add(locationResponse);
-                }
+        if(this.entityIsNull(usSenatorEntities))
+            throw new UsSenatorServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-                usSenatorDto.setLocationResponses(officeLocations);
-            }
+        List<USSenatorResponse> returnValue = new ArrayList<>();
 
-            if(usSenatorDto.getStaffEntities() != null){
+        for(USSenatorEntity usSenatorEntity: usSenatorEntities){
 
-                List<StaffResponse> staffResponses = new ArrayList<>();
-
-                for(StaffEntity staffEntity: usSenatorDto.getStaffEntities()){
-
-                    StaffResponse staffResponse = modelMapper.map(staffEntity, StaffResponse.class);
-
-                    if(staffEntity.getAssignedNumberEntities() != null){
-
-                        List<PhoneNumberResponse> phoneNumberResponses = new ArrayList<>();
-
-                        for(AssignedNumberEntity assignedNumber: staffEntity.getAssignedNumberEntities()){
-
-                            phoneNumberResponses.add(modelMapper.map(assignedNumber.getPhoneNumberEntity(), PhoneNumberResponse.class));
-                        }
-
-                        staffResponse.setPhoneNumberResponses(phoneNumberResponses);
-                    }
-
-                    staffResponses.add(staffResponse);
-                }
-
-                usSenatorDto.setStaffResponses(staffResponses);
-            }
-
-
-            returnValue.add(usSenatorDto);
-
+            returnValue.add(this.getUsSenatorResponse(usSenatorEntity));
         }
 
         return returnValue;
+    }
+
+
+    @Override
+    public List<USSenatorEntity> getUSSenatorEntities() {
+        return this.usSenatorRepository.findAll();
+    }
+
+    @Override
+    public USSenatorEssentials getUSSenatorEssentials(USSenatorEntity usSenatorEntity) {
+
+        if(this.entityIsNull(usSenatorEntity))
+            throw new UsSenatorServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        USSenatorEssentials usSenatorEssentials = new USSenatorEssentials();
+
+        usSenatorEssentials.setSenatorId(usSenatorEntity.getSenatorId());
+        usSenatorEssentials.setFirstName(usSenatorEntity.getFirstName());
+        usSenatorEssentials.setLastName(usSenatorEntity.getLastName());
+        usSenatorEssentials.setEmail(usSenatorEntity.getEmail());
+        usSenatorEssentials.setWebsite(usSenatorEntity.getWebsite());
+        usSenatorEssentials.setPicture(usSenatorEntity.getPicture());
+        usSenatorEssentials.setElected(usSenatorEntity.getElected());
+        usSenatorEssentials.setNextElection(usSenatorEntity.getNextElection());
+
+        usSenatorEssentials.setPoliticalPartyEssentials(
+                this.politicalPartyService.getPoliticalPartyEssentials(usSenatorEntity.getPoliticalPartyEntity()
+                )
+        );
+
+        usSenatorEssentials.setStaffEssentials(
+                this.staffService.getStaffEssentials(
+                        usSenatorEntity.getStaffEntities()
+                )
+        );
+
+        usSenatorEssentials.setLocationEssentialsResponses(
+                this.officeAssignmentService.getLocationEssentials(
+                        usSenatorEntity.getOfficeAssignmentEntities()
+                )
+        );
+
+        return usSenatorEssentials;
+    }
+
+    @Override
+    public List<USSenatorEssentials> getUSSenatorEssentials(List<USSenatorEntity> usSenatorEntities) {
+
+        if(entityIsNull(usSenatorEntities))
+            throw new UsSenatorServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<USSenatorEssentials> returnValue = new ArrayList<>();
+
+        for(USSenatorEntity usSenator: usSenatorEntities){
+
+            returnValue.add(this.getUSSenatorEssentials(usSenator));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public Boolean entityIsNull(USSenatorEntity usSenatorEntity) {
+        return usSenatorEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<USSenatorEntity> usSenatorEntities) {
+        return usSenatorEntities == null;
     }
 }

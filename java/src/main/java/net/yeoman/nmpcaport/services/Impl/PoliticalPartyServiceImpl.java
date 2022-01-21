@@ -1,8 +1,10 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.entities.PhoneNumberEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.PoliticalPartyServiceException;
 import net.yeoman.nmpcaport.io.request.politicalParty.PoliticalPartyDetailsRequest;
+import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyEssentials;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.services.PoliticalPartyService;
 import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
@@ -108,6 +110,20 @@ public class PoliticalPartyServiceImpl implements PoliticalPartyService {
         }
 
         return politicalPartyEntity;
+    }
+
+    @Override
+    public PoliticalPartyEssentials getPoliticalPartyEssentials(PoliticalPartyEntity politicalPartyEntity) {
+
+        if(this.entityIsNull(politicalPartyEntity))
+            throw new PoliticalPartyServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        PoliticalPartyEssentials politicalPartyEssentials = new PoliticalPartyEssentials();
+
+        politicalPartyEssentials.setName(politicalPartyEntity.getName());
+        politicalPartyEssentials.setPartyId(politicalPartyEntity.getPartyId());
+
+        return politicalPartyEssentials;
     }
 
     @Override

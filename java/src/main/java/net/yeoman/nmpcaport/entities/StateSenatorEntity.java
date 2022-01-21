@@ -1,7 +1,5 @@
 package net.yeoman.nmpcaport.entities;
 
-import org.springframework.stereotype.Controller;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -79,13 +77,8 @@ public class StateSenatorEntity implements Serializable {
     @JoinColumn(name = "zip_code_entity_id")
     private ZipCodeEntity zipCodeEntity;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "nmSenatorsCommittees",
-            joinColumns = @JoinColumn(name = "state_senator_entity_id"),
-            inverseJoinColumns = @JoinColumn(name = "n_m_senate_committee_entity_id")
-    )
-    private List<NMSenateCommitteeEntity> committees;
+    @OneToMany(mappedBy = "stateSenatorEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<InterimCommitteeAssignmentEntity> interimCommitteeAssignments;
 
     public StateSenatorEntity() {
     }
@@ -178,12 +171,12 @@ public class StateSenatorEntity implements Serializable {
         this.senateDistrictEntity = senateDistrictEntity;
     }
 
-    public List<NMSenateCommitteeEntity> getCommittees() {
-        return committees;
+    public List<InterimCommitteeAssignmentEntity> getInterimCommitteeAssignments() {
+        return interimCommitteeAssignments;
     }
 
-    public void setCommittees(List<NMSenateCommitteeEntity> committees) {
-        this.committees = committees;
+    public void setInterimCommitteeAssignments(List<InterimCommitteeAssignmentEntity> interimCommitteeAssignments) {
+        this.interimCommitteeAssignments = interimCommitteeAssignments;
     }
 
     public PoliticalPartyEntity getPoliticalPartyEntity() {

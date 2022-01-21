@@ -82,7 +82,6 @@ public class USSenatorEntity implements Serializable {
     @OneToMany(mappedBy = "usSenatorEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AssignedNumberEntity> assignedNumberEntities;
 
-
     public USSenatorEntity() {
     }
 

@@ -1,13 +1,10 @@
 package net.yeoman.nmpcaport.io.response.staff;
 
-import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
 import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberEssentials;
-import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 
-import java.util.Date;
 import java.util.List;
 
-public class StaffResponse {
+public class StaffEssentials {
 
     private String staffId;
     private String firstName;
@@ -15,9 +12,6 @@ public class StaffResponse {
     private String lastName;
     private String email;
     private List<PhoneNumberEssentials> phoneNumberEssentials;
-    private Date createdAt;
-    private Date updatedAt;
-
 
     public String getStaffId() {
         return staffId;
@@ -33,6 +27,14 @@ public class StaffResponse {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getLastName() {
@@ -51,35 +53,11 @@ public class StaffResponse {
         this.email = email;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public List<PhoneNumberEssentials> getPhoneNumberEssentials() {
         return phoneNumberEssentials;
     }
 
     public void setPhoneNumberEssentials(List<PhoneNumberEssentials> phoneNumberEssentials) {
         this.phoneNumberEssentials = phoneNumberEssentials;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 }

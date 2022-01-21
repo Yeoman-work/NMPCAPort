@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
 import net.yeoman.nmpcaport.services.StateSenatorService;
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
@@ -150,5 +151,67 @@ public class StateSenatorServiceImpl implements StateSenatorService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public List<StateSenatorEntity> getStateSenatorEntities() {
+        return this.stateSenatorRepository.findAll();
+    }
+
+    @Override
+    public StateSenatorNestedResponse stateSenatorDashboardData(StateSenatorEntity stateSenatorEntity) {
+
+        if(this.entityIsNull(stateSenatorEntity))
+            throw new StateSenatorServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        StateSenatorNestedResponse stateSenatorNestedResponse = new StateSenatorNestedResponse();
+
+        stateSenatorNestedResponse.setFirstName(stateSenatorEntity.getFirstName());
+        stateSenatorNestedResponse.setLastName(stateSenatorEntity.getLastName());
+        stateSenatorNestedResponse.setStateSenatorId(stateSenatorEntity.getStateSenatorId());
+        stateSenatorNestedResponse.setStreetAddress(stateSenatorEntity.getStreetAddress());
+        stateSenatorNestedResponse.setEmail(stateSenatorEntity.getEmail());
+        stateSenatorNestedResponse.setCapitolRoom(stateSenatorEntity.getCapitolRoom());
+        stateSenatorNestedResponse.setPicture(stateSenatorEntity.getPicture());
+        stateSenatorNestedResponse.setCity(stateSenatorEntity.getCityEntity().getName());
+        stateSenatorNestedResponse.setZipCode(stateSenatorEntity.getZipCodeEntity().getName());
+        stateSenatorNestedResponse.setPoliticalPartyEssentials(
+                this.politicalPartyService.getPoliticalPartyEssentials(
+                        stateSenatorEntity.getPoliticalPartyEntity()
+                )
+        );
+        stateSenatorNestedResponse.setSenateDistrictEssentialResponse(
+                this.senateDistrictService.essentialsToEntity(
+                        stateSenatorEntity.getSenateDistrictEntity()
+                )
+        );
+
+        return stateSenatorNestedResponse;
+    }
+
+    @Override
+    public List<StateSenatorNestedResponse> stateSenatorDashboardData(List<StateSenatorEntity> stateSenatorEntities) {
+
+        if(this.entityIsNull(stateSenatorEntities))
+            throw new StateSenatorServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<StateSenatorNestedResponse> returnValue = new ArrayList<>();
+
+        for(StateSenatorEntity stateSenator: stateSenatorEntities){
+
+            returnValue.add(this.stateSenatorDashboardData(stateSenator));
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public Boolean entityIsNull(StateSenatorEntity stateSenatorEntity) {
+        return stateSenatorEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<StateSenatorEntity> stateSenatorEntities) {
+        return stateSenatorEntities == null;
     }
 }

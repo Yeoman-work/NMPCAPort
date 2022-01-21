@@ -1,6 +1,8 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.*;
+import net.yeoman.nmpcaport.exception.StaffServiceException;
+import net.yeoman.nmpcaport.io.response.staff.StaffEssentials;
 import net.yeoman.nmpcaport.services.AssignedNumberService;
 import net.yeoman.nmpcaport.services.StaffService;
 import net.yeoman.nmpcaport.exception.CongressionalRepServiceException;
@@ -23,14 +25,21 @@ import java.util.List;
 @Service
 public class StaffServiceImpl implements StaffService {
 
-    @Autowired
-    private StaffRepository staffRepository;
+    private final StaffRepository staffRepository;
+
+
+    public StaffServiceImpl(StaffRepository staffRepository
+
+                            ){
+
+        this.staffRepository = staffRepository;
+
+    }
+
+
 
     @Autowired
     private USSenatorServiceImpl usSenatorService;
-
-    @Autowired
-    private CongressionalRepServiceImpl congressionalRepService;
 
     @Autowired
     PhoneNumberServiceImpl phoneNumberService;
@@ -148,84 +157,55 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public StaffDto createStaffMemberForCongressionalRep(StaffDto staffDto) {
-        //mapper object
-        ModelMapper modelMapper = new ModelMapper();
 
-        //convert staff Dto to entity
-        StaffEntity staffEntity = modelMapper.map(staffDto, StaffEntity.class);
+        return  null;
+    }
 
-        staffEntity.setStaffId(utils.generateRandomID());
+    @Override
+    public StaffEssentials getStaffEssentials(StaffEntity staffEntity) {
 
-        while(this.staffRepository.existsByStaffId(staffEntity.getStaffId())){
+        if(this.entityIsNull(staffEntity))
+            throw new StaffServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-            staffEntity.setStaffId(utils.generateRandomID());
+        StaffEssentials staffEssentials = new StaffEssentials();
+
+        staffEssentials.setTitle(staffEntity.getTitle());
+        staffEssentials.setFirstName(staffEntity.getFirstName());
+        staffEssentials.setLastName(staffEntity.getLastName());
+        staffEssentials.setStaffId(staffEntity.getStaffId());
+        staffEssentials.setEmail(staffEntity.getEmail());
+        staffEssentials.setPhoneNumberEssentials(
+                this.assignedNumberService.getPhoneNumberEssentials(
+                        staffEntity.getAssignedNumberEntities()
+                )
+        );
+
+        return staffEssentials;
+    }
+
+    @Override
+    public List<StaffEssentials> getStaffEssentials(List<StaffEntity> staffEntities) {
+
+        if(this.entityIsNull(staffEntities))
+            throw new StaffServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<StaffEssentials> returnValue = new ArrayList<>();
+
+        for(StaffEntity staffEntity: staffEntities){
+
+            returnValue.add(this.getStaffEssentials(staffEntity));
         }
 
-        CongressionalRepEntity congressionalRepEntity = this.congressionalRepService.getCongressionalRepEntity(staffDto.getRep());
+        return returnValue;
+    }
 
-        if(congressionalRepEntity == null) throw new CongressionalRepServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+    @Override
+    public Boolean entityIsNull(StaffEntity staffEntity) {
+        return staffEntity == null;
+    }
 
-        staffEntity.setCongressionalRepEntity(congressionalRepEntity);
-
-        StaffEntity savedStaffMember = this.staffRepository.save(staffEntity);
-        //convert staff entity to DTO
-        StaffDto savedStaffDto = modelMapper.map(savedStaffMember, StaffDto.class);
-
-        //check phone number list is present
-        if(staffDto.getPhoneNumberList() != null){
-
-            //assigned number entity
-            List<PhoneNumberResponse> phoneNumberResponses = new ArrayList<>();
-
-            //loop through phone number request
-            for(PhoneNumberRequest phoneNumber: staffDto.getPhoneNumberList()){
-
-                //convert phone number request to dto
-                PhoneNumberDto phoneNumberDto = modelMapper.map(phoneNumber, PhoneNumberDto.class);
-
-                //check if phone number exist
-                if(this.phoneNumberService.phoneNumberExist(phoneNumberDto.getNumber())) throw new PhoneNumberServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
-                //assign phone number id
-                phoneNumberDto.setPhoneNumberId(utils.generateRandomID());
-                //check if id is unique
-                while(this.phoneNumberService.phoneNumberIdExist(phoneNumberDto.getPhoneNumberId())){
-
-                    phoneNumberDto.setPhoneNumberId(utils.generateRandomID());
-                }
-
-                //phone number entity
-                PhoneNumberEntity phoneNumberEntity = modelMapper.map(phoneNumberDto, PhoneNumberEntity.class);
-
-                //save phone number
-                PhoneNumberEntity savedPhoneNumber = this.phoneNumberService.savePhoneNumber(phoneNumberEntity);
-
-                //new assigned Number entity
-                AssignedNumberEntity assignedNumberEntity = new AssignedNumberEntity();
-
-                //assign public ID to assigment entity
-                assignedNumberEntity.setAssignmentId(utils.generateRandomID());
-
-                while (this.assignedNumberService.existByAssignmentId(assignedNumberEntity.getAssignmentId())){
-
-                    assignedNumberEntity.setAssignmentId(utils.generateRandomID());
-                }
-
-                //save staff member
-                assignedNumberEntity.setStaffEntity(savedStaffMember);
-                //saved phone number
-                assignedNumberEntity.setPhoneNumberEntity(savedPhoneNumber);
-                //save assignment
-                //AssignedNumberEntity savedAssignmentEntity = this.assignedNumberService.createAssignedNumber(assignedNumberEntity);
-
-                //add assignment to list
-                //phoneNumberResponses.add(modelMapper.map(savedAssignmentEntity.getPhoneNumberEntity(), PhoneNumberResponse.class));
-            }
-
-
-            // saved responses to dto
-            savedStaffDto.setPhoneNumberResponses(phoneNumberResponses);
-        }
-
-        return savedStaffDto;
+    @Override
+    public Boolean entityIsNull(List<StaffEntity> staffEntities) {
+        return staffEntities == null;
     }
 }

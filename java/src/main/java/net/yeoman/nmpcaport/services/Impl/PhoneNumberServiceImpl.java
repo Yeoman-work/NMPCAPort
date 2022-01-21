@@ -5,6 +5,7 @@ import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.PhoneNumberServiceException;
 import net.yeoman.nmpcaport.io.repositories.PhoneNumberRepository;
 import net.yeoman.nmpcaport.io.request.PhoneNumberRequest.PhoneNumberRequest;
+import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberEssentials;
 import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
 import net.yeoman.nmpcaport.services.PhoneNumberService;
 import net.yeoman.nmpcaport.shared.dto.PhoneNumberDto;
@@ -179,6 +180,36 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
         return returnValue;
     }
 
+    @Override
+    public PhoneNumberEssentials getPhoneNumberEssentials(PhoneNumberEntity phoneNumberEntity) {
+
+        if(this.entityIsNull(phoneNumberEntity))
+            throw new PhoneNumberServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        PhoneNumberEssentials phoneNumberEssentials = new PhoneNumberEssentials();
+
+        phoneNumberEssentials.setPhoneNumberId(phoneNumberEntity.getPhoneNumberId());
+        phoneNumberEssentials.setNumber(phoneNumberEntity.getNumber());
+        phoneNumberEssentials.setDescription(phoneNumberEntity.getDescription());
+
+        return phoneNumberEssentials;
+    }
+
+    @Override
+    public List<PhoneNumberEssentials> getPhoneNumberEssentials(List<PhoneNumberEntity> phoneNumberEntityList) {
+
+        if(this.entityIsNull(phoneNumberEntityList))
+            throw new PhoneNumberServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<PhoneNumberEssentials> returnValue = new ArrayList<>();
+
+        for(PhoneNumberEntity phoneNumber: phoneNumberEntityList){
+
+            returnValue.add(this.getPhoneNumberEssentials(phoneNumber));
+        }
+
+        return returnValue;
+    }
 
 
     @Override

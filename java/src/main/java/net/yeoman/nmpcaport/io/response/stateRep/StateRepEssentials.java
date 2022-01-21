@@ -1,24 +1,17 @@
 package net.yeoman.nmpcaport.io.response.stateRep;
 
-import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
 import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyEssentials;
 
-public class StateRepNestedResponse {
-
+public class StateRepEssentials {
 
     private String stateRepId;
     private String firstName;
     private String lastName;
     private String email;
     private String picture;
-    private String capitolRoom;
-    private String streetAddress;
-    private String city;
-    private String zipCode;
     private NMHouseDistrictEssentialResponse nmHouseDistrictEssentialResponse;
     private PoliticalPartyEssentials politicalPartyEssentials;
-
 
     public String getStateRepId() {
         return stateRepId;
@@ -58,39 +51,6 @@ public class StateRepNestedResponse {
 
     public void setPicture(String picture) {
         this.picture = picture;
-    }
-
-    public String getCapitolRoom() {
-        return capitolRoom;
-    }
-
-    public void setCapitolRoom(String capitolRoom) {
-        this.capitolRoom = capitolRoom;
-    }
-
-    public String getStreetAddress() {
-        return streetAddress;
-    }
-
-    public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
-    }
-
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
     }
 
     public NMHouseDistrictEssentialResponse getNmHouseDistrictEssentialResponse() {

@@ -1,7 +1,9 @@
 package net.yeoman.nmpcaport.services;
 
+import net.yeoman.nmpcaport.entities.PhoneNumberEntity;
 import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
 import net.yeoman.nmpcaport.io.request.politicalParty.PoliticalPartyDetailsRequest;
+import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyEssentials;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.shared.dto.PoliticalPartyDto;
 
@@ -19,6 +21,9 @@ public interface PoliticalPartyService {
 
     //generate entity with unique id
     public PoliticalPartyEntity generateUniqueId(PoliticalPartyEntity politicalPartyEntity);
+
+    //political party essentials
+    public PoliticalPartyEssentials getPoliticalPartyEssentials(PoliticalPartyEntity politicalPartyEntity);
 
     //save political party
     public PoliticalPartyEntity savePoliticalEntity(PoliticalPartyEntity politicalPartyEntity);

@@ -84,6 +84,9 @@ public class StateRepEntity implements Serializable {
     @JsonIgnore
     private List<AssignedNumberEntity> assignedNumberEntities;
 
+    @OneToMany(mappedBy = "stateRepEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<InterimCommitteeAssignmentEntity> interimCommitteeAssignments;
+
 
 
     public StateRepEntity() {
@@ -240,4 +243,11 @@ public class StateRepEntity implements Serializable {
         this.politicalParty = politicalParty;
     }
 
+    public List<InterimCommitteeAssignmentEntity> getInterimCommitteeAssignments() {
+        return interimCommitteeAssignments;
+    }
+
+    public void setInterimCommitteeAssignments(List<InterimCommitteeAssignmentEntity> interimCommitteeAssignments) {
+        this.interimCommitteeAssignments = interimCommitteeAssignments;
+    }
 }

@@ -29,6 +29,7 @@ const USSenatorsDashboard = props =>{
 
             }catch(error){
 
+                console.log(error.response)
 
             }
         })()

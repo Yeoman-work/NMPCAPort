@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.StateRepEntity;
+import net.yeoman.nmpcaport.io.response.stateRep.StateRepEssentials;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepNestedResponse;
 import net.yeoman.nmpcaport.shared.dto.StateRepDto;
 
@@ -22,6 +23,10 @@ public interface StateRepService {
 
     //get all state rep entities
     public List<StateRepEntity> getAllEntities();
+
+    //State rep essentials
+    public StateRepEssentials getStateRepEssentials(StateRepEntity stateRepEntity);
+    public List<StateRepEssentials> getStateRepEssentials(List<StateRepEntity> stateRepEntities);
 
     //state Rep dashboard
     public StateRepNestedResponse getStateRepNestedReps(StateRepEntity stateRepEntity);

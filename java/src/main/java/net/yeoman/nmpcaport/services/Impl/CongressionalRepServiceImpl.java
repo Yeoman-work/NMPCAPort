@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.io.response.CongressionalRepResponse.CongressionalRepEssentials;
 import net.yeoman.nmpcaport.services.CongressionalRepService;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.LocationResponse.LocationResponse;
@@ -28,105 +29,39 @@ import java.util.List;
 @Service
 public class CongressionalRepServiceImpl implements CongressionalRepService {
 
-    @Autowired
-    private CongressionalRepRepository congressionalRepRepository;
 
-    @Autowired
-    private CongressionalDistrictServiceImpl congressionalDistrictService;
+    private final CongressionalRepRepository congressionalRepRepository;
+    private final CongressionalDistrictServiceImpl congressionalDistrictService;
+    private final PoliticalPartyServiceImpl politicalPartyService;
+    private final AssignedNumberServiceImpl assignedNumberService;
+    private final OfficeAssignmentServiceImpl officeAssignmentService;
+    private final StaffServiceImpl staffService;
+    private final Utils utils;
 
-    @Autowired
-    private PoliticalPartyServiceImpl politicalPartyService;
+    public CongressionalRepServiceImpl(CongressionalDistrictServiceImpl congressionalDistrictService,
+                                       CongressionalRepRepository congressionalRepRepository,
+                                       PoliticalPartyServiceImpl politicalPartyService,
+                                       AssignedNumberServiceImpl assignedNumberService,
+                                       OfficeAssignmentServiceImpl officeAssignmentService,
+                                       StaffServiceImpl staffService,
+                                       Utils utils
+    ){
 
-    @Autowired
-    private Utils utils;
+        this.congressionalRepRepository = congressionalRepRepository;
+        this.congressionalDistrictService = congressionalDistrictService;
+        this.politicalPartyService = politicalPartyService;
+        this.assignedNumberService = assignedNumberService;
+        this.officeAssignmentService = officeAssignmentService;
+        this.staffService = staffService;
+        this.utils = utils;
+    }
+
 
 
     @Override
     public CongressionalRepDto getCongressionalRep(String congressionalRepId) {
-        //get congressional Rep entity
-        CongressionalRepEntity congressionalRepEntity = this.congressionalRepRepository.findByCongressionalRepId(congressionalRepId);
-        //check if id was able to fetch a valid congressional rep
-        if(congressionalRepEntity == null) throw new CongressionalRepServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-        //create mapper for Dto
-        ModelMapper modelMapper = new ModelMapper();
-
-        //convert congressional rep to DTO
-        CongressionalRepDto congressionalRepDto = modelMapper.map(congressionalRepEntity, CongressionalRepDto.class);
-
-        //check for district entity
-        if(congressionalRepDto.getDistrictEntity() != null){
-            //convert district entity to response
-            congressionalRepDto.setDistrictResponse(modelMapper.map(congressionalRepDto.getDistrictEntity(), CongressionalDistrictResponse.class));
-        }
-
-        //convert political party
-        if(congressionalRepDto.getPoliticalPartyEntity() != null){
-
-            congressionalRepDto.setPoliticalPartyResponse(modelMapper.map(congressionalRepDto.getPoliticalPartyEntity(), PoliticalPartyResponse.class));
-        }
-
-        //check for staff entities
-        if(congressionalRepDto.getStaffEntities() != null){
-            List<StaffResponse> staffResponses = new ArrayList<>();
-
-            //convert staff entities to responses
-            for(StaffEntity staffEntity: congressionalRepDto.getStaffEntities()){
-
-                StaffResponse staffResponse = modelMapper.map(staffEntity, StaffResponse.class);
-
-                //convert phone number entities to responses
-                if(staffEntity.getAssignedNumberEntities() != null){
-                    List<PhoneNumberResponse> phoneNumberResponses = new ArrayList<>();
-
-                    for(AssignedNumberEntity assignedNumber: staffEntity.getAssignedNumberEntities()){
-
-                        phoneNumberResponses.add(modelMapper.map(assignedNumber.getPhoneNumberEntity(), PhoneNumberResponse.class));
-                    }
-
-                    staffResponse.setPhoneNumberResponses(phoneNumberResponses);
-
-                }
-
-                staffResponses.add(staffResponse);
-
-            }
-            congressionalRepDto.setStaffResponses(staffResponses);
-        }
-
-        //convert office assignment entities to location responses
-        if(congressionalRepDto.getOfficeAssignmentEntities() != null){
-
-            List<LocationResponse> locationResponses = new ArrayList<>();
-
-            for(OfficeAssignmentEntity officeAssignment: congressionalRepDto.getOfficeAssignmentEntities()){
-
-                LocationResponse locationResponse = modelMapper.map(officeAssignment.getLocationEntity(), LocationResponse.class);
-
-                if(officeAssignment.getLocationEntity().getCityEntity() != null){
-
-                    locationResponse.setCityResponse(modelMapper.map(officeAssignment.getLocationEntity().getCityEntity(), CityResponse.class));
-                }
-
-                if(officeAssignment.getLocationEntity().getZipCodeEntity() != null){
-
-                    locationResponse.setZipCodeResponse(modelMapper.map(officeAssignment.getLocationEntity().getZipCodeEntity(), ZipCodeResponse.class));
-                }
-
-                if(officeAssignment.getLocationEntity().getCountyEntity() != null){
-
-                    locationResponse.setCountyResponse(modelMapper.map(officeAssignment.getLocationEntity().getCountyEntity(), CountyResponse.class));
-                }
-
-                locationResponses.add(locationResponse);
-            }
-
-            congressionalRepDto.setLocationResponses(locationResponses);
-        }
-
-
-
-        return congressionalRepDto;
+        return null;
     }
 
     @Override
@@ -237,99 +172,75 @@ public class CongressionalRepServiceImpl implements CongressionalRepService {
     }
 
     @Override
-    public List<CongressionalRepDto> getAllCongressionalReps() {
+    public List<CongressionalRepEntity> getAllCongressionalRepEntities() {
+        return this.congressionalRepRepository.findAll();
+    }
 
-        List<CongressionalRepDto> returnValue = new ArrayList<>();
+    @Override
+    public CongressionalRepEssentials getAllCongressionalRepEssentials(CongressionalRepEntity congressionalRepEntity) {
 
-        //get all reps
-        List<CongressionalRepEntity> allReps = this.congressionalRepRepository.findAll();
+        if(this.entityIsNull(congressionalRepEntity))
+            throw new CongressionalRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        ModelMapper modelMapper = new ModelMapper();
-        //convert reps to repDTOs
-        for(CongressionalRepEntity rep: allReps){
+        CongressionalRepEssentials congressionalRepEssentials = new CongressionalRepEssentials();
 
-            //convert dto
-            CongressionalRepDto repDto = modelMapper.map(rep, CongressionalRepDto.class);
+        congressionalRepEssentials.setFirstName(congressionalRepEntity.getFirstName());
+        congressionalRepEssentials.setLastName(congressionalRepEntity.getLastName());
+        congressionalRepEssentials.setEmail(congressionalRepEntity.getEmail());
+        congressionalRepEssentials.setPicture(congressionalRepEntity.getPicture());
+        congressionalRepEssentials.setWebsite(congressionalRepEntity.getWebsite());
+        congressionalRepEssentials.setCongressionalRepId(congressionalRepEntity.getCongressionalRepId());
+        congressionalRepEssentials.setLocationEssentialsResponses(
+                this.officeAssignmentService.getLocationEssentials(
+                        congressionalRepEntity.getOfficeAssignmentEntities()
+                )
+        );
 
-            //check for district
-            if(rep.getDistrictEntity() != null){
+        congressionalRepEssentials.setPhoneNumberEssentials(
+                this.assignedNumberService.getPhoneNumberEssentials(
+                        congressionalRepEntity.getAssignedNumberEntities()
+                )
+        );
 
-                //convert district to response if found
+        congressionalRepEssentials.setStaffEssentials(
+                this.staffService.getStaffEssentials(
+                        congressionalRepEntity.getStaffEntities()
+                )
+        );
 
-                repDto.setDistrictResponse(modelMapper.map(rep.getDistrictEntity(), CongressionalDistrictResponse.class));
-            }
+        congressionalRepEssentials.setCongressionalDistrictEssentialsResponse(
+                this.congressionalDistrictService.entityToEssentials(
+                        congressionalRepEntity.getDistrictEntity()
+                )
+        );
+        return congressionalRepEssentials;
+    }
 
-            //check for party
-            if(rep.getPoliticalPartyEntity() != null){
+    @Override
+    public List<CongressionalRepEssentials> getAllCongressionalRepEssentials(List<CongressionalRepEntity> congressionalRepEntities) {
 
-                //convert party to response
-                repDto.setPoliticalPartyResponse(modelMapper.map(rep.getPoliticalPartyEntity(), PoliticalPartyResponse.class));
-            }
+        if(this.entityIsNull(congressionalRepEntities))
+            throw new CongressionalRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-            //check for number assignments
-            if(rep.getAssignedNumberEntities() != null){
-                //phone number response list
-                List<PhoneNumberResponse> phoneNumberResponses = new ArrayList<>();
-                //cycle through responses
-                for(AssignedNumberEntity assigned: rep.getAssignedNumberEntities()){
+        List<CongressionalRepEssentials> returnValue = new ArrayList<>();
 
-                    PhoneNumberResponse phoneNumberResponse = modelMapper.map(assigned.getPhoneNumberEntity(), PhoneNumberResponse.class);
+        for(CongressionalRepEntity congressionalRepEntity: congressionalRepEntities){
 
-                    phoneNumberResponses.add(phoneNumberResponse);
-
-                }
-
-                repDto.setPhoneNumberResponse(phoneNumberResponses);
-            }
-
-            if(repDto.getStaffEntities() != null){
-                List<StaffResponse> staffResponses = new ArrayList<>();
-
-                for(StaffEntity staffEntity: repDto.getStaffEntities()){
-
-                    StaffResponse staffResponse = modelMapper.map(staffEntity, StaffResponse.class);
-
-                    if(staffEntity.getAssignedNumberEntities() != null){
-
-                        List<PhoneNumberResponse> phoneNumberResponses= new ArrayList<>();
-
-                        for(AssignedNumberEntity assignedNumber: staffEntity.getAssignedNumberEntities()){
-
-                            phoneNumberResponses.add(modelMapper.map(assignedNumber, PhoneNumberResponse.class));
-                        }
-
-                        staffResponse.setPhoneNumberResponses(phoneNumberResponses);
-                    }
-
-                    staffResponses.add(staffResponse);
-                }
-
-                repDto.setStaffResponses(staffResponses);
-            }
-
-            if(repDto.getOfficeAssignmentEntities() != null){
-
-                List<LocationResponse> locationResponses = new ArrayList<>();
-
-                for(OfficeAssignmentEntity officeAssignment: repDto.getOfficeAssignmentEntities()){
-
-                    LocationResponse locationResponse = modelMapper.map(officeAssignment.getLocationEntity(), LocationResponse.class);
-
-                    locationResponse.setCountyResponse(modelMapper.map(officeAssignment.getLocationEntity().getCountyEntity(), CountyResponse.class));
-
-                    locationResponse.setCityResponse(modelMapper.map(officeAssignment.getLocationEntity().getCityEntity(), CityResponse.class));
-
-                    locationResponse.setZipCodeResponse(modelMapper.map(officeAssignment.getLocationEntity().getZipCodeEntity(), ZipCodeResponse.class));
-
-                    locationResponses.add(locationResponse);
-                }
-
-                repDto.setLocationResponses(locationResponses);
-            }
-
-            returnValue.add(repDto);
+            returnValue.add(this.getAllCongressionalRepEssentials(congressionalRepEntity));
         }
 
         return returnValue;
     }
+
+    @Override
+    public Boolean entityIsNull(CongressionalRepEntity congressionalRepEntity) {
+        return congressionalRepEntity == null;
+    }
+
+    @Override
+    public Boolean entityIsNull(List<CongressionalRepEntity> congressionalRepEntity) {
+        return congressionalRepEntity == null;
+    }
+
+
 }

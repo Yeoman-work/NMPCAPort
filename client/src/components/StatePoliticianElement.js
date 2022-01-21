@@ -18,7 +18,7 @@ const StatePoliticianElement = props =>{
 
     }
 
-    switch (electedOfficial.politicalPartyResponse.name){
+    switch (electedOfficial.politicalPartyEssentials.name){
 
         case 'republican':
             politicianBackgroundColor = 'bg-danger'
@@ -45,20 +45,20 @@ const StatePoliticianElement = props =>{
             <div className={'col align-bottom text-start'}>
                 {electedOfficial.nmHouseDistrictResponse? <h3>Representative</h3>: <h3>Senator</h3>}
                 <h3 className={''}>{electedOfficial.firstName.toUpperCase()} {electedOfficial.lastName.toUpperCase()} </h3>
-                <h4>Party:{electedOfficial.politicalPartyResponse.name.toUpperCase()}</h4>
+                <h4>Party:{electedOfficial.politicalPartyEssentials.name.toUpperCase()}</h4>
                 {electedOfficial.capitolRoom? <h5><strong>Capitol Room:</strong> {electedOfficial.capitolRoom}</h5>: <h5><strong>Capitol Room:</strong> Not provided</h5> }
                 <div className={'m-3'}>
                     <h6>Address:</h6>
                     <p>
                         {electedOfficial.streetAddress? electedOfficial.streetAddress : ''}<br/>
-                        { electedOfficial.cityResponse? electedOfficial.cityResponse.name.toUpperCase() + ', ' : ''}
-                        { electedOfficial.zipCodeResponse? electedOfficial.zipCodeResponse.name: ''}
+                        { electedOfficial.city? electedOfficial.city.toUpperCase() + ', ' : ''}
+                        { electedOfficial.zipCode? electedOfficial.zipCode: ''}
                     </p>
                 </div>
                 { electedOfficial.email? <MailToButton mailto={electedOfficial.email} label={electedOfficial.email}/>: <h5>No Email Provided</h5>}
             </div>
             <div className={'col'}>
-                <h4><strong>District:</strong> {district.name}</h4>
+                <h4><strong>District:</strong>{electedOfficial.nmHouseDistrictEssentialResponse? electedOfficial.nmHouseDistrictEssentialResponse.name : electedOfficial.senateDistrictEssentialResponse.name}</h4>
             </div>
         </div>
     )

@@ -48,12 +48,12 @@ const CongressionalRepElement = props =>{
 
                 <div className={'col'}>
                     {
-                        rep.districtResponse? <h3>Offices <Link to={'/yeoman/location/congressionalRep/' + rep.congressionalRepId}><MdOutlineLocationCity/></Link></h3>
+                        rep.congressionalDistrictEssentialsResponse? <h3>Offices <Link to={'/yeoman/location/congressionalRep/' + rep.congressionalRepId}><MdOutlineLocationCity/></Link></h3>
                             :
                         <h3>Offices <Link to={'/yeoman/location/senator/' + rep.senatorId}><MdOutlineLocationCity/></Link></h3>
                     }
                     {
-                        rep.locationResponses.map((location, index)=>{
+                        rep.locationEssentialsResponses.map((location, index)=>{
 
                             return(
                                 <div key={index} className={'border rounded'}>
@@ -70,14 +70,14 @@ const CongressionalRepElement = props =>{
 
             {
 
-                rep.districtResponse?
+                rep.congressionalDistrictEssentialsResponse?
 
                     <div className={'col'}>
                         <h3>Staff <Link to={'/yeoman/staff/congressionalRep/' + rep.congressionalRepId}><IoIosPeople/></Link></h3>
                         <div className={'height400 overflow-auto'}>
                             {
-                                rep.staffResponses?
-                                rep.staffResponses.map((staff, index)=>{
+                                rep.staffEssentials?
+                                rep.staffEssentials.map((staff, index)=>{
 
                                     return(
                                         <div key={index} className={'border rounded overflow-auto'}>
@@ -86,7 +86,7 @@ const CongressionalRepElement = props =>{
                                             <div>
                                                 <p>Phone Numbers:</p>
                                                 {
-                                                    staff.phoneNumberResponses.map((phoneNumber, index)=>{
+                                                    staff.phoneNumberEssentials.map((phoneNumber, index)=>{
 
                                                         return(
                                                             <div key={index} className={'overflow-auto'}>
@@ -111,7 +111,7 @@ const CongressionalRepElement = props =>{
                         <h3>Staff <Link to={'/yeoman/staff/senator/' + rep.senatorId}><IoIosPeople/></Link></h3>
                         <div className={'height400 overflow-auto'}>
                             {
-                                rep.staffResponses.map((staff, index)=>{
+                                rep.staffEssentials.map((staff, index)=>{
 
                                     return(
                                         <div key={index} className={'border rounded overflow-auto'}>
@@ -120,7 +120,7 @@ const CongressionalRepElement = props =>{
                                             <div>
                                                 <p>Phone Numbers:</p>
                                                 {
-                                                    staff.phoneNumberResponses.map((phoneNumber, index)=>{
+                                                    staff.phoneNumberEssentials.map((phoneNumber, index)=>{
 
                                                         return(
                                                             <div key={index} className={'overflow-auto'}>

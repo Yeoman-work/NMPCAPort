@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.stateSenator.StateSenatorDetailsRequest;
+import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorResponse;
 import net.yeoman.nmpcaport.services.Impl.StateSenatorServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.StateSenatorDto;
@@ -15,21 +16,19 @@ import java.util.List;
 @RequestMapping("/stateSenators")
 public class StateSenatorController {
 
-    @Autowired
-    private StateSenatorServiceImpl stateSenatorService;
+
+    private final StateSenatorServiceImpl stateSenatorService;
+
+    public StateSenatorController(StateSenatorServiceImpl stateSenatorService){
+
+        this.stateSenatorService = stateSenatorService;
+    }
 
     @GetMapping
-    public List<StateSenatorResponse> getStateSenators(){
-        List<StateSenatorResponse> returnValue = new ArrayList<>();
+    public List<StateSenatorNestedResponse> getStateSenators(){
 
-        List<StateSenatorDto> stateSenatorDtoList = this.stateSenatorService.getAllStateSenators();
 
-        for(StateSenatorDto stateSenator: stateSenatorDtoList){
-
-            returnValue.add(new ModelMapper().map(stateSenator, StateSenatorResponse.class));
-        }
-
-        return returnValue;
+        return this.stateSenatorService.stateSenatorDashboardData(this.stateSenatorService.getStateSenatorEntities());
     }
 
     @PostMapping
