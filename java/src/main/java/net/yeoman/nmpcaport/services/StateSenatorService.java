@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.StateSenatorEntity;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepNestedResponse;
+import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorEssentials;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
 import net.yeoman.nmpcaport.shared.dto.StateSenatorDto;
 
@@ -16,6 +17,10 @@ public interface StateSenatorService {
     public StateSenatorEntity getStateSenatorEntity(String senatorId);
     public List<StateSenatorDto> getAllStateSenators();
     public List<StateSenatorEntity> getStateSenatorEntities();
+
+    //get senator essentials
+    public StateSenatorEssentials getStateSenatorEssentials(StateSenatorEntity stateSenatorEntity);
+    public List<StateSenatorEssentials> getStateSenatorEssentials(List<StateSenatorEntity> stateSenatorEntities);
 
     //get senator dashboard
     public StateSenatorNestedResponse stateSenatorDashboardData(StateSenatorEntity stateSenatorEntity);

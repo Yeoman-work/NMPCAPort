@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -21,8 +22,10 @@ public class InterimCommitteeEntity implements Serializable {
     private String publicId;
 
     @NotBlank(message = "required")
+    @Size(min= 3, max=75)
     private String name;
 
+    @Size(max=150)
     private String description;
 
     @Column(updatable = false)

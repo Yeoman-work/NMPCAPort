@@ -22,6 +22,7 @@ import NetworkingGroupDashboard from "./views/NetworkingGroupDashboard";
 import CreateContactsView from "./views/CreateContactsView";
 import ContactElement from "./components/ContactElement";
 import ContactDashboardView from "./views/ContactDashboardView";
+import CreateInterimCommittee from "./views/CreateInterimCommittee";
 
 function App() {
   return (
@@ -40,17 +41,23 @@ function App() {
                         <Route path={'createLegislation'} element={<CreateLegislationView/>}/>
                     </Route>
                     <Route path={'government'}>
-                        <Route path={'stateRepDashboard'} element={<StateRepDashboard/>}/>
-                        <Route path={'addStateRep'}>
-                            <Route path={':type'} element={<CreateStateRepView/>}/>
+                        <Route path={'newMexico'}>
+                            <Route path ={'stateSenatorDashboard'} element={<StateSenatorDashBoardView/>}/>
+                            <Route path={'stateRepDashboard'} element={<StateRepDashboard/>}/>
+                            <Route path={'interimCommittees'} element={<CreateInterimCommittee/>}/>
+                            <Route path={'addStateRep'}>
+                                <Route path={':type'} element={<CreateStateRepView/>}/>
+                            </Route>
                         </Route>
-                        <Route path={'congressionalRepDashboard'} element={<CongressionalDashboard/>}/>
-                        <Route path={'addFederalRep'}>
-                            <Route path={':type'} element={<CreateFederalRepView/>}/>
+                        <Route path={'usGovernment'}>
+                            <Route path={'congressionalRepDashboard'} element={<CongressionalDashboard/>}/>
+                            <Route path={'federalRepFinish'} element={<FederalRepView/>}/>
+                            <Route path={'senatorDashboard'} element={<USSenatorsDashboard/>}/>
+                            <Route path={'addFederalRep'}>
+                                <Route path={':type'} element={<CreateFederalRepView/>}/>
+
+                            </Route>
                         </Route>
-                        <Route path={'federalRepFinish'} element={<FederalRepView/>}/>
-                        <Route path ={'stateSenatorDashboard'} element={<StateSenatorDashBoardView/>}/>
-                        <Route path={'senatorDashboard'} element={<USSenatorsDashboard/>}/>
                     </Route>
                     <Route path={'location'}>
                         <Route path={'senator/:id'} element={<USSenatorOffice/>}/>
@@ -68,6 +75,9 @@ function App() {
                     <Route path={'contacts'}>
                         <Route path={'dashboard'} element={<ContactDashboardView/>}/>
                         <Route path={'addContact'} element={<CreateContactsView/>}/>
+                    </Route>
+                    <Route path={'interimGroup'}>
+                        <Route path={'addCommittee'} element={<CreateInterimCommittee/>}/>
                     </Route>
                 </Route>
             </Routes>

@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.stateRep.StateRepDetailsRequest;
+import net.yeoman.nmpcaport.io.response.stateRep.StateRepEssentials;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepNestedResponse;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepResponse;
 import net.yeoman.nmpcaport.services.Impl.StateRepServiceImpl;
@@ -26,6 +27,12 @@ public class StateRepController {
 
 
         return this.stateRepService.getStateRepNestedReps(this.stateRepService.getAllEntities());
+    }
+
+    @GetMapping(path="/essentials",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public List<StateRepEssentials> getStateRepEssentials(){
+
+        return this.stateRepService.getStateRepEssentials(this.stateRepService.getAllEntities());
     }
 
     @GetMapping("/{stateRepId}")

@@ -60,6 +60,15 @@ public class InterimCommitteeAssignmentServiceImpl implements InterimCommitteeAs
     }
 
     @Override
+    public InterimCommitteeAssignmentEntity saveAssignmentEntity(InterimCommitteeAssignmentEntity interimCommitteeAssignmentEntity) {
+
+        if(this.entityIsNull(interimCommitteeAssignmentEntity))
+            throw new InterimCommitteeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return this.interimCommitteeAssignmentRepository.save(interimCommitteeAssignmentEntity);
+    }
+
+    @Override
     public StateRepEntity getStateRepEntities(InterimCommitteeAssignmentEntity interimCommitteeAssignment) {
 
         if(this.entityIsNull(interimCommitteeAssignment))

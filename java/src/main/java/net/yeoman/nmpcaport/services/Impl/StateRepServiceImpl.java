@@ -216,12 +216,43 @@ public class StateRepServiceImpl implements StateRepService {
 
     @Override
     public StateRepEssentials getStateRepEssentials(StateRepEntity stateRepEntity) {
-        return null;
+
+        if(this.entityIsNull(stateRepEntity))
+            throw new StateSenatorServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        StateRepEssentials stateRepEssentials = new StateRepEssentials();
+
+        stateRepEssentials.setFirstName(stateRepEntity.getFirstName());
+        stateRepEssentials.setLastName(stateRepEntity.getLastName());
+        stateRepEssentials.setStateRepId(stateRepEntity.getStateRepId());
+        stateRepEssentials.setPicture(stateRepEntity.getPicture());
+        stateRepEssentials.setEmail(stateRepEntity.getEmail());
+        stateRepEssentials.setNmHouseDistrictEssentialResponse(
+                this.nmHouseDistrictService.entityToEssentials(stateRepEntity.getNmHouseDistrict()
+                )
+        );
+        stateRepEssentials.setPoliticalPartyEssentials(
+                this.politicalPartyService.getPoliticalPartyEssentials(stateRepEntity.getPoliticalParty()
+                )
+        );
+
+        return stateRepEssentials;
     }
 
     @Override
     public List<StateRepEssentials> getStateRepEssentials(List<StateRepEntity> stateRepEntities) {
-        return null;
+
+        if(this.entityIsNull(stateRepEntities))
+            throw new StateSenatorServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<StateRepEssentials> returnValue = new ArrayList<>();
+
+        for(StateRepEntity stateRepEntity: stateRepEntities){
+
+            returnValue.add(this.getStateRepEssentials(stateRepEntity));
+        }
+
+        return returnValue;
     }
 
     @Override

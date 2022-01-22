@@ -30,14 +30,29 @@ const Header = props =>{
                             </li>
                             <li className="nav-item dropdown">
                                 <Link className="nav-link dropdown-toggle" to={''} id="navbarDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    Government
+                                      data-bs-toggle="dropdown" aria-expanded="false">
+                                    New Mexico Gov't
                                 </Link>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><Link className="dropdown-item" to={'/yeoman/government/stateRepDashboard'}>State Representatives</Link></li>
-                                    <li><Link className="dropdown-item" to={'/yeoman/government/stateSenatorDashboard'}>State Senators</Link></li>
-                                    <li><Link className='dropdown-item' to={'/yeoman/government/congressionalRepDashboard'}>Congressional Representatives</Link></li>
-                                    <li><Link className='dropdown-item' to={'/yeoman/government/senatorDashboard'}>Senators</Link></li>
+                                    <li><Link className="dropdown-item" to={'/yeoman/government/newMexico/stateRepDashboard'}>State Representatives</Link></li>
+                                    <li><Link className="dropdown-item" to={'/yeoman/government/newMexico/stateSenatorDashboard'}>State Senators</Link></li>
+                                    <li><Link className='dropdown-item' to={'/yeoman/government/newMexico/interimCommittees'}>Interim Committee(s)</Link></li>
+                                    <li><Link className='dropdown-item' to={'/yeoman/government/newMexico/houseCommittees'}>House Committee(s)</Link></li>
+                                    <li><Link className='dropdown-item' to={'/yeoman/government/newMexico/senatorCommittees'}>Senate Committee(s)</Link></li>
+                                    <li>
+                                        <hr className="dropdown-divider"/>
+                                    </li>
+                                    <li><Link className="dropdown-item" to={''}>Something else here</Link></li>
+                                </ul>
+                            </li>
+                            <li className="nav-item dropdown">
+                                <Link className="nav-link dropdown-toggle" to={''} id="navbarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    US Government
+                                </Link>
+                                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><Link className='dropdown-item' to={'/yeoman/government/usGovernment/congressionalRepDashboard'}>Congressional Representatives</Link></li>
+                                    <li><Link className='dropdown-item' to={'/yeoman/government/usGovernment/senatorDashboard'}>Senators</Link></li>
                                     <li>
                                         <hr className="dropdown-divider"/>
                                     </li>

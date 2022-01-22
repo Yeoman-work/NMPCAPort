@@ -1,9 +1,11 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.entities.InterimCommitteeAssignmentEntity;
 import net.yeoman.nmpcaport.entities.InterimCommitteeEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.InterimCommitteeServiceException;
 import net.yeoman.nmpcaport.io.repositories.InterimCommitteeRepository;
+import net.yeoman.nmpcaport.io.request.interimCommittee.InterimCommitteeRequest;
 import net.yeoman.nmpcaport.io.response.interimCommittee.InterimCommitteeEssentials;
 import net.yeoman.nmpcaport.io.response.interimCommittee.InterimCommitteeResponse;
 import net.yeoman.nmpcaport.services.InterimCommitteeService;
@@ -20,18 +22,22 @@ public class InterimCommitteeServiceImpl implements InterimCommitteeService {
 
     private final InterimCommitteeAssignmentServiceImpl interimCommitteeAssignmentService;
 
+    private final StateSenatorServiceImpl stateSenatorService;
+
     private final StateRepServiceImpl stateRepService;
 
     private  final Utils utils;
 
     public InterimCommitteeServiceImpl(InterimCommitteeRepository interimCommitteeRepository,
                                         InterimCommitteeAssignmentServiceImpl interimCommitteeAssignmentService,
+                                        StateSenatorServiceImpl stateSenatorService,
                                         StateRepServiceImpl stateRepService,
                                         Utils utils
     ){
 
         this.interimCommitteeRepository = interimCommitteeRepository;
         this.interimCommitteeAssignmentService = interimCommitteeAssignmentService;
+        this.stateSenatorService = stateSenatorService;
         this.stateRepService = stateRepService;
         this.utils = utils;
     }
@@ -45,6 +51,45 @@ public class InterimCommitteeServiceImpl implements InterimCommitteeService {
     @Override
     public List<InterimCommitteeEntity> getAllInterimCommittees() {
         return this.interimCommitteeRepository.findAll();
+    }
+
+    @Override
+    public void storeNewInterimCommittee(InterimCommitteeRequest interimCommitteeRequest) {
+
+        if(this.requestIsNull(interimCommitteeRequest))
+            throw  new InterimCommitteeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        InterimCommitteeEntity interimCommittee = this.createInterimCommittee(new InterimCommitteeEntity());
+
+        interimCommittee.setName(interimCommitteeRequest.getName());
+        interimCommittee.setDescription(interimCommitteeRequest.getDescription());
+
+        InterimCommitteeEntity savedCommittee = this.save(interimCommittee);
+
+        if(interimCommitteeRequest.getRepIds() != null){
+
+            for(String repId: interimCommitteeRequest.getSenatorIds()){
+
+                InterimCommitteeAssignmentEntity assignment = new InterimCommitteeAssignmentEntity();
+
+                assignment.setInterimCommitteeEntity(savedCommittee);
+                assignment.setStateRepEntity(this.stateRepService.findStateRepEntityById(repId));
+
+                this.interimCommitteeAssignmentService.saveAssignmentEntity(assignment);
+            }
+        }
+
+        if(interimCommitteeRequest.getSenatorIds() != null){
+
+            for(String senatorId: interimCommitteeRequest.getSenatorIds()){
+                InterimCommitteeAssignmentEntity assignment = new InterimCommitteeAssignmentEntity();
+
+                assignment.setInterimCommitteeEntity(savedCommittee);
+                assignment.setStateSenatorEntity(this.stateSenatorService.getStateSenatorEntity(senatorId));
+                this.interimCommitteeAssignmentService.saveAssignmentEntity(assignment);
+            }
+        }
+
     }
 
     @Override
@@ -145,5 +190,10 @@ public class InterimCommitteeServiceImpl implements InterimCommitteeService {
     @Override
     public Boolean entityIsNull(List<InterimCommitteeEntity> interimCommitteeEntities) {
         return interimCommitteeEntities == null;
+    }
+
+    @Override
+    public Boolean requestIsNull(InterimCommitteeRequest interimCommitteeRequest) {
+        return interimCommitteeRequest == null;
     }
 }

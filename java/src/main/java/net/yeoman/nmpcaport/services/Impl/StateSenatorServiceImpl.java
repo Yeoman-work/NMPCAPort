@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorEssentials;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
 import net.yeoman.nmpcaport.services.StateSenatorService;
 import net.yeoman.nmpcaport.entities.*;
@@ -13,7 +14,6 @@ import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.shared.dto.StateSenatorDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,26 +22,34 @@ import java.util.List;
 @Service
 public class StateSenatorServiceImpl implements StateSenatorService {
 
-    @Autowired
-    private StateSenatorRepository stateSenatorRepository;
 
-    @Autowired
-    private SenateDistrictServiceImpl senateDistrictService;
 
-    @Autowired
-    private CityServiceImpl cityService;
+    private final StateSenatorRepository stateSenatorRepository;
 
-    @Autowired
-    private CountyServiceImpl countyService;
+    private final SenateDistrictServiceImpl senateDistrictService;
 
-    @Autowired
-    private ZipCodeServiceImpl zipCodeService;
+    private final CityServiceImpl cityService;
 
-    @Autowired
-    private PoliticalPartyServiceImpl politicalPartyService;
+    private final ZipCodeServiceImpl zipCodeService;
 
-    @Autowired
-    private Utils utils;
+    private final PoliticalPartyServiceImpl politicalPartyService;
+
+    private final Utils utils;
+
+    public StateSenatorServiceImpl(StateSenatorRepository stateSenatorRepository,
+                                   SenateDistrictServiceImpl senateDistrictService,
+                                   CityServiceImpl cityService,
+                                   ZipCodeServiceImpl zipCodeService,
+                                   PoliticalPartyServiceImpl politicalPartyService,
+                                   Utils utils
+                                   ){
+        this.stateSenatorRepository = stateSenatorRepository;
+        this.senateDistrictService = senateDistrictService;
+        this.cityService = cityService;
+        this.zipCodeService = zipCodeService;
+        this.politicalPartyService = politicalPartyService;
+        this.utils = utils;
+    }
 
 
     @Override
@@ -156,6 +164,52 @@ public class StateSenatorServiceImpl implements StateSenatorService {
     @Override
     public List<StateSenatorEntity> getStateSenatorEntities() {
         return this.stateSenatorRepository.findAll();
+    }
+
+    @Override
+    public StateSenatorEssentials getStateSenatorEssentials(StateSenatorEntity stateSenatorEntity) {
+
+        if(this.entityIsNull(stateSenatorEntity))
+            throw new StateSenatorServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        StateSenatorEssentials stateSenatorEssentials = new StateSenatorEssentials();
+
+        stateSenatorEssentials.setStateSenatorId(stateSenatorEntity.getStateSenatorId());
+        stateSenatorEssentials.setEmail(stateSenatorEntity.getEmail());
+
+        stateSenatorEssentials.setPoliticalPartyEssentials(
+                this.politicalPartyService.getPoliticalPartyEssentials(
+                        stateSenatorEntity.getPoliticalPartyEntity()
+                )
+        );
+
+        stateSenatorEssentials.setSenateDistrictEssentialResponse(
+                this.senateDistrictService.essentialsToEntity(
+                        stateSenatorEntity.getSenateDistrictEntity()
+                )
+        );
+
+        stateSenatorEssentials.setPicture(stateSenatorEntity.getPicture());
+        stateSenatorEssentials.setLastName(stateSenatorEntity.getLastName());
+        stateSenatorEssentials.setFirstName(stateSenatorEntity.getFirstName());
+
+        return stateSenatorEssentials;
+    }
+
+    @Override
+    public List<StateSenatorEssentials> getStateSenatorEssentials(List<StateSenatorEntity> stateSenatorEntities) {
+
+        if(this.entityIsNull(stateSenatorEntities))
+            throw new StateSenatorServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<StateSenatorEssentials> returnValue = new ArrayList<>();
+
+        for(StateSenatorEntity stateSenatorEntity: stateSenatorEntities){
+
+            returnValue.add(this.getStateSenatorEssentials(stateSenatorEntity));
+        }
+
+        return returnValue;
     }
 
     @Override

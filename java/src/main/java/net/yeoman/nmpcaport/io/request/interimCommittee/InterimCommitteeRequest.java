@@ -6,8 +6,8 @@ public class InterimCommitteeRequest {
 
     private String name;
     private String description;
-    private List<String> stateRepIds;
-    private List<String> stateSenator;
+    private List<String> repIds;
+    private List<String> senatorIds;
 
     public String getName() {
         return name;
@@ -25,19 +25,19 @@ public class InterimCommitteeRequest {
         this.description = description;
     }
 
-    public List<String> getStateRepIds() {
-        return stateRepIds;
+    public List<String> getRepIds() {
+        return repIds;
     }
 
-    public void setStateRepIds(List<String> stateRepIds) {
-        this.stateRepIds = stateRepIds;
+    public void setRepIds(List<String> repIds) {
+        this.repIds = repIds;
     }
 
-    public List<String> getStateSenator() {
-        return stateSenator;
+    public List<String> getSenatorIds() {
+        return senatorIds;
     }
 
-    public void setStateSenator(List<String> stateSenator) {
-        this.stateSenator = stateSenator;
+    public void setSenatorIds(List<String> senatorIds) {
+        this.senatorIds = senatorIds;
     }
 }
