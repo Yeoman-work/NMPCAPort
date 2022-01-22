@@ -6,6 +6,9 @@ import Header from "../components/Header";
 import produce from "immer";
 import axios from "axios";
 import Button from "../components/Button";
+const {isValidCharacter,
+       fieldLengthRequired,
+       fieldLengthNotRequired} = require('../helper/generalFunctions')
 
 
 const committeeReducer = (committeeState, action) => {
@@ -13,11 +16,27 @@ const committeeReducer = (committeeState, action) => {
     switch (action.type){
 
         case FORM_FIELDS.NAME:
-            console.log(committeeState);
-            return produce(committeeState, draft=>{
 
-                draft.committee.name = action.payload;
-            })
+            if(isValidCharacter(action.payload)){
+
+                if(fieldLengthRequired(3, 75, action.payload)){
+
+                    return produce(committeeState, draft=>{
+
+                        draft.committee.name = action.payload;
+                    })
+
+                }else{
+
+                    return committeeState;
+
+                }
+
+            }else{
+
+                return committeeState;
+            }
+
 
         case FORM_FIELDS.DESCRIPTION:
 
