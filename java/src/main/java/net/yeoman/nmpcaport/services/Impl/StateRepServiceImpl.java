@@ -7,7 +7,7 @@ import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.repositories.StateRepRepository;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
@@ -24,14 +24,14 @@ public class StateRepServiceImpl implements StateRepService {
 
 
     private final StateRepRepository stateRepRepository;
-    private final NMHouseDistrictServiceImpl nmHouseDistrictService;
+    private final HouseDistrictServiceImpl nmHouseDistrictService;
     private final PoliticalPartyServiceImpl politicalPartyService;
     private final  CityServiceImpl cityService;
     private final  ZipCodeServiceImpl zipCodeService;
     private final Utils utils;
 
     public StateRepServiceImpl(StateRepRepository stateRepRepository,
-                               NMHouseDistrictServiceImpl nmHouseDistrictService,
+                               HouseDistrictServiceImpl nmHouseDistrictService,
                                PoliticalPartyServiceImpl politicalPartyService,
                                CityServiceImpl cityService,
                                ZipCodeServiceImpl zipCodeService,
@@ -56,7 +56,7 @@ public class StateRepServiceImpl implements StateRepService {
 
        if(stateRepDto.getNmHouseDistrict() != null){
 
-           stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(stateRepDto.getNmHouseDistrict(), NMHouseDistrictNestedResponse.class));
+           stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(stateRepDto.getNmHouseDistrict(), HouseDistrictNestedResponse.class));
        }
 
        return stateRepDto;
@@ -73,14 +73,14 @@ public class StateRepServiceImpl implements StateRepService {
         if(!stateRepDto.getNmHouseDistrict().isBlank()){
 
             //get NM House district
-            NMHouseDistrictEntity nmHouseDistrictEntity = this.nmHouseDistrictService.findNMHouseDistrictEntity(stateRepDto.getNmHouseDistrict());
+            HouseDistrictEntity nmHouseDistrictEntity = this.nmHouseDistrictService.findHouseDistrictEntity(stateRepDto.getNmHouseDistrict());
 
             //if null throw error
-            if(nmHouseDistrictEntity == null) throw new NMHouseDistrictServiceException(stateRepDto.getNmHouseDistrict() + ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            if(nmHouseDistrictEntity == null) throw new HouseDistrictServiceException(stateRepDto.getNmHouseDistrict() + ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
 
             //add district response to the dto
-            stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(nmHouseDistrictEntity, NMHouseDistrictNestedResponse.class));
+            stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(nmHouseDistrictEntity, HouseDistrictNestedResponse.class));
 
 
             //add district entity to state rep entity
@@ -199,7 +199,7 @@ public class StateRepServiceImpl implements StateRepService {
 
             if(stateRepDto.getNmHouseDistrictEntity() != null){
 
-                stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(stateRepDto.getNmHouseDistrictEntity(), NMHouseDistrictNestedResponse.class));
+                stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(stateRepDto.getNmHouseDistrictEntity(), HouseDistrictNestedResponse.class));
             }
 
 

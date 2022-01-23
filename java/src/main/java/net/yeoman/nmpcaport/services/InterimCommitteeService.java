@@ -27,7 +27,7 @@ public interface InterimCommitteeService {
     public List<InterimCommitteeResponse> getInterimCommitteeResponse(List<InterimCommitteeEntity> interimCommitteeEntities);
 
     //create committee
-    public InterimCommitteeEntity createInterimCommittee(InterimCommitteeEntity interimCommittee);
+    public InterimCommitteeEntity generateUniqueId(InterimCommitteeEntity interimCommittee);
 
     //save
     public InterimCommitteeEntity save(InterimCommitteeEntity interimCommitteeEntity);

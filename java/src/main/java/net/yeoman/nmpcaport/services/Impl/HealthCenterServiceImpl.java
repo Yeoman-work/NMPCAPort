@@ -5,7 +5,7 @@ import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistr
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
@@ -14,26 +14,11 @@ import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
 import net.yeoman.nmpcaport.services.HealthCenterService;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
-import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
-import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
-import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
-import net.yeoman.nmpcaport.io.response.County.CountyResponse;
-import net.yeoman.nmpcaport.io.response.city.CityResponse;
-import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
-import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
-import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
-import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
-import net.yeoman.nmpcaport.io.response.site.SiteDetailsResponse;
-import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
-import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.repositories.HealthCenterRepository;
-import net.yeoman.nmpcaport.services.SiteServiceDetailsService;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
-import net.yeoman.nmpcaport.shared.dto.SiteDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +54,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     private SiteServiceDetailsServiceImpl siteServiceDetailsService;
 
     @Autowired
-    private NMHouseDistrictServiceImpl nmHouseDistrictService;
+    private HouseDistrictServiceImpl nmHouseDistrictService;
 
     @Autowired
     private SenateDistrictServiceImpl senateDistrictService;
@@ -306,9 +291,9 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
-    public List<NMHouseDistrictEssentialResponse> getNMHouseDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
+    public List<HouseDistrictEssentialResponse> getNMHouseDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
 
-        List<NMHouseDistrictEssentialResponse> returnValue = new ArrayList<>();
+        List<HouseDistrictEssentialResponse> returnValue = new ArrayList<>();
 
         for(SiteEssentialsResponse site: siteEssentialsResponses){
 
@@ -351,12 +336,12 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
     //get NM house districts from sites
     @Override
-    public List<NMHouseDistrictNestedResponse> getHealthCenterNMHouseDistrictsFromSites(List<SiteEntity> siteEntities) {
+    public List<HouseDistrictNestedResponse> getHealthCenterNMHouseDistrictsFromSites(List<SiteEntity> siteEntities) {
 
         if(this.siteService.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        List<NMHouseDistrictEntity> districtEntities = new ArrayList<>();
-        List<NMHouseDistrictNestedResponse> returnValue = new ArrayList<>();
+        List<HouseDistrictEntity> districtEntities = new ArrayList<>();
+        List<HouseDistrictNestedResponse> returnValue = new ArrayList<>();
 
 
         for(SiteEntity siteEntity: siteEntities){
@@ -690,10 +675,10 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
-    public List<NMHouseDistrictEssentialResponse> healthCenterNMDistrictEssentials(List<SiteEntity> siteEntities) {
+    public List<HouseDistrictEssentialResponse> healthCenterNMDistrictEssentials(List<SiteEntity> siteEntities) {
 
-        List<NMHouseDistrictEntity> nmHouseDistrictEntities = new ArrayList<>();
-        List<NMHouseDistrictEssentialResponse> returnValue = new ArrayList<>();
+        List<HouseDistrictEntity> nmHouseDistrictEntities = new ArrayList<>();
+        List<HouseDistrictEssentialResponse> returnValue = new ArrayList<>();
 
         for(SiteEntity site: siteEntities){
 
@@ -703,9 +688,9 @@ public class HealthCenterServiceImpl implements HealthCenterService {
             }
         }
 
-        for(NMHouseDistrictEntity district: nmHouseDistrictEntities){
+        for(HouseDistrictEntity district: nmHouseDistrictEntities){
 
-            NMHouseDistrictEssentialResponse nmHouseDistrictEssentialResponse = new NMHouseDistrictEssentialResponse();
+            HouseDistrictEssentialResponse nmHouseDistrictEssentialResponse = new HouseDistrictEssentialResponse();
 
             nmHouseDistrictEssentialResponse.setName(district.getName());
             nmHouseDistrictEssentialResponse.setHouseDistrictId(district.getHouseDistrictId());
@@ -715,7 +700,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         }
 
         return returnValue.stream()
-                .sorted(Comparator.comparing(NMHouseDistrictEssentialResponse :: getName))
+                .sorted(Comparator.comparing(HouseDistrictEssentialResponse:: getName))
                 .collect(Collectors.toList());
     }
 

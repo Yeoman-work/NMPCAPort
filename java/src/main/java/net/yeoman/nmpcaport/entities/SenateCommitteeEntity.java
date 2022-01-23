@@ -8,11 +8,10 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="InterimCommittees")
-public class InterimCommitteeEntity implements Serializable {
+@Table(name = "nmSenateCommittees")
+public class SenateCommitteeEntity implements Serializable {
 
-
-    private static final long serialVersionUID = -5384914868731101704L;
+    private static final long serialVersionUID = -6206693048907184517L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,10 +44,10 @@ public class InterimCommitteeEntity implements Serializable {
 
     }
 
-    @OneToMany(mappedBy = "interimCommitteeEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<InterimCommitteeAssignmentEntity> interimCommitteeAssignments;
+    @OneToMany(mappedBy = "senateCommitteeEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SenateCommitteeAssignmentEntity> senateCommitteeAssignments;
 
-    public InterimCommitteeEntity() {
+    public SenateCommitteeEntity() {
     }
 
     public Long getId() {
@@ -59,20 +58,20 @@ public class InterimCommitteeEntity implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPublicId() {
         return publicId;
     }
 
     public void setPublicId(String publicId) {
         this.publicId = publicId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -99,11 +98,11 @@ public class InterimCommitteeEntity implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public List<InterimCommitteeAssignmentEntity> getInterimCommitteeAssignments() {
-        return interimCommitteeAssignments;
+    public List<SenateCommitteeAssignmentEntity> getSenateCommitteeAssignments() {
+        return senateCommitteeAssignments;
     }
 
-    public void setInterimCommitteeAssignments(List<InterimCommitteeAssignmentEntity> interimCommitteeAssignments) {
-        this.interimCommitteeAssignments = interimCommitteeAssignments;
+    public void setSenateCommitteeAssignments(List<SenateCommitteeAssignmentEntity> senateCommitteeAssignments) {
+        this.senateCommitteeAssignments = senateCommitteeAssignments;
     }
 }

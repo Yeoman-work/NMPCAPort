@@ -1,20 +1,13 @@
 package net.yeoman.nmpcaport.io.response.site;
 
 import net.yeoman.nmpcaport.io.response.County.CountyEssentials;
-import net.yeoman.nmpcaport.io.response.County.CountyResponse;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityEssentials;
-import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
-import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
-import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentials;
-import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
 import java.util.List;
 
@@ -29,7 +22,7 @@ public class SiteEssentialsResponse {
     private ZipCodeEssentials zipCodeEssentials;
     private List<FundEssentialsResponse> fundEssentialsResponses;
     private List<ServiceEssentialsResponse> serviceEssentialsResponses;
-    private NMHouseDistrictEssentialResponse nmHouseDistrictEssentialResponse;
+    private HouseDistrictEssentialResponse nmHouseDistrictEssentialResponse;
     private SenateDistrictEssentialResponse senateDistrictEssentialResponse;
     private CongressionalDistrictEssentialsResponse congressionalDistrictEssentialsResponse;
     private String createdAt;
@@ -115,11 +108,11 @@ public class SiteEssentialsResponse {
         this.updatedAt = updatedAt;
     }
 
-    public NMHouseDistrictEssentialResponse getNmHouseDistrictEssentialResponse() {
+    public HouseDistrictEssentialResponse getNmHouseDistrictEssentialResponse() {
         return nmHouseDistrictEssentialResponse;
     }
 
-    public void setNmHouseDistrictEssentialResponse(NMHouseDistrictEssentialResponse nmHouseDistrictEssentialResponse) {
+    public void setNmHouseDistrictEssentialResponse(HouseDistrictEssentialResponse nmHouseDistrictEssentialResponse) {
         this.nmHouseDistrictEssentialResponse = nmHouseDistrictEssentialResponse;
     }
 

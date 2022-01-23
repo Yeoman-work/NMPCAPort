@@ -1,13 +1,16 @@
 import React from "react";
+const {characterCount} = require('../helper/generalFunctions')
 
 
 
 const CommitteeForm = props =>{
     const {divProps,
-          dispatch,
+          inputChange,
           committee,
           formFields
     } = props;
+
+
 
     return(
         <div className={divProps}>
@@ -17,7 +20,7 @@ const CommitteeForm = props =>{
                     className={'form-control'}
                     name={formFields.NAME}
                     value={committee.name}
-                    onChange={(e)=>dispatch({type:e.target.name, payload: e.target.value})}
+                    onChange={(e)=>inputChange(e)}
                 />
             </div>
             <div className={'form-group'}>
@@ -25,10 +28,13 @@ const CommitteeForm = props =>{
                           className={'form-control'}
                           name={formFields.DESCRIPTION}
                           value={committee.description}
-                          onChange={(e)=>dispatch({type: e.target.name, payload: e.target.value})}
+                          onChange={(e)=>inputChange(e)}
                           cols="30"
                           rows="10"
                 ></textarea>
+            </div>
+            <div className={'text-end'}>
+                <h6>{characterCount(committee.description)+`/150 characters`}</h6>
             </div>
         </div>
     )

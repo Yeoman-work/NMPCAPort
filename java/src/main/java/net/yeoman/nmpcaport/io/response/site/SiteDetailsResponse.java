@@ -2,11 +2,9 @@ package net.yeoman.nmpcaport.io.response.site;
 
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
@@ -20,7 +18,7 @@ public class SiteDetailsResponse {
     private CityResponse cityResponse;
     private ZipCodeResponse zipCodeResponse;
     private HealthCenterNestedResponseModel healthCenterResponse;
-    private NMHouseDistrictResponse houseDistrictResponse;
+    private HouseDistrictResponse houseDistrictResponse;
     private SenateDistrictResponseModel senateDistrictResponseModel;
     private CongressionalDistrictResponse congressionalDistrictResponse;
 
@@ -88,11 +86,11 @@ public class SiteDetailsResponse {
         this.healthCenterResponse = healthCenterResponse;
     }
 
-    public NMHouseDistrictResponse getHouseDistrictResponse() {
+    public HouseDistrictResponse getHouseDistrictResponse() {
         return houseDistrictResponse;
     }
 
-    public void setHouseDistrictResponse(NMHouseDistrictResponse houseDistrictResponse) {
+    public void setHouseDistrictResponse(HouseDistrictResponse houseDistrictResponse) {
         this.houseDistrictResponse = houseDistrictResponse;
     }
 

@@ -1,16 +1,11 @@
 package net.yeoman.nmpcaport.io.response.HealthCenter;
 
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
-import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
-import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
-import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
-import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
-import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
 import java.util.Date;
 import java.util.List;
@@ -20,7 +15,7 @@ public class HealthCenterResponseFull {
     private String healthCenterId;
     private String name;
     private String nameAbbr;
-    private List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponses;
+    private List<HouseDistrictNestedResponse> nmHouseDistrictNestedResponses;
     private List<CongressionalDistrictNestedResponse> congressionalDistrictNestedResponseList;
     private List<SenateDistrictNestedResponse> senateDistrictNestedResponseList;
     private List<SiteDetailsNestedResponse> siteDetailsNestedResponseList;
@@ -53,11 +48,11 @@ public class HealthCenterResponseFull {
         this.nameAbbr = nameAbbr;
     }
 
-    public List<NMHouseDistrictNestedResponse> getNmHouseDistrictNestedResponses() {
+    public List<HouseDistrictNestedResponse> getNmHouseDistrictNestedResponses() {
         return nmHouseDistrictNestedResponses;
     }
 
-    public void setNmHouseDistrictNestedResponses(List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponses) {
+    public void setNmHouseDistrictNestedResponses(List<HouseDistrictNestedResponse> nmHouseDistrictNestedResponses) {
         this.nmHouseDistrictNestedResponses = nmHouseDistrictNestedResponses;
     }
 

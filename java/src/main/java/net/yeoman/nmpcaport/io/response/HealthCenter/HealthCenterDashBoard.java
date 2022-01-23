@@ -3,7 +3,7 @@ package net.yeoman.nmpcaport.io.response.HealthCenter;
 import net.yeoman.nmpcaport.io.response.LocationResponse.LocationEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
@@ -21,7 +21,7 @@ public class HealthCenterDashBoard {
     private List<ServiceEssentialsResponse> serviceEssentialsResponses;
     private List<FundEssentialsResponse> fundEssentialsResponses;
     private List<LocationEssentialsResponse> locationEssentialsResponseList;
-    private List<NMHouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses;
+    private List<HouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses;
     private List<SenateDistrictEssentialResponse> senateDistrictEssentialResponses;
     private List<CongressionalDistrictEssentialsResponse> congressionalEssentialsResponses;
     private Date createdAt;
@@ -75,11 +75,11 @@ public class HealthCenterDashBoard {
         this.locationEssentialsResponseList = locationEssentialsResponseList;
     }
 
-    public List<NMHouseDistrictEssentialResponse> getNmHouseDistrictEssentialResponses() {
+    public List<HouseDistrictEssentialResponse> getNmHouseDistrictEssentialResponses() {
         return nmHouseDistrictEssentialResponses;
     }
 
-    public void setNmHouseDistrictEssentialResponses(List<NMHouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses) {
+    public void setNmHouseDistrictEssentialResponses(List<HouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses) {
         this.nmHouseDistrictEssentialResponses = nmHouseDistrictEssentialResponses;
     }
 

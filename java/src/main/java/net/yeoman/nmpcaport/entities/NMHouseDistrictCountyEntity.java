@@ -42,7 +42,7 @@ public class NMHouseDistrictCountyEntity implements Serializable {
                                        String stateRepCountyId,
                                        Date createdAt,
                                        Date updatedAt,
-                                       NMHouseDistrictEntity nmHouseDistrictEntity,
+                                       HouseDistrictEntity nmHouseDistrictEntity,
                                        CountyEntity countyEntity) {
         this.id = id;
         this.stateRepCountyId = stateRepCountyId;
@@ -54,7 +54,7 @@ public class NMHouseDistrictCountyEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "n_m_house_district_entity_id")
-    private NMHouseDistrictEntity nmHouseDistrictEntity;
+    private HouseDistrictEntity nmHouseDistrictEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "county_entity_id")
@@ -92,11 +92,11 @@ public class NMHouseDistrictCountyEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public NMHouseDistrictEntity getNmHouseDistrictEntity() {
+    public HouseDistrictEntity getNmHouseDistrictEntity() {
         return nmHouseDistrictEntity;
     }
 
-    public void setNmHouseDistrictEntity(NMHouseDistrictEntity nmHouseDistrictEntity) {
+    public void setNmHouseDistrictEntity(HouseDistrictEntity nmHouseDistrictEntity) {
         this.nmHouseDistrictEntity = nmHouseDistrictEntity;
     }
 

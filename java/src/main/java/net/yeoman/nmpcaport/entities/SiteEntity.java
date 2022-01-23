@@ -1,8 +1,6 @@
 package net.yeoman.nmpcaport.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -75,7 +73,7 @@ public class SiteEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "n_m_house_district_entity_id")
-    private NMHouseDistrictEntity nmHouseDistrictEntity;
+    private HouseDistrictEntity nmHouseDistrictEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "senate_district_entity_id")
@@ -197,11 +195,11 @@ public class SiteEntity implements Serializable {
         this.zipCodeEntity = zipCodeEntity;
     }
 
-    public NMHouseDistrictEntity getNmHouseDistrictEntity() {
+    public HouseDistrictEntity getNmHouseDistrictEntity() {
         return nmHouseDistrictEntity;
     }
 
-    public void setNmHouseDistrictEntity(NMHouseDistrictEntity nmHouseDistrictEntity) {
+    public void setNmHouseDistrictEntity(HouseDistrictEntity nmHouseDistrictEntity) {
         this.nmHouseDistrictEntity = nmHouseDistrictEntity;
     }
 

@@ -7,7 +7,7 @@ const StateRepSelectionForm = props =>{
     const {reps,
         formFields,
         memberIds,
-        dispatch,
+        inputChange,
         divProps
     } = props
     
@@ -26,10 +26,10 @@ const StateRepSelectionForm = props =>{
                                 >
                                     <input type="checkbox"
                                            checked={memberIds.includes(member.stateRepId)}
-                                           name={formFields.REP_SELECT}
+                                           name={formFields.REP_IDS}
                                            className={'form-check-input'}
                                            value={ member.stateRepId }
-                                           onChange={(e)=>dispatch({type: e.target.name, payload: e.target})}
+                                           onChange={(e)=>inputChange(e)}
 
                                     /><label className={'ms-1'}>{` ${member.firstName} ${member.lastName}`}</label>
                                 </div>
@@ -54,10 +54,10 @@ const StateRepSelectionForm = props =>{
                                 >
                                     <input type="checkbox"
                                            checked={memberIds.includes(member.stateRepId)}
-                                           name={formFields.REP_SELECT}
+                                           name={formFields.REP_IDS}
                                            className={'form-check-input'}
                                            value={ member.stateRepId }
-                                           onChange={(e)=>dispatch({type: e.target.name, payload: e.target})}
+                                           onChange={(e)=>inputChange(e)}
 
                                     /><label className={'ms-1'}>{` ${member.firstName} ${member.lastName}`}</label>
                                 </div>

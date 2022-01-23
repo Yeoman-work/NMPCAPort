@@ -1,6 +1,6 @@
-package net.yeoman.nmpcaport.io.request.nmHouseDistrict;
+package net.yeoman.nmpcaport.io.request.HouseDistrict;
 
-public class NMHouseDistrictDetailsRequest {
+public class HouseDistrictDetailsRequest {
 
     private String name;
     private String map;

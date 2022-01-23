@@ -16,6 +16,8 @@ public interface InterimCommitteeAssignmentsService {
     //create assignment
     public InterimCommitteeAssignmentEntity createAssignment(InterimCommitteeAssignmentEntity assignmentEntity);
 
+    public InterimCommitteeAssignmentEntity generateAssignmentId(InterimCommitteeAssignmentEntity assignmentEntity);
+
     //save
     public InterimCommitteeAssignmentEntity saveAssignmentEntity(InterimCommitteeAssignmentEntity interimCommitteeAssignmentEntity);
 

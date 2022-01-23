@@ -1,13 +1,12 @@
 package net.yeoman.nmpcaport.shared.dto;
 
 import net.yeoman.nmpcaport.entities.CityEntity;
-import net.yeoman.nmpcaport.entities.NMHouseDistrictEntity;
+import net.yeoman.nmpcaport.entities.HouseDistrictEntity;
 import net.yeoman.nmpcaport.entities.PoliticalPartyEntity;
 import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.response.County.CountyResponse;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
@@ -31,8 +30,8 @@ public class StateRepDto {
     private String party;
     private Date createdAt;
     private Date updatedAt;
-    private NMHouseDistrictEntity nmHouseDistrictEntity;
-    private NMHouseDistrictNestedResponse nmHouseDistrictResponse;
+    private HouseDistrictEntity nmHouseDistrictEntity;
+    private HouseDistrictNestedResponse nmHouseDistrictResponse;
     private CountyResponse countyResponse;
     private CityResponse cityResponse;
     private ZipCodeResponse zipCodeResponse;
@@ -110,11 +109,11 @@ public class StateRepDto {
         this.nmHouseDistrict = nmHouseDistrict;
     }
 
-    public NMHouseDistrictEntity getNmHouseDistrictEntity() {
+    public HouseDistrictEntity getNmHouseDistrictEntity() {
         return nmHouseDistrictEntity;
     }
 
-    public void setNmHouseDistrictEntity(NMHouseDistrictEntity nmHouseDistrictEntity) {
+    public void setNmHouseDistrictEntity(HouseDistrictEntity nmHouseDistrictEntity) {
         this.nmHouseDistrictEntity = nmHouseDistrictEntity;
     }
 
@@ -138,11 +137,11 @@ public class StateRepDto {
         return nmHouseDistrict;
     }
 
-    public NMHouseDistrictNestedResponse getNmHouseDistrictResponse() {
+    public HouseDistrictNestedResponse getNmHouseDistrictResponse() {
         return nmHouseDistrictResponse;
     }
 
-    public void setNmHouseDistrictResponse(NMHouseDistrictNestedResponse nmHouseDistrictResponse) {
+    public void setNmHouseDistrictResponse(HouseDistrictNestedResponse nmHouseDistrictResponse) {
         this.nmHouseDistrictResponse = nmHouseDistrictResponse;
     }
 

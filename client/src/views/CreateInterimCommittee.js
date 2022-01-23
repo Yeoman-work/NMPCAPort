@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useState } from "react";
 import CommitteeForm from "../components/CommitteeForm";
 import StateRepSelectionForm from "../components/StateRepSelectionForm";
 import StateSenatorSelectionForm from "../components/StateSenatorSelectionForm";
@@ -11,133 +11,134 @@ const {isValidCharacter,
        fieldLengthNotRequired} = require('../helper/generalFunctions')
 
 
-const committeeReducer = (committeeState, action) => {
-
-    switch (action.type){
-
-        case FORM_FIELDS.NAME:
-
-            if(isValidCharacter(action.payload)){
-
-                if(fieldLengthRequired(3, 75, action.payload)){
-
-                    return produce(committeeState, draft=>{
-
-                        draft.committee.name = action.payload;
-                    })
-
-                }else{
-
-                    return committeeState;
-
-                }
-
-            }else{
-
-                return committeeState;
-            }
 
 
-        case FORM_FIELDS.DESCRIPTION:
 
-            return produce(committeeState, draft=>{
 
-                draft.committee.description = action.payload;
-            })
-
-        case FORM_FIELDS.STATE_SENATORS:
-
-            return produce(committeeState, draft=>{
-
-                draft.stateSenators = [...action.payload];
-            })
-
-        case FORM_FIELDS.STATE_REPS:
-
-            return produce(committeeState, draft=>{
-
-                draft.stateReps = [...action.payload];
-            })
-
-        case FORM_FIELDS.COMMITTEE:
-
-            return produce(committeeState, draft=>{
-
-                draft.committeeInfo = {...action.payload}
-            })
-
-        case FORM_FIELDS.REP_SELECT:
-
-            if(action.payload.checked){
-
-                return produce(committeeState, draft=>{
-
-                    draft.committee.repIds = [...committeeState.committee.repIds, action.payload.value];
-                })
-
-            }else{
-
-                return produce(committeeState, draft=>{
-
-                    draft.committee.repIds.splice(
-                        committeeState.committee.repIds.indexOf(action.value), 1);
-                })
-
-            }
-
-        case FORM_FIELDS.SENATOR_SELECT:
-
-            if(action.payload.checked){
-
-                return produce(committeeState, draft=>{
-
-                    draft.committee.senatorIds = [...committeeState.committee.repIds, action.payload.value];
-                })
-
-            }else{
-
-                return produce(committeeState, draft =>{
-
-                    draft.committee.senatorIds.splice(
-                        committeeState.committee.senatorIds.indexOf(action.value), 1)
-                })
-            }
-
-        default:
-            return committeeState;
-
-    }
-
-}
-
-const FORM_FIELDS ={
+const FORM_FIELDS={
 
     NAME: 'name',
     DESCRIPTION: 'description',
-    MEMBER_IDS: 'member_ids',
+    MEMBER_ID: 'memberIds',
+    REP_IDS: 'rep_ids',
+    SENATOR_IDS: 'senator_id',
     STATE_REPS: 'state reps',
-    STATE_SENATORS: 'state senators',
-    COMMITTEE: 'committee',
-    REP_SELECT: 'rep select',
-    SENATOR_SELECT: 'senator select'
+    STATE_SENATORS: 'state senators'
 
 }
 
 
 const CreateInterimCommittee = props =>{
 
-    const [committeeInfo, dispatchCommittee] = useReducer(committeeReducer, {
+    const [committee, setCommittee] = useState({
+        name: ''.trim().toLowerCase(),
+        description: ''.trim().toLowerCase(),
+        repIds: [],
+        senatorIds: []
+    });
+    const [stateReps, setStateReps] = useState([])
+    const [stateSenators, setStateSenators] = useState([])
 
-        committee:{
-            name: ''.trim().toLowerCase(),
-            description: ''.trim().toLowerCase(),
-            repIds: [],
-            senatorIds: []
-        },
-        stateReps: [],
-        stateSenators: []
 
-    })
+    const inputChangeCommittee = (e) =>{
+
+        let committeeObj = {...committee};
+
+        switch (e.target.name){
+
+            case FORM_FIELDS.NAME:
+
+                if(isValidCharacter(e.target.value)){
+
+                    if(e.target.value.length <= 75){
+
+                        committeeObj.name = e.target.value;
+
+                        return setCommittee(committeeObj);
+
+                    }else{
+
+                        return committee;
+
+                    }
+
+                }else if(e.target.value.length < 1){
+
+                    committeeObj.name = e.target.value;
+
+                    setCommittee(committeeObj);
+
+                }else{
+
+                    return committee
+
+                }
+
+            case FORM_FIELDS.DESCRIPTION:
+
+                if(isValidCharacter(e.target.value)){
+
+                    if(e.target.value.length <= 150){
+
+                        committeeObj.description = e.target.value;
+
+                        return setCommittee(committeeObj);
+                    }else{
+
+                        return committee;
+                    }
+
+                }else if(e.target.value.length < 1){
+
+                    committeeObj.description = e.target.value;
+
+                    setCommittee(committeeObj);
+
+                }else{
+
+                    return committee;
+
+                }
+
+            case FORM_FIELDS.REP_IDS:
+
+                if(e.target.checked){
+
+                    committeeObj.repIds.push(e.target.value);
+
+                    return setCommittee(committeeObj);
+
+                }else{
+
+                    const index = committeeObj.repIds.indexOf(e.target.value);
+
+                    committeeObj.repIds.splice(index, 1);
+
+                    return setCommittee(committeeObj);
+
+                }
+
+            case FORM_FIELDS.SENATOR_IDS:
+
+                console.log(e.target.checke)
+                if(e.target.checked){
+
+                    committeeObj.senatorIds.push(e.target.value);
+
+                    return setCommittee(committeeObj);
+
+                }else{
+
+                    const index = committeeObj.senatorIds.indexOf(e.target.value);
+
+                    committeeObj.senatorIds.splice(index, 1);
+
+                    return setCommittee(committeeObj);
+                }
+        }
+    }
+
+
 
     useEffect(()=>{
 
@@ -152,8 +153,11 @@ const CreateInterimCommittee = props =>{
                     }
                 })
 
-                console.log(stateRepResponse.data);
-                dispatchCommittee({type: FORM_FIELDS.STATE_REPS, payload: [...stateRepResponse.data]})
+
+
+                setStateReps(stateRepResponse.data);
+
+
 
             }catch(error){
 
@@ -161,10 +165,8 @@ const CreateInterimCommittee = props =>{
 
 
             }
-
-
+            return ()=>{}
         })()
-
 
     },[])
 
@@ -181,7 +183,8 @@ const CreateInterimCommittee = props =>{
                     }
                 })
 
-                dispatchCommittee({type: FORM_FIELDS.STATE_SENATORS, payload: [...senatorResponse.data]})
+
+                setStateSenators(senatorResponse.data);
 
             }catch(error){
 
@@ -192,6 +195,8 @@ const CreateInterimCommittee = props =>{
 
         })()
 
+        return ()=>{}
+
     },[])
 
 
@@ -200,7 +205,7 @@ const CreateInterimCommittee = props =>{
 
         try{
 
-            const committee = await axios.post('http://localhost:8080/', committeeInfo.committee, {
+            const saveCommittee = await axios.post('http://localhost:8080/interimCommittees', committee, {
                 headers:{
                     Authorization: localStorage.getItem('token')
                 }
@@ -211,35 +216,52 @@ const CreateInterimCommittee = props =>{
         }
     }
 
+
+    const committeeValidation = (committee) =>{
+
+        let isValid = true;
+
+        if(fieldLengthRequired(3, 75, committee.name)){
+            if(fieldLengthNotRequired(0, 150, committee.description)){
+
+                isValid  = false
+            }
+        }
+
+        return isValid;
+    }
+
     return(
         <div className={'m-auto heightFullPage'}>
             <Header/>
             <h1 className={'mt-5 mb-5'}>Create Interim Committee</h1>
             <CommitteeForm
                 divProps={'w-25 m-auto'}
+                committee={committee}
                 formFields={FORM_FIELDS}
-                dispatch={dispatchCommittee}
-                committee={committeeInfo.committee}
+                inputChange={inputChangeCommittee}
             />
             <div className={'m-auto border'}>
                 <StateRepSelectionForm
                  divProps={' border w-75 m-auto'}
-                 dispatch={dispatchCommittee}
-                 reps={committeeInfo.stateReps}
-                 memberIds={committeeInfo.committee.repIds}
+                 reps={stateReps}
+                 memberIds={committee.repIds}
                  formFields={FORM_FIELDS}
+                 inputChange={inputChangeCommittee}
                 />
                 <StateSenatorSelectionForm
                 divProps={'m-auto w-75 border m-auto'}
-                dispatch={dispatchCommittee}
-                senators={committeeInfo.stateSenators}
-                memberIds={committeeInfo.committee.senatorIds}
+                senators={stateSenators}
+                memberIds={committee.senatorIds}
                 formFields={FORM_FIELDS}
+                inputChange={inputChangeCommittee}
                 />
+
             </div>
             <Button
                 action={interimCommitteeHandler}
                 label={'Create Committee'}
+                disable={committeeValidation(committee)}
             />
         </div>
     )

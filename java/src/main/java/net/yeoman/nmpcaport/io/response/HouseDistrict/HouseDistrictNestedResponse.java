@@ -1,9 +1,9 @@
-package net.yeoman.nmpcaport.io.response.nmHouseDistrict;
+package net.yeoman.nmpcaport.io.response.HouseDistrict;
 
 import java.time.LocalDate;
 import java.util.Date;
 
-public class NMHouseDistrictNestedResponse {
+public class HouseDistrictNestedResponse {
 
     private String houseDistrictId;
     private String name;

@@ -1,16 +1,13 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.InterimCommitteeAssignmentEntity;
-import net.yeoman.nmpcaport.entities.InterimCommitteeEntity;
 import net.yeoman.nmpcaport.entities.StateRepEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.InterimCommitteeAssignmentServiceException;
 import net.yeoman.nmpcaport.exception.InterimCommitteeServiceException;
 import net.yeoman.nmpcaport.io.repositories.InterimCommitteeAssignmentRepository;
-import net.yeoman.nmpcaport.io.repositories.InterimCommitteeRepository;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepEssentials;
 import net.yeoman.nmpcaport.services.InterimCommitteeAssignmentsService;
-import net.yeoman.nmpcaport.services.NMHouseDistrictService;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +18,12 @@ import java.util.List;
 public class InterimCommitteeAssignmentServiceImpl implements InterimCommitteeAssignmentsService {
 
     private final InterimCommitteeAssignmentRepository interimCommitteeAssignmentRepository;
-    private final NMHouseDistrictServiceImpl nmHouseDistrictService;
+    private final HouseDistrictServiceImpl nmHouseDistrictService;
     private final PoliticalPartyServiceImpl politicalPartyService;
     private final Utils utils;
 
     public InterimCommitteeAssignmentServiceImpl(InterimCommitteeAssignmentRepository interimCommitteeAssignmentRepository,
-                                                 NMHouseDistrictServiceImpl nmHouseDistrictService,
+                                                 HouseDistrictServiceImpl nmHouseDistrictService,
                                                  PoliticalPartyServiceImpl politicalPartyService,
                                                  Utils utils
      ){
@@ -48,6 +45,22 @@ public class InterimCommitteeAssignmentServiceImpl implements InterimCommitteeAs
 
         if(entityIsNull(assignmentEntity))
             throw new InterimCommitteeAssignmentServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        assignmentEntity.setPublicId(this.utils.generateRandomID());
+
+        while(this.interimCommitteeAssignmentRepository.existsByPublicId(assignmentEntity.getPublicId())){
+
+            assignmentEntity.setPublicId(this.utils.generateRandomID());
+        }
+
+        return assignmentEntity;
+    }
+
+    @Override
+    public InterimCommitteeAssignmentEntity generateAssignmentId(InterimCommitteeAssignmentEntity assignmentEntity) {
+
+        if(this.entityIsNull(assignmentEntity))
+            throw new InterimCommitteeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         assignmentEntity.setPublicId(this.utils.generateRandomID());
 

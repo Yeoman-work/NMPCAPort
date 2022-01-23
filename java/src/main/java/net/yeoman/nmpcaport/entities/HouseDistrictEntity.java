@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "NMHouseDistricts")
-public class NMHouseDistrictEntity implements Serializable {
+public class HouseDistrictEntity implements Serializable {
 
     private static final long serialVersionUID = 2340860745973567245L;
 
@@ -63,19 +63,19 @@ public class NMHouseDistrictEntity implements Serializable {
 
 
 
-    public NMHouseDistrictEntity() {
+    public HouseDistrictEntity() {
     }
 
-    public NMHouseDistrictEntity(Long id,
-                                 String houseDistrictId,
-                                 String name,
-                                 String map,
-                                 LocalDate reelection,
-                                 Date createdAt,
-                                 Date updatedAt,
-                                 List<SiteEntity> sites,
-                                 StateRepEntity stateRep,
-                                 List<NMHouseDistrictCountyEntity> nmHouseDistrictCountyEntities) {
+    public HouseDistrictEntity(Long id,
+                               String houseDistrictId,
+                               String name,
+                               String map,
+                               LocalDate reelection,
+                               Date createdAt,
+                               Date updatedAt,
+                               List<SiteEntity> sites,
+                               StateRepEntity stateRep,
+                               List<NMHouseDistrictCountyEntity> nmHouseDistrictCountyEntities) {
         this.id = id;
         this.houseDistrictId = houseDistrictId;
         this.name = name;

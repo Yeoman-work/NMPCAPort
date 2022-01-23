@@ -59,7 +59,7 @@ public class InterimCommitteeServiceImpl implements InterimCommitteeService {
         if(this.requestIsNull(interimCommitteeRequest))
             throw  new InterimCommitteeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        InterimCommitteeEntity interimCommittee = this.createInterimCommittee(new InterimCommitteeEntity());
+        InterimCommitteeEntity interimCommittee = this.generateUniqueId(new InterimCommitteeEntity());
 
         interimCommittee.setName(interimCommitteeRequest.getName());
         interimCommittee.setDescription(interimCommitteeRequest.getDescription());
@@ -70,7 +70,10 @@ public class InterimCommitteeServiceImpl implements InterimCommitteeService {
 
             for(String repId: interimCommitteeRequest.getSenatorIds()){
 
-                InterimCommitteeAssignmentEntity assignment = new InterimCommitteeAssignmentEntity();
+                InterimCommitteeAssignmentEntity assignment =
+                        this.interimCommitteeAssignmentService.generateAssignmentId(
+                                new InterimCommitteeAssignmentEntity()
+                        );
 
                 assignment.setInterimCommitteeEntity(savedCommittee);
                 assignment.setStateRepEntity(this.stateRepService.findStateRepEntityById(repId));
@@ -162,7 +165,7 @@ public class InterimCommitteeServiceImpl implements InterimCommitteeService {
     }
 
     @Override
-    public InterimCommitteeEntity createInterimCommittee(InterimCommitteeEntity interimCommittee) {
+    public InterimCommitteeEntity generateUniqueId(InterimCommitteeEntity interimCommittee) {
 
         if(this.entityIsNull(interimCommittee))
             throw new InterimCommitteeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());

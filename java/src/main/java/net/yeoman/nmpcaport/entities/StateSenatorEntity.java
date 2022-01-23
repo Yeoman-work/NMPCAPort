@@ -80,6 +80,9 @@ public class StateSenatorEntity implements Serializable {
     @OneToMany(mappedBy = "stateSenatorEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<InterimCommitteeAssignmentEntity> interimCommitteeAssignments;
 
+    @OneToMany(mappedBy = "stateSenatorEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SenateCommitteeAssignmentEntity> senateCommitteeAssignments;
+
     public StateSenatorEntity() {
     }
 
@@ -204,5 +207,11 @@ public class StateSenatorEntity implements Serializable {
     }
 
 
+    public List<SenateCommitteeAssignmentEntity> getSenateCommitteeAssignments() {
+        return senateCommitteeAssignments;
+    }
 
+    public void setSenateCommitteeAssignments(List<SenateCommitteeAssignmentEntity> senateCommitteeAssignments) {
+        this.senateCommitteeAssignments = senateCommitteeAssignments;
+    }
 }

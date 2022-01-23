@@ -66,7 +66,7 @@ public class StateRepEntity implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nm_house_district_entity_id")
-    private NMHouseDistrictEntity nmHouseDistrict;
+    private HouseDistrictEntity nmHouseDistrict;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_entity_id")
@@ -87,6 +87,9 @@ public class StateRepEntity implements Serializable {
     @OneToMany(mappedBy = "stateRepEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<InterimCommitteeAssignmentEntity> interimCommitteeAssignments;
 
+    @OneToMany(mappedBy = "stateRepEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HouseCommitteeAssignmentEntity> houseCommitteeAssignments;
+
 
 
     public StateRepEntity() {
@@ -102,7 +105,7 @@ public class StateRepEntity implements Serializable {
                           String streetAddress,
                           Date createdAt,
                           Date updatedAt,
-                          NMHouseDistrictEntity nmHouseDistrict,
+                          HouseDistrictEntity nmHouseDistrict,
                           CityEntity cityEntity,
                           ZipCodeEntity zipCodeEntity,
                           List<AssignedNumberEntity> assignedNumberEntities) {
@@ -202,11 +205,11 @@ public class StateRepEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public NMHouseDistrictEntity getNmHouseDistrict() {
+    public HouseDistrictEntity getNmHouseDistrict() {
         return nmHouseDistrict;
     }
 
-    public void setNmHouseDistrict(NMHouseDistrictEntity nmHouseDistrict) {
+    public void setNmHouseDistrict(HouseDistrictEntity nmHouseDistrict) {
         this.nmHouseDistrict = nmHouseDistrict;
     }
 
@@ -249,5 +252,13 @@ public class StateRepEntity implements Serializable {
 
     public void setInterimCommitteeAssignments(List<InterimCommitteeAssignmentEntity> interimCommitteeAssignments) {
         this.interimCommitteeAssignments = interimCommitteeAssignments;
+    }
+
+    public List<HouseCommitteeAssignmentEntity> getHouseCommitteeAssignments() {
+        return houseCommitteeAssignments;
+    }
+
+    public void setHouseCommitteeAssignments(List<HouseCommitteeAssignmentEntity> houseCommitteeAssignments) {
+        this.houseCommitteeAssignments = houseCommitteeAssignments;
     }
 }

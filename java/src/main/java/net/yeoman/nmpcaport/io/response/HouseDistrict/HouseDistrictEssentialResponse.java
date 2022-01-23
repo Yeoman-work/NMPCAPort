@@ -1,6 +1,6 @@
-package net.yeoman.nmpcaport.io.response.nmHouseDistrict;
+package net.yeoman.nmpcaport.io.response.HouseDistrict;
 
-public class NMHouseDistrictEssentialResponse {
+public class HouseDistrictEssentialResponse {
 
 
     private String houseDistrictId;

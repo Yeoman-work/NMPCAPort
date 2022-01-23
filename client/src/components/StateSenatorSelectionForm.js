@@ -5,7 +5,7 @@ import React from "react";
 const StateSenatorSelectionForm = props =>{
     const {
         formFields,
-        dispatch,
+        inputChange,
         senators,
          memberIds,
          divProps
@@ -28,10 +28,10 @@ const StateSenatorSelectionForm = props =>{
                                         <input type="checkbox"
 
                                                className={'form-check-input'}
-                                               name={formFields.SENATOR_SELECT}
+                                               name={formFields.SENATOR_IDS}
                                                checked={memberIds.includes(member.stateSenatorId)}
                                                value={ member.stateSenatorId }
-                                               onChange={(e)=>dispatch({type: e.target.name, payload: e.target})}
+                                               onChange={(e)=>inputChange(e)}
 
                                         />
                                         <label className={'ms-1'}>{`${member.firstName} ${member.lastName}`}</label>
@@ -58,10 +58,10 @@ const StateSenatorSelectionForm = props =>{
                                     >
                                         <input type="checkbox"
                                                className={'form-check-input'}
-                                               name={formFields.SENATOR_SELECT}
+                                               name={formFields.SENATOR_IDS}
                                                checked={memberIds.includes(member.stateSenatorId)}
                                                value={ member.stateSenatorId }
-                                               onChange={(e)=>dispatch({type: e.target.name, payload: e.target})}
+                                               onChange={(e)=>inputChange(e)}
 
                                         />
                                         <label className={'ms-1'}>{`${member.firstName} ${member.lastName}`}</label>

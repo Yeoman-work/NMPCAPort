@@ -10,8 +10,8 @@ import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistr
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
@@ -54,13 +54,13 @@ public class SiteDto {
     private List<SiteServiceDetailsEntity> siteServiceDetailsEntities;
     private List<SiteFundingDetailsEntity> siteFundingDetailsEntities;
     private List<ServiceResponse> serviceResponses;
-    private NMHouseDistrictEntity nmHouseDistrictEntity;
-    private NMHouseDistrictNestedResponse nmHouseDistrictNestedResponse;
+    private HouseDistrictEntity nmHouseDistrictEntity;
+    private HouseDistrictNestedResponse nmHouseDistrictNestedResponse;
     private SenateDistrictEntity senateDistrictEntity;
     private SenateDistrictNestedResponse senateDistrictNestedResponse;
     private CongressionalDistrictEntity congressionalDistrictEntity;
     private CongressionalDistrictNestedResponse congressionalDistrictNestedResponse;
-    private NMHouseDistrictResponse nmHouseDistrictResponse;
+    private HouseDistrictResponse nmHouseDistrictResponse;
     private SenateDistrictResponseModel senateDistrictResponseModel;
     private CongressionalDistrictResponse congressionalDistrictResponse;
     private Date createdAt;
@@ -299,11 +299,11 @@ public class SiteDto {
         this.updatedAt = updatedAt;
     }
 
-    public NMHouseDistrictEntity getNmHouseDistrictEntity() {
+    public HouseDistrictEntity getNmHouseDistrictEntity() {
         return nmHouseDistrictEntity;
     }
 
-    public void setNmHouseDistrictEntity(NMHouseDistrictEntity nmHouseDistrictEntity) {
+    public void setNmHouseDistrictEntity(HouseDistrictEntity nmHouseDistrictEntity) {
         this.nmHouseDistrictEntity = nmHouseDistrictEntity;
     }
 
@@ -323,11 +323,11 @@ public class SiteDto {
         this.congressionalDistrictEntity = congressionalDistrictEntity;
     }
 
-    public NMHouseDistrictResponse getNmHouseDistrictResponse() {
+    public HouseDistrictResponse getNmHouseDistrictResponse() {
         return nmHouseDistrictResponse;
     }
 
-    public void setNmHouseDistrictResponse(NMHouseDistrictResponse nmHouseDistrictResponse) {
+    public void setNmHouseDistrictResponse(HouseDistrictResponse nmHouseDistrictResponse) {
         this.nmHouseDistrictResponse = nmHouseDistrictResponse;
     }
 
@@ -379,11 +379,11 @@ public class SiteDto {
         this.fundNestedResponses = fundNestedResponses;
     }
 
-    public NMHouseDistrictNestedResponse getNmHouseDistrictNestedResponse() {
+    public HouseDistrictNestedResponse getNmHouseDistrictNestedResponse() {
         return nmHouseDistrictNestedResponse;
     }
 
-    public void setNmHouseDistrictNestedResponse(NMHouseDistrictNestedResponse nmHouseDistrictNestedResponse) {
+    public void setNmHouseDistrictNestedResponse(HouseDistrictNestedResponse nmHouseDistrictNestedResponse) {
         this.nmHouseDistrictNestedResponse = nmHouseDistrictNestedResponse;
     }
 

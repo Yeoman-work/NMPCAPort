@@ -1,18 +1,15 @@
 package net.yeoman.nmpcaport.services;
 
-import net.yeoman.nmpcaport.entities.FundEntity;
 import net.yeoman.nmpcaport.entities.HealthCenterEntity;
-import net.yeoman.nmpcaport.entities.ServiceEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
-import net.yeoman.nmpcaport.io.repositories.SiteServiceDetailsRepository;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.*;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
@@ -36,7 +33,7 @@ public interface HealthCenterService {
     //dash board
     public List<ServiceEssentialsResponse> getServiceEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
     public List<FundEssentialsResponse> getFundingEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
-    public List<NMHouseDistrictEssentialResponse> getNMHouseDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
+    public List<HouseDistrictEssentialResponse> getNMHouseDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
     public List<SenateDistrictEssentialResponse> getSenateDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
     public List<CongressionalDistrictEssentialsResponse>
     congressionalDistrictEssentials(List<CongressionalDistrictEssentialsResponse> congressionalDistrictEssentialsResponses);
@@ -70,7 +67,7 @@ public interface HealthCenterService {
 
     public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEntity> siteEntities);
     public List<FundEssentialsResponse>  healthCenterFundEssentials(List<SiteEntity> siteEntities);
-    public List<NMHouseDistrictEssentialResponse> healthCenterNMDistrictEssentials(List<SiteEntity> siteEntities);
+    public List<HouseDistrictEssentialResponse> healthCenterNMDistrictEssentials(List<SiteEntity> siteEntities);
     public List<SenateDistrictEssentialResponse> healthCenterSenateDistrictEssentials(List<SiteEntity> siteEntities);
     public List<CongressionalDistrictEssentialsResponse> healthCenterCongressionalEssentials(List<SiteEntity> siteEntities);
 
@@ -104,7 +101,7 @@ public interface HealthCenterService {
     public List<FundNestedResponse> getHealthCenterFundingFromSites(List<SiteEntity> siteEntities);
 
     //get NM house districts from sites
-    public List<NMHouseDistrictNestedResponse> getHealthCenterNMHouseDistrictsFromSites(List<SiteEntity> siteEntities);
+    public List<HouseDistrictNestedResponse> getHealthCenterNMHouseDistrictsFromSites(List<SiteEntity> siteEntities);
 
     //get senate districts from states
     public List<SenateDistrictNestedResponse> getHealthCenterSenateDistrictFromSites(List<SiteEntity> siteEntities);

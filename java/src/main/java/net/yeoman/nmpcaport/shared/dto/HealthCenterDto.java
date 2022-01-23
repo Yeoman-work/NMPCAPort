@@ -11,8 +11,8 @@ import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
@@ -58,11 +58,11 @@ public class HealthCenterDto {
     private List<SiteEntity> siteEntities;
     private List<UserEntity> userEntities;
     private List<ContactEntity> contactEntities;
-    private List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponses;
+    private List<HouseDistrictNestedResponse> nmHouseDistrictNestedResponses;
     private List<CongressionalDistrictResponse> congressionalDistrictResponseList;
     private List<SenateDistrictResponseModel> senateDistrictResponseModelList;
     private List<SenateDistrictNestedResponse> senateDistrictNestedResponseList;
-    private List<NMHouseDistrictEntity> nmHouseDistrictsEntities;
+    private List<HouseDistrictEntity> nmHouseDistrictsEntities;
     private List<CongressionalDistrictEntity> congressionalDistrictEntities;
     private List<CongressionalDistrictNestedResponse> congressionalDistrictNestedResponseList;
     private List<ServiceEntity> serviceEntities;
@@ -80,7 +80,7 @@ public class HealthCenterDto {
     private List<ServiceEssentialsResponse> serviceEssentialsResponses;
     private List<FundEssentialsResponse> fundEssentialsResponses;
     private List<LocationEssentialsResponse> locationEssentialsResponseList;
-    private List<NMHouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses;
+    private List<HouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses;
     private List<SenateDistrictEssentialResponse> senateDistrictEssentialResponses;
     private List<CongressionalDistrictEssentialsResponse> congressionalEssentialsResponses;
 
@@ -222,11 +222,11 @@ public class HealthCenterDto {
         this.siteDetailsNestedResponseList = siteDetailsNestedResponseList;
     }
 
-    public List<NMHouseDistrictEntity> getNmHouseDistrictsEntities() {
+    public List<HouseDistrictEntity> getNmHouseDistrictsEntities() {
         return nmHouseDistrictsEntities;
     }
 
-    public void setNmHouseDistrictsEntities(List<NMHouseDistrictEntity> nmHouseDistrictsEntities) {
+    public void setNmHouseDistrictsEntities(List<HouseDistrictEntity> nmHouseDistrictsEntities) {
         this.nmHouseDistrictsEntities = nmHouseDistrictsEntities;
     }
 
@@ -270,11 +270,11 @@ public class HealthCenterDto {
         this.congressionalDistrictResponseList = congressionalDistrictResponseList;
     }
 
-    public List<NMHouseDistrictNestedResponse> getNmHouseDistrictNestedResponses() {
+    public List<HouseDistrictNestedResponse> getNmHouseDistrictNestedResponses() {
         return nmHouseDistrictNestedResponses;
     }
 
-    public void setNmHouseDistrictNestedResponses(List<NMHouseDistrictNestedResponse> nmHouseDistrictNestedResponses) {
+    public void setNmHouseDistrictNestedResponses(List<HouseDistrictNestedResponse> nmHouseDistrictNestedResponses) {
         this.nmHouseDistrictNestedResponses = nmHouseDistrictNestedResponses;
     }
 
@@ -382,11 +382,11 @@ public class HealthCenterDto {
         this.locationEssentialsResponseList = locationEssentialsResponseList;
     }
 
-    public List<NMHouseDistrictEssentialResponse> getNmHouseDistrictEssentialResponses() {
+    public List<HouseDistrictEssentialResponse> getNmHouseDistrictEssentialResponses() {
         return nmHouseDistrictEssentialResponses;
     }
 
-    public void setNmHouseDistrictEssentialResponses(List<NMHouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses) {
+    public void setNmHouseDistrictEssentialResponses(List<HouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses) {
         this.nmHouseDistrictEssentialResponses = nmHouseDistrictEssentialResponses;
     }
 

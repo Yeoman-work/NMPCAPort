@@ -30,6 +30,7 @@ public class InterimCommitteeController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public void createNewInterimGroup(@RequestBody InterimCommitteeRequest interimCommitteeRequest){
 
+        System.out.println("first step");
         this.interimCommitteeService.storeNewInterimCommittee(interimCommitteeRequest);
     }
 

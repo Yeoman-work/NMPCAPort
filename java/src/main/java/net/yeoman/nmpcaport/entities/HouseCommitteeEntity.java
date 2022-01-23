@@ -8,30 +8,32 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "nmSenateCommittees")
-public class NMSenateCommitteeEntity implements Serializable {
+@Table(name= "houseCommittee")
+public class HouseCommitteeEntity implements Serializable {
 
-    private static final long serialVersionUID = -6206693048907184517L;
+
+    private static final long serialVersionUID = 3988256856852878426L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message="required")
-    private String nmSenateCommitteeId;
+    @NotBlank(message = "required")
+    private String publicId;
+
 
     @NotBlank(message = "required")
-    @Size(min=4, max=100, message = "must be between 4 and 100 characters")
-    @Column(unique = true)
+    @Size(min=3, max=75)
     private String name;
 
-    @Size(min=8, max=200, message = "must be between 8 and 200 characters")
+    @NotBlank(message = "required")
+    @Size(max=150)
     private String description;
+
 
     @Column(updatable = false)
     private Date createdAt;
     private Date updatedAt;
-
 
 
     @PrePersist
@@ -46,17 +48,10 @@ public class NMSenateCommitteeEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
+    @OneToMany(mappedBy = "nmHouseCommitteeEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HouseCommitteeAssignmentEntity> houseCommitteeAssignments;
 
-    public NMSenateCommitteeEntity() {
-    }
-
-    public NMSenateCommitteeEntity(Long id, String nmSenateCommitteeId, String name, String description, Date createdAt, Date updatedAt) {
-        this.id = id;
-        this.nmSenateCommitteeId = nmSenateCommitteeId;
-        this.name = name;
-        this.description = description;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    public HouseCommitteeEntity() {
     }
 
     public Long getId() {
@@ -67,12 +62,12 @@ public class NMSenateCommitteeEntity implements Serializable {
         this.id = id;
     }
 
-    public String getNmSenateCommitteeId() {
-        return nmSenateCommitteeId;
+    public String getPublicId() {
+        return publicId;
     }
 
-    public void setNmSenateCommitteeId(String nmSenateCommitteeId) {
-        this.nmSenateCommitteeId = nmSenateCommitteeId;
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
     public String getName() {
@@ -107,5 +102,11 @@ public class NMSenateCommitteeEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public List<HouseCommitteeAssignmentEntity> getHouseCommitteeAssignments() {
+        return houseCommitteeAssignments;
+    }
 
+    public void setHouseCommitteeAssignments(List<HouseCommitteeAssignmentEntity> houseCommitteeAssignments) {
+        this.houseCommitteeAssignments = houseCommitteeAssignments;
+    }
 }

@@ -1,17 +1,13 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
-import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
 import net.yeoman.nmpcaport.services.SiteService;
-import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
-import net.yeoman.nmpcaport.io.response.service.ServiceResponse;
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.repositories.SiteRepository;
-import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
 import net.yeoman.nmpcaport.shared.dto.SiteDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
@@ -45,7 +41,7 @@ public class SiteServiceImpl implements SiteService {
     @Autowired HealthCenterServiceImpl healthCenterService;
 
     @Autowired
-    private NMHouseDistrictServiceImpl nmHouseDistrictService;
+    private HouseDistrictServiceImpl nmHouseDistrictService;
 
     @Autowired
     private SenateDistrictServiceImpl senateDistrictService;
@@ -260,7 +256,7 @@ public class SiteServiceImpl implements SiteService {
         if(siteDto.getNmHouseDistrict() != null){
 
             siteEntity.setNmHouseDistrictEntity(
-                    this.nmHouseDistrictService.findNMHouseDistrictEntity(
+                    this.nmHouseDistrictService.findHouseDistrictEntity(
                             siteDto.getNmHouseDistrict()
                     )
             );

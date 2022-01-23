@@ -1,6 +1,6 @@
 package net.yeoman.nmpcaport.io.response.stateRep;
 
-import net.yeoman.nmpcaport.io.response.nmHouseDistrict.NMHouseDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyEssentials;
 
 public class StateRepEssentials {
@@ -10,7 +10,7 @@ public class StateRepEssentials {
     private String lastName;
     private String email;
     private String picture;
-    private NMHouseDistrictEssentialResponse nmHouseDistrictEssentialResponse;
+    private HouseDistrictEssentialResponse nmHouseDistrictEssentialResponse;
     private PoliticalPartyEssentials politicalPartyEssentials;
 
     public String getStateRepId() {
@@ -53,11 +53,11 @@ public class StateRepEssentials {
         this.picture = picture;
     }
 
-    public NMHouseDistrictEssentialResponse getNmHouseDistrictEssentialResponse() {
+    public HouseDistrictEssentialResponse getNmHouseDistrictEssentialResponse() {
         return nmHouseDistrictEssentialResponse;
     }
 
-    public void setNmHouseDistrictEssentialResponse(NMHouseDistrictEssentialResponse nmHouseDistrictEssentialResponse) {
+    public void setNmHouseDistrictEssentialResponse(HouseDistrictEssentialResponse nmHouseDistrictEssentialResponse) {
         this.nmHouseDistrictEssentialResponse = nmHouseDistrictEssentialResponse;
     }
 

@@ -55,8 +55,8 @@ public class AppExceptionsHandler {
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(value={NMHouseDistrictServiceException.class})
-    public ResponseEntity<Object> handleNMHouseDistrictServiceException(NMHouseDistrictServiceException ex, WebRequest request){
+    @ExceptionHandler(value={HouseDistrictServiceException.class})
+    public ResponseEntity<Object> handleNMHouseDistrictServiceException(HouseDistrictServiceException ex, WebRequest request){
 
         ErrorMessage errorMessage = new ErrorMessage(new Date(), ex.getMessage());
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
