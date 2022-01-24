@@ -33,6 +33,7 @@ public interface SiteFundingDetailsService {
     public SiteEntity getSiteEntity(SiteFundingDetailsEntity siteFundingDetailsEntity);
     public List<SiteEntity> getSiteEntities(List<SiteFundingDetailsEntity> siteFundingDetailsEntityList);
 
+
     public Boolean entityIsNull(SiteFundingDetailsEntity siteFundingDetailsEntity);
     public Boolean entityIsNull(List<SiteFundingDetailsEntity> siteFundingDetailsEntities);
     public Boolean dtoIsNull(SiteFundingDetailsEntity siteFundingDetailsEntity);

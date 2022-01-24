@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.ServiceEntity;
+import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.io.request.service.ServiceDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.service.ServiceRequestListModel;
 import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
@@ -19,6 +20,10 @@ public interface ServiceService {
     //convert to response
     public ServiceResponse dtoToResponse(ServiceDto serviceDto);
     public List<ServiceResponse> dtoToResponse(List<ServiceDto> serviceDtoList);
+
+    //get service essentials from site(s)
+    public ServiceEssentialsResponse getServiceEssentialsFromSite(SiteEntity siteEntity);
+    public List<ServiceEssentialsResponse> getServiceEssentialsFromSite(List<SiteEntity> siteEntities);
 
     //convert to nested Response
     public ServiceNestedResponse dtoToNestedResponse(ServiceDto serviceDto);

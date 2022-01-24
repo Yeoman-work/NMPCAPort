@@ -1,8 +1,12 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.FundEntity;
+import net.yeoman.nmpcaport.entities.SiteEntity;
+import net.yeoman.nmpcaport.entities.SiteFundingDetailsEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.FundServiceException;
+import net.yeoman.nmpcaport.exception.SiteFundingServiceException;
+import net.yeoman.nmpcaport.exception.SiteServiceException;
 import net.yeoman.nmpcaport.io.request.fund.FundRequestListModel;
 import net.yeoman.nmpcaport.io.request.fund.FundRequestModel;
 import net.yeoman.nmpcaport.io.repositories.FundRepository;
@@ -11,6 +15,7 @@ import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.services.FundService;
+import net.yeoman.nmpcaport.services.SiteFundingDetailsService;
 import net.yeoman.nmpcaport.shared.dto.FundDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
@@ -23,12 +28,24 @@ import java.util.List;
 @Service
 public class FundServiceImpl implements FundService {
 
-    @Autowired
-    private FundRepository fundRepository;
 
+    private final FundRepository fundRepository;
+    private final SiteFundingDetailsServiceImpl siteFundingDetailsService;
+    private final SiteServiceImpl siteService;
+    private final Utils utils;
 
-    @Autowired
-    private Utils utils;
+    public FundServiceImpl(FundRepository fundRepository,
+                           SiteFundingDetailsServiceImpl siteFundingDetailsService,
+                           SiteServiceImpl siteService,
+                           Utils utils
+    ){
+
+        this.fundRepository = fundRepository;
+        this.siteFundingDetailsService = siteFundingDetailsService;
+        this.siteService = siteService;
+        this.utils = utils;
+
+    }
 
     @Override
     public FundEntity getFund(String fundId) {
@@ -85,6 +102,65 @@ public class FundServiceImpl implements FundService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public List<FundEntity> gatherFundEntity(List<SiteFundingDetailsEntity> fundingDetailsEntities, List<FundEntity> fundEntities) {
+
+        if(this.entityIsNull(fundEntities))
+            throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        if(this.siteFundingDetailsService.entityIsNull(fundingDetailsEntities))
+            throw new SiteFundingServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        for(SiteFundingDetailsEntity siteFunding: fundingDetailsEntities){
+
+            if(!fundEntities.contains(siteFunding.getFundEntity())){
+
+                fundEntities.add(siteFunding.getFundEntity());
+            }
+
+        }
+
+        return fundEntities;
+    }
+
+
+    @Override
+    public FundEssentialsResponse getEssentialsFromSite(SiteEntity siteEntity) {
+
+        if(this.siteService.entityIsNull(siteEntity))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        FundEssentialsResponse fundEssentialsResponse = new FundEssentialsResponse();
+
+
+        return null;
+    }
+
+    @Override
+    public List<FundEssentialsResponse> getEssentialsFromSite(List<SiteEntity> siteEntities) {
+
+        if(this.siteService.entityIsNull(siteEntities))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<FundEntity> fundingFromSitesList = new ArrayList<>();
+        List<FundEssentialsResponse> fundEssentialsFromSitesList = new ArrayList<>();
+
+        for(SiteEntity siteEntity: siteEntities){
+
+            fundingFromSitesList = this.gatherFundEntity(
+                    siteEntity.getSiteFundingDetailsEntities(),
+                    fundingFromSitesList
+            );
+        }
+
+        for(FundEntity fund: fundingFromSitesList){
+
+            fundEssentialsFromSitesList.add(this.entityToEssential(fund));
+        }
+
+        return fundEssentialsFromSitesList;
     }
 
 

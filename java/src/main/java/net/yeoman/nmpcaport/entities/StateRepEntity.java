@@ -66,7 +66,7 @@ public class StateRepEntity implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nm_house_district_entity_id")
-    private HouseDistrictEntity nmHouseDistrict;
+    private HouseDistrictEntity houseDistrict;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_entity_id")
@@ -105,7 +105,7 @@ public class StateRepEntity implements Serializable {
                           String streetAddress,
                           Date createdAt,
                           Date updatedAt,
-                          HouseDistrictEntity nmHouseDistrict,
+                          HouseDistrictEntity houseDistrict,
                           CityEntity cityEntity,
                           ZipCodeEntity zipCodeEntity,
                           List<AssignedNumberEntity> assignedNumberEntities) {
@@ -119,7 +119,7 @@ public class StateRepEntity implements Serializable {
         this.streetAddress = streetAddress;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.nmHouseDistrict = nmHouseDistrict;
+        this.houseDistrict = houseDistrict;
         this.cityEntity = cityEntity;
         this.zipCodeEntity = zipCodeEntity;
         this.assignedNumberEntities = assignedNumberEntities;
@@ -205,14 +205,13 @@ public class StateRepEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public HouseDistrictEntity getNmHouseDistrict() {
-        return nmHouseDistrict;
+    public HouseDistrictEntity getHouseDistrict() {
+        return houseDistrict;
     }
 
-    public void setNmHouseDistrict(HouseDistrictEntity nmHouseDistrict) {
-        this.nmHouseDistrict = nmHouseDistrict;
+    public void setHouseDistrict(HouseDistrictEntity houseDistrict) {
+        this.houseDistrict = houseDistrict;
     }
-
 
     public CityEntity getCityEntity() {
         return cityEntity;

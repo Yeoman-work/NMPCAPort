@@ -11,7 +11,7 @@ public class StateRepDetailsRequest {
     private String picture;
     private String capitolRoom;
     private String streetAddress;
-    private String nmHouseDistrict;
+    private String houseDistrict;
     private String city;
     private String zipCode;
     private String party;
@@ -65,14 +65,13 @@ public class StateRepDetailsRequest {
         this.streetAddress = streetAddress;
     }
 
-    public String getNmHouseDistrict() {
-        return nmHouseDistrict;
+    public String getHouseDistrict() {
+        return houseDistrict;
     }
 
-    public void setNmHouseDistrict(String nmHouseDistrict) {
-        this.nmHouseDistrict = nmHouseDistrict;
+    public void setHouseDistrict(String houseDistrict) {
+        this.houseDistrict = houseDistrict;
     }
-
 
     public String getCity() {
         return city;

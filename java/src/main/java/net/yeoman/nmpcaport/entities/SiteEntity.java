@@ -72,8 +72,8 @@ public class SiteEntity implements Serializable {
     private ZipCodeEntity zipCodeEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "n_m_house_district_entity_id")
-    private HouseDistrictEntity nmHouseDistrictEntity;
+    @JoinColumn(name = "house_district_entity_id")
+    private HouseDistrictEntity houseDistrictEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "senate_district_entity_id")
@@ -195,12 +195,12 @@ public class SiteEntity implements Serializable {
         this.zipCodeEntity = zipCodeEntity;
     }
 
-    public HouseDistrictEntity getNmHouseDistrictEntity() {
-        return nmHouseDistrictEntity;
+    public HouseDistrictEntity getHouseDistrictEntity() {
+        return houseDistrictEntity;
     }
 
-    public void setNmHouseDistrictEntity(HouseDistrictEntity nmHouseDistrictEntity) {
-        this.nmHouseDistrictEntity = nmHouseDistrictEntity;
+    public void setHouseDistrictEntity(HouseDistrictEntity houseDistrictEntity) {
+        this.houseDistrictEntity = houseDistrictEntity;
     }
 
     public SenateDistrictEntity getSenateDistrictEntity() {

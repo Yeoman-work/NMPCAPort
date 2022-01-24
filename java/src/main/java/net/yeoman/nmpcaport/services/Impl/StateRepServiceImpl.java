@@ -1,5 +1,7 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.errormessages.StateRepErrorMessage;
+import net.yeoman.nmpcaport.io.request.stateRep.StateRepDetailsRequest;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepEssentials;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepNestedResponse;
 import net.yeoman.nmpcaport.services.StateRepService;
@@ -49,169 +51,147 @@ public class StateRepServiceImpl implements StateRepService {
 
 
 
-    @Override
-    public StateRepDto getStateRep(String stateRepId) {
-
-       StateRepDto stateRepDto = new ModelMapper().map(this.stateRepRepository.findByStateRepId(stateRepId), StateRepDto.class);
-
-       if(stateRepDto.getNmHouseDistrict() != null){
-
-           stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(stateRepDto.getNmHouseDistrict(), HouseDistrictNestedResponse.class));
-       }
-
-       return stateRepDto;
-    }
-
-    @Override
-    public StateRepDto createStateRep(StateRepDto stateRepDto) {
-
-        StateRepEntity stateRepEntity = new ModelMapper().map(stateRepDto, StateRepEntity.class);
-
-        stateRepEntity.setStateRepId(utils.generateRandomID());
-
-        //check for NMHouse district
-        if(!stateRepDto.getNmHouseDistrict().isBlank()){
-
-            //get NM House district
-            HouseDistrictEntity nmHouseDistrictEntity = this.nmHouseDistrictService.findHouseDistrictEntity(stateRepDto.getNmHouseDistrict());
-
-            //if null throw error
-            if(nmHouseDistrictEntity == null) throw new HouseDistrictServiceException(stateRepDto.getNmHouseDistrict() + ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
-
-            //add district response to the dto
-            stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(nmHouseDistrictEntity, HouseDistrictNestedResponse.class));
-
-
-            //add district entity to state rep entity
-            stateRepEntity.setNmHouseDistrict(nmHouseDistrictEntity);
-        }
-
-        //check if party id exist
-        if(!stateRepDto.getParty().isBlank()){
-
-            //get political party
-            PoliticalPartyEntity politicalPartyEntity = this.politicalPartyService.politicalPartyEntity(stateRepDto.getParty());
-
-            //if party is null throw error
-            if(politicalPartyEntity == null) throw new PoliticalPartyServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
-            //set political party response to DTO
-            stateRepDto.setPoliticalPartyResponse(new ModelMapper().map(politicalPartyEntity, PoliticalPartyResponse.class));
-
-            //set political party entity tp state rep entity
-            stateRepEntity.setPoliticalParty(politicalPartyEntity);
-
-        }
-
-        //if city id exist
-        if(!stateRepDto.getCity().isBlank()){
-
-            //get city entity
-            CityEntity cityEntity = this.cityService.findCity(stateRepDto.getCity());
-
-            // if city is null throw error
-            if(cityEntity == null) throw new CityServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
-            //set city response on dto
-            stateRepDto.setCityResponse(new ModelMapper().map(cityEntity, CityResponse.class));
-
-            //set city entity on state rep entity
-            stateRepEntity.setCityEntity(cityEntity);
-        }
-
-        if(!stateRepDto.getZipCode().isBlank()){
-
-            //get zip code
-            ZipCodeEntity zipCodeEntity = this.zipCodeService.getZipCodeEntity(stateRepDto.getZipCode());
-
-            //check if zip code is null
-            if(zipCodeEntity == null) throw new ZipCodeServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
-            // add zipCode response
-            stateRepDto.setZipCodeResponse(new ModelMapper().map(zipCodeEntity, ZipCodeResponse.class));
-
-            //zipCode response
-            stateRepEntity.setZipCodeEntity(zipCodeEntity);
-
-        }
-
-        StateRepEntity savedStateRep = this.stateRepRepository.save(stateRepEntity);
-
-
-        return stateRepDto;
-    }
-
-    @Override
-    public StateRepDto updatedStateRep(String stateRepId, StateRepDto stateRepDto) {
-        return null;
-    }
-
-    @Override
-    public StateRepDto deleteStateRep(String stateRepId) {
-        return null;
-    }
 
     @Override
     public StateRepEntity findStateRepEntityById(String stateRepId) {
-        return null;
+
+        return this.stateRepRepository.findByStateRepId(stateRepId);
     }
 
     @Override
-    public List<StateRepDto> findAllStateReps() {
-        List<StateRepDto> returnValue = new ArrayList<>();
+    public StateRepEntity saveStateRepEntity(StateRepEntity stateRepEntity) {
 
-        List<StateRepEntity> allStateReps = this.stateRepRepository.findAll();
-
-        for(StateRepEntity rep: allStateReps){
-
-
-            StateRepDto stateRepDto = new ModelMapper().map(rep, StateRepDto.class);
-
-            if(stateRepDto.getCityEntity() != null){
-
-                stateRepDto.setCityResponse(
-                        this.cityService.dtoToResponse(
-                                this.cityService.entityToDto(
-                                        stateRepDto.getCityEntity()
-                                )
-                        )
-                );
-            }
-
-            if(stateRepDto.getZipCodeEntity() != null){
-
-                stateRepDto.setZipCodeResponse(
-                        this.zipCodeService.dtoToResponse(
-                                this.zipCodeService.entityToDto(
-                                        stateRepDto.getZipCodeEntity()
-                                )
-                        )
-                );
-
-            }
-
-            if(stateRepDto.getPoliticalParty() != null){
-
-                stateRepDto.setPoliticalPartyResponse(this.politicalPartyService.dtoToResponse(this.politicalPartyService.entityToDto(stateRepDto.getPoliticalParty())));
-
-            }
-
-            if(stateRepDto.getNmHouseDistrictEntity() != null){
-
-                stateRepDto.setNmHouseDistrictResponse(new ModelMapper().map(stateRepDto.getNmHouseDistrictEntity(), HouseDistrictNestedResponse.class));
-            }
-
-
-            returnValue.add(stateRepDto);
-        }
-
-        return returnValue;
+        return this.stateRepRepository.save(stateRepEntity);
     }
+
+    @Override
+    public StateRepEntity getStateRepEntity(String publicId) {
+
+        return this.stateRepRepository.findByStateRepId(publicId);
+    }
+
 
     @Override
     public List<StateRepEntity> getAllEntities() {
+
         return this.stateRepRepository.findAll();
+
+    }
+
+    @Override
+    public StateRepEntity generateUniqueId(StateRepEntity stateRepEntity) {
+
+        if(this.entityIsNull(stateRepEntity))
+            throw new StateRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        stateRepEntity.setStateRepId(this.utils.generateRandomID());
+
+        while(this.stateRepRepository.existsByStateRepId(stateRepEntity.getStateRepId())){
+
+            stateRepEntity.setStateRepId(this.utils.generateRandomID());
+        }
+
+        return stateRepEntity;
+    }
+
+    @Override
+    public StateRepEntity requestToEntity(StateRepDetailsRequest stateRepDetailsRequest) {
+
+        if(this.requestIsNull(stateRepDetailsRequest))
+            throw new StateRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        StateRepEntity stateRepEntity = this.generateUniqueId(new StateRepEntity());
+
+        if(stateRepDetailsRequest.getFirstName().length() < 3)
+            throw new StateRepServiceException(StateRepErrorMessage.FIRST_NAME_LENGTH.getErrorMessage());
+
+
+        if(stateRepDetailsRequest.getFirstName().length() > 50)
+            throw new StateRepServiceException(StateRepErrorMessage.FIRST_NAME_LENGTH.getErrorMessage());
+
+
+        stateRepEntity.setFirstName(stateRepDetailsRequest.getFirstName());
+
+        if(stateRepDetailsRequest.getLastName().length() < 3)
+            throw new StateRepServiceException(StateRepErrorMessage.LAST_NAME_LENGTH.getErrorMessage());
+
+        if(stateRepDetailsRequest.getLastName().length() > 50)
+            throw new StateRepServiceException(StateRepErrorMessage.LAST_NAME_LENGTH.getErrorMessage());
+
+
+        stateRepEntity.setLastName(stateRepDetailsRequest.getLastName());
+
+        if(stateRepDetailsRequest.getEmail().length() > 150)
+            throw new StateRepServiceException(ErrorMessages.EMAIL_CHARACTER_LENGTH.getErrorMessage());
+
+
+        stateRepEntity.setEmail(stateRepDetailsRequest.getEmail());
+
+        if(stateRepDetailsRequest.getPicture().length() > 250)
+            throw new StateRepServiceException(ErrorMessages.PICTURE_LENGTH.getErrorMessage());
+
+
+        stateRepEntity.setPicture(stateRepDetailsRequest.getPicture());
+
+        if(stateRepDetailsRequest.getCapitolRoom().length() <= 8)
+            throw new StateRepServiceException(ErrorMessages.CAPITOL_ROOM.getErrorMessage());
+
+
+        stateRepEntity.setCapitolRoom(stateRepDetailsRequest.getCapitolRoom());
+
+        if(stateRepDetailsRequest.getStreetAddress() != null){
+
+            if(stateRepDetailsRequest.getStreetAddress().length() < 5)
+                throw new StateRepServiceException(ErrorMessages.ADDRESS_LENGTH.getErrorMessage());
+
+            if(stateRepDetailsRequest.getStreetAddress().length() > 150)
+                throw new StateRepServiceException(ErrorMessages.ADDRESS_LENGTH.getErrorMessage());
+
+            stateRepEntity.setStreetAddress(stateRepDetailsRequest.getStreetAddress());
+        }
+
+
+        if(stateRepDetailsRequest.getCity() != null){
+
+            CityEntity cityEntity = this.cityService.findCity(stateRepDetailsRequest.getCity());
+
+            if(cityEntity == null) throw new CityServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+            stateRepEntity.setCityEntity(this.cityService.findCity(stateRepDetailsRequest.getCity()));
+        }
+
+
+        if(stateRepDetailsRequest.getZipCode() != null){
+
+            ZipCodeEntity zipCode = this.zipCodeService.getZipCodeEntity(stateRepDetailsRequest.getZipCode());
+
+            if(zipCode == null) throw new StateRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+            stateRepEntity.setZipCodeEntity(this.zipCodeService.getZipCodeEntity(stateRepDetailsRequest.getZipCode()));
+        }
+
+
+        if(stateRepDetailsRequest.getParty() != null){
+
+            stateRepEntity.setPoliticalParty(
+                    this.politicalPartyService.politicalPartyEntity(
+                            stateRepDetailsRequest.getParty()
+                    )
+            );
+
+        }
+
+        if(stateRepDetailsRequest.getHouseDistrict() != null){
+
+            stateRepEntity.setHouseDistrict(
+                    this.nmHouseDistrictService.getHouseDistrict(
+                            stateRepDetailsRequest.getHouseDistrict()
+                    )
+            );
+        }
+
+
+        return this.saveStateRepEntity(stateRepEntity);
     }
 
     @Override
@@ -228,7 +208,7 @@ public class StateRepServiceImpl implements StateRepService {
         stateRepEssentials.setPicture(stateRepEntity.getPicture());
         stateRepEssentials.setEmail(stateRepEntity.getEmail());
         stateRepEssentials.setNmHouseDistrictEssentialResponse(
-                this.nmHouseDistrictService.entityToEssentials(stateRepEntity.getNmHouseDistrict()
+                this.nmHouseDistrictService.entityToEssentials(stateRepEntity.getHouseDistrict()
                 )
         );
         stateRepEssentials.setPoliticalPartyEssentials(
@@ -273,7 +253,7 @@ public class StateRepServiceImpl implements StateRepService {
         stateRepNestedResponse.setCity(stateRepEntity.getCityEntity().getName());
         stateRepNestedResponse.setZipCode(stateRepEntity.getZipCodeEntity().getName());
         stateRepNestedResponse.setNmHouseDistrictEssentialResponse(
-                this.nmHouseDistrictService.entityToEssentials(stateRepEntity.getNmHouseDistrict()
+                this.nmHouseDistrictService.entityToEssentials(stateRepEntity.getHouseDistrict()
                 )
         );
 
@@ -288,19 +268,9 @@ public class StateRepServiceImpl implements StateRepService {
 
     @Override
     public List<StateRepNestedResponse> getStateRepNestedReps(List<StateRepEntity> stateRepEntities) {
-
-        if(this.entityIsNull(stateRepEntities))
-            throw new StateRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<StateRepNestedResponse> returnValue = new ArrayList<>();
-
-        for(StateRepEntity stateRepEntity: stateRepEntities){
-
-            returnValue.add(this.getStateRepNestedReps(stateRepEntity));
-        }
-
-        return returnValue;
+        return null;
     }
+
 
     @Override
     public Boolean entityIsNull(StateRepEntity stateRepEntity) {
@@ -310,5 +280,11 @@ public class StateRepServiceImpl implements StateRepService {
     @Override
     public Boolean entityIsNull(List<StateRepEntity> stateRepEntities) {
         return  stateRepEntities == null;
+    }
+
+    @Override
+    public Boolean requestIsNull(StateRepDetailsRequest stateRepDetailsRequest) {
+
+        return stateRepDetailsRequest == null;
     }
 }

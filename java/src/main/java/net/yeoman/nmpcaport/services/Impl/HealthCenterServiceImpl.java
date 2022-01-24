@@ -11,6 +11,7 @@ import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedRespo
 import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
+import net.yeoman.nmpcaport.services.FundService;
 import net.yeoman.nmpcaport.services.HealthCenterService;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
@@ -35,50 +36,55 @@ import java.util.stream.Collectors;
 @Service
 public class HealthCenterServiceImpl implements HealthCenterService {
 
-    @Autowired
-    private HealthCenterRepository healthCenterRepository;
 
-    @Autowired
-    private SiteServiceImpl siteService;
+    private final HealthCenterRepository healthCenterRepository;
 
-    @Autowired
-    private ServiceServiceImpl serviceService;
+    private final SiteServiceImpl siteService;
 
-    @Autowired
-    private SiteFundingDetailsServiceImpl siteFundingDetailsService;
+    private final ServiceServiceImpl serviceService;
 
-    @Autowired
-    private FundServiceImpl fundService;
+    private final SiteFundingDetailsServiceImpl siteFundingDetailsService;
 
-    @Autowired
-    private SiteServiceDetailsServiceImpl siteServiceDetailsService;
+    private final FundServiceImpl fundService;
 
-    @Autowired
-    private HouseDistrictServiceImpl nmHouseDistrictService;
+    private final SiteServiceDetailsServiceImpl siteServiceDetailsService;
 
-    @Autowired
-    private SenateDistrictServiceImpl senateDistrictService;
+    private final HouseDistrictServiceImpl houseDistrictService;
 
-    @Autowired
-    private CongressionalDistrictServiceImpl congressionalDistrictService;
+    private final SenateDistrictServiceImpl senateDistrictService;
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final CongressionalDistrictServiceImpl congressionalDistrictService;
 
-    @Autowired
-    private CityServiceImpl cityService;
+    private final ContactServiceImpl contactService;
 
-    @Autowired
-    private CountyServiceImpl countyService;
+    private final Utils utils;
 
-    @Autowired
-    private ZipCodeServiceImpl zipCodeService;
+    public HealthCenterServiceImpl(HealthCenterRepository healthCenterRepository,
+                                   SiteServiceImpl siteService,
+                                   ServiceServiceImpl serviceService,
+                                   SiteFundingDetailsServiceImpl siteFundingDetailsService,
+                                   FundServiceImpl fundService,
+                                   SiteServiceDetailsServiceImpl siteServiceDetailsService,
+                                   HouseDistrictServiceImpl houseDistrictService,
+                                   SenateDistrictServiceImpl senateDistrictService,
+                                   CongressionalDistrictServiceImpl congressionalDistrictService,
+                                   ContactServiceImpl contactService,
+                                   Utils utils
+                                   ){
 
-    @Autowired
-    private ContactServiceImpl contactService;
+        this.healthCenterRepository = healthCenterRepository;
+        this.siteService = siteService;
+        this.serviceService = serviceService;
+        this.siteFundingDetailsService = siteFundingDetailsService;
+        this.fundService = fundService;
+        this.siteServiceDetailsService = siteServiceDetailsService;
+        this.houseDistrictService = houseDistrictService;
+        this.senateDistrictService = senateDistrictService;
+        this.congressionalDistrictService = congressionalDistrictService;
+        this.contactService = contactService;
+        this.utils = utils;
 
-    @Autowired
-    private Utils utils;
+    }
 
     @Override
     public HealthCenterDto getHealthCenter(String healthCenterId) {
@@ -334,36 +340,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return healthCenter;
     }
 
-    //get NM house districts from sites
-    @Override
-    public List<HouseDistrictNestedResponse> getHealthCenterNMHouseDistrictsFromSites(List<SiteEntity> siteEntities) {
 
-        if(this.siteService.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<HouseDistrictEntity> districtEntities = new ArrayList<>();
-        List<HouseDistrictNestedResponse> returnValue = new ArrayList<>();
-
-
-        for(SiteEntity siteEntity: siteEntities){
-
-            if(!this.nmHouseDistrictService.entityIsNull(siteEntity.getNmHouseDistrictEntity())){
-
-                if(!districtEntities.contains(siteEntity.getNmHouseDistrictEntity())){
-
-                    districtEntities.add(siteEntity.getNmHouseDistrictEntity());
-                }
-            }
-        }
-
-
-        if(districtEntities.size() > 0){
-
-            returnValue = this.nmHouseDistrictService.dtoToNestedResponse(this.nmHouseDistrictService.entityToDto(districtEntities));
-
-        }
-
-        return returnValue;
-    }
 
     //get senate district from sites
     @Override
@@ -498,6 +475,11 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public List<HouseDistrictNestedResponse> getHealthCenterNMHouseDistrictsFromSites(List<SiteEntity> siteEntities) {
+        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.ServiceException;
 import net.yeoman.nmpcaport.exception.SiteServiceException;
@@ -23,17 +24,25 @@ import java.util.List;
 @Service
 public class ServiceServiceImpl implements ServiceService {
 
-    @Autowired
-    private ServiceRepository serviceRepository;
 
-    @Autowired
-    private SiteServiceImpl siteService;
+    private final ServiceRepository serviceRepository;
 
-    @Autowired
-    private SiteServiceDetailsServiceImpl siteServiceDetailsService;
+    private final SiteServiceImpl siteService;
 
-    @Autowired
-    private Utils utils;
+    private final SiteServiceDetailsServiceImpl siteServiceDetailsService;
+
+    private final Utils utils;
+
+    public ServiceServiceImpl(ServiceRepository serviceRepository,
+                              SiteServiceImpl siteService,
+                              SiteServiceDetailsServiceImpl siteServiceDetailsService,
+                              Utils utils
+    ){
+        this.serviceRepository = serviceRepository;
+        this.siteService = siteService;
+        this.siteServiceDetailsService = siteServiceDetailsService;
+        this.utils = utils;
+    }
 
     @Override
     public List<ServiceDto> allServices() {
@@ -80,6 +89,36 @@ public class ServiceServiceImpl implements ServiceService {
             returnValue.add(this.dtoToResponse(serviceDto));
         }
 
+
+        return returnValue;
+    }
+
+    @Override
+    public ServiceEssentialsResponse getServiceEssentialsFromSite(SiteEntity siteEntity) {
+
+        if(this.siteService.entityIsNull(siteEntity))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        ServiceEssentialsResponse serviceEssentialsResponse = new ServiceEssentialsResponse();
+
+        serviceEssentialsResponse.setName(siteEntity.getName());
+        serviceEssentialsResponse.setServiceId(siteEntity.getSiteId());
+
+        return serviceEssentialsResponse;
+    }
+
+    @Override
+    public List<ServiceEssentialsResponse> getServiceEssentialsFromSite(List<SiteEntity> siteEntities) {
+
+        if(this.siteService.entityIsNull(siteEntities))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<ServiceEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(SiteEntity siteEntity: siteEntities){
+
+            returnValue.add(this.getServiceEssentialsFromSite(siteEntity));
+        }
 
         return returnValue;
     }

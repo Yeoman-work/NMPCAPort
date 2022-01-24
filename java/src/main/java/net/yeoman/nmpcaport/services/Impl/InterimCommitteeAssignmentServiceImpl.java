@@ -127,7 +127,7 @@ public class InterimCommitteeAssignmentServiceImpl implements InterimCommitteeAs
 
         stateRepEssentials.setNmHouseDistrictEssentialResponse(
                 this.nmHouseDistrictService.entityToEssentials(
-                        interimCommitteeAssignmentEntity.getStateRepEntity().getNmHouseDistrict()
+                        interimCommitteeAssignmentEntity.getStateRepEntity().getHouseDistrict()
                 )
         );
 

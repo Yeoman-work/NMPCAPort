@@ -23,6 +23,10 @@ public interface SenateDistrictService {
     //entity to essentials
     public SenateDistrictEssentialResponse essentialsToEntity(SenateDistrictEntity senateDistrictEntity);
 
+
+    //get entities from site(s)
+    public SenateDistrictEntity getSenateEntites
+
     public SenateDistrictDto entityToDto(SenateDistrictEntity senateDistrictEntity);
     public List<SenateDistrictDto> entityToDto(List<SenateDistrictEntity> senateDistrictEntities);
     public SenateDistrictNestedResponse dtoToNestedResponse(SenateDistrictDto senateDistrictDto);

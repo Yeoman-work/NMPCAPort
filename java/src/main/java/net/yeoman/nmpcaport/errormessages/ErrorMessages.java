@@ -17,9 +17,12 @@ public enum ErrorMessages {
     EMAIL_CHARACTER_LENGTH("Email must be 150 characters and below"),
     PICTURE_LENGTH("Picture URL must be 250 characters or less"),
     WEBSITE_URL("Website URL must be 300 characters or less"),
-    FIRST_NAME_LENGTH("First name must be between 3 and 25 characters"),
-    LAST_NAME_LENGTH("Last name must be between 3 and 25 characters"),
+    FIRST_NAME_LENGTH("First name must be between 3 and 50 characters"),
+    LAST_NAME_LENGTH("Last name must be between 3 and 50 characters"),
+    CAPITOL_ROOM("Capitol room length must be 8 characters or less"),
+    ADDRESS_LENGTH("Address must be between 5 and 150 characters"),
     RECORD_IS_NULL("Selected Entity is null");
+
 
 
     private String errorMessage;

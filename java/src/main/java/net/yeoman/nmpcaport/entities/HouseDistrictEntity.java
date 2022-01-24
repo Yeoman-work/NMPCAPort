@@ -49,11 +49,11 @@ public class HouseDistrictEntity implements Serializable {
         this.updatedAt = new Date();
     }
 
-    @OneToMany(mappedBy = "nmHouseDistrictEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "houseDistrictEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<SiteEntity> sites;
 
-    @OneToOne(mappedBy = "nmHouseDistrict", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "houseDistrict", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private StateRepEntity stateRep;
 

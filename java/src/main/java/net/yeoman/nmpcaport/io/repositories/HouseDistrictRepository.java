@@ -13,5 +13,7 @@ public interface HouseDistrictRepository extends CrudRepository<HouseDistrictEnt
 
     HouseDistrictEntity findByHouseDistrictId(String houseDistrictId);
 
+    Boolean existsByHouseDistrictId(String houseDistrict);
+
     Boolean existsByName(String name);
 }

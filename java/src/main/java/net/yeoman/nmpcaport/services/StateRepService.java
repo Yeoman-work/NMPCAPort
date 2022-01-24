@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.StateRepEntity;
+import net.yeoman.nmpcaport.io.request.stateRep.StateRepDetailsRequest;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepEssentials;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepNestedResponse;
 import net.yeoman.nmpcaport.shared.dto.StateRepDto;
@@ -9,20 +10,24 @@ import java.util.List;
 
 public interface StateRepService {
 
-    public StateRepDto getStateRep(String stateRepId);
 
-    public StateRepDto createStateRep(StateRepDto stateRepDto);
 
-    public StateRepDto updatedStateRep(String stateRepId, StateRepDto stateRepDto);
-
-    public StateRepDto deleteStateRep(String stateRepId);
 
     public StateRepEntity findStateRepEntityById(String stateRepId);
 
-    public List<StateRepDto> findAllStateReps();
+
+    //save entity
+    public StateRepEntity saveStateRepEntity(StateRepEntity stateRepEntity);
 
     //get all state rep entities
+    public StateRepEntity getStateRepEntity(String publicId);
     public List<StateRepEntity> getAllEntities();
+
+    //generate entity with unique ID
+    public StateRepEntity generateUniqueId(StateRepEntity stateRepEntity);
+
+    //get state rep
+    public StateRepEntity requestToEntity(StateRepDetailsRequest stateRepDetailsRequest);
 
     //State rep essentials
     public StateRepEssentials getStateRepEssentials(StateRepEntity stateRepEntity);
@@ -35,6 +40,9 @@ public interface StateRepService {
     //check for objects
     public Boolean entityIsNull(StateRepEntity stateRepEntity);
     public Boolean entityIsNull(List<StateRepEntity> stateRepEntities);
+
+    //check if request is null
+    public Boolean requestIsNull(StateRepDetailsRequest stateRepDetailsRequest);
 
 
 

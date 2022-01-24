@@ -65,9 +65,9 @@ public interface HealthCenterService {
 
 
 
-    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEntity> siteEntities);
-    public List<FundEssentialsResponse>  healthCenterFundEssentials(List<SiteEntity> siteEntities);
-    public List<HouseDistrictEssentialResponse> healthCenterNMDistrictEssentials(List<SiteEntity> siteEntities);
+//    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEntity> siteEntities);
+//    public List<FundEssentialsResponse>  healthCenterFundEssentials(List<SiteEntity> siteEntities);
+//    public List<HouseDistrictEssentialResponse> healthCenterNMDistrictEssentials(List<SiteEntity> siteEntities);
     public List<SenateDistrictEssentialResponse> healthCenterSenateDistrictEssentials(List<SiteEntity> siteEntities);
     public List<CongressionalDistrictEssentialsResponse> healthCenterCongressionalEssentials(List<SiteEntity> siteEntities);
 

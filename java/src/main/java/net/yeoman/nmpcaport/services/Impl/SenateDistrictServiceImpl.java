@@ -20,15 +20,21 @@ import java.util.List;
 @Service
 public class SenateDistrictServiceImpl implements SenateDistrictService {
 
-    @Autowired
-    private SenateDistrictRepository senateDistrictRepository;
 
-    @Autowired
-    private StateSenatorServiceImpl stateSenatorService;
+    private final SenateDistrictRepository senateDistrictRepository;
 
-    @Autowired
-    private Utils utils;
+    private final StateSenatorServiceImpl stateSenatorService;
 
+    private final Utils utils;
+
+    public SenateDistrictServiceImpl(SenateDistrictRepository senateDistrictRepository,
+                                     StateSenatorServiceImpl stateSenatorService,
+                                     Utils utils
+    ){
+        this.senateDistrictRepository = senateDistrictRepository;
+        this.stateSenatorService = stateSenatorService;
+        this.utils = utils;
+    }
 
     @Override
     public SenateDistrictDto getDistrict(String districtId) {

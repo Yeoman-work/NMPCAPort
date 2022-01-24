@@ -13,4 +13,6 @@ public interface StateRepRepository extends CrudRepository<StateRepEntity, Long>
 
     StateRepEntity findByStateRepId(String stateRepId);
 
+    Boolean existsByStateRepId(String stateRepId);
+
 }

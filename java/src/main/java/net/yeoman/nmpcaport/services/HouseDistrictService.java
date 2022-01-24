@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.HouseDistrictEntity;
+import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequest;
 import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
@@ -17,6 +18,12 @@ public interface HouseDistrictService {
     //update house district
     public void updateHouseDistrict(String publicId, HouseDistrictDetailsRequest houseDistrictDetailsRequest);
 
+    //get request to entity
+    public HouseDistrictEntity convertRequestToEntity(HouseDistrictDetailsRequest houseDistrictDetailsRequest);
+
+    //save house district
+    public HouseDistrictEntity saveHouseDistrict(HouseDistrictEntity houseDistrictEntity);
+
     //get house district entities
     public HouseDistrictEntity getHouseDistrict(String publicId);
     public List<HouseDistrictEntity> getAllHouseDistrictEntities();
@@ -31,10 +38,17 @@ public interface HouseDistrictService {
     public HouseDistrictEssentialResponse entityToEssentials(HouseDistrictEntity nmHouseDistrictEntity);
     public List<HouseDistrictEssentialResponse> entityToEssentials(List<HouseDistrictEntity> houseDistrictEntity);
 
+    //get house districts from site
+    public HouseDistrictEntity getHouseDistrictsFromSites(SiteEntity siteEntity);
+    public List<HouseDistrictEntity> getHouseDistrictsFromSites(List<SiteEntity> siteEntities);
+
 
 
      //check for entity is null
      public Boolean entityIsNull(HouseDistrictEntity nmHouseDistrictEntity);
      public Boolean entityIsNull(List<HouseDistrictEntity> nmHouseDistrictEntities);
+
+     //check if request is null
+    public Boolean requestIsNull(HouseDistrictDetailsRequest houseDistrictDetailsRequest);
 
 }

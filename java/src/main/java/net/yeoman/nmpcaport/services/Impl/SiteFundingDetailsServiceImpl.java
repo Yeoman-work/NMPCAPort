@@ -21,18 +21,24 @@ import java.util.List;
 @Service
 public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService {
 
-    @Autowired
-    private SiteFundingDetailsRepository siteFundingDetailsRepository;
 
+    private final SiteFundingDetailsRepository siteFundingDetailsRepository;
+    private final FundServiceImpl fundService;
+    private final SiteServiceImpl siteService;
+    private final Utils utils;
 
-    @Autowired
-    private FundServiceImpl fundService;
+    public SiteFundingDetailsServiceImpl(SiteFundingDetailsRepository siteFundingDetailsRepository,
+                                         FundServiceImpl fundService,
+                                         SiteServiceImpl siteService,
+                                         Utils utils
+    ){
 
-    @Autowired
-    private SiteServiceImpl siteService;
+        this.siteFundingDetailsRepository = siteFundingDetailsRepository;
+        this.fundService = fundService;
+        this.siteService = siteService;
+        this.utils = utils;
 
-    @Autowired
-    private Utils utils;
+    }
 
     @Override
     public SiteFundingDetailsDto getSiteFunding(String id) {
