@@ -1,8 +1,10 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.CongressionalDistrictEntity;
+import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.CongressionalDistrictServiceException;
+import net.yeoman.nmpcaport.exception.SiteServiceException;
 import net.yeoman.nmpcaport.io.repositories.CongressionalDistrictRepository;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
@@ -10,21 +12,32 @@ import net.yeoman.nmpcaport.services.CongressionalDistrictService;
 import net.yeoman.nmpcaport.shared.dto.CongressionalDistrictDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CongressionalDistrictServiceImpl implements CongressionalDistrictService {
 
-    @Autowired
-    private CongressionalDistrictRepository congressionalDistrictRepository;
 
-    @Autowired
-    private Utils utils;
+    private final CongressionalDistrictRepository congressionalDistrictRepository;
 
+    private final SiteServiceImpl siteService;
+
+    private final Utils utils;
+
+
+    public CongressionalDistrictServiceImpl(CongressionalDistrictRepository congressionalDistrictRepository,
+                                            SiteServiceImpl siteService,
+                                            Utils utils
+    ){
+        this.congressionalDistrictRepository = congressionalDistrictRepository;
+        this.siteService = siteService;
+        this.utils = utils;
+    }
 
     @Override
     public CongressionalDistrictDto getCongressionalDistrict(String congressionalDistrictId) {
@@ -95,7 +108,63 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
         if(this.entityIsNull(congressionalDistrictEntity))
             throw new CongressionalDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        return this.utils.objectMapper().map(congressionalDistrictEntity, CongressionalDistrictEssentialsResponse.class);
+        CongressionalDistrictEssentialsResponse congressionalDistrict = new CongressionalDistrictEssentialsResponse();
+
+        congressionalDistrict.setName(congressionalDistrictEntity.getName());
+        congressionalDistrict.setCongressionalDistrictId(congressionalDistrictEntity.getCongressionalDistrictId());
+
+        return congressionalDistrict;
+    }
+
+    @Override
+    public List<CongressionalDistrictEssentialsResponse> entityToEssentials(List<CongressionalDistrictEntity> congressionalDistrictEntityList) {
+
+        if(this.entityIsNull(congressionalDistrictEntityList))
+            throw new CongressionalDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<CongressionalDistrictEssentialsResponse> returnValue = new ArrayList<>();
+
+        for(CongressionalDistrictEntity district: congressionalDistrictEntityList){
+
+            returnValue.add(this.entityToEssentials(district));
+        }
+
+        return returnValue.stream()
+                .sorted(Comparator.comparing(CongressionalDistrictEssentialsResponse :: getName))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CongressionalDistrictEntity getCongressionalDistrictFromSite(SiteEntity siteEntity) {
+
+        if(this.siteService.entityIsNull(siteEntity))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return siteEntity.getCongressionalDistrictEntity();
+    }
+
+    @Override
+    public List<CongressionalDistrictEntity> getCongressionalDistrictFromSites(List<SiteEntity> siteEntities) {
+
+        if(this.siteService.entityIsNull(siteEntities))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<CongressionalDistrictEntity> returnValue = new ArrayList<>();
+
+        for(SiteEntity siteEntity: siteEntities){
+
+            if(siteEntity.getCongressionalDistrictEntity()!= null){
+
+                if(!returnValue.contains(siteEntity.getCongressionalDistrictEntity())){
+
+                    returnValue.add(siteEntity.getCongressionalDistrictEntity());
+                }
+            }
+        }
+
+        return returnValue.stream()
+                .sorted(Comparator.comparing(CongressionalDistrictEntity ::getName))
+                .collect(Collectors.toList());
     }
 
     @Override

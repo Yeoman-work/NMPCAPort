@@ -15,7 +15,7 @@ public class SiteDetailsRequestModel {
     private String county;
     private String zipCode;
     private String healthCenter;
-    private String nmHouseDistrict;
+    private String houseDistrict;
     private String senateDistrict;
     private String congressionalDistrict;
     private List<String> funding;
@@ -69,12 +69,12 @@ public class SiteDetailsRequestModel {
         this.healthCenter = healthCenter;
     }
 
-    public String getNmHouseDistrict() {
-        return nmHouseDistrict;
+    public String getHouseDistrict() {
+        return houseDistrict;
     }
 
-    public void setNmHouseDistrict(String nmHouseDistrict) {
-        this.nmHouseDistrict = nmHouseDistrict;
+    public void setHouseDistrict(String houseDistrict) {
+        this.houseDistrict = houseDistrict;
     }
 
     public String getSenateDistrict() {

@@ -11,31 +11,30 @@ import java.util.List;
 
 public interface SiteFundingDetailsService {
 
-    public SiteFundingDetailsDto getSiteFunding(String id);
-    public SiteFundingDetailsDto deleteSiteFunding(String id);
-    public List<SiteFundingDetailsDto> getAllSiteFunding();
-    public void savedSiteFundDetails(SiteFundingDetailsEntity siteFundingDetailsEntity);
-    public SiteFundingDetailsEntity saveSiteFundDetailsWithReturnEntity(SiteFundingDetailsEntity siteFundingDetailsServiceEntity);
-    public SiteFundingDetailsEntity createSiteFundingEntity();
-    public SiteFundingDetailsEntity generateUniqueId(SiteFundingDetailsEntity siteFundingDetailsEntity);
-    public Boolean existByPublicId(String publicId);
+    SiteFundingDetailsDto getSiteFunding(String id);
+    void deleteSiteFunding(String id);
+    List<SiteFundingDetailsDto> getAllSiteFunding();
+    void savedSiteFundDetails(SiteFundingDetailsEntity siteFundingDetailsEntity);
+    SiteFundingDetailsEntity saveSiteFundDetailsWithReturnEntity(SiteFundingDetailsEntity siteFundingDetailsServiceEntity);
+    SiteFundingDetailsEntity createSiteFundingEntity();
+    SiteFundingDetailsEntity generateUniqueId(SiteFundingDetailsEntity siteFundingDetailsEntity);
+    Boolean existByPublicId(String publicId);
 
     //get fund entity
-    public FundEntity getFundEntity(SiteFundingDetailsEntity siteFundingDetailsEntity);
-    public List<FundEntity> getFundEntities(List<SiteFundingDetailsEntity> siteFundingDetailsEntities);
-
+    FundEntity getFundEntity(SiteFundingDetailsEntity siteFundingDetailsEntity);
+    List<FundEntity> getFundEntities(List<SiteFundingDetailsEntity> siteFundingDetailsEntities);
 
 
     //create funding relationship to site
-    public void linkFundingToSites(List<FundEntity> fundEntityList, SiteEntity siteEntity);
+    void linkFundingToSites(List<FundEntity> fundEntityList, SiteEntity siteEntity);
 
     //get site entity
-    public SiteEntity getSiteEntity(SiteFundingDetailsEntity siteFundingDetailsEntity);
-    public List<SiteEntity> getSiteEntities(List<SiteFundingDetailsEntity> siteFundingDetailsEntityList);
+    SiteEntity getSiteEntity(SiteFundingDetailsEntity siteFundingDetailsEntity);
+    List<SiteEntity> getSiteEntities(List<SiteFundingDetailsEntity> siteFundingDetailsEntityList);
 
 
-    public Boolean entityIsNull(SiteFundingDetailsEntity siteFundingDetailsEntity);
-    public Boolean entityIsNull(List<SiteFundingDetailsEntity> siteFundingDetailsEntities);
-    public Boolean dtoIsNull(SiteFundingDetailsEntity siteFundingDetailsEntity);
-    public Boolean dtoIsNull(List<SiteFundingDetailsEntity> siteFundingDetailsEntities);
+    Boolean entityIsNull(SiteFundingDetailsEntity siteFundingDetailsEntity);
+    Boolean entityIsNull(List<SiteFundingDetailsEntity> siteFundingDetailsEntities);
+    Boolean dtoIsNull(SiteFundingDetailsEntity siteFundingDetailsEntity);
+    Boolean dtoIsNull(List<SiteFundingDetailsEntity> siteFundingDetailsEntities);
 }

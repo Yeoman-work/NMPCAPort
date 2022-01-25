@@ -48,12 +48,10 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
     }
 
     @Override
-    public SiteFundingDetailsDto deleteSiteFunding(String id) {
+    public void deleteSiteFunding(String id) {
 
-        SiteFundingDetailsEntity siteFundingDetails = this.siteFundingDetailsRepository.findBySiteFundingDetailsId(id);
-        this.siteFundingDetailsRepository.delete(siteFundingDetails);
+        this.siteFundingDetailsRepository.delete(this.siteFundingDetailsRepository.findBySiteFundingDetailsId(id));
 
-        return new ModelMapper().map(siteFundingDetails, SiteFundingDetailsDto.class);
     }
 
     @Override
@@ -67,7 +65,6 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
 
         this.siteFundingDetailsRepository.save(siteFundingDetailsEntity);
 
-        return;
     }
 
     @Override
@@ -148,8 +145,6 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
             savedSiteFundDetails(siteFundingDetailsEntity);
 
         }
-
-        return;
     }
 
     @Override

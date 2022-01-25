@@ -2,7 +2,6 @@ package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.ServiceEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
-import net.yeoman.nmpcaport.io.request.service.ServiceDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.service.ServiceRequestListModel;
 import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;

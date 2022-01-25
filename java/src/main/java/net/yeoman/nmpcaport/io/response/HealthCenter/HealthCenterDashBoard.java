@@ -20,10 +20,9 @@ public class HealthCenterDashBoard {
     private List<SiteEssentialsResponse> siteEssentialsResponses;
     private List<ServiceEssentialsResponse> serviceEssentialsResponses;
     private List<FundEssentialsResponse> fundEssentialsResponses;
-    private List<LocationEssentialsResponse> locationEssentialsResponseList;
-    private List<HouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses;
+    private List<HouseDistrictEssentialResponse> houseDistrictEssentialResponses;
     private List<SenateDistrictEssentialResponse> senateDistrictEssentialResponses;
-    private List<CongressionalDistrictEssentialsResponse> congressionalEssentialsResponses;
+    private List<CongressionalDistrictEssentialsResponse> congressionalDistrictEssentialResponses;
     private Date createdAt;
     private Date updatedAt;
 
@@ -67,20 +66,13 @@ public class HealthCenterDashBoard {
         this.fundEssentialsResponses = fundEssentialsResponses;
     }
 
-    public List<LocationEssentialsResponse> getLocationEssentialsResponseList() {
-        return locationEssentialsResponseList;
+
+    public List<HouseDistrictEssentialResponse> getHouseDistrictEssentialResponses() {
+        return houseDistrictEssentialResponses;
     }
 
-    public void setLocationEssentialsResponseList(List<LocationEssentialsResponse> locationEssentialsResponseList) {
-        this.locationEssentialsResponseList = locationEssentialsResponseList;
-    }
-
-    public List<HouseDistrictEssentialResponse> getNmHouseDistrictEssentialResponses() {
-        return nmHouseDistrictEssentialResponses;
-    }
-
-    public void setNmHouseDistrictEssentialResponses(List<HouseDistrictEssentialResponse> nmHouseDistrictEssentialResponses) {
-        this.nmHouseDistrictEssentialResponses = nmHouseDistrictEssentialResponses;
+    public void setHouseDistrictEssentialResponses(List<HouseDistrictEssentialResponse> houseDistrictEssentialResponses) {
+        this.houseDistrictEssentialResponses = houseDistrictEssentialResponses;
     }
 
     public List<SenateDistrictEssentialResponse> getSenateDistrictEssentialResponses() {
@@ -91,12 +83,12 @@ public class HealthCenterDashBoard {
         this.senateDistrictEssentialResponses = senateDistrictEssentialResponses;
     }
 
-    public List<CongressionalDistrictEssentialsResponse> getCongressionalEssentialsResponses() {
-        return congressionalEssentialsResponses;
+    public List<CongressionalDistrictEssentialsResponse> getCongressionalDistrictEssentialResponses() {
+        return congressionalDistrictEssentialResponses;
     }
 
-    public void setCongressionalEssentialsResponses(List<CongressionalDistrictEssentialsResponse> congressionalEssentialsResponses) {
-        this.congressionalEssentialsResponses = congressionalEssentialsResponses;
+    public void setCongressionalDistrictEssentialResponses(List<CongressionalDistrictEssentialsResponse> congressionalDistrictEssentialResponses) {
+        this.congressionalDistrictEssentialResponses = congressionalDistrictEssentialResponses;
     }
 
     public List<SiteEssentialsResponse> getSiteEssentialsResponses() {

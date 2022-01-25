@@ -17,11 +17,18 @@ import java.util.List;
 @RequestMapping("/sites")
 public class SiteController {
 
-    @Autowired
-    private SiteServiceImpl siteService;
 
-    @Autowired
-    private HealthCenterServiceImpl healthCenterService;
+    private final SiteServiceImpl siteService;
+
+    private final HealthCenterServiceImpl healthCenterService;
+
+    public SiteController(SiteServiceImpl siteService,
+                          HealthCenterServiceImpl healthCenterService
+    ){
+        this.siteService = siteService;
+        this.healthCenterService = healthCenterService;
+    }
+
 
     @GetMapping
     public String getSite(){

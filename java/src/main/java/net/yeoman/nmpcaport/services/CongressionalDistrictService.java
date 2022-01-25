@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.CongressionalDistrictEntity;
+import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.exception.CongressionalDistrictServiceException;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
@@ -20,6 +21,12 @@ public interface CongressionalDistrictService {
 
     //entity to essentials
     public CongressionalDistrictEssentialsResponse entityToEssentials(CongressionalDistrictEntity congressionalDistrictEntity);
+    public List<CongressionalDistrictEssentialsResponse> entityToEssentials(List<CongressionalDistrictEntity> congressionalDistrictEntityList);
+
+    //get congressionalDistrict from sites
+    public CongressionalDistrictEntity getCongressionalDistrictFromSite(SiteEntity siteEntity);
+    public List<CongressionalDistrictEntity> getCongressionalDistrictFromSites(List<SiteEntity> siteEntities);
+
 
     public CongressionalDistrictDto entityToDto(CongressionalDistrictEntity congressionalDistrictEntity);
     public List<CongressionalDistrictDto> entityToDto(List<CongressionalDistrictEntity> congressionalDistrictEntityList);

@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ServiceServiceImpl implements ServiceService {
@@ -120,7 +122,9 @@ public class ServiceServiceImpl implements ServiceService {
             returnValue.add(this.getServiceEssentialsFromSite(siteEntity));
         }
 
-        return returnValue;
+        return returnValue.stream()
+                .sorted(Comparator.comparing(ServiceEssentialsResponse :: getName))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -278,13 +282,17 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public ServiceEntity getService(String serviceId) {
+    public ServiceEntity getService(String serviceId)   {
+
+        if(serviceId == null) throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         return this.serviceRepository.findByServiceId(serviceId);
     }
 
     @Override
     public List<ServiceEntity> getServices(List<String> serviceIds) {
+
+        if(serviceIds == null) throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<ServiceEntity> returnValue = new ArrayList<>();
 

@@ -86,57 +86,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
     }
 
-    @Override
-    public HealthCenterDto getHealthCenter(String healthCenterId) {
 
-        HealthCenterEntity healthCenterEntity = this.healthCenterRepository.findByHealthCenterId(healthCenterId);
-
-
-        return this.entityToDto(healthCenterEntity);
-    }
-
-    @Override
-    public HealthCenterDto requestToDto(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel) {
-
-        if(this.requestIsNull(healthCenterDetailsRequestModel))
-            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.utils.objectMapper().map(healthCenterDetailsRequestModel, HealthCenterDto.class);
-    }
-
-    @Override
-    public List<HealthCenterDto> requestToDto(List<HealthCenterDetailsRequestModel> healthCenterDetailsRequestModelList) {
-
-        if(this.requestIsNull(healthCenterDetailsRequestModelList))
-            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return null;
-    }
-
-    @Override
-    public HealthCenterResponseFull dtoToResponseFull(HealthCenterDto healthCenterDto) {
-
-        if(this.dtoIsNull(healthCenterDto))
-            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.utils.objectMapper().map(healthCenterDto, HealthCenterResponseFull.class);
-    }
-
-    @Override
-    public List<HealthCenterResponseFull> dtoToResponseFull(List<HealthCenterDto> healthCenterDtoList) {
-
-        if(this.dtoIsNull(healthCenterDtoList))
-            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<HealthCenterResponseFull> returnValue = new ArrayList<>();
-
-        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
-
-            returnValue.add(this.dtoToResponseFull(healthCenterDto));
-        }
-
-        return returnValue;
-    }
 
     @Override
     public void createHealthCenter(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel) {
@@ -144,20 +94,13 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         if(this.requestIsNull(healthCenterDetailsRequestModel))
             throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        HealthCenterEntity healthCenterEntity = this.savedHealthCenterEntityWithReturn(
-                this.dtoToEntity(
-                        this.requestToDto(
-                                healthCenterDetailsRequestModel)
-                )
-        );
+        HealthCenterEntity healthCenterEntity = this.generateHealthCenterWithUniqueId(new HealthCenterEntity());
 
         if(!this.siteService.requestIsNull(
                 healthCenterDetailsRequestModel.getSitesRequest())
         ){
-            this.siteService.createSiteBulk(healthCenterDetailsRequestModel.getSitesRequest(), healthCenterEntity);
+            this.siteService.createSitesBulk(healthCenterDetailsRequestModel.getSitesRequest());
         }
-
-        return ;
 
     }
 
@@ -183,8 +126,9 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
     @Override
-    public HealthCenterDto deleteHealthCenter(String healthCenterId) {
-        return null;
+    public void deleteHealthCenter(String healthCenterId) {
+
+        this.healthCenterRepository.delete(this.healthCenterRepository.findByHealthCenterId(healthCenterId));
     }
 
     @Override
@@ -203,7 +147,6 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         this.healthCenterRepository.save(healthCenterEntity);
 
-         return;
     }
 
     @Override
@@ -215,21 +158,6 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return this.healthCenterRepository.save(healthCenterEntity);
     }
 
-
-    @Override
-    public List<HealthCenterDto> getHealthCenters(int page, int limit) {
-
-
-        if (page > 0) page -= 1;
-
-        Pageable pageableRequest = PageRequest.of(page, limit);
-
-        Page<HealthCenterEntity> healthCenterPage = this.healthCenterRepository.findAll(pageableRequest);
-
-        List<HealthCenterEntity> healthCenterEntities = healthCenterPage.getContent();
-
-        return this.entityToDto(healthCenterEntities);
-    }
 
     @Override
     public List<HealthCenterEntity> getHealthCenterEntities(int page, int limit) {
@@ -258,73 +186,10 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return returnValue;
     }
 
-    @Override
-    public List<ServiceEssentialsResponse> getServiceEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
-
-        List<ServiceEssentialsResponse> returnValue = new ArrayList<>();
-
-        for(SiteEssentialsResponse site: siteEssentialsResponses){
-
-            for(ServiceEssentialsResponse service: site.getServiceEssentialsResponses()){
-
-                if(!returnValue.contains(service)){
-
-                    returnValue.add(service);
-                }
-            }
-        }
-
-        return returnValue;
-    }
-
-    @Override
-    public List<FundEssentialsResponse> getFundingEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
-
-        List<FundEssentialsResponse> returnValue = new ArrayList<>();
-
-        for(SiteEssentialsResponse site: siteEssentialsResponses){
-
-            for(FundEssentialsResponse fund: site.getFundEssentialsResponses()){
-
-                if(!returnValue.contains(fund)){
-
-                    returnValue.add(fund);
-                }
-
-            }
-        }
-        return returnValue;
-    }
-
-    @Override
-    public List<HouseDistrictEssentialResponse> getNMHouseDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
-
-        List<HouseDistrictEssentialResponse> returnValue = new ArrayList<>();
-
-        for(SiteEssentialsResponse site: siteEssentialsResponses){
-
-            returnValue.add(site.getNmHouseDistrictEssentialResponse());
-        }
-
-
-        return returnValue.stream()
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<SenateDistrictEssentialResponse> getSenateDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses) {
-        return null;
-    }
-
-    @Override
-    public List<CongressionalDistrictEssentialsResponse> congressionalDistrictEssentials(List<CongressionalDistrictEssentialsResponse> congressionalDistrictEssentialsResponses) {
-        return null;
-    }
 
 
     @Override
-    public HealthCenterEntity generateHealthCenterWithUniqueHealthCenterId(HealthCenterEntity healthCenter) {
+    public HealthCenterEntity generateHealthCenterWithUniqueId(HealthCenterEntity healthCenter) {
 
         //check if health center is null
         if(healthCenter == null) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
@@ -342,215 +207,6 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
 
 
-    //get senate district from sites
-    @Override
-    public List<SenateDistrictNestedResponse> getHealthCenterSenateDistrictFromSites(List<SiteEntity> siteEntities) {
-
-        if(this.siteService.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<SenateDistrictNestedResponse> returnValue = new ArrayList<>();
-        List<SenateDistrictEntity> senateDistrictEntities = new ArrayList<>();
-
-        for(SiteEntity siteEntity: siteEntities){
-
-            if(!this.senateDistrictService.entityIsNull(siteEntity.getSenateDistrictEntity())){
-
-                if(!senateDistrictEntities.contains(siteEntity.getSenateDistrictEntity())){
-
-                    senateDistrictEntities.add(siteEntity.getSenateDistrictEntity());
-                }
-            }
-
-        }
-
-        if(siteEntities != null && siteEntities.size() > 0){
-
-            returnValue = this.senateDistrictService.dtoToNestedResponse(this.senateDistrictService.entityToDto(senateDistrictEntities));
-        }
-
-        return returnValue;
-    }
-
-    @Override
-    public List<CongressionalDistrictNestedResponse> getHealthCenterCongressionalDistrictFromSites(List<SiteEntity> siteEntities) {
-
-        if(this.siteService.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<CongressionalDistrictNestedResponse> returnValue = new ArrayList<>();
-        List<CongressionalDistrictEntity> congressionalDistrictEntities = new ArrayList<>();
-
-        for(SiteEntity siteEntity: siteEntities){
-
-            if(!this.congressionalDistrictService.entityIsNull(siteEntity.getCongressionalDistrictEntity())){
-
-                if(!congressionalDistrictEntities.contains(siteEntity.getCongressionalDistrictEntity())){
-
-
-                    System.out.println(siteEntity.getCongressionalDistrictEntity().getName());
-                    congressionalDistrictEntities.add(siteEntity.getCongressionalDistrictEntity());
-                }
-            }
-        }
-
-
-        if(congressionalDistrictEntities != null && congressionalDistrictEntities.size() > 0){
-
-            System.out.println(" where are in here");
-            returnValue = this.congressionalDistrictService.dtoToNestedResponse(this.congressionalDistrictService.entityToDto(congressionalDistrictEntities));
-        }
-
-
-        return returnValue;
-    }
-
-    @Override
-    public List<ServiceNestedResponse> getHealthCenterServicesFromSites(List<SiteEntity> siteEntities) {
-
-        if(this.siteService.entityIsNull(siteEntities)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<ServiceEntity> serviceEntityList =  new ArrayList<>();
-
-        List<ServiceNestedResponse> returnValue = new ArrayList<>();
-
-        for(SiteEntity site: siteEntities){
-
-            if(!this.siteService.entityIsNull(site)){
-
-                if(!this.siteServiceDetailsService.entityIsNull(site.getServiceDetailsEntities())){
-
-
-                    List<ServiceEntity> serviceEntities = this.siteServiceDetailsService.getServiceEntities(
-                            site.getServiceDetailsEntities());
-
-                    for(ServiceEntity serviceEntity: serviceEntities){
-
-                        if(!serviceEntityList.contains(serviceEntity)){
-
-                            serviceEntityList.add(serviceEntity);
-                        }
-                    }
-                }
-            }
-        }
-
-        if(serviceEntityList != null && serviceEntityList.size() > 0){
-
-            returnValue = this.serviceService.entityToNestedResponse(serviceEntityList);
-        }
-
-        return returnValue;
-    }
-
-
-
-    @Override
-    public List<FundNestedResponse> getHealthCenterFundingFromSites(List<SiteEntity> siteEntities) {
-
-        if(this.siteService.entityIsNull(siteEntities)) throw new  SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<FundNestedResponse> returnValue = new ArrayList<>();
-        List<FundEntity> fundEntityList = new ArrayList<>();
-
-
-        for(SiteEntity siteEntity: siteEntities){
-
-            if(this.siteService.entityIsNull(siteEntities)){
-                if(!this.siteFundingDetailsService.entityIsNull(siteEntity.getSiteFundingDetailsEntities())){
-
-                    for(FundEntity fundEntity: this.siteFundingDetailsService.getFundEntities(siteEntity.getSiteFundingDetailsEntities())){
-
-                        if(!fundEntityList.contains(fundEntity)){
-
-                            fundEntityList.add(fundEntity);
-                        }
-                    }
-                }
-            }
-
-            if(fundEntityList != null && fundEntityList.size() > 0){
-
-                returnValue =  this.fundService.dtoToNestedResponse(this.fundService.entityToDto(fundEntityList));
-            }
-
-        }
-
-        return returnValue;
-    }
-
-    @Override
-    public List<HouseDistrictNestedResponse> getHealthCenterNMHouseDistrictsFromSites(List<SiteEntity> siteEntities) {
-        return null;
-    }
-
-    @Override
-    public HealthCenterDto entityToDto(HealthCenterEntity healthCenterEntity) {
-
-        if(this.entityIsNull(healthCenterEntity))
-            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        HealthCenterDto healthCenterDto = this.utils.objectMapper().map(healthCenterEntity, HealthCenterDto.class);
-
-        if(!this.contactService.entityIsNull(healthCenterDto.getContactEntities())){
-
-            healthCenterDto.setContactNestedResponseList(this.contactService.dtoToNestedResponse(
-                    this.contactService.entityToDto(
-                            healthCenterEntity.getContacts())));
-        }
-
-        if(!this.siteService.entityIsNull(healthCenterDto.getSiteEntities())){
-
-            //get sites
-            healthCenterDto.setSiteDetailsNestedResponseList(
-                    this.siteService.entityToNestedResponse(
-                            healthCenterDto.getSiteEntities()
-                    )
-            );
-
-            //get services from sites
-            healthCenterDto.setServiceNestedResponses(
-                    this.getHealthCenterServicesFromSites(
-                            healthCenterDto.getSiteEntities()));
-
-            //get funding from sites
-            healthCenterDto.setFundNestedResponses(
-                    this.getHealthCenterFundingFromSites(
-                            healthCenterDto.getSiteEntities()));
-
-            healthCenterDto.setNmHouseDistrictNestedResponses(
-                    this.getHealthCenterNMHouseDistrictsFromSites(
-                            healthCenterDto.getSiteEntities()));
-
-
-            healthCenterDto.setSenateDistrictNestedResponseList(
-                    this.getHealthCenterSenateDistrictFromSites(
-                            healthCenterDto.getSiteEntities()));
-
-
-            healthCenterDto.setCongressionalDistrictNestedResponseList(
-                    this.getHealthCenterCongressionalDistrictFromSites(
-                            healthCenterDto.getSiteEntities()));
-
-
-        }
-
-        return healthCenterDto;
-    }
-
-    @Override
-    public List<HealthCenterDto> entityToDto(List<HealthCenterEntity> healthCenterEntityList) {
-
-        if(this.entityIsNull(healthCenterEntityList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<HealthCenterDto> returnValue = new ArrayList<>();
-
-        for(HealthCenterEntity healthCenter: healthCenterEntityList){
-
-            returnValue.add(this.entityToDto(healthCenter));
-        }
-
-        return returnValue;
-    }
-
     //get health center for dashboard
     @Override
     public HealthCenterDashBoard entityToDashBoardData(HealthCenterEntity healthCenterEntity) {
@@ -558,20 +214,59 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         if(this.entityIsNull(healthCenterEntity))
             throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        HealthCenterDto healthCenterDto = this.utils.objectMapper().map(healthCenterEntity, HealthCenterDto.class);
+        HealthCenterDashBoard healthCenterDashBoard = new HealthCenterDashBoard();
 
-        List<SiteEssentialsResponse> siteEssentialsResponses = this.siteService.entityToEssential(healthCenterDto.getSiteEntities());
+        healthCenterDashBoard.setHealthCenterId(healthCenterEntity.getHealthCenterId());
 
-        healthCenterDto.setSiteEssentialsResponses(siteEssentialsResponses);
+        healthCenterDashBoard.setName(healthCenterEntity.getName());
 
-          healthCenterDto.setServiceEssentialsResponses(this.healthCenterServiceEssentials(healthCenterEntity.getSiteEntities()));
-        healthCenterDto.setFundEssentialsResponses(this.healthCenterFundEssentials(healthCenterEntity.getSiteEntities()));
-        healthCenterDto.setNmHouseDistrictEssentialResponses(this.healthCenterNMDistrictEssentials(healthCenterEntity.getSiteEntities()));
-        healthCenterDto.setSenateDistrictEssentialResponses(this.healthCenterSenateDistrictEssentials(healthCenterEntity.getSiteEntities()));
-        healthCenterDto.setCongressionalEssentialsResponses(this.healthCenterCongressionalEssentials(healthCenterEntity.getSiteEntities()));
+        healthCenterDashBoard.setNameAbbr(healthCenterEntity.getNameAbbr());
+
+        healthCenterDashBoard.setSiteEssentialsResponses(
+                this.siteService.entityToEssential(
+                        healthCenterEntity.getSiteEntities()
+                )
+        );
+
+        healthCenterDashBoard.setServiceEssentialsResponses(
+                this.serviceService.getServiceEssentialsFromSite(
+                        healthCenterEntity.getSiteEntities()
+                )
+        );
+
+        healthCenterDashBoard.setFundEssentialsResponses(
+                this.fundService.getEssentialsFromSite(
+                        healthCenterEntity.getSiteEntities()
+                )
+        );
 
 
-        return this.utils.objectMapper().map(healthCenterDto, HealthCenterDashBoard.class);
+        healthCenterDashBoard.setHouseDistrictEssentialResponses(
+                this.houseDistrictService.entityToEssentials(
+                        this.houseDistrictService.getHouseDistrictsFromSites(
+                                healthCenterEntity.getSiteEntities()
+                        )
+                )
+        );
+
+        healthCenterDashBoard.setSenateDistrictEssentialResponses(
+                this.senateDistrictService.entitiesToEssentials(
+                        this.senateDistrictService.getSenateDistrictEntitiesFromSites(
+                                healthCenterEntity.getSiteEntities()
+                        )
+                )
+        );
+
+        healthCenterDashBoard.setCongressionalDistrictEssentialResponses(
+                this.congressionalDistrictService.entityToEssentials(
+                        this.congressionalDistrictService.getCongressionalDistrictFromSites(
+                                healthCenterEntity.getSiteEntities()
+                        )
+                )
+        );
+
+
+        return healthCenterDashBoard;
     }
 
     @Override
@@ -594,187 +289,6 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
 
     @Override
-    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEntity> siteEntities) {
-
-        List<ServiceEntity> serviceEntities = new ArrayList<>();
-        List<ServiceEssentialsResponse> returnValue = new ArrayList<>();
-
-        for(SiteEntity siteEntity: siteEntities){
-
-            for(SiteServiceDetailsEntity serviceDetailsEntity: siteEntity.getServiceDetailsEntities()){
-
-                if(!serviceEntities.contains(serviceDetailsEntity.getServiceEntity())){
-
-                    serviceEntities.add(serviceDetailsEntity.getServiceEntity());
-                }
-            }
-        }
-
-        for(ServiceEntity service: serviceEntities){
-
-            ServiceEssentialsResponse serviceEssentialsResponse = new ServiceEssentialsResponse();
-
-            serviceEssentialsResponse.setName(service.getName());
-            serviceEssentialsResponse.setServiceId(service.getServiceId());
-            returnValue.add(serviceEssentialsResponse);
-        }
-
-        return returnValue.stream()
-                .sorted(Comparator.comparing(ServiceEssentialsResponse::getName))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FundEssentialsResponse> healthCenterFundEssentials(List<SiteEntity> siteEntities) {
-
-        List<FundEntity> fundEntities = new ArrayList<>();
-        List<FundEssentialsResponse> returnValue = new ArrayList<>();
-
-        for(SiteEntity siteEntity: siteEntities){
-
-            for(SiteFundingDetailsEntity fund: siteEntity.getSiteFundingDetailsEntities()){
-
-                if(!fundEntities.contains(fund.getFundEntity())){
-
-                    fundEntities.add(fund.getFundEntity());
-                }
-            }
-        }
-
-        for(FundEntity fund: fundEntities){
-
-            FundEssentialsResponse fundEssentialsResponse = new FundEssentialsResponse();
-
-            fundEssentialsResponse.setFundId(fund.getFundId());
-            fundEssentialsResponse.setName(fund.getName());
-
-            returnValue.add(fundEssentialsResponse);
-        }
-
-        return returnValue.stream()
-                .sorted(Comparator.comparing(FundEssentialsResponse :: getName))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<HouseDistrictEssentialResponse> healthCenterNMDistrictEssentials(List<SiteEntity> siteEntities) {
-
-        List<HouseDistrictEntity> nmHouseDistrictEntities = new ArrayList<>();
-        List<HouseDistrictEssentialResponse> returnValue = new ArrayList<>();
-
-        for(SiteEntity site: siteEntities){
-
-            if(!nmHouseDistrictEntities.contains(site.getNmHouseDistrictEntity())){
-
-                nmHouseDistrictEntities.add(site.getNmHouseDistrictEntity());
-            }
-        }
-
-        for(HouseDistrictEntity district: nmHouseDistrictEntities){
-
-            HouseDistrictEssentialResponse nmHouseDistrictEssentialResponse = new HouseDistrictEssentialResponse();
-
-            nmHouseDistrictEssentialResponse.setName(district.getName());
-            nmHouseDistrictEssentialResponse.setHouseDistrictId(district.getHouseDistrictId());
-
-            returnValue.add(nmHouseDistrictEssentialResponse);
-
-        }
-
-        return returnValue.stream()
-                .sorted(Comparator.comparing(HouseDistrictEssentialResponse:: getName))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<SenateDistrictEssentialResponse> healthCenterSenateDistrictEssentials(List<SiteEntity> siteEntities) {
-
-        List<SenateDistrictEntity> senateDistrictEntities = new ArrayList<>();
-        List<SenateDistrictEssentialResponse> returnValue = new ArrayList<>();
-
-        for(SiteEntity site: siteEntities){
-
-            if(!senateDistrictEntities.contains(site.getSenateDistrictEntity())){
-
-                senateDistrictEntities.add(site.getSenateDistrictEntity());
-            }
-        }
-
-        for(SenateDistrictEntity district: senateDistrictEntities){
-
-            SenateDistrictEssentialResponse senateDistrictEssentialResponse = new SenateDistrictEssentialResponse();
-
-            senateDistrictEssentialResponse.setSenateDistrictId(district.getSenateDistrictId());
-            senateDistrictEssentialResponse.setName(district.getName());
-
-            returnValue.add(senateDistrictEssentialResponse);
-        }
-
-        return returnValue.stream()
-                .sorted(Comparator.comparing(SenateDistrictEssentialResponse :: getName))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CongressionalDistrictEssentialsResponse> healthCenterCongressionalEssentials(List<SiteEntity> siteEntities) {
-
-        List<CongressionalDistrictEntity> congressionalDistrictEntities = new ArrayList<>();
-        List<CongressionalDistrictEssentialsResponse> returnValue = new ArrayList<>();
-
-        for(SiteEntity site: siteEntities){
-
-            if(!congressionalDistrictEntities.contains(site.getCongressionalDistrictEntity())){
-
-                congressionalDistrictEntities.add(site.getCongressionalDistrictEntity());
-            }
-
-        }
-
-        for(CongressionalDistrictEntity district: congressionalDistrictEntities){
-
-            CongressionalDistrictEssentialsResponse congressionalDistrictEssentialsResponse =
-                    new CongressionalDistrictEssentialsResponse();
-
-            congressionalDistrictEssentialsResponse.setCongressionalDistrictId(district.getCongressionalDistrictId());
-            congressionalDistrictEssentialsResponse.setName(district.getName());
-
-            returnValue.add(congressionalDistrictEssentialsResponse);
-        }
-
-        return returnValue.stream()
-                .sorted(Comparator.comparing(CongressionalDistrictEssentialsResponse :: getName))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public HealthCenterResponseFull entityToResponseFull(HealthCenterEntity healthCenterEntity) {
-
-        if(this.entityIsNull(healthCenterEntity))
-            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        HealthCenterDto healthCenterDto = this.entityToDto(healthCenterEntity);
-
-        return this.dtoToResponseFull(healthCenterDto);
-    }
-
-    @Override
-    public List<HealthCenterResponseFull> entityToResponseFull(List<HealthCenterEntity> healthCenterEntityList) {
-
-        if(this.entityIsNull(healthCenterEntityList))
-            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<HealthCenterResponseFull> returnValue = new ArrayList<>();
-
-        for(HealthCenterEntity healthCenterEntity: healthCenterEntityList){
-
-            HealthCenterResponseFull healthCenterResponseFull = this.entityToResponseFull(healthCenterEntity);
-            returnValue.add(healthCenterResponseFull);
-        }
-
-        return returnValue;
-    }
-
-    @Override
     public HealthCenterEssentials healthCenterEssentials(HealthCenterEntity healthCenterEntity) {
 
         if(this.entityIsNull(healthCenterEntity))
@@ -789,13 +303,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return healthCenterEssentials;
     }
 
-    @Override
-    public List<HealthCenterResponseFull> getHealthCenterResponse(int page, int index) {
 
-        List<HealthCenterDto> healthCenterEntities = this.getHealthCenters(page, index);
-
-        return this.dtoToResponseFull(healthCenterEntities);
-    }
 
     @Override
     public List<HealthCenterDashBoard> healthCenterDashBoard(int page, int limit) {
@@ -806,129 +314,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return this.entityToDashBoardData(healthCenterDtoList);
     }
 
-    @Override
-    public HealthCenterEntity dtoToEntity(HealthCenterDto healthCenterDto) {
 
-
-        HealthCenterEntity healthCenterEntity = utils.objectMapper().map(healthCenterDto, HealthCenterEntity.class);
-
-        if(healthCenterEntity.getHealthCenterId() == null || healthCenterEntity.getHealthCenterId().length() < 30){
-
-            healthCenterEntity = this.generateHealthCenterWithUniqueHealthCenterId(healthCenterEntity);
-        }
-
-        return healthCenterEntity;
-    }
-
-    @Override
-    public List<HealthCenterEntity> dtoToEntity(List<HealthCenterDto> healthCenterDtoList) {
-
-        List<HealthCenterEntity> returnValue = new ArrayList<>();
-
-        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
-
-            returnValue.add(this.dtoToEntity(healthCenterDto));
-        }
-
-        return returnValue;
-    }
-
-    @Override
-    public HealthCenterResponseModel dtoToHealthCenterResponse(HealthCenterDto healthCenterDto) {
-
-        if(this.dtoIsNull(healthCenterDto)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.utils.objectMapper().map(healthCenterDto, HealthCenterResponseModel.class);
-
-    }
-
-    @Override
-    public List<HealthCenterResponseModel> dtoToHealthCenterResponseModel(List<HealthCenterDto> healthCenterDtoList) {
-
-        if(this.dtoIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<HealthCenterResponseModel> returnValue = new ArrayList<>();
-
-        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
-
-            returnValue.add(this.dtoToHealthCenterResponse(healthCenterDto));
-        }
-
-        return returnValue;
-    }
-
-
-
-    @Override
-    public HealthCenterResponseBaseModel dtoToHealthCenterResponseBaseModel(HealthCenterDto healthCenterDto) {
-
-        if(this.dtoIsNull(healthCenterDto)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.utils.objectMapper().map(healthCenterDto, HealthCenterResponseBaseModel.class);
-    }
-
-    @Override
-    public List<HealthCenterResponseBaseModel> dtoToHealthCenterResponseBaseModel(List<HealthCenterDto> healthCenterDtoList) {
-
-        if(this.dtoIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<HealthCenterResponseBaseModel> returnValue = new ArrayList<>();
-
-        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
-
-            returnValue.add(this.utils.objectMapper().map(healthCenterDto, HealthCenterResponseBaseModel.class));
-        }
-        return null;
-    }
-
-    @Override
-    public HealthCenterNestedResponseModel dtoToHealthCenterNestedResponseModel(HealthCenterDto healthCenterDto) {
-
-        if(this.dtoIsNull(healthCenterDto)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.utils.objectMapper().map(healthCenterDto, HealthCenterNestedResponseModel.class);
-    }
-
-
-
-
-    @Override
-    public List<HealthCenterNestedResponseModel> dtoToHealthCenterNestedResponseModelArray(List<HealthCenterDto> healthCenterDtoList) {
-
-        if(this.dtoIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<HealthCenterNestedResponseModel> returnValue = new ArrayList<>();
-
-        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
-
-            returnValue.add(this.dtoToHealthCenterNestedResponseModel(healthCenterDto));
-        }
-
-        return returnValue;
-    }
-
-    @Override
-    public HealthCenterDetailsRequestModel dtoToHealthCenterDetailsRequestModel(HealthCenterDto healthCenterDto) {
-
-        if(dtoIsNull(healthCenterDto)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.utils.objectMapper().map(healthCenterDto, HealthCenterDetailsRequestModel.class);
-    }
-
-    @Override
-    public List<HealthCenterDetailsRequestModel> dtoToHealthCenterDetailsRequestModel(List<HealthCenterDto> healthCenterDtoList) {
-
-        if(dtoIsNull(healthCenterDtoList)) throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<HealthCenterDetailsRequestModel> returnValue = new ArrayList<>();
-
-        for(HealthCenterDto healthCenterDto: healthCenterDtoList){
-
-            returnValue.add(this.utils.objectMapper().map(healthCenterDto, HealthCenterDetailsRequestModel.class));
-        }
-
-        return returnValue;
-    }
 
     @Override
     public Boolean entityIsNull(HealthCenterEntity healthCenter) {
@@ -940,15 +326,6 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         return healthCenterEntityList == null;
     }
 
-    @Override
-    public Boolean dtoIsNull(HealthCenterDto healthCenterDto) {
-        return healthCenterDto == null;
-    }
-
-    @Override
-    public Boolean dtoIsNull(List<HealthCenterDto> healthCenterDtoList) {
-        return healthCenterDtoList == null;
-    }
 
     @Override
     public Boolean responseIsNull(List<HealthCenterResponseModel> healthCenterResponseModelList) {

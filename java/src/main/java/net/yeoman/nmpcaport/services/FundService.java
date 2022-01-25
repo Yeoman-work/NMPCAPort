@@ -13,14 +13,13 @@ import java.util.List;
 
 public interface FundService {
 
-    public FundEntity getFund(String fundId);
+
     public FundDto createFund(FundDto fundDto);
     public FundDto updateFund(FundDto fundDto, String fundId);
     public FundDto deleteFund(String fundId);
-    public FundEntity getFundEntity(String fundId);
     public List<FundDto> getAllFunding();
     public List<FundDto> createFundBulk(FundRequestListModel fundRequestListModel);
-    public List<FundEntity> getFunds(List<String> fundIds);
+
     public FundResponseModel getFundResponse(String fundId);
 
     //get essentials from entity
@@ -30,6 +29,9 @@ public interface FundService {
     //get fundList
     public List<FundEntity> gatherFundEntity(List<SiteFundingDetailsEntity> fundingDetailsEntities, List<FundEntity> fundEntities);
 
+    //get funds from funding ids
+    public FundEntity getFundEntity(String fundId);
+    public List<FundEntity> getFundEntities(List<String> fundIds);
 
     //get essentials from sites
     //used for the health Center dashboard

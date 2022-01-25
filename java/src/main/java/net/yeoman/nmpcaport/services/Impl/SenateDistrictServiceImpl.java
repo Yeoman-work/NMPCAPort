@@ -1,8 +1,10 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
+import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.SenateDistrictServiceException;
+import net.yeoman.nmpcaport.exception.SiteServiceException;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
@@ -11,11 +13,12 @@ import net.yeoman.nmpcaport.services.SenateDistrictService;
 import net.yeoman.nmpcaport.shared.dto.SenateDistrictDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SenateDistrictServiceImpl implements SenateDistrictService {
@@ -23,16 +26,16 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
 
     private final SenateDistrictRepository senateDistrictRepository;
 
-    private final StateSenatorServiceImpl stateSenatorService;
+    private final SiteServiceImpl siteService;
 
     private final Utils utils;
 
     public SenateDistrictServiceImpl(SenateDistrictRepository senateDistrictRepository,
-                                     StateSenatorServiceImpl stateSenatorService,
+                                     SiteServiceImpl siteService,
                                      Utils utils
     ){
         this.senateDistrictRepository = senateDistrictRepository;
-        this.stateSenatorService = stateSenatorService;
+        this.siteService = siteService;
         this.utils = utils;
     }
 
@@ -124,13 +127,67 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
     }
 
     @Override
-    public SenateDistrictEssentialResponse essentialsToEntity(SenateDistrictEntity senateDistrictEntity) {
+    public SenateDistrictEssentialResponse entityToEssentials(SenateDistrictEntity senateDistrictEntity) {
 
         if(this.entityIsNull(senateDistrictEntity))
             throw new SenateDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
+        SenateDistrictEssentialResponse senateDistrict = new SenateDistrictEssentialResponse();
 
-        return this.utils.objectMapper().map(senateDistrictEntity, SenateDistrictEssentialResponse.class);
+        senateDistrict.setName(senateDistrictEntity.getName());
+        senateDistrict.setSenateDistrictId(senateDistrictEntity.getSenateDistrictId());
+
+        return senateDistrict;
+    }
+
+    @Override
+    public List<SenateDistrictEssentialResponse> entitiesToEssentials(List<SenateDistrictEntity> senateDistrictEntities) {
+
+        if(this.entityIsNull(senateDistrictEntities))
+            throw new SenateDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SenateDistrictEssentialResponse> returnValue = new ArrayList<>();
+
+        for(SenateDistrictEntity district: senateDistrictEntities){
+
+            returnValue.add(this.entityToEssentials(district));
+        }
+
+        return returnValue.stream()
+                .sorted(Comparator.comparing(SenateDistrictEssentialResponse::getName))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public SenateDistrictEntity getSenateDistrictEntitiesFromSites(SiteEntity siteEntity) {
+
+        if(this.siteService.entityIsNull(siteEntity))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        return siteEntity.getSenateDistrictEntity();
+    }
+
+    @Override
+    public List<SenateDistrictEntity> getSenateDistrictEntitiesFromSites(List<SiteEntity> siteEntities) {
+
+        if(this.siteService.entityIsNull(siteEntities))
+            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<SenateDistrictEntity> returnValue = new ArrayList<>();
+
+        for(SiteEntity site: siteEntities){
+
+            if(site.getSenateDistrictEntity() != null){
+
+                if(!returnValue.contains(site.getSenateDistrictEntity())){
+
+                    returnValue.add(site.getSenateDistrictEntity());
+                }
+            }
+
+        }
+
+        return returnValue;
     }
 
     @Override

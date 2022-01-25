@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FundServiceImpl implements FundService {
@@ -47,28 +49,7 @@ public class FundServiceImpl implements FundService {
 
     }
 
-    @Override
-    public FundEntity getFund(String fundId) {
 
-        if(fundId == null) throw new  FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.fundRepository.findByFundId(fundId);
-    }
-
-    @Override
-    public List<FundEntity> getFunds(List<String> fundIds) {
-
-        if(fundIds == null) throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<FundEntity> returnValue = new ArrayList<>();
-
-        for(String fundId: fundIds){
-
-            returnValue.add(this.getFund(fundId));
-        }
-
-        return returnValue;
-    }
 
     @Override
     public FundResponseModel getFundResponse(String fundId) {
@@ -101,7 +82,9 @@ public class FundServiceImpl implements FundService {
             returnValue.add(this.entityToEssential(fund));
         }
 
-        return returnValue;
+        return returnValue.stream()
+                .sorted(Comparator.comparing(FundEssentialsResponse::getName))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -203,7 +186,25 @@ public class FundServiceImpl implements FundService {
     @Override
     public FundEntity getFundEntity(String fundId) {
 
+        if(fundId == null) throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
         return this.fundRepository.findByFundId(fundId);
+    }
+
+    @Override
+    public List<FundEntity> getFundEntities(List<String> fundIds) {
+
+        if(fundIds == null) throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<FundEntity> returnValue = new ArrayList<>();
+
+        for(String fundId: fundIds){
+
+            returnValue.add(this.getFundEntity(fundId));
+
+        }
+
+        return returnValue;
     }
 
     @Override

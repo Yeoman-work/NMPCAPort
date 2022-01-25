@@ -8,12 +8,10 @@ import net.yeoman.nmpcaport.exception.ServiceException;
 import net.yeoman.nmpcaport.exception.SiteServiceException;
 import net.yeoman.nmpcaport.exception.SiteServiceServiceException;
 import net.yeoman.nmpcaport.io.repositories.SiteServiceDetailsRepository;
-import net.yeoman.nmpcaport.services.ServiceService;
 import net.yeoman.nmpcaport.services.SiteServiceDetailsService;
 import net.yeoman.nmpcaport.shared.dto.SiteServiceDetailsDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,17 +20,26 @@ import java.util.List;
 @Service
 public class SiteServiceDetailsServiceImpl implements SiteServiceDetailsService {
 
-    @Autowired
-    private SiteServiceDetailsRepository siteServiceDetailsRepository;
 
-    @Autowired
-    private ServiceServiceImpl serviceService;
+    private final SiteServiceDetailsRepository siteServiceDetailsRepository;
 
-    @Autowired
-    private SiteServiceImpl siteService;
+    private final ServiceServiceImpl serviceService;
 
-    @Autowired
-    private Utils utils;
+    private final SiteServiceImpl siteService;
+
+    private final Utils utils;
+
+    public SiteServiceDetailsServiceImpl(SiteServiceDetailsRepository siteServiceDetailsRepository,
+                                         ServiceServiceImpl serviceService,
+                                         SiteServiceImpl siteService,
+                                         Utils utils
+    ){
+        this.siteServiceDetailsRepository = siteServiceDetailsRepository;
+        this.serviceService = serviceService;
+        this.siteService = siteService;
+        this.utils = utils;
+
+    }
 
 
     @Override
@@ -68,7 +75,6 @@ public class SiteServiceDetailsServiceImpl implements SiteServiceDetailsService 
 
         this.siteServiceDetailsRepository.save(serviceDetailsEntity);
 
-        return;
     }
 
     @Override
@@ -161,7 +167,6 @@ public class SiteServiceDetailsServiceImpl implements SiteServiceDetailsService 
             this.saveSiteServiceEntity(siteServiceDetailsEntity);
         }
 
-        return;
     }
 
 

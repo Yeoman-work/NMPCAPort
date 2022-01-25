@@ -23,110 +23,37 @@ public interface HealthCenterService {
 
 
     //return dto
-    public HealthCenterDto getHealthCenter(String healthCenterId);
-    public HealthCenterDto updateHealthCenter(String healthCenterId, HealthCenterDto healthCenterDto);
-    public HealthCenterDto deleteHealthCenter(String healthCenterId);
-    public List<HealthCenterDto> getHealthCenters(int page, int limit);
-    public List<HealthCenterEntity> getHealthCenterEntities(int page, int limit);
-    public List<HealthCenterDto> getAllHealthCenters();
+    HealthCenterDto updateHealthCenter(String healthCenterId, HealthCenterDto healthCenterDto);
+    void deleteHealthCenter(String healthCenterId);
 
-    //dash board
-    public List<ServiceEssentialsResponse> getServiceEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
-    public List<FundEssentialsResponse> getFundingEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
-    public List<HouseDistrictEssentialResponse> getNMHouseDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
-    public List<SenateDistrictEssentialResponse> getSenateDistrictEssentials(List<SiteEssentialsResponse> siteEssentialsResponses);
-    public List<CongressionalDistrictEssentialsResponse>
-    congressionalDistrictEssentials(List<CongressionalDistrictEssentialsResponse> congressionalDistrictEssentialsResponses);
-
-    //convert request
-    public HealthCenterDto requestToDto(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel);
-    public List<HealthCenterDto> requestToDto(List<HealthCenterDetailsRequestModel> healthCenterDetailsRequestModelList);
-
-    //convert Dto to request
-    public HealthCenterResponseFull dtoToResponseFull(HealthCenterDto healthCenterDto);
-    public List<HealthCenterResponseFull> dtoToResponseFull(List<HealthCenterDto> healthCenterDtoList);
+    List<HealthCenterDto> getAllHealthCenters();
 
     //create healthCenter
     public void createHealthCenter(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel);
 
     //return entity
-    public HealthCenterEntity generateHealthCenterWithUniqueHealthCenterId(HealthCenterEntity healthCenter);
-    public HealthCenterEntity getHealthCenterEntity(String healthCenterId);
-    public void savedHealthCenterEntity(HealthCenterEntity healthCenterEntity);
-    public HealthCenterEntity savedHealthCenterEntityWithReturn(HealthCenterEntity healthCenterEntity);
-
-    //convert entity to DTO
-    public HealthCenterDto entityToDto(HealthCenterEntity healthCenterEntity);
-    public List<HealthCenterDto> entityToDto(List<HealthCenterEntity> healthCenterEntityList);
+    HealthCenterEntity generateHealthCenterWithUniqueId(HealthCenterEntity healthCenter);
+    HealthCenterEntity getHealthCenterEntity(String healthCenterId);
+    void savedHealthCenterEntity(HealthCenterEntity healthCenterEntity);
+    HealthCenterEntity savedHealthCenterEntityWithReturn(HealthCenterEntity healthCenterEntity);
+    List<HealthCenterEntity> getHealthCenterEntities(int page, int limit);
 
     //entity to dashboard view
-    public HealthCenterDashBoard entityToDashBoardData(HealthCenterEntity healthCenterEntity);
-    public List<HealthCenterDashBoard> entityToDashBoardData(List<HealthCenterEntity> healthCenterEntityList);
-
-
-
-//    public List<ServiceEssentialsResponse> healthCenterServiceEssentials(List<SiteEntity> siteEntities);
-//    public List<FundEssentialsResponse>  healthCenterFundEssentials(List<SiteEntity> siteEntities);
-//    public List<HouseDistrictEssentialResponse> healthCenterNMDistrictEssentials(List<SiteEntity> siteEntities);
-    public List<SenateDistrictEssentialResponse> healthCenterSenateDistrictEssentials(List<SiteEntity> siteEntities);
-    public List<CongressionalDistrictEssentialsResponse> healthCenterCongressionalEssentials(List<SiteEntity> siteEntities);
-
-    //entity to response full
-    public HealthCenterResponseFull entityToResponseFull(HealthCenterEntity healthCenterEntity);
-    public List<HealthCenterResponseFull> entityToResponseFull(List<HealthCenterEntity> healthCenterEntity);
+    HealthCenterDashBoard entityToDashBoardData(HealthCenterEntity healthCenterEntity);
+    List<HealthCenterDashBoard> entityToDashBoardData(List<HealthCenterEntity> healthCenterEntityList);
 
     //health center essentials
-    public HealthCenterEssentials healthCenterEssentials(HealthCenterEntity healthEntity);
-
-
-    public List<HealthCenterResponseFull> getHealthCenterResponse(int page, int index);
+    HealthCenterEssentials healthCenterEssentials(HealthCenterEntity healthEntity);
 
     //get dashboard data
-    public List<HealthCenterDashBoard> healthCenterDashBoard(int page, int limit);
-
-
-    //convert dto to entity
-    public HealthCenterEntity dtoToEntity(HealthCenterDto healthCenterDto);
-    public List<HealthCenterEntity> dtoToEntity(List<HealthCenterDto> healthCenterDtoList);
-
-    //convert dto to health center response
-    public HealthCenterResponseModel dtoToHealthCenterResponse(HealthCenterDto healthCenterDto);
-    public List<HealthCenterResponseModel> dtoToHealthCenterResponseModel(List<HealthCenterDto> healthCenterDtoList);
-
-    //get services from sites
-    public List<ServiceNestedResponse> getHealthCenterServicesFromSites(List<SiteEntity> siteEntities);
-
-
-    //get funding from sites
-    public List<FundNestedResponse> getHealthCenterFundingFromSites(List<SiteEntity> siteEntities);
-
-    //get NM house districts from sites
-    public List<HouseDistrictNestedResponse> getHealthCenterNMHouseDistrictsFromSites(List<SiteEntity> siteEntities);
-
-    //get senate districts from states
-    public List<SenateDistrictNestedResponse> getHealthCenterSenateDistrictFromSites(List<SiteEntity> siteEntities);
-
-    //get congressional districts from sites
-    public List<CongressionalDistrictNestedResponse> getHealthCenterCongressionalDistrictFromSites(List<SiteEntity> siteEntities);
-
-
-
-    public HealthCenterResponseBaseModel dtoToHealthCenterResponseBaseModel(HealthCenterDto healthCenterDto);
-    public List<HealthCenterResponseBaseModel> dtoToHealthCenterResponseBaseModel(List<HealthCenterDto> healthCenterDtoList);
-    public HealthCenterNestedResponseModel dtoToHealthCenterNestedResponseModel(HealthCenterDto healthCenterDto);
-    public List<HealthCenterNestedResponseModel> dtoToHealthCenterNestedResponseModelArray(List<HealthCenterDto> healthCenterDtoList);
-    public HealthCenterDetailsRequestModel dtoToHealthCenterDetailsRequestModel(HealthCenterDto healthCenterDto);
-    public List<HealthCenterDetailsRequestModel> dtoToHealthCenterDetailsRequestModel(List<HealthCenterDto> healthCenterDtoList);
-
+    List<HealthCenterDashBoard> healthCenterDashBoard(int page, int limit);
 
     //check if object is null
-    public Boolean entityIsNull(HealthCenterEntity healthCenter);
-    public Boolean entityIsNull(List<HealthCenterEntity> healthCenterEntityList);
-    public Boolean dtoIsNull(HealthCenterDto healthCenterDto);
-    public Boolean dtoIsNull(List<HealthCenterDto> healthCenterDtoList);
-    public Boolean responseIsNull(List<HealthCenterResponseModel> healthCenterResponseModelList);
-    public Boolean responseIsNull(HealthCenterResponseModel healthCenterResponseModel);
-    public Boolean requestIsNull(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel);
-    public Boolean requestIsNull(List<HealthCenterDetailsRequestModel> healthCenterDetailsRequestModelList);
+    Boolean entityIsNull(HealthCenterEntity healthCenter);
+    Boolean entityIsNull(List<HealthCenterEntity> healthCenterEntityList);
+    Boolean responseIsNull(List<HealthCenterResponseModel> healthCenterResponseModelList);
+    Boolean responseIsNull(HealthCenterResponseModel healthCenterResponseModel);
+    Boolean requestIsNull(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel);
+    Boolean requestIsNull(List<HealthCenterDetailsRequestModel> healthCenterDetailsRequestModelList);
 
 }
