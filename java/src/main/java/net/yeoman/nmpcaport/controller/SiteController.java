@@ -36,23 +36,11 @@ public class SiteController {
         return "inside get site";
     }
 
-//    @PostMapping
-//    public SiteDetailsResponse createSite(@RequestBody SiteDetailsRequestModel siteDetails){
-//
-//
-//        SiteDto savedSiteDto = this.siteService.createSite(siteDetails);
-//
-//
-//        return new ModelMapper().map(savedSiteDto, SiteDetailsResponse.class);
-//    }
 
     @PostMapping("/bulk/{healthCenterId}")
     public void createSitesWithOutId(@PathVariable("healthCenterId") String healthCenterId, @RequestBody SiteDetailsRequestListModel siteDetailsRequestListModel){
 
 
-        this.siteService.createSiteBulk(
-                siteDetailsRequestListModel.getSiteDetailsRequestModelList(), this.healthCenterService.getHealthCenterEntity(healthCenterId)
-        );
 
         return;
     }

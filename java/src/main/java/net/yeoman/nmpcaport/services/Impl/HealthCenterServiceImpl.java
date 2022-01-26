@@ -1,37 +1,22 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.io.response.HealthCenter.*;
-import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictEssentialsResponse;
-import net.yeoman.nmpcaport.io.response.congressionalDistrict.CongressionalDistrictNestedResponse;
-import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
-import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
-import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
-import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
-import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
-import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
-import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
-import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
-import net.yeoman.nmpcaport.services.FundService;
 import net.yeoman.nmpcaport.services.HealthCenterService;
 import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
-import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.repositories.HealthCenterRepository;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class HealthCenterServiceImpl implements HealthCenterService {
@@ -43,16 +28,9 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
     private final ServiceServiceImpl serviceService;
 
-    private final SiteFundingDetailsServiceImpl siteFundingDetailsService;
-
     private final FundServiceImpl fundService;
-
-    private final SiteServiceDetailsServiceImpl siteServiceDetailsService;
-
     private final HouseDistrictServiceImpl houseDistrictService;
-
     private final SenateDistrictServiceImpl senateDistrictService;
-
     private final CongressionalDistrictServiceImpl congressionalDistrictService;
 
     private final ContactServiceImpl contactService;
@@ -60,24 +38,20 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     private final Utils utils;
 
     public HealthCenterServiceImpl(HealthCenterRepository healthCenterRepository,
-                                   SiteServiceImpl siteService,
+                                   @Lazy SiteServiceImpl siteService,
                                    ServiceServiceImpl serviceService,
-                                   SiteFundingDetailsServiceImpl siteFundingDetailsService,
                                    FundServiceImpl fundService,
-                                   SiteServiceDetailsServiceImpl siteServiceDetailsService,
-                                   HouseDistrictServiceImpl houseDistrictService,
-                                   SenateDistrictServiceImpl senateDistrictService,
-                                   CongressionalDistrictServiceImpl congressionalDistrictService,
-                                   ContactServiceImpl contactService,
+                                   @Lazy HouseDistrictServiceImpl houseDistrictService,
+                                   @Lazy SenateDistrictServiceImpl senateDistrictService,
+                                   @Lazy CongressionalDistrictServiceImpl congressionalDistrictService,
+                                   @Lazy ContactServiceImpl contactService,
                                    Utils utils
                                    ){
 
         this.healthCenterRepository = healthCenterRepository;
         this.siteService = siteService;
         this.serviceService = serviceService;
-        this.siteFundingDetailsService = siteFundingDetailsService;
         this.fundService = fundService;
-        this.siteServiceDetailsService = siteServiceDetailsService;
         this.houseDistrictService = houseDistrictService;
         this.senateDistrictService = senateDistrictService;
         this.congressionalDistrictService = congressionalDistrictService;
@@ -96,34 +70,79 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         HealthCenterEntity healthCenterEntity = this.generateHealthCenterWithUniqueId(new HealthCenterEntity());
 
+        healthCenterEntity.setName(healthCenterDetailsRequestModel.getName());
+        healthCenterEntity.setNameAbbr(healthCenterDetailsRequestModel.getNameAbbr());
+
+        HealthCenterEntity savedHealthCenter = this.saveHealthCenterEntity(healthCenterEntity);
+
         if(!this.siteService.requestIsNull(
                 healthCenterDetailsRequestModel.getSitesRequest())
         ){
-            this.siteService.createSitesBulk(healthCenterDetailsRequestModel.getSitesRequest());
+            this.siteService.createSitesBulk(healthCenterDetailsRequestModel.getSitesRequest(), savedHealthCenter);
         }
 
     }
-
 
     @Override
-    public HealthCenterDto updateHealthCenter(String healthCenterId, HealthCenterDto healthCenterDto) {
+    public HealthCenterResponseModel getHealthCenterResponse(HealthCenterEntity healthCenterEntity) {
 
-        //get record
-        HealthCenterEntity healthCenterEntity = this.healthCenterRepository.findByHealthCenterId(healthCenterId);
+        if(this.entityIsNull(healthCenterEntity))
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        //health center entity null throw error
-        if(healthCenterEntity == null) throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        HealthCenterResponseModel healthCenterResponseModel = new HealthCenterResponseModel();
 
-        if(!healthCenterEntity.getName().equals(healthCenterDto.getName())){
-            healthCenterEntity.setName(healthCenterDto.getName());
+        healthCenterResponseModel.setName(healthCenterEntity.getName());
+        healthCenterResponseModel.setNameAbbr(healthCenterEntity.getNameAbbr());
+        healthCenterResponseModel.setCreatedAt(healthCenterEntity.getCreatedAt());
+        healthCenterResponseModel.setUpdatedAt(healthCenterEntity.getUpdatedAt());
+        healthCenterResponseModel.setHealthCenterId(healthCenterEntity.getHealthCenterId());
+
+        if(healthCenterEntity.getContacts() != null){
+
+            healthCenterResponseModel.setContactEssentials(
+                    this.contactService.getContactEssentials(healthCenterEntity.getContacts()
+                    )
+            );
         }
 
-        if(!healthCenterEntity.getNameAbbr().equals(healthCenterDto.getNameAbbr())){
-            healthCenterEntity.setNameAbbr(healthCenterDto.getNameAbbr());
+        if(healthCenterEntity.getSiteEntities() != null){
+
+            healthCenterResponseModel.setSiteEssentialsResponses(
+                    this.siteService.entityToEssential(
+                            healthCenterEntity.getSiteEntities()
+                    )
+            );
+
+            healthCenterResponseModel.setHouseDistrictEssentialResponses(
+                    this.houseDistrictService.entityToEssentials(
+                            this.houseDistrictService.getHouseDistrictsFromSites(
+                                    healthCenterEntity.getSiteEntities()
+                            )
+                    )
+            );
+
+            healthCenterResponseModel.setSenateDistrictEssentialResponses(
+                    this.senateDistrictService.entitiesToEssentials(
+                            this.senateDistrictService.getSenateDistrictEntitiesFromSites(
+                                    healthCenterEntity.getSiteEntities())
+                    )
+            );
+
+            healthCenterResponseModel.setCongressionalDistrictEssentialsResponses(
+                    this.congressionalDistrictService.entityToEssentials(
+                            this.congressionalDistrictService.getCongressionalDistrictFromSites(
+                                    healthCenterEntity.getSiteEntities()
+                            )
+                    )
+            );
+
+
+
         }
 
-        return new ModelMapper().map(healthCenterEntity, HealthCenterDto.class);
+        return healthCenterResponseModel;
     }
+
 
     @Override
     public void deleteHealthCenter(String healthCenterId) {
@@ -138,19 +157,8 @@ public class HealthCenterServiceImpl implements HealthCenterService {
     }
 
 
-
     @Override
-    public void savedHealthCenterEntity(HealthCenterEntity healthCenterEntity) {
-
-        if(this.entityIsNull(healthCenterEntity))
-            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        this.healthCenterRepository.save(healthCenterEntity);
-
-    }
-
-    @Override
-    public HealthCenterEntity savedHealthCenterEntityWithReturn(HealthCenterEntity healthCenterEntity) {
+    public HealthCenterEntity saveHealthCenterEntity(HealthCenterEntity healthCenterEntity) {
 
         if(this.entityIsNull(healthCenterEntity))
             throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
@@ -284,7 +292,6 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         return returnValue;
     }
-
 
 
 

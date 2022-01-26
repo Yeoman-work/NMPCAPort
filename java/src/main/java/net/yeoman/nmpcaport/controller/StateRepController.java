@@ -18,9 +18,12 @@ import java.util.List;
 @RequestMapping("/stateReps")
 public class StateRepController {
 
-    @Autowired
-    private StateRepServiceImpl stateRepService;
 
+    private final StateRepServiceImpl stateRepService;
+
+    StateRepController(StateRepServiceImpl stateRepService){
+        this.stateRepService = stateRepService;
+    }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<StateRepNestedResponse> getAllStateReps(){
@@ -38,15 +41,14 @@ public class StateRepController {
     @GetMapping("/{stateRepId}")
     public StateRepResponse getStateRep(@PathVariable("stateRepId") String stateRepId){
 
-        return new ModelMapper().map(this.stateRepService.getStateRep(stateRepId), StateRepResponse.class);
+        return this.stateRepService.getStateRepResponse(this.stateRepService.getStateRepEntity(stateRepId));
     }
 
     @PostMapping
-    public StateRepResponse createStateRep(@RequestBody StateRepDetailsRequest stateRepDetails){
-        System.out.println( "Read this " + stateRepDetails.getParty());
-        StateRepDto stateRepDto = this.stateRepService.createStateRep(new ModelMapper().map(stateRepDetails, StateRepDto.class));
+    public void createStateRep(@RequestBody StateRepDetailsRequest stateRepDetails){
 
-        return new ModelMapper().map(stateRepDto, StateRepResponse.class);
+
+        this.stateRepService.createStateRep(stateRepDetails);
     }
 
 

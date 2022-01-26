@@ -25,17 +25,12 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
 
 
     private final SenateDistrictRepository senateDistrictRepository;
-
-    private final SiteServiceImpl siteService;
-
     private final Utils utils;
 
     public SenateDistrictServiceImpl(SenateDistrictRepository senateDistrictRepository,
-                                     SiteServiceImpl siteService,
                                      Utils utils
     ){
         this.senateDistrictRepository = senateDistrictRepository;
-        this.siteService = siteService;
         this.utils = utils;
     }
 
@@ -161,7 +156,7 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
     @Override
     public SenateDistrictEntity getSenateDistrictEntitiesFromSites(SiteEntity siteEntity) {
 
-        if(this.siteService.entityIsNull(siteEntity))
+        if(siteEntity == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         return siteEntity.getSenateDistrictEntity();
@@ -170,7 +165,7 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
     @Override
     public List<SenateDistrictEntity> getSenateDistrictEntitiesFromSites(List<SiteEntity> siteEntities) {
 
-        if(this.siteService.entityIsNull(siteEntities))
+        if(siteEntities == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<SenateDistrictEntity> returnValue = new ArrayList<>();

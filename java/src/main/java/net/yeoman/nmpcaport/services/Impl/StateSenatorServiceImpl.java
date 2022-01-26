@@ -184,7 +184,7 @@ public class StateSenatorServiceImpl implements StateSenatorService {
         );
 
         stateSenatorEssentials.setSenateDistrictEssentialResponse(
-                this.senateDistrictService.essentialsToEntity(
+                this.senateDistrictService.entityToEssentials(
                         stateSenatorEntity.getSenateDistrictEntity()
                 )
         );
@@ -234,10 +234,10 @@ public class StateSenatorServiceImpl implements StateSenatorService {
                         stateSenatorEntity.getPoliticalPartyEntity()
                 )
         );
+
         stateSenatorNestedResponse.setSenateDistrictEssentialResponse(
-                this.senateDistrictService.essentialsToEntity(
-                        stateSenatorEntity.getSenateDistrictEntity()
-                )
+                this.senateDistrictService.entityToEssentials(
+                        stateSenatorEntity.getSenateDistrictEntity())
         );
 
         return stateSenatorNestedResponse;

@@ -28,17 +28,20 @@ import java.util.List;
 public class ContactController {
 
 
-    @Autowired
-    private ContactServiceImpl contactService;
 
-    @Autowired
-    private Utils utils;
+    private final ContactServiceImpl contactService;
 
+
+    public ContactController(ContactServiceImpl contactService){
+
+        this.contactService = contactService;
+
+    }
 
     @GetMapping(path = {"/{contactId}"}, produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ContactResponseModel getContact(@PathVariable("contactId") String contactId){
 
-    	return new ModelMapper().map(this.contactService.getContact(contactId), ContactResponseModel.class);
+    	return this.contactService.getContactResponseModel(this.contactService.getContactEntity(contactId));
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -55,11 +58,11 @@ public class ContactController {
         return this.contactService.getContactEssentials(this.contactService.getAllContactEntities());
     }
 
-    @GetMapping(path="/formContacts", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ContactFormListResponse getContactsForm(){
-
-        return this.contactService.contactsForNetworkingGroup();
-    }
+//    @GetMapping(path="/formContacts", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+//    public ContactFormListResponse getContactsForm(){
+//
+//        return this.contactService.contactsForNetworkingGroup();
+//    }
 
     @PostMapping(consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
     			 produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -71,14 +74,13 @@ public class ContactController {
     }
     
 
-    @PutMapping(path="/{contactId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-    								 produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ContactResponseModel updateUser(@PathVariable("contactId") String contactid, @RequestBody ContactDetailsRequestModel contactDetails){
-    	
-    	ContactDto contactDto = this.contactService.updateContact(contactid, new ModelMapper().map(contactDetails, ContactDto.class));
-    	
-        return new ModelMapper().map(contactDto, ContactResponseModel.class);
-    }
+//    @PutMapping(path="/{contactId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+//    								 produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+//    public ContactResponseModel updateUser(@PathVariable("contactId") String contactid, @RequestBody ContactDetailsRequestModel contactDetails){
+//
+//
+//        return new ModelMapper().map(contactDto, ContactResponseModel.class);
+//    }
 
     @DeleteMapping
     public String deleteUser(){

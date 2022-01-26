@@ -16,9 +16,13 @@ import java.util.List;
 @RequestMapping("/congressionalDistricts")
 public class CongressionalDistrictController {
 
-    @Autowired
-    private CongressionalDistrictServiceImpl congressionalDistrictService;
 
+    private final CongressionalDistrictServiceImpl congressionalDistrictService;
+
+    CongressionalDistrictController(CongressionalDistrictServiceImpl congressionalDistrictService){
+
+        this.congressionalDistrictService = congressionalDistrictService;
+    }
 
     @GetMapping("/{congressionalDistrictId}")
     public String getCongressionalDistrict(@PathVariable("congressionalDistrictId") String congressionalDistrictId){

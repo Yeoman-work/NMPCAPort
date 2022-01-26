@@ -1,7 +1,6 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
-import net.yeoman.nmpcaport.io.response.site.SiteDetailsNestedResponse;
 import net.yeoman.nmpcaport.io.response.site.SiteEssentialsResponse;
 import net.yeoman.nmpcaport.services.SiteService;
 import net.yeoman.nmpcaport.entities.*;
@@ -10,8 +9,6 @@ import net.yeoman.nmpcaport.exception.*;
 import net.yeoman.nmpcaport.io.repositories.SiteRepository;
 import net.yeoman.nmpcaport.shared.dto.SiteDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -81,7 +78,7 @@ public class SiteServiceImpl implements SiteService {
     }
 
     @Override
-    public SiteEntity createSiteEntity(SiteDetailsRequestModel siteDetailsRequestModel) {
+    public void createSiteEntity(SiteDetailsRequestModel siteDetailsRequestModel) {
 
         if(this.requestIsNull(siteDetailsRequestModel))
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
@@ -209,25 +206,21 @@ public class SiteServiceImpl implements SiteService {
              this.siteFundingDetailsService.linkFundingToSites(fundEntities, savedSiteEntity);
          }
 
-
-
-        return savedSiteEntity;
     }
 
     @Override
-    public List<SiteEntity> createSitesBulk(List<SiteDetailsRequestModel> siteDetailsRequestModels) {
+    public void createSitesBulk(List<SiteDetailsRequestModel> siteDetailsRequestModels, HealthCenterEntity healthCenterEntity) {
 
         if(this.requestIsNull(siteDetailsRequestModels))
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        List<SiteEntity> returnValue = new ArrayList<>();
+
 
         for(SiteDetailsRequestModel request: siteDetailsRequestModels){
 
-            returnValue.add(this.createSiteEntity(request));
+            this.createSiteEntity(request);
         }
 
-        return returnValue;
     }
 
     @Override

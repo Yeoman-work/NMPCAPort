@@ -4,13 +4,13 @@ import java.util.List;
 
 public class HouseDistrictDetailsRequestList {
 
-    List<HouseDistrictDetailsRequest> nmHouseDistrictDetailsRequestList;
+    List<HouseDistrictDetailsRequest> houseDistrictDetailsRequestList;
 
-    public List<HouseDistrictDetailsRequest> getNmHouseDistrictDetailsRequestList() {
-        return nmHouseDistrictDetailsRequestList;
+    public List<HouseDistrictDetailsRequest> getHouseDistrictDetailsRequestList() {
+        return houseDistrictDetailsRequestList;
     }
 
-    public void setNmHouseDistrictDetailsRequestList(List<HouseDistrictDetailsRequest> nmHouseDistrictDetailsRequestList) {
-        this.nmHouseDistrictDetailsRequestList = nmHouseDistrictDetailsRequestList;
+    public void setHouseDistrictDetailsRequestList(List<HouseDistrictDetailsRequest> houseDistrictDetailsRequestList) {
+        this.houseDistrictDetailsRequestList = houseDistrictDetailsRequestList;
     }
 }

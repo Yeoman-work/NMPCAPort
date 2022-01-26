@@ -24,18 +24,13 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
 
 
     private final CongressionalDistrictRepository congressionalDistrictRepository;
-
-    private final SiteServiceImpl siteService;
-
     private final Utils utils;
 
 
     public CongressionalDistrictServiceImpl(CongressionalDistrictRepository congressionalDistrictRepository,
-                                            SiteServiceImpl siteService,
                                             Utils utils
     ){
         this.congressionalDistrictRepository = congressionalDistrictRepository;
-        this.siteService = siteService;
         this.utils = utils;
     }
 
@@ -137,7 +132,7 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
     @Override
     public CongressionalDistrictEntity getCongressionalDistrictFromSite(SiteEntity siteEntity) {
 
-        if(this.siteService.entityIsNull(siteEntity))
+        if(siteEntity == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         return siteEntity.getCongressionalDistrictEntity();
@@ -146,7 +141,7 @@ public class CongressionalDistrictServiceImpl implements CongressionalDistrictSe
     @Override
     public List<CongressionalDistrictEntity> getCongressionalDistrictFromSites(List<SiteEntity> siteEntities) {
 
-        if(this.siteService.entityIsNull(siteEntities))
+        if(siteEntities == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<CongressionalDistrictEntity> returnValue = new ArrayList<>();

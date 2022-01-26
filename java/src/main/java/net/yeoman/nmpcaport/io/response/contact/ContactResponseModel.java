@@ -1,10 +1,12 @@
 package net.yeoman.nmpcaport.io.response.contact;
 
+import java.util.Date;
 import java.util.List;
 
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupResponseModel;
-import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberResponse;
+import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterEssentials;
+import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupEssentials;
+import net.yeoman.nmpcaport.io.response.phoneNumber.PhoneNumberEssentials;
+
 
 public class ContactResponseModel {
 
@@ -13,11 +15,11 @@ public class ContactResponseModel {
     private String firstName;
     private String lastName;
     private String email;
-    private String createdAt;
-    private String updatedAt;
-    private List<NetworkingGroupResponseModel> networkingGroupResponses;
-    private HealthCenterNestedResponseModel healthCenterNestedResponse;
-    private List<PhoneNumberResponse> phoneNumberResponses;
+    private Date createdAt;
+    private Date updatedAt;
+    private List<NetworkingGroupEssentials> networkingGroupEssentials;
+    private HealthCenterEssentials healthCenterEssentials;
+    private List<PhoneNumberEssentials> phoneNumberEssentials;
 
 
     public String getContactId() {
@@ -60,43 +62,43 @@ public class ContactResponseModel {
         this.email = email;
     }
 
-    public List<NetworkingGroupResponseModel> getNetworkingGroupResponses() {
-        return networkingGroupResponses;
-    }
-
-    public void setNetworkingGroupResponses(List<NetworkingGroupResponseModel> networkingGroupResponses) {
-        this.networkingGroupResponses = networkingGroupResponses;
-    }
-
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public HealthCenterNestedResponseModel getHealthCenterNestedResponse() {
-        return healthCenterNestedResponse;
+    public List<NetworkingGroupEssentials> getNetworkingGroupEssentials() {
+        return networkingGroupEssentials;
     }
 
-    public void setHealthCenterNestedResponse(HealthCenterNestedResponseModel healthCenterNestedResponse) {
-        this.healthCenterNestedResponse = healthCenterNestedResponse;
+    public void setNetworkingGroupEssentials(List<NetworkingGroupEssentials> networkingGroupEssentials) {
+        this.networkingGroupEssentials = networkingGroupEssentials;
     }
 
-    public List<PhoneNumberResponse> getPhoneNumberResponses() {
-        return phoneNumberResponses;
+    public HealthCenterEssentials getHealthCenterEssentials() {
+        return healthCenterEssentials;
     }
 
-    public void setPhoneNumberResponses(List<PhoneNumberResponse> phoneNumberResponses) {
-        this.phoneNumberResponses = phoneNumberResponses;
+    public void setHealthCenterEssentials(HealthCenterEssentials healthCenterEssentials) {
+        this.healthCenterEssentials = healthCenterEssentials;
+    }
+
+    public List<PhoneNumberEssentials> getPhoneNumberEssentials() {
+        return phoneNumberEssentials;
+    }
+
+    public void setPhoneNumberEssentials(List<PhoneNumberEssentials> phoneNumberEssentials) {
+        this.phoneNumberEssentials = phoneNumberEssentials;
     }
 }

@@ -26,8 +26,9 @@ public class HealthCenterController {
     @GetMapping(path = "/{healthCenterId}")
     public HealthCenterResponseModel getHealthCenter(@PathVariable("healthCenterId") String healthCenterId){
 
-        return new ModelMapper().map(this.healthCenterService.getHealthCenter(healthCenterId), HealthCenterResponseModel.class);
-        //return this.healthCenterService.getHealthCenterEntity(healthCenterId);
+        return this.healthCenterService.getHealthCenterResponse(
+                this.healthCenterService.getHealthCenterEntity(healthCenterId)
+        );
     }
 
     @GetMapping(path="/base")

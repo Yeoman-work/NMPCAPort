@@ -1,8 +1,12 @@
 package net.yeoman.nmpcaport.io.response.stateRep;
 
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.city.CityEssentials;
 import net.yeoman.nmpcaport.io.response.city.CityResponse;
 import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
+import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyEssentials;
 import net.yeoman.nmpcaport.io.response.politcalParty.PoliticalPartyResponse;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentials;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 
 public class StateRepResponse {
@@ -14,10 +18,10 @@ public class StateRepResponse {
     private String picture;
     private String capitolRoom;
     private String streetAddress;
-    private PoliticalPartyResponse politicalPartyResponse;
-    private HouseDistrictNestedResponse nmHouseDistrictResponse;
-    private CityResponse cityResponse;
-    private ZipCodeResponse zipCodeResponse;
+    private PoliticalPartyEssentials politicalPartyEssentials;
+    private HouseDistrictEssentialResponse houseDistrictEssentialResponse;
+    private CityEssentials cityEssentials;
+    private ZipCodeEssentials zipCodeEssentials;
 
 
 
@@ -77,35 +81,35 @@ public class StateRepResponse {
         this.streetAddress = streetAddress;
     }
 
-    public HouseDistrictNestedResponse getNmHouseDistrictResponse() {
-        return nmHouseDistrictResponse;
+    public PoliticalPartyEssentials getPoliticalPartyEssentials() {
+        return politicalPartyEssentials;
     }
 
-    public void setNmHouseDistrictResponse(HouseDistrictNestedResponse nmHouseDistrictResponse) {
-        this.nmHouseDistrictResponse = nmHouseDistrictResponse;
+    public void setPoliticalPartyEssentials(PoliticalPartyEssentials politicalPartyEssentials) {
+        this.politicalPartyEssentials = politicalPartyEssentials;
     }
 
-    public CityResponse getCityResponse() {
-        return cityResponse;
+    public HouseDistrictEssentialResponse getHouseDistrictEssentialResponse() {
+        return houseDistrictEssentialResponse;
     }
 
-    public void setCityResponse(CityResponse cityResponse) {
-        this.cityResponse = cityResponse;
+    public void setHouseDistrictEssentialResponse(HouseDistrictEssentialResponse houseDistrictEssentialResponse) {
+        this.houseDistrictEssentialResponse = houseDistrictEssentialResponse;
     }
 
-    public ZipCodeResponse getZipCodeResponse() {
-        return zipCodeResponse;
+    public CityEssentials getCityEssentials() {
+        return cityEssentials;
     }
 
-    public void setZipCodeResponse(ZipCodeResponse zipCodeResponse) {
-        this.zipCodeResponse = zipCodeResponse;
+    public void setCityEssentials(CityEssentials cityEssentials) {
+        this.cityEssentials = cityEssentials;
     }
 
-    public PoliticalPartyResponse getPoliticalPartyResponse() {
-        return politicalPartyResponse;
+    public ZipCodeEssentials getZipCodeEssentials() {
+        return zipCodeEssentials;
     }
 
-    public void setPoliticalPartyResponse(PoliticalPartyResponse politicalPartyResponse) {
-        this.politicalPartyResponse = politicalPartyResponse;
+    public void setZipCodeEssentials(ZipCodeEssentials zipCodeEssentials) {
+        this.zipCodeEssentials = zipCodeEssentials;
     }
 }

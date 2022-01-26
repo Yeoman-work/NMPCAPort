@@ -3,6 +3,7 @@ package net.yeoman.nmpcaport.services;
 import net.yeoman.nmpcaport.entities.HouseDistrictEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequest;
+import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequestList;
 import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.shared.dto.NMHouseDistrictDto;
@@ -13,42 +14,41 @@ public interface HouseDistrictService {
 
 
     //delete house district
-    public void deleteHouseDistrict(String publicId);
+    void deleteHouseDistrict(String d);
 
     //update house district
-    public void updateHouseDistrict(String publicId, HouseDistrictDetailsRequest houseDistrictDetailsRequest);
+    void updateHouseDistrict(String id, HouseDistrictDetailsRequest houseDistrictDetailsRequest);
 
-    //get request to entity
-    public HouseDistrictEntity convertRequestToEntity(HouseDistrictDetailsRequest houseDistrictDetailsRequest);
 
     //save house district
-    public HouseDistrictEntity saveHouseDistrict(HouseDistrictEntity houseDistrictEntity);
+    HouseDistrictEntity saveHouseDistrict(HouseDistrictEntity houseDistrictEntity);
 
     //get house district entities
-    public HouseDistrictEntity getHouseDistrict(String publicId);
-    public List<HouseDistrictEntity> getAllHouseDistrictEntities();
+    HouseDistrictEntity getHouseDistrict(String d);
+    List<HouseDistrictEntity> getAllHouseDistrictEntities();
 
     //generate uniqueId
-    public HouseDistrictEntity generateUniqueId(HouseDistrictEntity houseDistrictEntity);
+    HouseDistrictEntity generateUniqueId(HouseDistrictEntity houseDistrictEntity);
 
     //create house district
-    public HouseDistrictEntity createHouseDistrict(HouseDistrictDetailsRequest houseDistrictDetailsRequest);
+    HouseDistrictEntity createHouseDistrict(HouseDistrictDetailsRequest houseDistrictDetailsRequest);
+    List<HouseDistrictEntity> createHouseDistrictBulk(HouseDistrictDetailsRequestList houseDistrictDetailsRequestList);
 
     //get district essentials for dashboards and large pulls
-    public HouseDistrictEssentialResponse entityToEssentials(HouseDistrictEntity nmHouseDistrictEntity);
-    public List<HouseDistrictEssentialResponse> entityToEssentials(List<HouseDistrictEntity> houseDistrictEntity);
+    HouseDistrictEssentialResponse entityToEssentials(HouseDistrictEntity nmHouseDistrictEntity);
+    List<HouseDistrictEssentialResponse> entityToEssentials(List<HouseDistrictEntity> houseDistrictEntity);
 
     //get house districts from site
-    public HouseDistrictEntity getHouseDistrictsFromSites(SiteEntity siteEntity);
-    public List<HouseDistrictEntity> getHouseDistrictsFromSites(List<SiteEntity> siteEntities);
+    HouseDistrictEntity getHouseDistrictsFromSites(SiteEntity siteEntity);
+    List<HouseDistrictEntity> getHouseDistrictsFromSites(List<SiteEntity> siteEntities);
 
 
 
      //check for entity is null
-     public Boolean entityIsNull(HouseDistrictEntity nmHouseDistrictEntity);
-     public Boolean entityIsNull(List<HouseDistrictEntity> nmHouseDistrictEntities);
+     Boolean entityIsNull(HouseDistrictEntity nmHouseDistrictEntity);
+     Boolean entityIsNull(List<HouseDistrictEntity> nmHouseDistrictEntities);
 
      //check if request is null
-    public Boolean requestIsNull(HouseDistrictDetailsRequest houseDistrictDetailsRequest);
+    Boolean requestIsNull(HouseDistrictDetailsRequest houseDistrictDetailsRequest);
 
 }

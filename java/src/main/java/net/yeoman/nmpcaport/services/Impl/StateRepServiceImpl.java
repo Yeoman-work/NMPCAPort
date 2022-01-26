@@ -4,6 +4,7 @@ import net.yeoman.nmpcaport.errormessages.StateRepErrorMessage;
 import net.yeoman.nmpcaport.io.request.stateRep.StateRepDetailsRequest;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepEssentials;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepNestedResponse;
+import net.yeoman.nmpcaport.io.response.stateRep.StateRepResponse;
 import net.yeoman.nmpcaport.services.StateRepService;
 import net.yeoman.nmpcaport.entities.*;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
@@ -79,6 +80,47 @@ public class StateRepServiceImpl implements StateRepService {
     }
 
     @Override
+    public StateRepResponse getStateRepResponse(StateRepEntity stateRepEntity) {
+
+        if(this.entityIsNull(stateRepEntity))
+            throw new StateRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        StateRepResponse stateRepResponse = new StateRepResponse();
+
+        stateRepResponse.setStateRepId(stateRepEntity.getStateRepId());
+        stateRepResponse.setFirstName(stateRepEntity.getFirstName());
+        stateRepResponse.setLastName(stateRepEntity.getLastName());
+        stateRepResponse.setEmail(stateRepEntity.getEmail());
+        stateRepResponse.setPicture(stateRepEntity.getPicture());
+        stateRepResponse.setCapitolRoom(stateRepEntity.getCapitolRoom());
+        stateRepResponse.setStreetAddress(stateRepEntity.getStreetAddress());
+
+        stateRepResponse.setPoliticalPartyEssentials(
+                this.politicalPartyService.getPoliticalPartyEssentials(
+                        this.politicalPartyService.politicalPartyEntity(stateRepEntity.getStateRepId())
+                )
+        );
+
+        stateRepResponse.setHouseDistrictEssentialResponse(
+                this.nmHouseDistrictService.entityToEssentials(stateRepEntity.getHouseDistrict()
+                )
+        );
+
+        stateRepResponse.setCityEssentials(
+                this.cityService.entityToEssentials(stateRepEntity.getCityEntity()
+                )
+        );
+
+        stateRepResponse.setZipCodeEssentials(
+                this.zipCodeService.entityToEssentials(
+                        stateRepEntity.getZipCodeEntity()
+                )
+        );
+
+        return stateRepResponse;
+    }
+
+    @Override
     public StateRepEntity generateUniqueId(StateRepEntity stateRepEntity) {
 
         if(this.entityIsNull(stateRepEntity))
@@ -95,7 +137,7 @@ public class StateRepServiceImpl implements StateRepService {
     }
 
     @Override
-    public StateRepEntity requestToEntity(StateRepDetailsRequest stateRepDetailsRequest) {
+    public StateRepEntity createStateRep(StateRepDetailsRequest stateRepDetailsRequest) {
 
         if(this.requestIsNull(stateRepDetailsRequest))
             throw new StateRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
@@ -194,6 +236,7 @@ public class StateRepServiceImpl implements StateRepService {
         return this.saveStateRepEntity(stateRepEntity);
     }
 
+
     @Override
     public StateRepEssentials getStateRepEssentials(StateRepEntity stateRepEntity) {
 
@@ -287,4 +330,5 @@ public class StateRepServiceImpl implements StateRepService {
 
         return stateRepDetailsRequest == null;
     }
+
 }

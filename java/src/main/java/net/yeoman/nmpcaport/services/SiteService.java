@@ -14,38 +14,37 @@ public interface SiteService {
 
 
     //create site from response
-    public SiteEntity createSiteEntity(SiteDetailsRequestModel siteDetailsRequestModel);
-    public List<SiteEntity> createSitesBulk(List<SiteDetailsRequestModel> siteDetailsRequestModels);
+    void createSiteEntity(SiteDetailsRequestModel siteDetailsRequestModel);
+    void createSitesBulk(List<SiteDetailsRequestModel> siteDetailsRequestModels, HealthCenterEntity healthCenterEntity);
 
 
     //generated public id
-    public SiteEntity generateUniqueSiteId(SiteEntity siteEntity);
+    SiteEntity generateUniqueSiteId(SiteEntity siteEntity);
 
     //save site
-    public SiteEntity saveSite(SiteEntity siteEntity);
+    SiteEntity saveSite(SiteEntity siteEntity);
 
 
     //site for health Center dashboard
-    public SiteEssentialsResponse entityToEssential(SiteEntity siteEntity);
-    public List<SiteEssentialsResponse> entityToEssential(List<SiteEntity> siteEntities);
+    SiteEssentialsResponse entityToEssential(SiteEntity siteEntity);
+    List<SiteEssentialsResponse> entityToEssential(List<SiteEntity> siteEntities);
 
 
     //object is null
-    public Boolean entityIsNull(SiteEntity siteEntity);
-    public Boolean entityIsNull(List<SiteEntity> siteEntities);
-    public Boolean dtoIsNull(SiteDto siteDto);
-    public Boolean dtoIsNull(List<SiteDto> siteDtoList);
-    public Boolean requestIsNull(SiteDetailsRequestModel siteDetailsRequestModel);
-    public Boolean requestIsNull(List<SiteDetailsRequestModel> siteDetailsRequestModels);
+    Boolean entityIsNull(SiteEntity siteEntity);Boolean entityIsNull(List<SiteEntity> siteEntities);
+    Boolean dtoIsNull(SiteDto siteDto);
+    Boolean dtoIsNull(List<SiteDto> siteDtoList);
+    Boolean requestIsNull(SiteDetailsRequestModel siteDetailsRequestModel);
+    Boolean requestIsNull(List<SiteDetailsRequestModel> siteDetailsRequestModels);
 
 
     //get site entity
-    public SiteEntity getSiteEntity(String siteId);
+    SiteEntity getSiteEntity(String siteId);
 
     //delete site
-    public void deleteSite(String siteId);
+    void deleteSite(String siteId);
 
     //exist
-    public Boolean siteExist(String publicId);
+    Boolean siteExist(String publicId);
 
 }

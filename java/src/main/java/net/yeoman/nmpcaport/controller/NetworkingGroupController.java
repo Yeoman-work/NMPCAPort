@@ -50,31 +50,29 @@ public class NetworkingGroupController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
                  produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public NetworkingGroupResponseModel createNetworkingGroup(@RequestBody NetworkingGroupRequestModel networkingGroupDetails){
+    public void createNetworkingGroup(@RequestBody NetworkingGroupRequestModel networkingGroupDetails){
 
 
-        NetworkingGroupDto storedNetworkingGroup = this.networkingGroupService.createNetworkingGroup(this.networkingGroupService.requestToDto(networkingGroupDetails));
-
-        return this.networkingGroupService.dtoToResponse(storedNetworkingGroup);
+        this.networkingGroupService.createNetworkingGroup(networkingGroupDetails);
     }
 
 
 
-    @PutMapping(path ="/{networkingGroupId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-                                                 consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public NetworkingGroupResponseModel updateNetworkingGroup(@PathVariable("networkingGroupId") String networkingGroupId,
-                                                              @RequestBody NetworkingGroupRequestModel networkingGroupDetails){
+    @PutMapping(path ="/{networkingGroupId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public void updateNetworkingGroup(@PathVariable("networkingGroupId") String networkingGroupId,
+                                      @RequestBody NetworkingGroupRequestModel networkingGroupDetails
+    ){
 
-        NetworkingGroupDto networkingGroupDto = new ModelMapper().map(networkingGroupDetails, NetworkingGroupDto.class);
 
-        NetworkingGroupDto storedNetworkingGrp = this.networkingGroupService.updateNetworkingGroup(networkingGroupDto, networkingGroupId);
 
-        return new ModelMapper().map(storedNetworkingGrp, NetworkingGroupResponseModel.class);
+        return ;
     }
 
     @DeleteMapping(path = "/{networkingGroupId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public NetworkingGroupResponseModel deleteNetworkingGroup(@PathVariable("networkingGroupId") String networkingGroupId){
+    public void deleteNetworkingGroup(@PathVariable("networkingGroupId") String networkingGroupId){
 
-        return this.networkingGroupService.deleteNetworkingGroup(networkingGroupId);
+        this.networkingGroupService.deleteNetworkingGroup(networkingGroupId);
     }
 }

@@ -13,46 +13,49 @@ import java.util.List;
 public interface AssignedNetworkingGroupService {
 
     //assignment networking group
-    public AssignedNetworkingGroupEntity createAssignedNetworkingGroupEntity();
-    public void savedAssignedNetworkingGroupNoReturn(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
-    public AssignedNetworkingGroupEntity savedAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
-    public AssignedNetworkingGroupEntity updateAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity, String assignmentId);
-    public void deleteAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
-    public AssignedNetworkingGroupEntity getAssignedNetworkingGroup(String assignedId);
+    AssignedNetworkingGroupEntity createAssignedNetworkingGroupEntity();
+    void savedAssignedNetworkingGroupNoReturn(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
+    AssignedNetworkingGroupEntity savedAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
+    AssignedNetworkingGroupEntity updateAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity, String assignmentId);
+    AssignedNetworkingGroupEntity getAssignedNetworkingGroup(String assignedId);
+
 
 
     //get networking group essentials
-    public NetworkingGroupEssentials getNetworkingGroupEssentials(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
-    public List<NetworkingGroupEssentials> getNetworkingEssentials(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntityList);
+    NetworkingGroupEssentials getNetworkingGroupEssentials(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
+    List<NetworkingGroupEssentials> getNetworkingEssentials(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntityList);
 
     //get contact essentials
-    public ContactEssentials getContactEssentials(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
-    public List<ContactEssentials> getContactEssentials(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
+    ContactEssentials getContactEssentials(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
+    List<ContactEssentials> getContactEssentials(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
 
 
-    //create Relationships
-    public void assignNetworkingGroupsToContact(ContactEntity contactEntity, List<NetworkingGroupEntity> networkingGroupEntities);
-    public List<AssignedNetworkingGroupEntity> assignNetworkingGroupToContact(List<ContactEntity> contactEntities, NetworkingGroupEntity networkingGroupEntity);
+    //create Relationship with contacts
+    void assignNetworkingGroupsToContact(ContactEntity contactEntity, List<NetworkingGroupEntity> networkingGroupEntities);
+    List<AssignedNetworkingGroupEntity> assignNetworkingGroupToContact(List<ContactEntity> contactEntities, NetworkingGroupEntity networkingGroupEntity);
+
+    //remove relationship with contacts
+    void removedNetworkingGroupAssignment(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
+
 
     //get networking group entities
-    public List<NetworkingGroupEntity>  networkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
+    List<NetworkingGroupEntity>  networkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
 
     //get contact entity
-    public List<ContactEntity> getContactEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
-
-    //get nested contact response
-    public List<ContactNestedResponseModel> getNestedContactResponse(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntityList);
+    List<ContactEntity> getContactEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
 
 
     //exist
-    public Boolean existByNetworkingGroup(String assignedId);
-    public Boolean entityIsNull(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
-    public Boolean entityIsNull(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
+    Boolean existByNetworkingGroup(String assignedId);
+    Boolean entityIsNull(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
+    Boolean entityIsNull(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities);
 
 
+    //delete assignment entity
+    void deleteAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity);
 
     //saved
-    public void createAndSaveAssignedNetworkingGroupsContact(NetworkingGroupEntity networkingGroupEntity, ContactEntity contactEntity);
+    void createAndSaveAssignedNetworkingGroupsContact(NetworkingGroupEntity networkingGroupEntity, ContactEntity contactEntity);
 
 
 

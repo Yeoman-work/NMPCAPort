@@ -1,49 +1,50 @@
 package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.StateRepEntity;
+import net.yeoman.nmpcaport.exception.StateRepServiceException;
 import net.yeoman.nmpcaport.io.request.stateRep.StateRepDetailsRequest;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepEssentials;
 import net.yeoman.nmpcaport.io.response.stateRep.StateRepNestedResponse;
+import net.yeoman.nmpcaport.io.response.stateRep.StateRepResponse;
 import net.yeoman.nmpcaport.shared.dto.StateRepDto;
 
 import java.util.List;
 
 public interface StateRepService {
 
-
-
-
-    public StateRepEntity findStateRepEntityById(String stateRepId);
+    //find state rep entity
+    StateRepEntity findStateRepEntityById(String stateRepId);
 
 
     //save entity
-    public StateRepEntity saveStateRepEntity(StateRepEntity stateRepEntity);
+    StateRepEntity saveStateRepEntity(StateRepEntity stateRepEntity);
 
     //get all state rep entities
-    public StateRepEntity getStateRepEntity(String publicId);
-    public List<StateRepEntity> getAllEntities();
+    StateRepEntity getStateRepEntity(String d);
+    List<StateRepEntity> getAllEntities();
+
+    StateRepResponse getStateRepResponse(StateRepEntity stateRepEntity);
 
     //generate entity with unique ID
-    public StateRepEntity generateUniqueId(StateRepEntity stateRepEntity);
+    StateRepEntity generateUniqueId(StateRepEntity stateRepEntity);
 
     //get state rep
-    public StateRepEntity requestToEntity(StateRepDetailsRequest stateRepDetailsRequest);
+    StateRepEntity createStateRep(StateRepDetailsRequest stateRepDetailsRequest);
 
     //State rep essentials
-    public StateRepEssentials getStateRepEssentials(StateRepEntity stateRepEntity);
-    public List<StateRepEssentials> getStateRepEssentials(List<StateRepEntity> stateRepEntities);
+    StateRepEssentials getStateRepEssentials(StateRepEntity stateRepEntity);
+    List<StateRepEssentials> getStateRepEssentials(List<StateRepEntity> stateRepEntities);
 
     //state Rep dashboard
-    public StateRepNestedResponse getStateRepNestedReps(StateRepEntity stateRepEntity);
-    public List<StateRepNestedResponse> getStateRepNestedReps(List<StateRepEntity> stateRepEntities);
+    StateRepNestedResponse getStateRepNestedReps(StateRepEntity stateRepEntity);
+    List<StateRepNestedResponse> getStateRepNestedReps(List<StateRepEntity> stateRepEntities);
 
     //check for objects
-    public Boolean entityIsNull(StateRepEntity stateRepEntity);
-    public Boolean entityIsNull(List<StateRepEntity> stateRepEntities);
+    Boolean entityIsNull(StateRepEntity stateRepEntity);
+    Boolean entityIsNull(List<StateRepEntity> stateRepEntities);
 
     //check if request is null
-    public Boolean requestIsNull(StateRepDetailsRequest stateRepDetailsRequest);
-
+    Boolean requestIsNull(StateRepDetailsRequest stateRepDetailsRequest);
 
 
 }

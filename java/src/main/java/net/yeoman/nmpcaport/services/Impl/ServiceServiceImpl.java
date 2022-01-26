@@ -15,7 +15,6 @@ import net.yeoman.nmpcaport.io.repositories.ServiceRepository;
 import net.yeoman.nmpcaport.shared.dto.ServiceDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,21 +27,12 @@ public class ServiceServiceImpl implements ServiceService {
 
 
     private final ServiceRepository serviceRepository;
-
-    private final SiteServiceImpl siteService;
-
-    private final SiteServiceDetailsServiceImpl siteServiceDetailsService;
-
     private final Utils utils;
 
     public ServiceServiceImpl(ServiceRepository serviceRepository,
-                              SiteServiceImpl siteService,
-                              SiteServiceDetailsServiceImpl siteServiceDetailsService,
                               Utils utils
     ){
         this.serviceRepository = serviceRepository;
-        this.siteService = siteService;
-        this.siteServiceDetailsService = siteServiceDetailsService;
         this.utils = utils;
     }
 
@@ -98,7 +88,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public ServiceEssentialsResponse getServiceEssentialsFromSite(SiteEntity siteEntity) {
 
-        if(this.siteService.entityIsNull(siteEntity))
+        if(siteEntity == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         ServiceEssentialsResponse serviceEssentialsResponse = new ServiceEssentialsResponse();
@@ -112,7 +102,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public List<ServiceEssentialsResponse> getServiceEssentialsFromSite(List<SiteEntity> siteEntities) {
 
-        if(this.siteService.entityIsNull(siteEntities))
+        if(siteEntities == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<ServiceEssentialsResponse> returnValue = new ArrayList<>();
@@ -208,9 +198,7 @@ public class ServiceServiceImpl implements ServiceService {
 
         if(this.entityIsNull(serviceEntity)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        ServiceDto returnValue = this.utils.objectMapper().map(serviceEntity, ServiceDto.class);
-
-        return returnValue;
+        return this.utils.objectMapper().map(serviceEntity, ServiceDto.class);
     }
 
     @Override

@@ -12,7 +12,6 @@ import net.yeoman.nmpcaport.services.SiteFundingDetailsService;
 import net.yeoman.nmpcaport.shared.dto.SiteFundingDetailsDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,19 +22,14 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
 
 
     private final SiteFundingDetailsRepository siteFundingDetailsRepository;
-    private final FundServiceImpl fundService;
-    private final SiteServiceImpl siteService;
     private final Utils utils;
 
     public SiteFundingDetailsServiceImpl(SiteFundingDetailsRepository siteFundingDetailsRepository,
-                                         FundServiceImpl fundService,
-                                         SiteServiceImpl siteService,
+
                                          Utils utils
     ){
 
         this.siteFundingDetailsRepository = siteFundingDetailsRepository;
-        this.fundService = fundService;
-        this.siteService = siteService;
         this.utils = utils;
 
     }
@@ -131,7 +125,7 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
     @Override
     public void linkFundingToSites(List<FundEntity> fundEntityList, SiteEntity siteEntity) {
 
-        if(this.fundService.entityIsNull(fundEntityList))
+        if(fundEntityList == null)
             throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
 

@@ -9,12 +9,9 @@ import net.yeoman.nmpcaport.exception.ContactServiceException;
 import net.yeoman.nmpcaport.exception.NetworkingGroupServiceException;
 import net.yeoman.nmpcaport.io.repositories.AssignedNetworkingGroupRepository;
 import net.yeoman.nmpcaport.io.response.contact.ContactEssentials;
-import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.networkingGroup.NetworkingGroupEssentials;
 import net.yeoman.nmpcaport.services.AssignedNetworkingGroupService;
-import net.yeoman.nmpcaport.shared.dto.ContactDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,18 +20,18 @@ import java.util.List;
 @Service
 public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGroupService {
 
-    @Autowired
-    private AssignedNetworkingGroupRepository assignedNetworkingGroupRepository;
 
-    @Autowired
-    private ContactServiceImpl contactService;
+    private final AssignedNetworkingGroupRepository assignedNetworkingGroupRepository;
 
-    @Autowired
-    private NetworkingGroupServiceImpl networkingGroupService;
+    private final Utils utils;
 
+    public AssignedNetworkingGroupServiceImpl(AssignedNetworkingGroupRepository assignedNetworkingGroupRepository,
+                                              Utils utils
+    ){
 
-    @Autowired
-    private Utils utils;
+        this.assignedNetworkingGroupRepository = assignedNetworkingGroupRepository;
+        this.utils = utils;
+    }
 
     @Override
     public AssignedNetworkingGroupEntity createAssignedNetworkingGroupEntity() {
@@ -79,6 +76,17 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
     }
 
     @Override
+    public void removedNetworkingGroupAssignment(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity) {
+
+        if(assignedNetworkingGroupEntity == null)
+            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        assignedNetworkingGroupEntity.setContactEntity(null);
+        assignedNetworkingGroupEntity.setNetworkingGroupEntity(null);
+
+    }
+
+    @Override
     public AssignedNetworkingGroupEntity savedAssignedNetworkingGroup(AssignedNetworkingGroupEntity assignedNetworkingGroupEntity) {
 
         //check assignment entity is not null
@@ -98,7 +106,7 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
 
         this.assignedNetworkingGroupRepository.save(assignedNetworkingGroupEntity);
 
-        return;
+
 
     }
 
@@ -112,7 +120,6 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
 
         this.assignedNetworkingGroupRepository.delete(assignedNetworkingGroupEntity);
 
-        return;
     }
 
     @Override
@@ -191,10 +198,10 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
     @Override
     public void assignNetworkingGroupsToContact(ContactEntity contactEntity, List<NetworkingGroupEntity> networkingGroupEntities) {
 
-        if(this.contactService.entityIsNull(contactEntity))
+        if(contactEntity == null)
             throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        if(this.networkingGroupService.entityIsNull(networkingGroupEntities))
+        if(networkingGroupEntities == null)
             throw new NetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         for(NetworkingGroupEntity group: networkingGroupEntities){
@@ -207,14 +214,14 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
             this.savedAssignedNetworkingGroup(assignedNetworkingGroupEntity);
         }
 
-        return;
     }
 
 
     @Override
     public List<NetworkingGroupEntity> networkingGroupEntities(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntities) {
 
-        if(entityIsNull(assignedNetworkingGroupEntities)) throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(this.entityIsNull(assignedNetworkingGroupEntities))
+            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<NetworkingGroupEntity> returnValue = new ArrayList<>();
 
@@ -232,7 +239,7 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
 
         final long start = System.currentTimeMillis();
 
-        if(entityIsNull(assignedNetworkingGroupEntities))
+        if(this.entityIsNull(assignedNetworkingGroupEntities))
             throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<ContactEntity> returnValue = new ArrayList<>();
@@ -249,26 +256,6 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
         return returnValue;
     }
 
-    @Override
-    public List<ContactNestedResponseModel> getNestedContactResponse(List<AssignedNetworkingGroupEntity> assignedNetworkingGroupEntityList) {
-
-         final long start = System.currentTimeMillis();
-
-         if(this.entityIsNull(assignedNetworkingGroupEntityList))
-            throw new AssignedNetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<ContactEntity> contactEntities = this.getContactEntities(assignedNetworkingGroupEntityList);
-
-        List<ContactDto> contactDtoList = this.contactService.partialEntityToDto(contactEntities);
-
-        List<ContactNestedResponseModel> nestedResponse = this.contactService.dtoToNestedResponse(contactDtoList);
-
-        final  long stop = System.currentTimeMillis();
-
-        System.out.println("nested contact time: " + ( stop - start));
-
-        return nestedResponse;
-    }
 
     @Override
     public Boolean existByNetworkingGroup(String assignedId){
@@ -280,11 +267,11 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
     public void createAndSaveAssignedNetworkingGroupsContact(NetworkingGroupEntity networkingGroupEntity, ContactEntity contactEntity) {
 
         //check networking group entity
-        if(this.networkingGroupService.entityIsNull(networkingGroupEntity))
+        if(networkingGroupEntity == null)
             throw new NetworkingGroupServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         //check contact entity
-        if(this.contactService.entityIsNull(contactEntity))
+        if(contactEntity == null)
             throw new ContactServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         //create assigned networking group entity
@@ -298,8 +285,6 @@ public class AssignedNetworkingGroupServiceImpl implements AssignedNetworkingGro
 
         //save assignment
         this.savedAssignedNetworkingGroup(assignedNetworkingGroupEntity);
-
-        return;
 
     }
 

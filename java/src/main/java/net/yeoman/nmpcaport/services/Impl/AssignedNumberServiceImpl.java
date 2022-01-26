@@ -22,18 +22,19 @@ import java.util.List;
 @Service
 public class AssignedNumberServiceImpl implements AssignedNumberService {
 
-    @Autowired
-    private AssignedNumberRepository assignedNumberRepository;
 
-    @Autowired
-    private ContactServiceImpl contactService;
+    private final AssignedNumberRepository assignedNumberRepository;
+    private final PhoneNumberServiceImpl phoneNumberService;
+    private final Utils utils;
 
-    @Autowired
-    private PhoneNumberServiceImpl phoneNumberService;
-
-    @Autowired
-    private Utils utils;
-
+    AssignedNumberServiceImpl(AssignedNumberRepository assignedNumberRepository,
+                              PhoneNumberServiceImpl phoneNumberService,
+                              Utils utils
+    ){
+        this.assignedNumberRepository = assignedNumberRepository;
+        this.phoneNumberService = phoneNumberService;
+        this.utils = utils;
+    }
 
     @Override
     public AssignedNumberEntity getAssignedNumber(String assignmentId) {
@@ -95,7 +96,7 @@ public class AssignedNumberServiceImpl implements AssignedNumberService {
         if(this.phoneNumberService.entityIsNull(phoneNumberEntityList))
             throw new PhoneNumberServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        if(this.contactService.entityIsNull(contactEntity))
+        if(contactEntity == null)
             throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
 
@@ -188,7 +189,7 @@ public class AssignedNumberServiceImpl implements AssignedNumberService {
     public AssignedNumberEntity saveAssignmentEntityContact(ContactEntity contactEntity, PhoneNumberEntity phoneNumberEntity) {
 
         //check for contact entity
-        if(this.contactService.entityIsNull(contactEntity)) throw new ContactServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        if(contactEntity == null) throw new ContactServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         //check for phone number entity
         if(this.phoneNumberService.entityIsNull(phoneNumberEntity)) throw new PhoneNumberServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());

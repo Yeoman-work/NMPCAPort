@@ -8,9 +8,7 @@ import net.yeoman.nmpcaport.io.response.contact.*;
 import net.yeoman.nmpcaport.io.repositories.ContactRepository;
 import net.yeoman.nmpcaport.services.ContactService;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
-import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,27 +17,37 @@ import java.util.List;
 @Service
 public class ContactServiceImpl implements ContactService {
 
-    @Autowired
-    private ContactRepository contactRepository;
 
-    @Autowired
-    private NetworkingGroupServiceImpl networkingGroupService;
+    private final ContactRepository contactRepository;
 
-    @Autowired
-    private AssignedNetworkingGroupServiceImpl assignedNetworkingGroupService;
+    private final NetworkingGroupServiceImpl networkingGroupService;
 
-    @Autowired
-    private PhoneNumberServiceImpl phoneNumberService;
+    private final AssignedNetworkingGroupServiceImpl assignedNetworkingGroupService;
 
-    @Autowired
-    private AssignedNumberServiceImpl assignedNumberService;
+    private final PhoneNumberServiceImpl phoneNumberService;
 
-    @Autowired
-    private HealthCenterServiceImpl healthCenterService;
+    private final AssignedNumberServiceImpl assignedNumberService;
 
-    @Autowired
-    private Utils utils;
+    private final HealthCenterServiceImpl healthCenterService;
 
+    private final Utils utils;
+
+    public ContactServiceImpl(ContactRepository contactRepository,
+                              NetworkingGroupServiceImpl networkingGroupService,
+                              AssignedNetworkingGroupServiceImpl assignedNetworkingGroupService,
+                              PhoneNumberServiceImpl phoneNumberService,
+                              AssignedNumberServiceImpl assignedNumberService,
+                              HealthCenterServiceImpl healthCenterService,
+                              Utils utils
+    ){
+        this.contactRepository = contactRepository;
+        this.networkingGroupService = networkingGroupService;
+        this.assignedNetworkingGroupService = assignedNetworkingGroupService;
+        this.phoneNumberService = phoneNumberService;
+        this.assignedNumberService = assignedNumberService;
+        this.healthCenterService = healthCenterService;
+        this.utils = utils;
+    }
 
 
 
@@ -57,85 +65,6 @@ public class ContactServiceImpl implements ContactService {
         return this.contactRepository.findAll();
     }
 
-    @Override
-    public void processContact(ContactDto contactDto) {
-
-
-        //create contact entity with contactId
-        ContactEntity contactEntity = this.generateUniqueContactId(
-                this.utils.objectMapper().map(
-                        contactDto, ContactEntity.class));
-
-        //get healthCenter
-        HealthCenterEntity healthCenterEntity = this.healthCenterService.getHealthCenterEntity(
-                contactDto.getHealthCenter()
-        );
-
-
-        //check for health center
-        if(healthCenterEntity == null)
-            throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
-        //set health Center
-        contactEntity.setHealthCenter(healthCenterEntity);
-
-        //save contact entity
-        ContactEntity savedContact = this.savedContactEntity(contactEntity);
-
-
-        //process networking groups
-        if(contactDto.getNetworkingGroups() != null){
-
-
-            //convert Ids(String) to entities
-            List<NetworkingGroupEntity> networkingGroupEntities =
-                    this.networkingGroupService.getMultipleNetworkingGroups(contactDto.getNetworkingGroups());
-
-            //assign groups to entities
-            this.assignedNetworkingGroupService.assignNetworkingGroupsToContact(savedContact, networkingGroupEntities);
-
-        }
-
-        if(contactDto.getPhoneNumbers() != null){
-
-            List<PhoneNumberEntity> phoneNumberEntityList = this.phoneNumberService.processBulkPhoneNumbers(
-                    contactDto.getPhoneNumbers()
-            );
-
-            this.assignedNumberService.assignmentNumberContactProcess(phoneNumberEntityList, savedContact);
-        }
-
-        return;
-    }
-
-    @Override
-    public ContactDto partialEntityToDto(ContactEntity contactEntity) {
-
-        if(this.entityIsNull(contactEntity))
-            throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.utils.objectMapper().map(contactEntity, ContactDto.class);
-    }
-
-    @Override
-    public List<ContactDto> partialEntityToDto(List<ContactEntity> contactEntityList) {
-        final long start = System.currentTimeMillis();
-        if(this.entityIsNull(contactEntityList))
-            throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<ContactDto> returnValue = new ArrayList<>();
-
-        for(ContactEntity contact: contactEntityList){
-
-            returnValue.add(this.partialEntityToDto(contact));
-        }
-
-        final long stop = System.currentTimeMillis();
-
-        System.out.println("convert contact entity to DTO total time: " + (stop - start));
-
-        return returnValue;
-    }
 
     @Override
     public ContactDashBoard contactDashboardData(ContactEntity contactEntity) {
@@ -229,52 +158,38 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public void createContact(ContactDetailsRequestModel contactDetailsRequestModel) {
 
-        ContactDto contactDto = this.requestToDto(contactDetailsRequestModel);
-
-        this.processContact(contactDto);
-
-        return;
-    }
-
-    @Override
-    public ContactNestedResponseModel dtoToNestedResponse(ContactDto contactDto) {
-
-        if(this.dtoIsNull(contactDto))
+        if(this.requestIsNull(contactDetailsRequestModel))
             throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        return this.utils.objectMapper().map(contactDto, ContactNestedResponseModel.class);
-    }
+        ContactEntity contactEntity = this.createContactEntity();
 
-    @Override
-    public List<ContactNestedResponseModel> dtoToNestedResponse(List<ContactDto> contactDtoList) {
+        contactEntity.setFirstName(contactDetailsRequestModel.getFirstName());
+        contactEntity.setLastName(contactDetailsRequestModel.getLastName());
+        contactEntity.setEmail(contactDetailsRequestModel.getEmail());
+        contactEntity.setTitle(contactDetailsRequestModel.getTitle());
+        contactEntity.setHealthCenter(
+                this.healthCenterService.getHealthCenterEntity(
+                        contactDetailsRequestModel.getHealthCenter()
+                )
+        );
 
-        final long start = System.currentTimeMillis();
+        ContactEntity savedContact = this.savedContactEntity(contactEntity);
 
-        List<ContactNestedResponseModel> returnValue = new ArrayList<>();
+        if(contactDetailsRequestModel.getNetworkingGroups() != null){
 
-        for(ContactDto contactDto: contactDtoList){
+            List<NetworkingGroupEntity> networkingGroupEntities =
+                    this.networkingGroupService.getMultipleNetworkingGroups(
+                            contactDetailsRequestModel.getNetworkingGroups()
+                    );
 
-            returnValue.add(this.dtoToNestedResponse(contactDto));
+            this.assignedNetworkingGroupService.assignNetworkingGroupsToContact(savedContact, networkingGroupEntities);
+
         }
 
-        final long stop = System.currentTimeMillis();
 
-        System.out.println("contact dto to nested Response total time: " + (stop - start));
 
-        return returnValue;
     }
 
-    @Override
-    public ContactFormListResponse contactsForNetworkingGroup() {
-
-        List<ContactEntity> contactEntities = this.getAllContactEntities();
-
-        ContactFormListResponse returnValue = new ContactFormListResponse();
-
-        returnValue.setContactNestedResponses(this.dtoToNestedResponse(this.entityToDto(contactEntities)));
-
-        return returnValue;
-    }
 
     @Override
     public String peelOffContactIds(ContactEntity contactEntity) {
@@ -298,17 +213,6 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public void saveContact(ContactEntity contact) {
          this.contactRepository.save(contact);
-    }
-
-    @Override
-    public List<ContactResponseModel> getAllContacts() {
-
-        List<ContactEntity> contactEntities = this.contactRepository.findAll();
-
-        List<ContactDto> contactDtoList = this.entityToDto(contactEntities);
-
-
-        return this.dtoToResponse(contactDtoList);
     }
 
     @Override
@@ -342,25 +246,6 @@ public class ContactServiceImpl implements ContactService {
         return null;
     }
 
-    @Override
-    public Boolean responseIsNull(ContactResponseModel contactResponseModel) {
-        return contactResponseModel == null;
-    }
-
-    @Override
-    public Boolean responseIsNull(List<ContactResponseModel> contactResponseModels) {
-        return null;
-    }
-
-    @Override
-    public Boolean nestedResponseIsNull(List<ContactNestedResponseModel> contactNestedResponseModels) {
-        return null;
-    }
-
-    @Override
-    public Boolean nestedResponseIsNull(ContactNestedResponseModel contactNestedResponseModel) {
-        return contactNestedResponseModel == null;
-    }
 
     @Override
     public ContactEntity generateUniqueContactId(ContactEntity contactEntity) {
@@ -376,15 +261,6 @@ public class ContactServiceImpl implements ContactService {
         return contactEntity;
     }
 
-
-    @Override
-    public ContactEntity getContact(String contactId) {
-
-        if(contactId == null || contactId.length() < 30 ) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-    	return this.contactRepository.findByContactId(contactId);
-        
-    }
 
     @Override
     public List<ContactEntity> getMultipleContacts(List<String> memberIds) {
@@ -404,150 +280,61 @@ public class ContactServiceImpl implements ContactService {
         return returnValue;
     }
 
-    //contact entity mapper
     @Override
-    public ContactEntity dtoToEntity(ContactDto contactDto) {
+    public ContactResponseModel getContactResponseModel(ContactEntity contactEntity) {
 
-        if(contactDto == null) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(this.entityIsNull(contactEntity))
+            throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        ContactEntity contactEntity = this.utils.objectMapper().map(contactDto, ContactEntity.class);
+        ContactResponseModel contactResponseModel = new ContactResponseModel();
 
-        return contactEntity;
+
+        contactResponseModel.setContactId(contactEntity.getContactId());
+        contactResponseModel.setFirstName(contactEntity.getFirstName());
+        contactResponseModel.setLastName(contactEntity.getLastName());
+        contactResponseModel.setTitle(contactEntity.getTitle());
+        contactResponseModel.setEmail(contactEntity.getEmail());
+        contactResponseModel.setCreatedAt(contactEntity.getCreatedAt());
+        contactResponseModel.setUpdatedAt(contactEntity.getUpdatedAt());
+
+        contactResponseModel.setHealthCenterEssentials(
+                this.healthCenterService.healthCenterEssentials(
+                        contactEntity.getHealthCenter()
+                )
+        );
+
+        if(contactEntity.getAssignedNumberEntities() != null){
+            contactResponseModel.setPhoneNumberEssentials(
+                    this.phoneNumberService.getPhoneNumberEssentials(
+                            this.assignedNumberService.getPhoneNumberEntities(
+                                    contactEntity.getAssignedNumberEntities()
+                            )
+                    )
+            );
+        }
+
+        if(contactEntity.getAssignedNetworkingGroupEntities() != null){
+
+            contactResponseModel.setNetworkingGroupEssentials(
+                    this.assignedNetworkingGroupService.getNetworkingEssentials(
+                            contactEntity.getAssignedNetworkingGroupEntities()
+                    )
+            );
+
+        }
+
+        return contactResponseModel;
     }
+
+
+
 
     @Override
     public ContactEntity createContactEntity() {
 
         ContactEntity contactEntity = new ContactEntity();
 
-        contactEntity.setContactId(utils.generateRandomID());
-
-        return contactEntity;
-    }
-
-    @Override
-    public List<ContactEntity> dtoToEntity(List<ContactDto> contactDtoList) {
-
-        List<ContactEntity> returnValue = new ArrayList<>();
-
-        if(contactDtoList == null) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        for(ContactDto contact: contactDtoList){
-
-            returnValue.add(this.dtoToEntity(contact));
-        }
-
-        return returnValue;
-    }
-
-    @Override
-    public ContactResponseModel dtoToResponse(ContactDto contactDto) {
-
-        return utils.objectMapper().map(contactDto, ContactResponseModel.class);
-    }
-
-
-    @Override
-    public List<ContactResponseModel> dtoToResponse(List<ContactDto> contactDtoList) {
-
-        List<ContactResponseModel> returnValue = new ArrayList<>();
-
-        for(ContactDto contactDto: contactDtoList){
-
-            returnValue.add(this.dtoToResponse(contactDto));
-        }
-
-        return returnValue;
-    }
-
-
-    @Override
-    public ContactDto requestToDto(ContactDetailsRequestModel contactDetailsRequestModel) {
-
-        if(this.requestIsNull(contactDetailsRequestModel))
-            throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.utils.objectMapper().map(contactDetailsRequestModel, ContactDto.class);
-
-    }
-
-    @Override
-    public List<ContactDto> requestToDto(List<ContactDetailsRequestModel> contactDetailsRequestModelList) {
-
-        if(this.requestIsNull(contactDetailsRequestModelList))
-            throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<ContactDto> returnValue = new ArrayList<>();
-
-        for(ContactDetailsRequestModel requestModel: contactDetailsRequestModelList){
-
-            returnValue.add(this.requestToDto(requestModel));
-        }
-
-        return returnValue;
-    }
-
-    @Override
-    public List<ContactDto> entityToDto(List<ContactEntity> contactEntities) {
-
-        final long start = System.currentTimeMillis();
-
-        if(this.entityIsNull(contactEntities)) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<ContactDto> returnValue = new ArrayList<>();
-
-        for(ContactEntity contactEntity: contactEntities){
-
-            returnValue.add(this.entityToDto(contactEntity));
-
-        }
-
-        final long stop = System.currentTimeMillis();
-
-        System.out.println("convert contact entity to DTO total time: " + (stop - start));
-
-        return returnValue;
-    }
-
-    @Override
-    public ContactDto entityToDto(ContactEntity contactEntity) {
-        //check if entity is null
-        if(entityIsNull(contactEntity)) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        //convert contact
-        ContactDto contactDto = utils.objectMapper().map(contactEntity, ContactDto.class);
-
-        //convert health center entity
-        HealthCenterDto healthCenterDto = this.healthCenterService.entityToDto(contactEntity.getHealthCenter());
-
-        //convert dto to response
-        contactDto.setHealthCenterNestedResponse(this.healthCenterService.dtoToHealthCenterNestedResponseModel(healthCenterDto));
-
-        if(contactEntity.getAssignedNetworkingGroupEntities() != null){
-
-            List<NetworkingGroupEntity> networkingGroupEntities =
-                    this.assignedNetworkingGroupService.networkingGroupEntities(
-                            contactEntity.getAssignedNetworkingGroupEntities()
-                    );
-
-            if(networkingGroupEntities == null)
-                throw new NetworkingGroupServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-            contactDto.setNetworkingGroupResponses(this.networkingGroupService.dtoToResponse(
-                    this.networkingGroupService.entityToDtoBase(networkingGroupEntities)));
-        }
-
-
-        if(contactEntity.getAssignedNumberEntities() != null){
-
-            List<PhoneNumberEntity> phoneNumberEntityList =
-                    this.assignedNumberService.getPhoneNumberEntities(contactEntity.getAssignedNumberEntities());
-
-
-            contactDto.setPhoneNumberResponses(this.phoneNumberService.dtoToResponse(
-                    this.phoneNumberService.entityToDto(phoneNumberEntityList)));
-        }
-        return contactDto;
+        return this.generateUniqueContactId(contactEntity);
     }
 
 
@@ -558,19 +345,11 @@ public class ContactServiceImpl implements ContactService {
     }
 
 
-    @Override
-    public ContactDto updateContact(String contactId, ContactDto contactDto) {
-
-    	return contactDto;
-    }
-
 
     @Override
-    public ContactDto deleteContact(String contactId) {
-        return null;
+    public void deleteContact(String contactId) {
+
+        this.contactRepository.delete(this.getContactEntity(contactId));
     }
-
-
-
 
 }

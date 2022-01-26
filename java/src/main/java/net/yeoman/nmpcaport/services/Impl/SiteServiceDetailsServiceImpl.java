@@ -22,21 +22,12 @@ public class SiteServiceDetailsServiceImpl implements SiteServiceDetailsService 
 
 
     private final SiteServiceDetailsRepository siteServiceDetailsRepository;
-
-    private final ServiceServiceImpl serviceService;
-
-    private final SiteServiceImpl siteService;
-
     private final Utils utils;
 
     public SiteServiceDetailsServiceImpl(SiteServiceDetailsRepository siteServiceDetailsRepository,
-                                         ServiceServiceImpl serviceService,
-                                         SiteServiceImpl siteService,
                                          Utils utils
     ){
         this.siteServiceDetailsRepository = siteServiceDetailsRepository;
-        this.serviceService = serviceService;
-        this.siteService = siteService;
         this.utils = utils;
 
     }
@@ -152,9 +143,9 @@ public class SiteServiceDetailsServiceImpl implements SiteServiceDetailsService 
     @Override
     public void linkServicesToSites(List<ServiceEntity> serviceEntities, SiteEntity siteEntity) {
 
-        if(this.serviceService.entityIsNull(serviceEntities)) throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(serviceEntities == null) throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        if(this.siteService.entityIsNull(siteEntity)) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(siteEntity == null) throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
 
         for(ServiceEntity serviceEntity: serviceEntities){

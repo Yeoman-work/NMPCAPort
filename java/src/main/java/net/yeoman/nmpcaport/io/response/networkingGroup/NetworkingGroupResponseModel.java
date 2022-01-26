@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.io.response.networkingGroup;
 
 import net.yeoman.nmpcaport.entities.UserEntity;
+import net.yeoman.nmpcaport.io.response.contact.ContactEssentials;
 import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
 import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
 
@@ -13,8 +14,7 @@ public class NetworkingGroupResponseModel {
     private String networkingGroupId;
     private String name;
     private String description;
-    private List<UserDetailsResponseModel> userResponses;
-    private List<ContactNestedResponseModel> contactNestedResponses;
+    private List<ContactEssentials> contactEssentials;
     private Date createdAt;
     private Date updatedAt;
 
@@ -42,13 +42,6 @@ public class NetworkingGroupResponseModel {
         this.description = description;
     }
 
-    public List<UserDetailsResponseModel> getUserResponses() {
-        return userResponses;
-    }
-
-    public void setUserResponses(List<UserDetailsResponseModel> userResponses) {
-        this.userResponses = userResponses;
-    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -66,11 +59,11 @@ public class NetworkingGroupResponseModel {
         this.updatedAt = updatedAt;
     }
 
-    public List<ContactNestedResponseModel> getContactNestedResponses() {
-        return contactNestedResponses;
+    public List<ContactEssentials> getContactEssentials() {
+        return contactEssentials;
     }
 
-    public void setContactNestedResponses(List<ContactNestedResponseModel> contactNestedResponses) {
-        this.contactNestedResponses = contactNestedResponses;
+    public void setContactEssentials(List<ContactEssentials> contactEssentials) {
+        this.contactEssentials = contactEssentials;
     }
 }

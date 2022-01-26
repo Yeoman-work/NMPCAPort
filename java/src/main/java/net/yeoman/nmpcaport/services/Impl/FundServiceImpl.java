@@ -10,16 +10,13 @@ import net.yeoman.nmpcaport.exception.SiteServiceException;
 import net.yeoman.nmpcaport.io.request.fund.FundRequestListModel;
 import net.yeoman.nmpcaport.io.request.fund.FundRequestModel;
 import net.yeoman.nmpcaport.io.repositories.FundRepository;
-import net.yeoman.nmpcaport.io.repositories.SiteRepository;
 import net.yeoman.nmpcaport.io.response.fund.FundEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundNestedResponse;
 import net.yeoman.nmpcaport.io.response.fund.FundResponseModel;
 import net.yeoman.nmpcaport.services.FundService;
-import net.yeoman.nmpcaport.services.SiteFundingDetailsService;
 import net.yeoman.nmpcaport.shared.dto.FundDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,18 +30,15 @@ public class FundServiceImpl implements FundService {
 
     private final FundRepository fundRepository;
     private final SiteFundingDetailsServiceImpl siteFundingDetailsService;
-    private final SiteServiceImpl siteService;
     private final Utils utils;
 
     public FundServiceImpl(FundRepository fundRepository,
                            SiteFundingDetailsServiceImpl siteFundingDetailsService,
-                           SiteServiceImpl siteService,
                            Utils utils
     ){
 
         this.fundRepository = fundRepository;
         this.siteFundingDetailsService = siteFundingDetailsService;
-        this.siteService = siteService;
         this.utils = utils;
 
     }
@@ -112,10 +106,8 @@ public class FundServiceImpl implements FundService {
     @Override
     public FundEssentialsResponse getEssentialsFromSite(SiteEntity siteEntity) {
 
-        if(this.siteService.entityIsNull(siteEntity))
+        if(siteEntity == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        FundEssentialsResponse fundEssentialsResponse = new FundEssentialsResponse();
 
 
         return null;
@@ -124,7 +116,7 @@ public class FundServiceImpl implements FundService {
     @Override
     public List<FundEssentialsResponse> getEssentialsFromSite(List<SiteEntity> siteEntities) {
 
-        if(this.siteService.entityIsNull(siteEntities))
+        if(siteEntities == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<FundEntity> fundingFromSitesList = new ArrayList<>();

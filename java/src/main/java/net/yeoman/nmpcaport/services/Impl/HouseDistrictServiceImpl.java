@@ -10,12 +10,11 @@ import net.yeoman.nmpcaport.exception.SiteServiceException;
 import net.yeoman.nmpcaport.exception.StateRepServiceException;
 import net.yeoman.nmpcaport.io.repositories.HouseDistrictRepository;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequest;
+import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequestList;
 import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
-import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
 import net.yeoman.nmpcaport.services.HouseDistrictService;
-import net.yeoman.nmpcaport.shared.dto.NMHouseDistrictDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
-import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,19 +29,15 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
 
     private final HouseDistrictRepository houseDistrictRepository;
     private final StateRepServiceImpl stateRepService;
-    private final SiteServiceImpl siteService;
-
     private final Utils utils;
 
     public HouseDistrictServiceImpl(HouseDistrictRepository houseCommitteeRepository,
-                                    StateRepServiceImpl stateRepService,
-                                    SiteServiceImpl siteService,
+                                    @Lazy StateRepServiceImpl stateRepService,
                                     Utils utils
                                     ){
 
         this.houseDistrictRepository = houseCommitteeRepository;
         this.stateRepService = stateRepService;
-        this.siteService = siteService;
         this.utils = utils;
     }
 
@@ -58,36 +53,7 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
 
     }
 
-    @Override
-    public HouseDistrictEntity convertRequestToEntity(HouseDistrictDetailsRequest houseDistrictDetailsRequest) {
 
-        if(this.requestIsNull(houseDistrictDetailsRequest))
-            throw new HouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        HouseDistrictEntity houseDistrict = this.generateUniqueId(new HouseDistrictEntity());
-
-        houseDistrict.setName(houseDistrictDetailsRequest.getName());
-        houseDistrict.setMap(houseDistrictDetailsRequest.getMap());
-
-        if(houseDistrictDetailsRequest.getRepId() != null){
-
-            houseDistrict.setStateRep(this.stateRepService.getStateRepEntity(houseDistrictDetailsRequest.getRepId()));
-        }
-
-        if(houseDistrictDetailsRequest.getStateRepDetailsRequest() != null){
-
-            StateRepEntity stateRepEntity = this.stateRepService.requestToEntity(
-                    houseDistrictDetailsRequest.getStateRepDetailsRequest()
-            );
-
-            if(stateRepEntity == null)
-                throw new StateRepServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-            houseDistrict.setStateRep(stateRepEntity);
-        }
-
-        return this.saveHouseDistrict(houseDistrict);
-    }
 
     @Override
     public HouseDistrictEntity saveHouseDistrict(HouseDistrictEntity houseDistrictEntity) {
@@ -126,7 +92,7 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
     @Override
     public HouseDistrictEntity createHouseDistrict(HouseDistrictDetailsRequest houseDistrictDetailsRequest) {
 
-        if(requestIsNull(houseDistrictDetailsRequest))
+        if(this.requestIsNull(houseDistrictDetailsRequest))
             throw new HouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         HouseDistrictEntity houseDistrict = this.generateUniqueId(new HouseDistrictEntity());
@@ -147,13 +113,31 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
         if(houseDistrictDetailsRequest.getStateRepDetailsRequest() != null){
 
             houseDistrict.setStateRep(
-                    this.stateRepService.requestToEntity(
+                    this.stateRepService.createStateRep(
                             houseDistrictDetailsRequest.getStateRepDetailsRequest()
                     )
             );
+
         }
 
         return this.saveHouseDistrict(houseDistrict);
+    }
+
+    @Override
+    public List<HouseDistrictEntity> createHouseDistrictBulk(HouseDistrictDetailsRequestList houseDistrictDetailsRequestList) {
+
+        if(houseDistrictDetailsRequestList == null)
+            throw new HouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
+        List<HouseDistrictEntity> returnValue = new ArrayList<>();
+
+        for(HouseDistrictDetailsRequest request: houseDistrictDetailsRequestList.getHouseDistrictDetailsRequestList()){
+
+            returnValue.add(this.createHouseDistrict(request));
+
+        }
+
+        return returnValue;
     }
 
     @Override
@@ -190,7 +174,7 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
     @Override
     public HouseDistrictEntity getHouseDistrictsFromSites(SiteEntity siteEntity) {
 
-        if(this.siteService.entityIsNull(siteEntity))
+        if(siteEntity == null)
             throw new SiteFundingServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         return siteEntity.getHouseDistrictEntity();
@@ -199,7 +183,7 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
     @Override
     public List<HouseDistrictEntity> getHouseDistrictsFromSites(List<SiteEntity> siteEntities) {
 
-        if(this.siteService.entityIsNull(siteEntities))
+        if(siteEntities == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         List<HouseDistrictEntity> returnValue = new ArrayList<>();

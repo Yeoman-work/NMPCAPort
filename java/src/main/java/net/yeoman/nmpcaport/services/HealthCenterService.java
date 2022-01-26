@@ -22,8 +22,7 @@ import java.util.List;
 public interface HealthCenterService {
 
 
-    //return dto
-    HealthCenterDto updateHealthCenter(String healthCenterId, HealthCenterDto healthCenterDto);
+
     void deleteHealthCenter(String healthCenterId);
 
     List<HealthCenterDto> getAllHealthCenters();
@@ -31,11 +30,13 @@ public interface HealthCenterService {
     //create healthCenter
     public void createHealthCenter(HealthCenterDetailsRequestModel healthCenterDetailsRequestModel);
 
+    //health Center response
+    HealthCenterResponseModel getHealthCenterResponse(HealthCenterEntity healthCenterEntity);
+
     //return entity
     HealthCenterEntity generateHealthCenterWithUniqueId(HealthCenterEntity healthCenter);
     HealthCenterEntity getHealthCenterEntity(String healthCenterId);
-    void savedHealthCenterEntity(HealthCenterEntity healthCenterEntity);
-    HealthCenterEntity savedHealthCenterEntityWithReturn(HealthCenterEntity healthCenterEntity);
+    HealthCenterEntity saveHealthCenterEntity(HealthCenterEntity healthCenterEntity);
     List<HealthCenterEntity> getHealthCenterEntities(int page, int limit);
 
     //entity to dashboard view
