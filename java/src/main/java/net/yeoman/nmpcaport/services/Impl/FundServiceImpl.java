@@ -19,9 +19,7 @@ import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,7 +80,7 @@ public class FundServiceImpl implements FundService {
     }
 
     @Override
-    public List<FundEntity> gatherFundEntity(List<SiteFundingDetailsEntity> fundingDetailsEntities, List<FundEntity> fundEntities) {
+    public void gatherFundEntity(List<SiteFundingDetailsEntity> fundingDetailsEntities, List<FundEntity> fundEntities) {
 
         if(this.entityIsNull(fundEntities))
             throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
@@ -92,26 +90,31 @@ public class FundServiceImpl implements FundService {
 
         for(SiteFundingDetailsEntity siteFunding: fundingDetailsEntities){
 
-            if(!fundEntities.contains(siteFunding.getFundEntity())){
+            if(siteFunding.getFundEntity() != null){
 
-                fundEntities.add(siteFunding.getFundEntity());
+                if(!fundEntities.contains(siteFunding.getFundEntity())){
+
+                    fundEntities.add(siteFunding.getFundEntity());
+                }
             }
-
         }
 
-        return fundEntities;
     }
-
 
     @Override
-    public FundEssentialsResponse getEssentialsFromSite(SiteEntity siteEntity) {
+    public FundEssentialsResponse getEssentialsFromSite(String fundId, String fundName) {
 
-        if(siteEntity == null)
-            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(fundId == null) throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(fundName == null) throw new FundServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
+        FundEssentialsResponse fundEssentialsResponse = new FundEssentialsResponse();
 
-        return null;
+        fundEssentialsResponse.setFundId(fundId);
+        fundEssentialsResponse.setName(fundName);
+
+        return fundEssentialsResponse;
     }
+
 
     @Override
     public List<FundEssentialsResponse> getEssentialsFromSite(List<SiteEntity> siteEntities) {
@@ -119,21 +122,23 @@ public class FundServiceImpl implements FundService {
         if(siteEntities == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        List<FundEntity> fundingFromSitesList = new ArrayList<>();
+        Map<String, String> fundingFromSitesMap = new HashMap<>();
         List<FundEssentialsResponse> fundEssentialsFromSitesList = new ArrayList<>();
 
         for(SiteEntity siteEntity: siteEntities){
 
-            fundingFromSitesList = this.gatherFundEntity(
-                    siteEntity.getSiteFundingDetailsEntities(),
-                    fundingFromSitesList
-            );
+            for(SiteFundingDetailsEntity fundDetails: siteEntity.getSiteFundingDetailsEntities()){
+
+                if(fundingFromSitesMap.get(fundDetails.getFundEntity().getFundId()) == null){
+                    fundingFromSitesMap.put(fundDetails.getFundEntity().getFundId(), fundDetails.getFundEntity().getName());
+                }
+
+            }
+
         }
 
-        for(FundEntity fund: fundingFromSitesList){
+        fundingFromSitesMap.forEach((key, value) -> fundEssentialsFromSitesList.add(this.getEssentialsFromSite(key, value)));
 
-            fundEssentialsFromSitesList.add(this.entityToEssential(fund));
-        }
 
         return fundEssentialsFromSitesList;
     }
@@ -198,6 +203,7 @@ public class FundServiceImpl implements FundService {
 
         return returnValue;
     }
+
 
     @Override
     public List<FundDto> getAllFunding() {

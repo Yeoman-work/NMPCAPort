@@ -186,6 +186,15 @@ public class ContactServiceImpl implements ContactService {
 
         }
 
+        if(contactDetailsRequestModel.getPhoneNumbers() != null){
+
+            List<PhoneNumberEntity> phoneNumberEntities =
+                    this.phoneNumberService.processBulkPhoneNumbers(
+                            contactDetailsRequestModel.getPhoneNumbers()
+                    );
+
+            this.assignedNumberService.assignmentNumberContactProcess(phoneNumberEntities, savedContact);
+        }
 
 
     }

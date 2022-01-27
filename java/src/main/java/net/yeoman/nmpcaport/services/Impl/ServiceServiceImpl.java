@@ -1,6 +1,7 @@
 package net.yeoman.nmpcaport.services.Impl;
 
 import net.yeoman.nmpcaport.entities.SiteEntity;
+import net.yeoman.nmpcaport.entities.SiteServiceDetailsEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.ServiceException;
 import net.yeoman.nmpcaport.exception.SiteServiceException;
@@ -12,14 +13,13 @@ import net.yeoman.nmpcaport.entities.ServiceEntity;
 import net.yeoman.nmpcaport.io.request.service.ServiceDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.service.ServiceRequestListModel;
 import net.yeoman.nmpcaport.io.repositories.ServiceRepository;
+import net.yeoman.nmpcaport.services.SiteServiceDetailsService;
 import net.yeoman.nmpcaport.shared.dto.ServiceDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,18 +86,19 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public ServiceEssentialsResponse getServiceEssentialsFromSite(SiteEntity siteEntity) {
+    public ServiceEssentialsResponse getServiceEssentialsFromSite(String serviceId, String serviceName) {
 
-        if(siteEntity == null)
-            throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(serviceId == null) throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+        if(serviceName == null) throw new ServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         ServiceEssentialsResponse serviceEssentialsResponse = new ServiceEssentialsResponse();
 
-        serviceEssentialsResponse.setName(siteEntity.getName());
-        serviceEssentialsResponse.setServiceId(siteEntity.getSiteId());
+        serviceEssentialsResponse.setServiceId(serviceId);
+        serviceEssentialsResponse.setName(serviceName);
 
         return serviceEssentialsResponse;
     }
+
 
     @Override
     public List<ServiceEssentialsResponse> getServiceEssentialsFromSite(List<SiteEntity> siteEntities) {
@@ -105,12 +106,21 @@ public class ServiceServiceImpl implements ServiceService {
         if(siteEntities == null)
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
+        Map<String, String> serviceEntities = new HashMap<>();
         List<ServiceEssentialsResponse> returnValue = new ArrayList<>();
 
         for(SiteEntity siteEntity: siteEntities){
 
-            returnValue.add(this.getServiceEssentialsFromSite(siteEntity));
+            for(SiteServiceDetailsEntity serviceDetails: siteEntity.getServiceDetailsEntities()){
+
+                if(serviceEntities.get(serviceDetails.getServiceEntity().getServiceId()) == null){
+
+                    serviceEntities.put(serviceDetails.getServiceEntity().getServiceId(), serviceDetails.getServiceEntity().getName());
+                }
+            }
         }
+
+        serviceEntities.forEach((key, value) -> returnValue.add(this.getServiceEssentialsFromSite(key, value)));
 
         return returnValue.stream()
                 .sorted(Comparator.comparing(ServiceEssentialsResponse :: getName))

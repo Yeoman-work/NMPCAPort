@@ -1,15 +1,12 @@
 package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.HealthCenter.HealthCenterDetailsRequestModel;
-import net.yeoman.nmpcaport.io.request.site.SiteDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterDashBoard;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseBaseModel;
-import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseFull;
 import net.yeoman.nmpcaport.io.response.HealthCenter.HealthCenterResponseModel;
 import net.yeoman.nmpcaport.services.Impl.HealthCenterServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.HealthCenterDto;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +17,13 @@ import java.util.List;
 @RequestMapping("/healthCenters")
 public class HealthCenterController {
 
-    @Autowired
-    private HealthCenterServiceImpl healthCenterService;
+
+    private final HealthCenterServiceImpl healthCenterService;
+
+    HealthCenterController(HealthCenterServiceImpl healthCenterService){
+
+        this.healthCenterService = healthCenterService;
+    }
 
     @GetMapping(path = "/{healthCenterId}")
     public HealthCenterResponseModel getHealthCenter(@PathVariable("healthCenterId") String healthCenterId){
@@ -71,7 +73,6 @@ public class HealthCenterController {
 
         this.healthCenterService.createHealthCenter(healthCenterDetails);
 
-        return;
     }
 
     @PutMapping

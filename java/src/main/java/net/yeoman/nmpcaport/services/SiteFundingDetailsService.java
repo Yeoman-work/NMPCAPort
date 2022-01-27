@@ -14,7 +14,8 @@ public interface SiteFundingDetailsService {
     SiteFundingDetailsDto getSiteFunding(String id);
     void deleteSiteFunding(String id);
     List<SiteFundingDetailsDto> getAllSiteFunding();
-    void savedSiteFundDetails(SiteFundingDetailsEntity siteFundingDetailsEntity);
+    SiteFundingDetailsEntity savedSiteFundDetails(SiteFundingDetailsEntity siteFundingDetailsEntity);
+
     SiteFundingDetailsEntity saveSiteFundDetailsWithReturnEntity(SiteFundingDetailsEntity siteFundingDetailsServiceEntity);
     SiteFundingDetailsEntity createSiteFundingEntity();
     SiteFundingDetailsEntity generateUniqueId(SiteFundingDetailsEntity siteFundingDetailsEntity);

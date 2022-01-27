@@ -78,19 +78,26 @@ public class SiteServiceImpl implements SiteService {
     }
 
     @Override
-    public void createSiteEntity(SiteDetailsRequestModel siteDetailsRequestModel) {
+    public void createSiteEntity(SiteDetailsRequestModel siteDetailsRequestModel, HealthCenterEntity healthCenterEntity) {
 
         if(this.requestIsNull(siteDetailsRequestModel))
             throw new SiteServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
+        if(healthCenterEntity == null)
+            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+
         //create site entity with unique id
         SiteEntity siteEntity = this.generateUniqueSiteId(new SiteEntity());
+
+        //set health center
+        siteEntity.setHealthCenterEntity(healthCenterEntity);
 
         //set name
         siteEntity.setName(siteDetailsRequestModel.getName());
 
         //set address
         siteEntity.setStreetAddress(siteDetailsRequestModel.getStreetAddress());
+
 
         //check for city id
         if(siteDetailsRequestModel.getCity() == null)
@@ -119,7 +126,7 @@ public class SiteServiceImpl implements SiteService {
         siteEntity.setCountyEntity(countyEntity);
 
         //check for zip code id
-        if(siteDetailsRequestModel.getZipCode() != null)
+        if(siteDetailsRequestModel.getZipCode() == null)
             throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
         //get zipCode from db
@@ -130,20 +137,6 @@ public class SiteServiceImpl implements SiteService {
 
         //set zip code
         siteEntity.setZipCodeEntity(zipCodeEntity);
-
-        //check for health center
-        if(siteDetailsRequestModel.getHealthCenter() == null)
-            throw new HealthCenterServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        //get health center from db
-         HealthCenterEntity healthCenterEntity = this.healthCenterService.getHealthCenterEntity(
-                 siteDetailsRequestModel.getHealthCenter()
-         );
-
-         if(healthCenterEntity == null)
-             throw new HealthCenterServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
-         siteEntity.setHealthCenterEntity(healthCenterEntity);
 
          if(siteDetailsRequestModel.getHouseDistrict() != null){
 
@@ -200,8 +193,15 @@ public class SiteServiceImpl implements SiteService {
          if(siteDetailsRequestModel.getFunding() != null){
 
              List<FundEntity> fundEntities = this.fundService.getFundEntities(
-                     siteDetailsRequestModel.getService()
+                     siteDetailsRequestModel.getFunding()
              );
+
+             System.out.println("read this");
+
+             for(FundEntity fund: fundEntities){
+
+                 System.out.println(fund.getName());
+             }
 
              this.siteFundingDetailsService.linkFundingToSites(fundEntities, savedSiteEntity);
          }
@@ -218,7 +218,7 @@ public class SiteServiceImpl implements SiteService {
 
         for(SiteDetailsRequestModel request: siteDetailsRequestModels){
 
-            this.createSiteEntity(request);
+            this.createSiteEntity(request, healthCenterEntity);
         }
 
     }

@@ -55,9 +55,9 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
     }
 
     @Override
-    public void savedSiteFundDetails(SiteFundingDetailsEntity siteFundingDetailsEntity) {
+    public SiteFundingDetailsEntity savedSiteFundDetails(SiteFundingDetailsEntity siteFundingDetailsEntity) {
 
-        this.siteFundingDetailsRepository.save(siteFundingDetailsEntity);
+        return this.siteFundingDetailsRepository.save(siteFundingDetailsEntity);
 
     }
 
@@ -136,7 +136,7 @@ public class SiteFundingDetailsServiceImpl implements SiteFundingDetailsService 
             siteFundingDetailsEntity.setSiteEntity(siteEntity);
             siteFundingDetailsEntity.setFundEntity(fundEntity);
 
-            savedSiteFundDetails(siteFundingDetailsEntity);
+            this.savedSiteFundDetails(siteFundingDetailsEntity);
 
         }
     }

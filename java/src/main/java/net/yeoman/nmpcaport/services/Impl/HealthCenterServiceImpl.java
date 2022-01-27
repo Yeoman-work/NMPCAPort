@@ -75,8 +75,7 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         HealthCenterEntity savedHealthCenter = this.saveHealthCenterEntity(healthCenterEntity);
 
-        if(!this.siteService.requestIsNull(
-                healthCenterDetailsRequestModel.getSitesRequest())
+        if(!this.siteService.requestIsNull(healthCenterDetailsRequestModel.getSitesRequest())
         ){
             this.siteService.createSitesBulk(healthCenterDetailsRequestModel.getSitesRequest(), savedHealthCenter);
         }
@@ -227,6 +226,9 @@ public class HealthCenterServiceImpl implements HealthCenterService {
         healthCenterDashBoard.setHealthCenterId(healthCenterEntity.getHealthCenterId());
 
         healthCenterDashBoard.setName(healthCenterEntity.getName());
+
+        healthCenterDashBoard.setCreatedAt(healthCenterEntity.getCreatedAt());
+        healthCenterDashBoard.setUpdatedAt(healthCenterEntity.getUpdatedAt());
 
         healthCenterDashBoard.setNameAbbr(healthCenterEntity.getNameAbbr());
 

@@ -141,17 +141,17 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
     }
 
     @Override
-    public HouseDistrictEssentialResponse entityToEssentials(HouseDistrictEntity nmHouseDistrictEntity) {
+    public HouseDistrictEssentialResponse entityToEssentials(HouseDistrictEntity houseDistrictEntity) {
 
-        if(this.entityIsNull(nmHouseDistrictEntity))
+        if(this.entityIsNull(houseDistrictEntity))
             throw new HouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 
-        HouseDistrictEssentialResponse nmHouseDistrictEssentialResponse = new HouseDistrictEssentialResponse();
+        HouseDistrictEssentialResponse houseDistrictEssentialResponse = new HouseDistrictEssentialResponse();
 
-        nmHouseDistrictEssentialResponse.setHouseDistrictId(nmHouseDistrictEntity.getHouseDistrictId());
-        nmHouseDistrictEssentialResponse.setName(nmHouseDistrictEntity.getName());
+        houseDistrictEssentialResponse.setHouseDistrictId(houseDistrictEntity.getHouseDistrictId());
+        houseDistrictEssentialResponse.setName(houseDistrictEntity.getName());
 
-        return nmHouseDistrictEssentialResponse;
+        return houseDistrictEssentialResponse;
     }
 
     @Override
@@ -167,7 +167,7 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
             returnValue.add(this.entityToEssentials(houseDistrictEntity));
         }
         return returnValue.stream()
-                .sorted(Comparator.comparing(HouseDistrictEssentialResponse::getName))
+                .sorted(Comparator.comparing(houseDistrict ->Integer.parseInt(houseDistrict.getName())))
                 .collect(Collectors.toList());
     }
 

@@ -70,7 +70,6 @@ public class ContactController {
         //process single contact
         this.contactService.createContact(contactDetails);
 
-        return;
     }
     
 

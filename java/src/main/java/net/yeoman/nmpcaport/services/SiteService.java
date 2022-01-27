@@ -14,7 +14,7 @@ public interface SiteService {
 
 
     //create site from response
-    void createSiteEntity(SiteDetailsRequestModel siteDetailsRequestModel);
+    void createSiteEntity(SiteDetailsRequestModel siteDetailsRequestModel, HealthCenterEntity healthCenterEntity);
     void createSitesBulk(List<SiteDetailsRequestModel> siteDetailsRequestModels, HealthCenterEntity healthCenterEntity);
 
 

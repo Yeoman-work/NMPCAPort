@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.services;
 
 import net.yeoman.nmpcaport.entities.ServiceEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
+import net.yeoman.nmpcaport.entities.SiteServiceDetailsEntity;
 import net.yeoman.nmpcaport.io.request.service.ServiceRequestListModel;
 import net.yeoman.nmpcaport.io.response.service.ServiceEssentialsResponse;
 import net.yeoman.nmpcaport.io.response.service.ServiceNestedResponse;
@@ -21,7 +22,7 @@ public interface ServiceService {
     public List<ServiceResponse> dtoToResponse(List<ServiceDto> serviceDtoList);
 
     //get service essentials from site(s)
-    public ServiceEssentialsResponse getServiceEssentialsFromSite(SiteEntity siteEntity);
+    public ServiceEssentialsResponse getServiceEssentialsFromSite(String serviceId, String serviceName);
     public List<ServiceEssentialsResponse> getServiceEssentialsFromSite(List<SiteEntity> siteEntities);
 
     //convert to nested Response
