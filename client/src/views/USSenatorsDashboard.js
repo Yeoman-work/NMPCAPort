@@ -40,7 +40,7 @@ const USSenatorsDashboard = props =>{
     return(
         <div>
             <Header/>
-            <h1 className={'mt-5 mb-5'}>Senator Dashboard <Link to={'/yeoman/government/addFederalRep/senator'}><GiCongress/></Link> </h1>
+            <h1 className={'mt-5 mb-5'}>Senator Dashboard <Link to={'/yeoman/government/usGovernment/addFederalRep/senator'}><GiCongress/></Link> </h1>
             <div>
                 {
                     senators.map((senator, index)=>{

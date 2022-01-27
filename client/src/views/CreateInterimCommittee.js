@@ -3,7 +3,6 @@ import CommitteeForm from "../components/CommitteeForm";
 import StateRepSelectionForm from "../components/StateRepSelectionForm";
 import StateSenatorSelectionForm from "../components/StateSenatorSelectionForm";
 import Header from "../components/Header";
-import produce from "immer";
 import axios from "axios";
 import Button from "../components/Button";
 const {isValidCharacter,
@@ -66,7 +65,7 @@ const CreateInterimCommittee = props =>{
 
                     committeeObj.name = e.target.value;
 
-                    setCommittee(committeeObj);
+                    return setCommittee(committeeObj);
 
                 }else{
 
@@ -92,7 +91,7 @@ const CreateInterimCommittee = props =>{
 
                     committeeObj.description = e.target.value;
 
-                    setCommittee(committeeObj);
+                    return setCommittee(committeeObj);
 
                 }else{
 
@@ -120,7 +119,7 @@ const CreateInterimCommittee = props =>{
 
             case FORM_FIELDS.SENATOR_IDS:
 
-                console.log(e.target.checke)
+                console.log(e.target.checked)
                 if(e.target.checked){
 
                     committeeObj.senatorIds.push(e.target.value);

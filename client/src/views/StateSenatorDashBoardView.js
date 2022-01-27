@@ -42,7 +42,7 @@ const StateSenatorDashBoardView = props =>{
     return(
         <div>
             <Header/>
-            <h1 className={'mt-5 mb-5'}>State Senators <Link to={'/yeoman/government/addStateRep/senator'}><RiGovernmentFill/></Link> </h1>
+            <h1 className={'mt-5 mb-5'}>State Senators <Link to={'/yeoman/government/newMexico/addStateRep/senator'}><RiGovernmentFill/></Link> </h1>
             <div className={'pt-3 w-75 m-auto'}>
                 {
                     stateSenatorList.length > 0?
