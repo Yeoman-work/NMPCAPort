@@ -174,7 +174,7 @@ const SiteForm = props =>{
                                                             type="checkbox"
                                                             name={siteDataFields.SITE_FUNDING}
                                                             className={'form-check-input me-2'}
-                                                            checked={siteJson.fund.includes(fundId)}
+                                                            checked={siteJson.funding.includes(fundId)}
                                                             value={fundId}
                                                             itemID={fundId}
                                                             onChange={(e)=>dispatchSite(
@@ -193,8 +193,8 @@ const SiteForm = props =>{
                         <div className={'row'}>
                             <div className={'col'}>
                                 <label> NM House district</label>
-                                <select name={siteDataFields.NM_HOUSE_DISTRICT}
-                                        value={ siteJson.nmHouseDistrict }
+                                <select name={siteDataFields.HOUSE_DISTRICT}
+                                        value={ siteJson.houseDistrict }
                                         className={'form-control'}
                                         onChange={(e)=>dispatchSite(
                                             {type: e.target.name, payload: e.target.value})}
@@ -202,7 +202,7 @@ const SiteForm = props =>{
                                     <option>Choose a District</option>
                                     {
                                         formData?
-                                            formData.nmHouse_districts.map(({houseDistrictId, name}, index)=>{
+                                            formData.house_districts.map(({houseDistrictId, name}, index)=>{
 
                                                 return(
                                                     <option key={index} value={ houseDistrictId }>{name}</option>

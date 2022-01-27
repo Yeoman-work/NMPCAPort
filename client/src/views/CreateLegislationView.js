@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router";
 import Header from "../components/Header";
@@ -7,7 +7,8 @@ import LegislationForm from "../components/LegislationForm";
 
 
 
-const CreateLegislationView = props =>{
+const CreateLegislationView = () =>{
+
     const navigate = useNavigate();
     const [ legislation, setLegislation] = useState({
         name:'',
@@ -32,8 +33,11 @@ const CreateLegislationView = props =>{
                 }
             })
 
-            console.log(legislationResponse);
-            //navigate();
+            console.log(legislationResponse.data);
+
+            if(legislationResponse.data){
+                navigate('/yeoman/legislation/dashboard');
+            }
 
         }catch(error){
 

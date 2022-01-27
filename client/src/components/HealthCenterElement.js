@@ -76,8 +76,8 @@ const HealthCenterElement = props =>{
                                 <h6>House</h6>
                                 <ul className={'w-25 m-auto'}>
                                     {
-                                        healthCenter.nmHouseDistrictEssentialResponses?
-                                            healthCenter.nmHouseDistrictEssentialResponses.map((district, index)=>{
+                                        healthCenter.houseDistrictEssentialResponses?
+                                            healthCenter.houseDistrictEssentialResponses.map((district, index)=>{
 
 
                                                 return(
@@ -110,8 +110,8 @@ const HealthCenterElement = props =>{
                                 <h6>Congressional</h6>
                                 <ul className={'w-25 m-auto'}>
                                     {
-                                        healthCenter.congressionalEssentialsResponses?
-                                            healthCenter.congressionalEssentialsResponses.map((district, index)=>{
+                                        healthCenter.congressionalDistrictEssentialResponses?
+                                            healthCenter.congressionalDistrictEssentialResponses.map((district, index)=>{
 
 
                                                 return(

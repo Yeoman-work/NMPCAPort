@@ -1,4 +1,5 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect } from "react"
+import { useNavigate } from 'react-router'
 import axios from "axios";
 import produce from "immer";
 import Header from "../components/Header";
@@ -10,7 +11,8 @@ const { isValidCharacter, phoneNumberBuilder } = require('../helper/generalFunct
 const { isContact } = require('../helper/contactValidation')
 
 const contactReducer = (contactState, action) =>{
-    console.log(contactState);
+
+
     switch(action.type){
 
         case FORM_FIELDS.FIRST_NAME:
@@ -53,7 +55,7 @@ const contactReducer = (contactState, action) =>{
                     })
 
                 }else{
-
+                    return contactState;
                 }
 
             }else if(action.payload.length < 1 ){
@@ -266,7 +268,8 @@ const FORM_FIELDS={
 
 }
 
-const CreateContactsView = props =>{
+const CreateContactsView = () =>{
+    const navigate = useNavigate();
     const { id } = useParams()
     const [contactInfo, dispatchContactInfo] = useReducer(contactReducer, {
 
@@ -294,9 +297,6 @@ const CreateContactsView = props =>{
 
     useEffect(()=>{
 
-        console.log('top')
-        console.log(id);
-        console.log('bottom')
         if(id !== undefined && id !== null)
             dispatchContactInfo({type: FORM_FIELDS.NETWORK_GRP, payload: {checked: true, value: id}})
 
@@ -374,7 +374,12 @@ const CreateContactsView = props =>{
             })
 
             dispatchContactInfo({type: FORM_FIELDS.CLEAR_CONTACT})
-            console.log('read this')
+
+            if(savedContactResponse.data){
+
+                navigate('/yeoman/contacts/dashboard')
+            }
+
             console.log(savedContactResponse.data);
 
         }catch(error){

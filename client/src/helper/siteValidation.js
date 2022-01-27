@@ -136,7 +136,7 @@ const addSite = (siteJson, formData) =>{
                             if(formData.zipCode_list){
                                 if(zipCodeIdValidation(formData.zipCode_list, siteJson.zipCode)){
                                     console.log('here')
-                                    if(houseDistrictIdValidationNotRequired(formData.nmHouse_districts, siteJson.nmHouseDistrict)){
+                                    if(houseDistrictIdValidationNotRequired(formData.house_districts, siteJson.houseDistrict)){
 
                                         if(senateDistrictIdValidationNotRequired(formData.senate_districts, siteJson.senateDistrict)){
 

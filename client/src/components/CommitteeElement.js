@@ -5,7 +5,7 @@ import React from "react";
 
 
 const CommitteeElement = props =>{
-    const
+
 
     return(
         <div>

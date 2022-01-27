@@ -33,9 +33,45 @@ const SiteListComponent = props =>{
                                     </div>
                                     <h6><span className={'fw-bold me-1'}>Site Name:</span>{site.name}</h6>
                                     <span className={'fw-bold me-1'}>Address:</span> {site.streetAddress}<br/>
-                                    <span className={'fw-bold me-1'}>City:</span> {site.city.name}<br/>
-                                    <span className={'fw-bold me-1'}>County:</span> {site.county.name}<br/>
-                                    <span className={'fw-bold me-1'}>zip code:</span>{site.zipCode.name}<br/>
+                                    {
+                                        formData.city_list.map(({name, cityId}, index)=>{
+
+                                            return(
+                                                cityId === site.city?
+                                                <div key={index}>
+                                                    <span className={'fw-bold me-1'}>City: {name}</span>
+                                                </div>
+                                                    : null
+
+                                            )
+                                        })
+                                    }
+                                    {
+                                        formData.county_list.map(({name, countyId}, index)=>{
+
+                                            return(
+                                                countyId === site.county?
+                                                <div key={index}>
+                                                    <span className={'fw-bold me-1'}>County: {name}</span>
+                                                </div>
+
+                                                    : null
+                                            )
+                                        })
+                                    }
+                                    {
+                                        formData.zipCode_list.map(({name, zipCodeId}, index)=>{
+
+                                            return(
+
+                                                zipCodeId === site.zipCode?
+                                                <div key={index}>
+                                                    <span className={'fw-bold me-1'}>zip code: {name}</span>
+                                                </div>
+                                                    : null
+                                            )
+                                        })
+                                    }
                                     <span className={'fw-bold me-1'}>Service(s):</span>
                                     <ul>
                                         {
@@ -71,10 +107,10 @@ const SiteListComponent = props =>{
                                                 : null
                                         }
                                     </ul>
-                                    <span className={'fw-bold me-1'}>NM House District:</span>{formData.nmHouse_districts.map((district, index)=>{
+                                    <span className={'fw-bold me-1'}>NM House District:</span>{formData.house_districts.map((district, index)=>{
 
                                         return(
-                                            site.nmHouseDistrict === district.houseDistrictId?
+                                            site.houseDistrict === district.houseDistrictId?
                                                 district.name
                                                 :null
                                         )

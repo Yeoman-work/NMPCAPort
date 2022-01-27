@@ -21,7 +21,7 @@ const clearSiteData ={
         county: {id: '', name: ''},
         zipCode: {id: '', name: ''},
         healthCenter: {id: '', name: ''},
-        nmHouseDistrict: {id: '', name: ''},
+        houseDistrict: {id: '', name: ''},
         senateDistrict:{id: '', name: ''},
         congressionalDistrict: {id: '', name: ''},
         service: [],
@@ -35,10 +35,10 @@ const clearSiteData ={
         county: '',
         zipCode: '',
         healthCenter: '',
-        nmHouseDistrict: '',
+        houseDistrict: '',
         senateDistrict: '',
         congressionalDistrict: '',
-        fund: [],
+        funding: [],
         service: [],
     }
 
@@ -50,7 +50,7 @@ function healthCenterReducer(healthCenterState, action){
 
     switch(action.type){
         case HEALTH_CENTER_FIELDS.HEALTH_CENTER_NAME:
-
+            console.log(healthCenterState);
             const healthCenterString = action.payload;
 
             if(healthCenterString.length <= 50 ){
@@ -155,11 +155,11 @@ function healthCenterReducer(healthCenterState, action){
                 })
             })
 
-        case HEALTH_CENTER_FIELDS.NM_HOUSE_DISTRICT:
+        case HEALTH_CENTER_FIELDS.HOUSE_DISTRICT:
 
             return produce(healthCenterState, draft =>{
 
-                draft.siteJson.nmHouseDistrict = action.payload;
+                draft.siteJson.houseDistrict = action.payload;
             })
 
         case HEALTH_CENTER_FIELDS.SENATE_DISTRICT:
@@ -196,6 +196,25 @@ function healthCenterReducer(healthCenterState, action){
                     draft.siteJson.service.push(action.payload)
                 })
 
+            }
+
+        case HEALTH_CENTER_FIELDS.SITE_FUNDING:
+            console.log('right place')
+            console.log(action.payload)
+
+            if(healthCenterState.siteJson.funding.includes(action.payload)){
+
+                return produce(healthCenterState, draft=>{
+
+                    draft.siteJson.funding.splice(
+                        healthCenterState.siteJson.funding.indexOf(action.payload), 1);
+                });
+            }else{
+
+                return produce(healthCenterState, draft =>{
+
+                    draft.siteJson.funding.push(action.payload);
+                });
             }
 
         case HEALTH_CENTER_FIELDS.NEW_SITE_REQUEST:
@@ -275,11 +294,18 @@ function healthCenterReducer(healthCenterState, action){
                 draft.formData.service_list = [...action.payload];
             })
 
-        case HEALTH_CENTER_FIELDS.NM_HOUSE_DISTRICT_LIST:
+        case HEALTH_CENTER_FIELDS.FUNDING_LIST:
 
             return produce(healthCenterState, draft=>{
 
-                draft.formData.nmHouse_districts = [...action.payload];
+                draft.formData.funding_list = [...action.payload];
+            })
+
+        case HEALTH_CENTER_FIELDS.HOUSE_DISTRICT_LIST:
+
+            return produce(healthCenterState, draft=>{
+
+                draft.formData.house_districts = [...action.payload];
             })
 
         case HEALTH_CENTER_FIELDS.SENATE_DISTRICT_LIST:
@@ -295,10 +321,6 @@ function healthCenterReducer(healthCenterState, action){
 
                 draft.formData.congressional_districts = [...action.payload];
             })
-
-
-
-
 
 
 
@@ -322,13 +344,13 @@ const HEALTH_CENTER_FIELDS ={
     PARENT_HEALTH_CENTER: '',
     SITE_SERVICES : 'SERVICES',
     SITE_FUNDING: 'funding',
-    NM_HOUSE_DISTRICT: 'nmHouseDistrict',
+    HOUSE_DISTRICT: 'houseDistrict',
     SENATE_DISTRICT: 'senateDistrict',
     CONGRESSIONAL_DISTRICT: 'congressionalDistrict',
     FORM_DATA_SERVICES : 'services',
     FUNDING_LIST: 'fundList',
     SERVICE_LIST: 'serviceList',
-    NM_HOUSE_DISTRICT_LIST: 'nmHouseDistricts',
+    HOUSE_DISTRICT_LIST: 'houseDistricts',
     SENATE_DISTRICT_LIST: 'senateDistricts',
     CONGRESSIONAL_DISTRICT_LIST: 'congressionalDistricts',
     COUNTY_LIST: 'county_list',
@@ -353,7 +375,7 @@ const clearData ={
         county: ''.trim(),
         zipCode: ''.trim(),
         healthCenter: ''.trim(),
-        nmHouseDistrict: ''.trim(),
+        houseDistrict: ''.trim(),
         senateDistrict: ''.trim(),
         congressionalDistrict: ''.trim(),
         service: [],
@@ -367,7 +389,7 @@ const clearData ={
         county: '',
         zipCode: '',
         healthCenter: '',
-        nmHouseDistrict: '',
+        houseDistrict: '',
         senateDistrict: '',
         congressionalDistrict: '',
         funding : [],
@@ -395,7 +417,7 @@ const CreateHealthCenterView = props =>{
           county: '',
           zipCode: '',
           healthCenter: '',
-          nmHouseDistrict: '',
+          houseDistrict: '',
           senateDistrict: '',
           congressionalDistrict: '',
           funding : [],
@@ -405,7 +427,7 @@ const CreateHealthCenterView = props =>{
         formData:{
             service_list : [],
             funding_list: [],
-            nmHouse_districts: [],
+            house_districts: [],
             senate_districts: [],
             congressional_districts: [],
             county_list: [],
@@ -540,6 +562,7 @@ const CreateHealthCenterView = props =>{
                 })
 
 
+                console.log(funding.data);
                 dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.FUNDING_LIST, payload: [...funding.data]})
 
             }catch(error){
@@ -571,14 +594,14 @@ const CreateHealthCenterView = props =>{
 
                 dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.SENATE_DISTRICT_LIST, payload: [...senateDistrict.data]})
 
-                const nmHouseDistrict = await axios.get('http://localhost:8080/nmHouseDistricts/',{
+                const houseDistrict = await axios.get('http://localhost:8080/houseDistricts/',{
 
                     headers:{
                         Authorization: localStorage.getItem('token')
                     }
                 })
 
-                dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.NM_HOUSE_DISTRICT_LIST, payload: [...nmHouseDistrict.data]})
+                dispatchHealthCenterInfo({type: HEALTH_CENTER_FIELDS.HOUSE_DISTRICT_LIST, payload: [...houseDistrict.data]})
 
                 const congressionalDistrict = await axios.get('http://localhost:8080/congressionalDistricts',{
 
