@@ -12,31 +12,38 @@ import java.util.List;
 
 public interface SenateDistrictService {
 
-    public SenateDistrictDto getDistrict(String districtId);
-    public SenateDistrictDto createDistrict(SenateDistrictDto senateDistrictDto);
-    public SenateDistrictDto updateDistrict(String senateDistrictId, SenateDistrictDto senateDistrictDto);
-    public SenateDistrictDto deleteDistrict(String senateDistrictId);
-    public SenateDistrictEntity findSenateDistrictEntity(String senateDistrictId);
-    public List<SenateDistrictDto> getAllSenateDistricts();
-    public List<SenateDistrictDto> createBulkSenateDistrict(List<SenateDistrictDto> senateDistrictDtoList);
+    SenateDistrictDto getDistrict(String districtId);
+    SenateDistrictDto createDistrict(SenateDistrictDto senateDistrictDto);
+    SenateDistrictDto updateDistrict(String senateDistrictId, SenateDistrictDto senateDistrictDto);
+    SenateDistrictDto deleteDistrict(String senateDistrictId);
 
 
+    SenateDistrictEntity findSenateDistrictEntity(String senateDistrictId);
+    List<SenateDistrictDto> createBulkSenateDistrict(List<SenateDistrictDto> senateDistrictDtoList);
+
+    //get all senateDistrict entities
+    List<SenateDistrictEntity> getAllDistrictEntities();
+
+
+    //get all districts and convert them to entity
+    List<SenateDistrictEssentialResponse> getAllDistrictEssentials();
 
     //entity to essentials
-    public SenateDistrictEssentialResponse entityToEssentials(SenateDistrictEntity senateDistrictEntity);
-    public List<SenateDistrictEssentialResponse> entitiesToEssentials(List<SenateDistrictEntity> senateDistrictEntities);
+    SenateDistrictEssentialResponse entityToEssentials(SenateDistrictEntity senateDistrictEntity);
+    List<SenateDistrictEssentialResponse> entitiesToEssentials(List<SenateDistrictEntity> senateDistrictEntities);
+
 
     //get entities from site(s)
-    public SenateDistrictEntity getSenateDistrictEntitiesFromSites(SiteEntity siteEntity);
-    public List<SenateDistrictEntity> getSenateDistrictEntitiesFromSites(List<SiteEntity> siteEntities);
+    SenateDistrictEntity getSenateDistrictEntitiesFromSites(SiteEntity siteEntity);
+    List<SenateDistrictEntity> getSenateDistrictEntitiesFromSites(List<SiteEntity> siteEntities);
 
-    public SenateDistrictDto entityToDto(SenateDistrictEntity senateDistrictEntity);
-    public List<SenateDistrictDto> entityToDto(List<SenateDistrictEntity> senateDistrictEntities);
-    public SenateDistrictNestedResponse dtoToNestedResponse(SenateDistrictDto senateDistrictDto);
-    public List<SenateDistrictNestedResponse> dtoToNestedResponse(List<SenateDistrictDto> senateDistrictDtoList);
+    SenateDistrictDto entityToDto(SenateDistrictEntity senateDistrictEntity);
+    List<SenateDistrictDto> entityToDto(List<SenateDistrictEntity> senateDistrictEntities);
+    SenateDistrictNestedResponse dtoToNestedResponse(SenateDistrictDto senateDistrictDto);
+    List<SenateDistrictNestedResponse> dtoToNestedResponse(List<SenateDistrictDto> senateDistrictDtoList);
 
-    public Boolean entityIsNull(SenateDistrictEntity senateDistrictEntity);
-    public Boolean entityIsNull(List<SenateDistrictEntity> senateDistrictEntities);
-    public Boolean dtoIsNull(SenateDistrictDto senateDistrictDto);
-    public Boolean dtoIsNull(List<SenateDistrictDto> senateDistrictDtoList);
+    Boolean entityIsNull(SenateDistrictEntity senateDistrictEntity);
+    Boolean entityIsNull(List<SenateDistrictEntity> senateDistrictEntities);
+    Boolean dtoIsNull(SenateDistrictDto senateDistrictDto);
+    Boolean dtoIsNull(List<SenateDistrictDto> senateDistrictDtoList);
 }

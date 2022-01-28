@@ -175,7 +175,6 @@ public class HealthCenterServiceImpl implements HealthCenterService {
 
         Page<HealthCenterEntity> healthCenterPage = this.healthCenterRepository.findAll(pageableRequest);
 
-
         return healthCenterPage.getContent();
     }
 

@@ -1,24 +1,25 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
 import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.errormessages.ErrorMessages;
 import net.yeoman.nmpcaport.exception.SenateDistrictServiceException;
 import net.yeoman.nmpcaport.exception.SiteServiceException;
+import net.yeoman.nmpcaport.io.repositories.SenateDistrictRepository;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
-import net.yeoman.nmpcaport.io.repositories.SenateDistrictRepository;
 import net.yeoman.nmpcaport.services.SenateDistrictService;
 import net.yeoman.nmpcaport.shared.dto.SenateDistrictDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SenateDistrictServiceImpl implements SenateDistrictService {
@@ -91,18 +92,6 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
         return this.senateDistrictRepository.findBySenateDistrictId(senateDistrictId);
     }
 
-    @Override
-    public List<SenateDistrictDto> getAllSenateDistricts() {
-        List<SenateDistrictDto> returnValue = new ArrayList<>();
-        List<SenateDistrictEntity> senateDistrictEntities = this.senateDistrictRepository.findAll();
-
-        for(SenateDistrictEntity district: senateDistrictEntities){
-
-            returnValue.add(new ModelMapper().map(district, SenateDistrictDto.class));
-        }
-
-        return returnValue;
-    }
 
     @Override
     public List<SenateDistrictDto> createBulkSenateDistrict(List<SenateDistrictDto> senateDistrictDtoList) {
@@ -119,6 +108,20 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public List<SenateDistrictEntity> getAllDistrictEntities() {
+
+        return this.senateDistrictRepository.findAll();
+    }
+
+    @Override
+    public List<SenateDistrictEssentialResponse> getAllDistrictEssentials() {
+
+        List<SenateDistrictEntity> senateDistrictEntities = this.getAllDistrictEntities();
+
+        return this.entitiesToEssentials(senateDistrictEntities);
     }
 
     @Override
@@ -149,8 +152,8 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
         }
 
         return returnValue.stream()
-                .sorted(Comparator.comparing(SenateDistrictEssentialResponse::getName))
-                .collect(Collectors.toList());
+        		.sorted(Comparator.comparing(district ->Integer.parseInt(district.getName())))
+        		.collect(Collectors.toList());
     }
 
     @Override

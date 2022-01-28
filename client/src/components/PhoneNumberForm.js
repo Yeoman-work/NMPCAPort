@@ -5,15 +5,42 @@ const {phoneNumberCheck,
         } = require('../helper/generalFunctions')
 
 
+const clearPhoneNumber = {
+
+    phoneNumber:{
+        number: ''.trim(),
+        description: ''.trim()
+    },
+
+
+
+}
 
 const PhoneNumberForm = props =>{
-        const { dispatchFunction,
-                formFields,
-                phoneNumber,
-                phoneNumberList,
-                handler,
-                divClass
-        } = props;
+        const {phoneNumber,
+               phoneNumberList,
+               setPhoneNumberList,
+               setPhoneNumber,
+               divClass,
+            } = props
+
+
+        const inputChange = (e) =>{
+
+            let phoneNumberObj = {...phoneNumber};
+
+            phoneNumberObj[e.target.name] = e.target.value;
+
+            setPhoneNumber(phoneNumberObj);
+        }
+
+        const addPhoneNumber = (e) =>{
+
+            let phoneNumberObjList = [...phoneNumberList, e.target.value];
+
+            setPhoneNumberList(phoneNumberObjList);
+        }
+
 
 
     return(
@@ -26,24 +53,25 @@ const PhoneNumberForm = props =>{
                             <label>Number</label>
                             <input type="tel"
                                    pattern={'[0-9]{3}-[0-9]{3}-[0-9]{4}'}
-                                   name={formFields.PHONE_NUMBER}
+                                   name={'number'}
                                    className={'form-control'}
                                    value={phoneNumber.number}
-                                   onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target.value})}
+                                    onChange={(e)=>inputChange(e)}
                             />
 
                         </div>
                         <div className={'form-group mb-3'}>
                             <label>Description</label>
                             <input type="text"
-                                   name={formFields.PHONE_DESCRIPTION}
+                                   name={'description'}
                                    className={'form-control'}
                                    value={phoneNumber.description}
-                                   onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target.value})}
+                                   onChange={(e)=>inputChange(e)}
                             />
-                            { phoneNumber.number.length && fieldLength(5, 25, phoneNumber.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, formFields.PHONE_DESCRIPTION)}</div> : null}
+
+                            { phoneNumber.number.length && fieldLength(5, 25, phoneNumber.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, 'description')}</div> : null}
                         </div>
-                        <button disabled={phoneNumberCheck(phoneNumber)} onClick={(e)=>dispatchFunction({type: formFields.PHONE_NUMBER_LIST})}>Add Phone Number</button>
+                        <button>Add Phone Number</button>
                     </div>
                     <div className={'col'}>
                         <label>Added Phone Number</label>
@@ -72,5 +100,6 @@ const PhoneNumberForm = props =>{
         </div>
     )
 }
+
 
 export default PhoneNumberForm;

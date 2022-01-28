@@ -7,6 +7,8 @@ import net.yeoman.nmpcaport.services.ZipCodeService;
 import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
 import net.yeoman.nmpcaport.io.repositories.ZipCodeRepository;
+import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeDetailsRequestModel;
+import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeRequestList;
 import net.yeoman.nmpcaport.shared.dto.ZipCodeDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
@@ -19,63 +21,20 @@ import java.util.List;
 @Service
 public class ZipCodeServiceImpl implements ZipCodeService {
 
-    @Autowired
-    private ZipCodeRepository zipCodeRepository;
-
-    @Autowired
-    private Utils utils;
-
-    @Override
-    public List<ZipCodeDto> findALl() {
-
-        List<ZipCodeDto> returnValue = new ArrayList<>();
-
-        List<ZipCodeEntity> zipCodes = this.zipCodeRepository.findAll();
-
-        for(ZipCodeEntity zipCode: zipCodes){
-
-            returnValue.add(new ModelMapper().map(zipCode, ZipCodeDto.class));
-        }
-        return returnValue;
+    
+    private final ZipCodeRepository zipCodeRepository;
+    private final Utils utils;
+    
+    ZipCodeServiceImpl(ZipCodeRepository zipCodeRepository,
+    		           Utils utils
+	){
+    	this.zipCodeRepository = zipCodeRepository;
+    	this.utils = utils;
     }
 
-    @Override
-    public ZipCodeEntity getZipCodeEntity(String zipCodeId) {
-
-        return this.zipCodeRepository.findByZipCodeId(zipCodeId);
-    }
-
-    @Override
-    public ZipCodeDto findZipCodeById(String zipCodeId) {
-
-        ZipCodeEntity zipCode = this.zipCodeRepository.findByZipCodeId(zipCodeId);
-
-        return new ModelMapper().map(zipCode, ZipCodeDto.class);
-    }
-
-    @Override
-    public List<ZipCodeResponse> createZipCodesFromList(List<String> zipCodes) {
-        List<ZipCodeResponse> zipCodeResponseList = new ArrayList<>();
-
-        for(String zipCode: zipCodes){
-
-            if(!this.zipCodeRepository.existsByName(zipCode)){
-
-                ZipCodeEntity zipCodeEntity = new ZipCodeEntity();
-
-                zipCodeEntity.setZipCodeId(utils.generateRandomID());
-                zipCodeEntity.setName(zipCode);
-
-                ZipCodeEntity storedZipCode = this.zipCodeRepository.save(zipCodeEntity);
-
-                zipCodeResponseList.add(new ModelMapper().map(storedZipCode, ZipCodeResponse.class));
-            }
-
-        }
-
-        return zipCodeResponseList;
-    }
-
+    
+    // zipCode essentials
+   
     @Override
     public ZipCodeEssentials entityToEssentials(ZipCodeEntity zipCodeEntity) {
 
@@ -106,52 +65,8 @@ public class ZipCodeServiceImpl implements ZipCodeService {
         return returnValue;
     }
 
-    @Override
-    public ZipCodeDto entityToDto(ZipCodeEntity zipCodeEntity) {
-
-        if(this.entityIsNull(zipCodeEntity)) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.utils.objectMapper().map(zipCodeEntity, ZipCodeDto.class);
-    }
-
-    @Override
-    public List<ZipCodeDto> entityToDto(List<ZipCodeEntity> zipCodeDtoEntityList) {
-
-        if(this.entityIsNull(zipCodeDtoEntityList)) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<ZipCodeDto> returnValue = new ArrayList<>();
-
-        for(ZipCodeEntity zipCodeEntity: zipCodeDtoEntityList){
-
-            returnValue.add(this.entityToDto(zipCodeEntity));
-        }
-
-        return returnValue;
-    }
-
-    @Override
-    public ZipCodeResponse dtoToResponse(ZipCodeDto zipCodeDto) {
-
-        if(this.dtoIsNull(zipCodeDto)) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        return this.utils.objectMapper().map(zipCodeDto, ZipCodeResponse.class);
-    }
-
-    @Override
-    public List<ZipCodeResponse> dtoToResponse(List<ZipCodeDto> zipCodeDtoList) {
-
-        if(this.dtoIsNull(zipCodeDtoList)) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
-
-        List<ZipCodeResponse> returnValue = new ArrayList<>();
-
-        for(ZipCodeDto zipCodeDto: zipCodeDtoList){
-
-            returnValue.add(this.dtoToResponse(zipCodeDto));
-        }
-
-        return returnValue;
-    }
-
+    
+  //check if the zipCode entity is null
     @Override
     public Boolean entityIsNull(ZipCodeEntity zipCodeEntity) {
         return  zipCodeEntity == null;
@@ -162,15 +77,140 @@ public class ZipCodeServiceImpl implements ZipCodeService {
         return zipCodeEntities == null;
     }
 
-    @Override
-    public Boolean dtoIsNull(ZipCodeDto zipCodeDto) {
-        return zipCodeDto == null;
-    }
+    
+    //get zipCode code entity
+	@Override
+	public List<ZipCodeEntity> findAllZipCodeEntities() {
+		
+		return this.zipCodeRepository.findAll();
+	}
 
-    @Override
-    public Boolean dtoIsNull(List<ZipCodeDto> zipCodeDtoList) {
-        return zipCodeDtoList == null;
-    }
+	
+	@Override
+	public ZipCodeEntity getZipCodeEntity(String zipCodeId) {
+		
+		return this.zipCodeRepository.findByZipCodeId(zipCodeId);
+	}
 
+	
+	 //create zipCode Entities
+	@Override
+	public ZipCodeEntity createZipCode(ZipCodeDetailsRequestModel zipCodeDetialsRequestModel) {
+		
+		if(zipCodeDetialsRequestModel == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		ZipCodeEntity zipCodeEntity = this.generateUniqueId(new ZipCodeEntity());
+		
+		zipCodeEntity.setName(zipCodeDetialsRequestModel.getName());
+		
+		return zipCodeEntity;
+	}
+
+
+	@Override
+	public List<ZipCodeEntity> createZipCodes(ZipCodeRequestList zipCodeRequestList) {
+		
+		if(zipCodeRequestList == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		List<ZipCodeEntity> returnValue = new ArrayList<>();
+		
+		for(String request: zipCodeRequestList.getZipCodes()) {
+			
+			ZipCodeEntity zipCodeEntity = this.generateUniqueId(new ZipCodeEntity());
+			
+			zipCodeEntity.setName(request);
+			
+			returnValue.add(this.saveZipCodeEntity(zipCodeEntity));
+		}
+		
+		return returnValue;
+	}
+
+
+	@Override
+	public ZipCodeEntity generateUniqueId(ZipCodeEntity zipCodeEntity) {
+		
+		if(this.entityIsNull(zipCodeEntity)) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		zipCodeEntity.setZipCodeId(utils.generateRandomID());
+		
+		while(this.zipCodeRepository.existsByZipCodeId(zipCodeEntity.getZipCodeId())) {
+			
+			zipCodeEntity.setZipCodeId(utils.generateRandomID());
+		}
+		
+		return zipCodeEntity;
+	}
+
+
+	 //save the zipEntity
+	@Override
+	public ZipCodeEntity saveZipCodeEntity(ZipCodeEntity zipCodeEntity) {
+		
+		if(this.entityIsNull(zipCodeEntity)) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		
+		return this.zipCodeRepository.save(zipCodeEntity);
+	}
+
+
+	@Override
+	public List<ZipCodeEntity> saveZipCodeEnitties(List<ZipCodeEntity> zipCodeEntities) {
+		
+		if(this.entityIsNull(zipCodeEntities)) throw  new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		List<ZipCodeEntity> returnValue = new ArrayList<>();
+		
+		for(ZipCodeEntity zipCode: zipCodeEntities) {
+			
+			returnValue.add(this.saveZipCodeEntity(zipCode));
+		}
+		
+		return returnValue;
+	}
+	
+	
+    //end point functions
+    
+	
+    // getMappings 
+    
+	
+    //path = zipCodes
+
+  @Override
+	public List<ZipCodeEssentials> getZipcodesForDropDowns() {
+		
+		List<ZipCodeEntity> zipCodeEntities = this.findAllZipCodeEntities();
+		
+		return this.entityToEssentials(zipCodeEntities);
+	}
+
+  
+  	//postMapping
+
+	@Override
+	public List<ZipCodeEssentials> createZipCodesFromEndPoint(ZipCodeRequestList zipCodeRequestList) {
+		
+		if(zipCodeRequestList == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		List<ZipCodeEntity> zipCodeentities = this.createZipCodes(zipCodeRequestList);
+		
+		
+		return this.entityToEssentials(zipCodeentities);
+	}
+	
+	
+
+	@Override
+	public ZipCodeEssentials createZipCodeEntityFromEndPoint(ZipCodeDetailsRequestModel zipCodeDetailsRequestModel) {
+		
+		if(zipCodeDetailsRequestModel == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		ZipCodeEntity zipCode = this.createZipCode(zipCodeDetailsRequestModel);
+			
+		return this.entityToEssentials(zipCode);
+	}
+   
 
 }

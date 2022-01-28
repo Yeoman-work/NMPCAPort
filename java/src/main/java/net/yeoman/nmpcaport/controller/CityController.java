@@ -1,42 +1,56 @@
 package net.yeoman.nmpcaport.controller;
 
-import net.yeoman.nmpcaport.io.request.city.CityDetailsRequestModel;
-import net.yeoman.nmpcaport.io.request.city.CityRequestList;
-import net.yeoman.nmpcaport.io.response.city.CityResponse;
-import net.yeoman.nmpcaport.services.Impl.CityServiceImpl;
-import net.yeoman.nmpcaport.shared.dto.CityDto;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import net.yeoman.nmpcaport.io.request.city.CityDetailsRequestModel;
+import net.yeoman.nmpcaport.io.response.city.CityEssentials;
+import net.yeoman.nmpcaport.services.Impl.CityServiceImpl;
 
 @RestController
 @RequestMapping("/cities")
 public class CityController {
 
-    @Autowired
-    private CityServiceImpl cityService;
+    
+    private final CityServiceImpl cityService;
 
+    CityController(CityServiceImpl cityService){
+    	
+    	this.cityService = cityService;
+    }
+    
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<CityResponse> getAllCities(){
+    public List<CityEssentials> getAllCities(@RequestParam(value="pageNo", defaultValue = "0") int pageNo, 
+    										 @RequestParam(value="limit", defaultValue="25") int limit
+	){
 
-        return this.cityService.allCities();
+        return this.cityService.getAllCityEssentials(pageNo, limit);
     }
 
-    @PostMapping
-    public List<CityResponse> createCity(@RequestBody CityRequestList cityRequestList){
+    @PostMapping(path="bulk", 
+    			 consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+    			 produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_ATOM_XML_VALUE}
+    		)
+    public List<CityEssentials> createCity(@RequestBody List<String> cityList){
 
-        return this.cityService.createCitiesFromList(cityRequestList.getCityNames());
+        return this.cityService.createCitiesProcess(cityList);
 
     }
 
     @PutMapping("/{cityId}")
-    public CityResponse updateCity(@PathVariable("cityId") String cityId, @RequestBody CityDetailsRequestModel cityDetails){
+    public CityEssentials updateCity(@PathVariable("cityId") String cityId, @RequestBody CityDetailsRequestModel cityDetails){
 
-        CityDto cityDto = this.cityService.updateCity(cityId, new ModelMapper().map(cityDetails, CityDto.class));
+        
 
-        return new ModelMapper().map(cityDto, CityResponse.class);
+        return cityService.updateCityProcess(cityId, cityDetails) ;
     }
 }

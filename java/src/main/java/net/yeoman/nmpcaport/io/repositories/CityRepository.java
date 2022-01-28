@@ -1,17 +1,23 @@
 package net.yeoman.nmpcaport.io.repositories;
 
-import net.yeoman.nmpcaport.entities.CityEntity;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
+
+import net.yeoman.nmpcaport.entities.CityEntity;
+
 @Repository
-public interface CityRepository extends CrudRepository<CityEntity, Long> {
+public interface CityRepository extends PagingAndSortingRepository<CityEntity, Long> {
 
     CityEntity findByCityId(String cityId);
 
     List<CityEntity> findAll();
+    
+   
+    Boolean existsByCityId(String cityId);
+    Boolean existsByName(String name);
 
 
 }

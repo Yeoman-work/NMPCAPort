@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router";
-import produce from "immer";
 import Header from "../components/Header";
 import StateRepForm from "../components/StateRepForm";
 import {number} from "../helper/generalFunctions";
@@ -13,394 +12,85 @@ const { phoneNumberPattern,
         fieldLength,
         emailValidation,
         fieldLengthNotRequired,
-     } = require('../helper/generalFunctions')
-
-
-const stateRepReducer = (stateRepState, action) =>{
-
-    switch(action.type){
-        case STATE_REP_FIELDS.STATE_REP_FIRST_NAME:
-
-            if(characters.includes(action.payload[action.payload.length - 1]) || action.payload.length === 0){
-
-                if(action.payload.length <= 50) {
-
-                    return produce(stateRepState, draft => {
-                        console.log('here')
-                        draft.stateRep.firstName = action.payload;
-                    })
-                }
-
-            }else{
-
-                return stateRepState;
-            }
-
-        case STATE_REP_FIELDS.STATE_REP_LAST_NAME:
-
-
-            if(characters.includes(action.payload[action.payload.length - 1]) || action.payload.length === 0){
-                if(action.payload.length <= 50){
-
-                    return produce(stateRepState, draft=>{
-                        draft.stateRep.lastName = action.payload;
-                    })
-
-                }else{
-
-                    return stateRepState;
-                }
-            }else{
-
-                return stateRepState;
-            }
-
-
-        case STATE_REP_FIELDS.STATE_REP_EMAIL:
-            console.log(stateRepState.stateRep);
-
-            if(action.payload.length <= 150){
-                return produce(stateRepState, draft=>{
-                    draft.stateRep.email = action.payload;
-                })
-            }else{
-
-                return stateRepState;
-            }
-
-        case STATE_REP_FIELDS.STATE_REP_ADDRESS:
-            console.log(stateRepState.stateRep);
-            if(action.payload.length <= 150){
-                return produce(stateRepState, draft=>{
-                    draft.stateRep.streetAddress = action.payload;
-                })
-            }else{
-
-                return stateRepState;
-            }
-
-        case STATE_REP_FIELDS.STATE_REP_CITY:
-            console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.stateRep.city = action.payload;
-            })
-
-        case STATE_REP_FIELDS.STATE_REP_ZIP_CODE:
-            console.log('sip code')
-            console.log(action.payload);
-            return produce(stateRepState, draft=>{
-                draft.stateRep.zipCode = action.payload;
-            })
-
-        case STATE_REP_FIELDS.STATE_REP_CAPITAL_RM:
-            console.log(stateRepState.stateRep);
-            if(characters.includes(action.payload[action.payload.length - 1])){
-                if(action.payload.length <=8){
-                    return produce(stateRepState, draft=>{
-                        draft.stateRep.capitolRoom = action.payload;
-                    })
-                }else{
-
-                    if(action.payload.length === 0){
-
-                        return produce(stateRepState, draft=>{
-
-                            draft.stateRep.capitolRoom = action.payload;
-                        })
-                    }
-                    return stateRepState;
-                }
-            }
-
-
-        case STATE_REP_FIELDS.STATE_REP_DISTRICT:
-
-            console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.stateRep.nmHouseDistrict = action.payload;
-            })
-
-        case STATE_REP_FIELDS.STATE_REP_PICTURE:
-
-            if(action.payload.length <= 250){
-
-                return produce(stateRepState, draft=>{
-                    draft.stateRep.picture = action.payload
-                })
-
-            }else{
-
-                return stateRepState;
-            }
-
-        case STATE_REP_FIELDS.STATE_SEN_DISTRICT:
-
-            console.log(stateRepState);
-            return produce(stateRepState, draft=>{
-
-                draft.stateRep.senateDistrict = action.payload;
-            })
-
-
-        case STATE_REP_FIELDS.STATE_REP_COUNTIES:
-            console.log(stateRepState);
-            if(action.payload.checked){
-                return produce(stateRepState, draft=>{
-                    draft.stateRep.counties = [...stateRepState.stateRep.counties, action.payload.value]
-                })
-
-            }else{
-                return produce(stateRepState, draft=>{
-
-                    let counties = draft.stateRep.counties;
-                    const removeIndex = counties.indexOf(action.payload.value);
-                    counties.splice(removeIndex, 1);
-                    draft.stateRep.counties = [...counties];
-
-                })
-            }
-
-
-        case STATE_REP_FIELDS.CITIES:
-            console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.formData.citiesList = [...action.payload];
-            })
-
-        case STATE_REP_FIELDS.ZIP_CODE:
-            console.log('zip code list')
-            console.log(stateRepState.formData);
-            return produce(stateRepState, draft=>{
-                draft.formData.zipCodeList = [...action.payload];
-            })
-
-        case STATE_REP_FIELDS.DISTRICTS:
-            console.log(stateRepState.stateRep);
-            return produce(stateRepState, draft=>{
-                draft.formData.districtList = [...action.payload];
-            })
-
-
-        case STATE_REP_FIELDS.STATE_REP_PHONE_NUMBER:
-
-            let phoneNumber = action.payload;
-
-            if(number.includes(phoneNumber[phoneNumber.length - 1])){
-
-                if(action.payload.length <= 12){
-
-                    return produce(stateRepState, draft=>{
-                        draft.phoneNumber.number = phoneNumberPattern(action.payload);
-                        console.log(stateRepState);
-                    })
-
-                }else{
-
-                    return stateRepState;
-                }
-
-            }else if(phoneNumber.length < 1){
-
-                return produce(stateRepState, draft=>{
-
-                    draft.phoneNumber.number = phoneNumberPattern(action.payload);
-
-                })
-
-            }else{
-
-                return stateRepState;
-            }
-
-
-        case STATE_REP_FIELDS.STATE_REP_PHONE_DESCRIPTION:
-
-            if(characters.includes(action.payload[action.payload.length - 1]) || action.payload.length === 0){
-                if(action.payload.length <= 25){
-                    return produce(stateRepState, draft=>{
-
-                        draft.phoneNumber.description = action.payload;
-                    })
-                }else{
-
-                    return stateRepState;
-                }
-            }else{
-
-                return stateRepState;
-            }
-
-        case STATE_REP_FIELDS.Phone_Number_List:
-
-            return produce(stateRepState, draft=>{
-
-                draft.phoneNumberList = [...stateRepState.phoneNumberList, action.payload];
-            })
-
-        case STATE_REP_FIELDS.CLEAR_PHONE_NUMBER:
-            const clearPhoneNumber ={
-                number: '',
-                description: ''
-        }
-            return produce(stateRepState, draft=>{
-
-                draft.phoneNumber = {...clearPhoneNumber};
-            })
-
-        case STATE_REP_FIELDS.PARTIES_LIST:
-
-            return produce(stateRepState, draft=>{
-
-                draft.formData.partiesList = [...action.payload]
-            })
-
-        case STATE_REP_FIELDS.STATE_REP_PARTY:
-            console.log(action.payload);
-            return produce(stateRepState, draft=>{
-
-                draft.stateRep.party = action.payload;
-            })
-
-        case STATE_REP_FIELDS.CLEAR_STATE_REP:
-            const stateRep ={
-                    firstName: ''.trim(),
-                    lastName: ''.trim(),
-                    email: ''.trim(),
-                    picture: ''.trim(),
-                    streetAddress: ''.trim(),
-                    city: ''.trim(),
-                    capitolRoom: ''.trim(),
-                    zipCode: ''.trim(),
-                    nmHouseDistrict: ''.trim(),
-                    senateDistrict: ''.trim(),
-                    party: ''.trim()
-            }
-            return produce(stateRepState, draft=>{
-
-                 draft.stateRep = {...stateRep};
-            })
-
-        case STATE_REP_FIELDS.REP_TYPE:
-
-            if(action.payload === 'senator'){
-
-                return produce(stateRepState, draft=>{
-
-                    draft.repType = false;
-                })
-
-            }else{
-
-                return produce(stateRepState, draft=>{
-
-                    draft.repType = true;
-                })
-
-            }
-
-        default:
-            return stateRepState;
-
+    } = require('../helper/generalFunctions')
+
+
+const clearData = {
+
+    phoneNumber:{
+        number: ''.trim(),
+        description: ''.trim()
+    },
+
+    stateRep:{
+        firstName: ''.trim(),
+        lastName: ''.trim(),
+        streetAddress: ''.trim(),
+        city: ''.trim(),
+        zipCode: ''.trim(),
+        capitolRoom: ''.trim(),
+        email: ''.trim(),
+        picture: ''.trim(),
+        houseDistrict: ''.trim(),
+        senateDistrict: ''.trim(),
+        party: ''.trim()
     }
-}
-
-const STATE_REP_FIELDS ={
-
-    STATE_REP_FIRST_NAME: 'First Name',
-    STATE_REP_LAST_NAME: 'Last Name',
-    STATE_REP_EMAIL: 'email',
-    STATE_REP_PICTURE: 'picture',
-    STATE_REP_ADDRESS: 'streetAddress',
-    STATE_REP_CITY: 'city',
-    STATE_REP_ZIP_CODE: 'zipCode',
-    STATE_REP_DISTRICT: 'nmHouseDistrict',
-    STATE_SEN_DISTRICT: 'senateDistrict',
-    STATE_REP_CAPITAL_RM: 'capitalRoom',
-    STATE_REP_COUNTIES: 'counties',
-    PHONE_NUMBER: 'phoneNumber',
-    PHONE_DESCRIPTION: 'Phone Description',
-    STATE_REP_SELECTOR: 'selector',
-    STATE_REP_PARTY: 'party',
-    CITIES: 'citiesList',
-    ZIP_CODE: 'zipCodeList',
-    DISTRICTS: 'districtList',
-    PARTIES_LIST: 'parties_list',
-    Phone_Number_List: 'phoneNumberList',
-    CLEAR_PHONE_NUMBER: 'clearPhoneNumber',
-    CLEAR_STATE_REP: 'clearStateRep',
-    REP_TYPE: 'repType'
 
 }
 
 
 const CreateStateRepView = props =>{
-    let params = useParams();
-    const navigate = useNavigate();
 
-    let repType = true;
+    const [stateRep, setStateRep] = useState({
 
-    if(params.type === 'senator'){
+        firstName: ''.trim(),
+        lastName: ''.trim(),
+        streetAddress: ''.trim(),
+        city: ''.trim(),
+        zipCode: ''.trim(),
+        capitolRoom: ''.trim(),
+        email: ''.trim(),
+        picture: ''.trim(),
+        houseDistrict: ''.trim(),
+        senateDistrict: ''.trim(),
+        party: ''.trim()
 
-        repType = false;
+    });
 
-    }
+    const [phoneNumber, setPhoneNumber] = useState({
 
-
-    const [stateRepInfo, dispatchStateRepInfo] = useReducer(stateRepReducer, {
-
-        stateRep:{
-            firstName: ''.trim(),
-            lastName: ''.trim(),
-            email: ''.trim(),
-            picture: ''.trim(),
-            streetAddress: ''.trim(),
-            city: ''.trim(),
-            capitolRoom: ''.trim(),
-            zipCode: ''.trim(),
-            nmHouseDistrict: ''.trim(),
-            senateDistrict: ''.trim(),
-            party: ''.trim(),
-        },
-
-        errors:{
-          firstName: '',
-          lastName: '',
-          email: '',
-          picture:'',
-          streetAddress:'',
-          city:'',
-          capitolRoom: '',
-          zipCode: '',
-          nmHouseDistrict: '',
-          senateDistrict: '',
-          counties: ''
-        },
-
-        phoneNumber:{
-            number: '',
-            description: '',
-        },
-
-        phoneNumberList: [],
-
-        formData:{
-            partiesList: [],
-
-            citiesList: [],
-            zipCodeList: [],
-            districtList: [],
-        }
+        number: ''.trim(),
+        description: ''.trim()
 
     })
 
-    const repTypeSelector = (e) =>{
+    const [phoneNumberList, setPhoneNumberList] = useState([]);
+
+    const [zipCodeList, setZipCodeList] = useState([]);
+
+    const [cityList, setCityList] = useState([]);
+
+    const [districtList, setDistrictList] = useState([]);
+
+    const [partyList, setPartyList] = useState([]);
+
+    const [repType, setRepType] = useState(true);
+
+    let params = useParams();
+    const navigate = useNavigate();
+
+
+
+
+    const changeRepType = (e) =>{
 
         if(repType){
 
-            repType = false;
+            setRepType(false);
+
         }else{
 
-            repType = true;
+            setRepType(true);
         }
     }
 
@@ -419,7 +109,8 @@ const CreateStateRepView = props =>{
                     }
                 })
 
-                dispatchStateRepInfo({type: STATE_REP_FIELDS.CITIES, payload: [...cityListResponse.data]})
+                console.log(cityListResponse.data);
+                setCityList(cityListResponse.data);
 
             }catch(error){
 
@@ -437,14 +128,14 @@ const CreateStateRepView = props =>{
 
             try{
 
-                const PartyListResponse = await axios.get('http://localhost:8080/politicalParties',{
+                const partyListResponse = await axios.get('http://localhost:8080/politicalParties',{
 
                     headers:{
                         Authorization: localStorage.getItem('token')
                     }
                 })
 
-                dispatchStateRepInfo({type: STATE_REP_FIELDS.PARTIES_LIST, payload: [...PartyListResponse.data]})
+                setPartyList(partyListResponse.data);
 
             }catch(error){
 
@@ -469,7 +160,8 @@ const CreateStateRepView = props =>{
                 })
 
 
-                dispatchStateRepInfo({type: STATE_REP_FIELDS.ZIP_CODE, payload: [...zipCodeListResponse.data]})
+                console.log(zipCodeListResponse.data);
+                setZipCodeList(zipCodeListResponse.data);
 
             }catch(error){
 
@@ -488,7 +180,7 @@ const CreateStateRepView = props =>{
 
                 try{
 
-                    const houseDistrictResponse = await axios.get('http://localhost:8080/nmHouseDistricts', {
+                    const houseDistrictResponse = await axios.get('http://localhost:8080/houseDistricts', {
 
                         headers:{
                             Authorization: localStorage.getItem('token')
@@ -496,8 +188,10 @@ const CreateStateRepView = props =>{
 
                     })
 
-                    dispatchStateRepInfo({type: STATE_REP_FIELDS.DISTRICTS, payload: [...houseDistrictResponse.data]})
                     console.log(houseDistrictResponse.data);
+
+                    setDistrictList(houseDistrictResponse.data);
+
                 }catch(error){
 
                     console.log(error.response);
@@ -509,23 +203,24 @@ const CreateStateRepView = props =>{
 
             (async ()=>{
 
-               try{
+            try{
 
-                   const senateDistrictResponse = await axios.get('http://localhost:8080/senateDistricts', {
+                const senateDistrictResponse = await axios.get('http://localhost:8080/senateDistricts', {
 
-                       headers:{
-                           Authorization: localStorage.getItem('token')
-                       }
+                headers:{
+                    Authorization: localStorage.getItem('token')
+                }
 
-                   })
-                   console.log(senateDistrictResponse.data);
-                   dispatchStateRepInfo({type: STATE_REP_FIELDS.DISTRICTS, payload: [...senateDistrictResponse.data]})
+                })
+                console.log(senateDistrictResponse.data);
 
-               }catch(error){
+                setDistrictList(senateDistrictResponse.data);
 
-                   console.log(error.response)
+            }catch(error){
 
-               }
+                console.log(error.response)
+
+            }
 
             })()
 
@@ -542,7 +237,7 @@ const CreateStateRepView = props =>{
 
             try{
 
-                const createRepResponse = await  axios.post('http://localhost:8080/stateReps', stateRepInfo.stateRep, {
+                const createRepResponse = await  axios.post('http://localhost:8080/stateReps', stateRep, {
 
                     headers:{
                         Authorization: localStorage.getItem('token')
@@ -550,8 +245,7 @@ const CreateStateRepView = props =>{
 
                 })
 
-
-                dispatchStateRepInfo({type: STATE_REP_FIELDS.CLEAR_STATE_REP});
+                setStateRep(clearData.stateRep);
 
                 navigate('/yeoman/government/stateRepDashboard');
 
@@ -566,7 +260,7 @@ const CreateStateRepView = props =>{
 
             try{
 
-                const createSenatorResponse = await axios.post('http://localhost:8080/stateSenators', stateRepInfo.stateRep,{
+                const createSenatorResponse = await axios.post('http://localhost:8080/stateSenators', stateRep,{
 
                     headers:{
                         Authorization: localStorage.getItem('token')
@@ -574,7 +268,7 @@ const CreateStateRepView = props =>{
                 })
 
 
-                dispatchStateRepInfo({type: STATE_REP_FIELDS.CLEAR_STATE_REP});
+                setStateRep(clearData.stateRep);
 
                 navigate('/yeoman/government/stateSenatorDashboard');
 
@@ -594,9 +288,12 @@ const CreateStateRepView = props =>{
 
     const addPhoneNumber = (e) =>{
         e.preventDefault();
-        dispatchStateRepInfo({type: STATE_REP_FIELDS.Phone_Number_List, payload: stateRepInfo.phoneNumber})
 
-        dispatchStateRepInfo({type: STATE_REP_FIELDS.CLEAR_PHONE_NUMBER})
+        let phoneNumberObjList = [...phoneNumberList, phoneNumber];
+
+        setPhoneNumberList(phoneNumberObjList);
+
+        setPhoneNumber(clearData.phoneNumber);
 
     }
 
@@ -621,17 +318,17 @@ const CreateStateRepView = props =>{
     }
 
 
-    const canSubmit = (stateRepInfo) =>{
+    const canSubmit = (stateRep) =>{
 
         let isDisabled = true;
 
-        if(!fieldLength(3, 50, stateRepInfo.stateRep.firstName)){
-            if(!fieldLength(3, 50, stateRepInfo.stateRep.lastName)){
-                if(emailValidation(stateRepInfo.stateRep.email)){
-                    if(fieldLengthNotRequired(0, 150, stateRepInfo.stateRep.email)){
-                        if(fieldLengthNotRequired(5, 250, stateRepInfo.stateRep.picture)){
-                            if(fieldLengthNotRequired(5, 150, stateRepInfo.stateRep.streetAddress)){
-                                if(fieldLengthNotRequired(0, 8, stateRepInfo.stateRep.capitolRoom)){
+        if(!fieldLength(3, 50, stateRep.firstName)){
+            if(!fieldLength(3, 50, stateRep.lastName)){
+                if(emailValidation(stateRep.email)){
+                    if(fieldLengthNotRequired(0, 150, stateRep.email)){
+                        if(fieldLengthNotRequired(5, 250, stateRep.picture)){
+                            if(fieldLengthNotRequired(5, 150, stateRep.streetAddress)){
+                                if(fieldLengthNotRequired(0, 8, stateRep.capitolRoom)){
                                     isDisabled = false;
                                 }
                             }
@@ -652,13 +349,16 @@ const CreateStateRepView = props =>{
             <Header/>
             <div className={''}>
                 <div className={'mt-5 pt-5'}>
-                    <button disabled={repType} onClick={(e)=>repTypeSelector(e)} className={'p-2'}>Representative</button>
-                    <button disabled={!repType} className={'p-2'} onClick={(e)=>repTypeSelector(e)}>Senator</button>
+                    <button disabled={repType} onClick={(e)=>changeRepType(e)} className={'p-2'}>Representative</button>
+                    <button disabled={!repType} className={'p-2'} onClick={(e)=>changeRepType(e)}>Senator</button>
                 </div>
                 <StateRepForm
-                    stateRepInfo={stateRepInfo}
-                    formFields={STATE_REP_FIELDS}
-                    dispatchStateRepInfo={dispatchStateRepInfo}
+                    stateRep={stateRep}
+                    setStateRep={setStateRep}
+                    cityList={cityList}
+                    zipCodeList={zipCodeList}
+                    partyList={partyList}
+                    districtList={districtList}
                     handler={createRep}
                     formLabel={repType?  'New State Rep': 'New State Senator'}
                     fieldLength={fieldLength}
@@ -668,14 +368,13 @@ const CreateStateRepView = props =>{
                     repType={repType}
                 />
                 <PhoneNumberForm
-                    formFields={STATE_REP_FIELDS}
-                    dispatchFunction={dispatchStateRepInfo}
-                    phoneNumber={stateRepInfo.phoneNumber}
-                    phoneNumberList={stateRepInfo.phoneNumberList}
-                    handler={addPhoneNumber}
+                    phoneNumber={phoneNumber}
+                    phoneNumberList={phoneNumberList}
+                    setPhoneNumber={setPhoneNumber}
+                    setPhoneNumberList={setPhoneNumberList}
                 />
             </div>
-            <button disabled={stateRepInfo.stateRep?canSubmit(stateRepInfo) : true} onClick={(e)=>createRep(e)}>Save State</button>
+            <button disabled={stateRep?canSubmit(stateRep) : true} onClick={(e)=>createRep(e)}>Save State</button>
         </div>
     )
 }

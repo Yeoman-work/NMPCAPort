@@ -2,6 +2,7 @@ package net.yeoman.nmpcaport.controller;
 
 import net.yeoman.nmpcaport.io.request.senateDistrict.SenateDistrictDetailsRequest;
 import net.yeoman.nmpcaport.io.request.senateDistrict.SenateDistrictDetailsRequestList;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.services.Impl.SenateDistrictServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.SenateDistrictDto;
@@ -29,17 +30,9 @@ public class SenateDistrictController {
     }
 
     @GetMapping
-    public List<SenateDistrictResponseModel> getAllSenateDistrictResponses(){
-        List<SenateDistrictResponseModel> returnValue = new ArrayList<>();
+    public List<SenateDistrictEssentialResponse> getAllSenateDistrictResponses(){
 
-        List<SenateDistrictDto> districtDtoList = this.senateDistrictService.getAllSenateDistricts();
-
-        for(SenateDistrictDto district: districtDtoList){
-
-            returnValue.add(new ModelMapper().map(district, SenateDistrictResponseModel.class));
-        }
-
-        return returnValue;
+        return this.senateDistrictService.getAllDistrictEssentials();
     }
 
     @PostMapping
