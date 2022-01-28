@@ -13,6 +13,8 @@ import net.yeoman.nmpcaport.shared.dto.ZipCodeDto;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -169,6 +171,77 @@ public class ZipCodeServiceImpl implements ZipCodeService {
 		return returnValue;
 	}
 	
+	//pagination
+	
+	@Override
+	public Page<ZipCodeEntity> getPageInfo(int pageNo, int limit) {
+		
+		if(pageNo > 0) pageNo -= 1;
+		
+		PageRequest pageableRequest = PageRequest.of(pageNo, limit);
+		
+		Page<ZipCodeEntity> zipCodePage = this.zipCodeRepository.findAll(pageableRequest);
+		
+		return zipCodePage;
+	}
+
+
+	@Override
+	public List<ZipCodeEntity> getPageOfEntities(Page<ZipCodeEntity> pageEntity) {
+		
+		if(pageEntity == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		
+		return pageEntity.getContent();
+	}
+
+
+	@Override
+	public int getTotalNumberOfPagesA(Page<ZipCodeEntity> pageEntity) {
+		
+		if(pageEntity == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		return pageEntity.getTotalPages();
+	}
+
+
+	@Override
+	public Long getTotalItems(Page<ZipCodeEntity> pageEntity) {
+		
+		if(pageEntity == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		return pageEntity.getTotalElements();
+	}
+
+
+	@Override
+	public Boolean hasPrevious(Page<ZipCodeEntity> pageEntity) {
+		
+		if(pageEntity == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage()); 
+		
+		return pageEntity.hasPrevious();
+	}
+
+
+	@Override
+	public Boolean hasNext(Page<ZipCodeEntity> pageEntity) {
+		
+		if(pageEntity == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		return pageEntity.hasNext();
+	}
+
+
+	@Override
+	public List<ZipCodeEssentials> getZipcodesForDropDowns(int pageNo, int limit) {
+		
+		Page<ZipCodeEntity> zipCodePage = this.getPageInfo(pageNo, limit);
+		
+		List<ZipCodeEntity> zipCodeEntities = this.getPageOfEntities(zipCodePage);
+		
+		return this.entityToEssentials(zipCodeEntities);
+	}
+
 	
     //end point functions
     
@@ -178,14 +251,7 @@ public class ZipCodeServiceImpl implements ZipCodeService {
 	
     //path = zipCodes
 
-  @Override
-	public List<ZipCodeEssentials> getZipcodesForDropDowns() {
-		
-		List<ZipCodeEntity> zipCodeEntities = this.findAllZipCodeEntities();
-		
-		return this.entityToEssentials(zipCodeEntities);
-	}
-
+  
   
   	//postMapping
 

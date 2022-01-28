@@ -216,12 +216,33 @@ public class CityServiceImpl implements CityService {
 		
 		return cityPage.getTotalElements();
 	}
-
 	
+	
+	@Override
+		public Boolean hasPrevious(Page<CityEntity> cityPage) {
+			
+			return cityPage.hasPrevious();
+		}
+	
+	
+	@Override
+	public Boolean hasNext(Page<CityEntity> cityPage) {
+		
+		if(cityPage == null) throw new CityServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		
+		return cityPage.hasNext() ;
+	}
 	
 	
 	//end points
 	
+	
+
+
+	
+
+
 	//getMappings
 	@Override
 	public List<CityEssentials> getAllCityEssentials(int pageNo, int size) {

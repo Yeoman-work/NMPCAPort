@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeDetailsRequestModel;
@@ -43,9 +44,10 @@ public class ZipCodeController {
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<ZipCodeEssentials> allZipCodes(){
-    		
-    	return this.zipCodeService.getZipcodesForDropDowns();
+    public List<ZipCodeEssentials> allZipCodes(@RequestParam(value="pageNo", defaultValue="0") int pageNo, 
+    										   @RequestParam(value="limit", defaultValue="25") int limit
+   ){	
+    	return this.zipCodeService.getZipcodesForDropDowns(pageNo, limit);
 
     }
 }

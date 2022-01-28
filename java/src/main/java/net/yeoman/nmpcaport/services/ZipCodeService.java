@@ -2,6 +2,8 @@ package net.yeoman.nmpcaport.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeRequestList;
@@ -34,13 +36,31 @@ public interface ZipCodeService {
     ZipCodeEntity saveZipCodeEntity(ZipCodeEntity zipCodeEntity);
     List<ZipCodeEntity> saveZipCodeEnitties(List<ZipCodeEntity> zipCodeEntities);
     
+    //pagination
+    Page<ZipCodeEntity> getPageInfo(int pageNo, int limit);
+    
+    //get zipCode entity list
+    List<ZipCodeEntity> getPageOfEntities(Page<ZipCodeEntity> pageEntity);
+    
+    
+    //number of page
+    int getTotalNumberOfPagesA(Page<ZipCodeEntity> pageEntity);
+    
+    //getting total number of items
+    Long getTotalItems(Page<ZipCodeEntity> pageEntity);
+    
+    //previous page
+    Boolean hasPrevious(Page<ZipCodeEntity> pageEntity);
+    
+    //next page
+    Boolean hasNext(Page<ZipCodeEntity> pageEntity);
+    
     
     //end point functions
     
     // getMappings 
     
-    //path = zipCodes
-    List<ZipCodeEssentials> getZipcodesForDropDowns();
+    List<ZipCodeEssentials> getZipcodesForDropDowns(int pageNo, int limit);
     
     
     //postMapping

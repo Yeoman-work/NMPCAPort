@@ -41,6 +41,10 @@ public interface CityService {
     //get total number of items
     Long getTotalItems(Page<CityEntity> cityPage);
     
+    //previous page
+    Boolean hasPrevious(Page<CityEntity> cityPage);
+    Boolean hasNext(Page<CityEntity> cityPage);
+    
     
     //saved city entity
     CityEntity saveEntity(CityEntity cityEntity);

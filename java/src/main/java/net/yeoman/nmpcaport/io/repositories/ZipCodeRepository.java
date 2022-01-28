@@ -1,13 +1,14 @@
 package net.yeoman.nmpcaport.io.repositories;
 
-import net.yeoman.nmpcaport.entities.ZipCodeEntity;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
+
+import net.yeoman.nmpcaport.entities.ZipCodeEntity;
+
 @Repository
-public interface ZipCodeRepository extends CrudRepository<ZipCodeEntity, Long> {
+public interface ZipCodeRepository extends PagingAndSortingRepository<ZipCodeEntity, Long> {
 
 	//find all zip codes
     List<ZipCodeEntity> findAll();
