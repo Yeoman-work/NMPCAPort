@@ -271,11 +271,22 @@ public class ZipCodeServiceImpl implements ZipCodeService {
     	
     	List<ZipCodeEntity> zipCodes = this.zipCodeSearchContaining(zipCodeName);
     	
+    	int limit = zipCodes.size() - endIndex;
+    	
+    	if(limit <= 0) {
+    		
+    		limit = zipCodes.size() - 1;
+    	}else {
+    		
+    		limit = endIndex;
+    	}
+    	
     	List<ZipCodeEssentials> returnValue = new ArrayList<>();
     	
-    	for(int i = 0; i <= endIndex; i++) {
-    		System.out.println(i);
+    	for(int i = 0; i <= limit; i++) {
+    	
     		
+    		if(zipCodes.get(i) == null) break;
     		returnValue.add(this.entityToEssentials(zipCodes.get(i)));
     	}
     	

@@ -1,28 +1,28 @@
 
 
-const indexForward = (NumOfItems, searchObj) =>{
+const setIndex = (searchObj) =>{
 
-    let returnValue;
+    
 
-    switch(searchObj.listSize){
+    switch(searchObj.range){
 
         case '10':
-            returnValue = (searchObj.startIndex + 10) - 1;
+            searchObj.endIndex = (searchObj.startIndex + 10) - 1;
             break;
 
         case '25':
-            returnValue = (searchObj.startIndex + 25) - 1;
+            searchObj.endIndex = (searchObj.startIndex + 25) - 1;
             break;
         
         case '50':
-            returnValue = (searchObj.startIndex + 50) - 1;
+            searchObj.endIndex = (searchObj.startIndex + 50) - 1;
             break;
         
         default:
-            returnValue = (searchObj.startIndex + 10) - 1;
+            searchObj.endIndex = (searchObj.startIndex + 10) - 1;
     }
 
-    return returnValue;
+    return searchObj;
 
 }
 
@@ -60,11 +60,12 @@ const next = (searchInputObj) =>{
     if(searchInputObj.next){
 
         searchInputObj.startIndex = searchInputObj.endIndex + 1;
-        searchInputObj.endIndex = indexForward(searchInputObj);
+        searchInputObj.endIndex = setIndex(searchInputObj);
         
     }
     
 } 
+
 
 const previous = (searchObj) =>{
 
@@ -73,7 +74,7 @@ const previous = (searchObj) =>{
     if(searchObj.previous){
 
         searchObj.startIndex = indexBackward(searchObj)
-        searchObj.endIndex = indexForward(searchObj);
+        searchObj.endIndex = setIndex(searchObj);
     }
 
     return searchObj
@@ -81,7 +82,7 @@ const previous = (searchObj) =>{
 
 
 module.exports={
-    next,
+    setIndex,
     previous
 }
 

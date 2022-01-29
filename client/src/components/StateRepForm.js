@@ -1,7 +1,7 @@
 import React from "react";
 import { RawZoomHelpers } from "victory";
 import '../css/style.css'
-const {next, previous} =require('../helper/paginationFunctions')
+const {next, previous, setIndex} =require('../helper/paginationFunctions')
 
 
 const clearStateRep ={
@@ -58,8 +58,11 @@ const StateRepForm = props =>{
 
         let searchObj = {...search};
         console.log(search);
+
         searchObj[e.target.name] = e.target.value;
-        
+
+        setIndex(searchObj);
+
         setSearch(searchObj);
 
     } 

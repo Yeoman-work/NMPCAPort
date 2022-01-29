@@ -39,10 +39,12 @@ public class ZipCodeController {
 	
 	    }
     
-    @GetMapping(path="/search/{name}" ,consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public List<ZipCodeEssentials> zipCodeSearch(@PathVariable("name") String name,@RequestParam(value="startIndex", defaultValue="0") int startIndex,
+    @GetMapping(path="/search/{name}", produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public List<ZipCodeEssentials> zipCodeSearch(@PathVariable("name") String name, @RequestParam(value="startIndex", defaultValue="0") int startIndex,
     											 @RequestParam(value="endIndex", defaultValue="9") int endIndex
    ){
+    	System.out.println("startIndex " + startIndex);
+    	System.out.println("endIndex " + endIndex);
     		return this.zipCodeService.getZipCodeSearch(name, startIndex, endIndex);
     }
     

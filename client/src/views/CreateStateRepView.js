@@ -107,18 +107,23 @@ const CreateStateRepView = props =>{
 
 
     const zipCodeSearch = async (e)=>{
-
+        e.preventDefault();
+        console.log(typeof(search.endIndex));
         try{
 
-            const zipCodeSearchResponse = await axios.get('http://localhost:8080/zipCode/search/' + search.name,{
+            const zipCodeSearchResponse = await axios.get('http://localhost:8080/zipCodes/search/' + search.name,{
 
+            
                 headers:{
-                    Authorization: localStorage.getItem('token')
+                    
+                    Authorization: localStorage.getItem('token'),
+                    
                 },
-                params:{
-                    startIndex: search.startIndex,
-                    endItem: search.endIndex,
 
+                params:{
+
+                    startIndex: search.startIndex,
+                    endIndex: search.endIndex
                 }
             })
 
@@ -126,7 +131,7 @@ const CreateStateRepView = props =>{
 
         }catch(error){
 
-            console.log(error.response);
+            console.log(error);
         }
     }
 
@@ -398,7 +403,7 @@ const CreateStateRepView = props =>{
                 <StateRepForm
                     stateRep={stateRep}
                     setStateRep={setStateRep}
-                    zipCodeSearch={zipCodeSearch}
+                    zipCodeSearch zipCodeSearch={zipCodeSearch}
                     cityList={cityList}
                     zipCodeList={zipCodeList}
                     partyList={partyList}
