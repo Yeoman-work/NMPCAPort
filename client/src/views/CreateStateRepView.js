@@ -76,6 +76,16 @@ const CreateStateRepView = props =>{
 
     const [repType, setRepType] = useState(true);
 
+    const [search, setSearch] = useState({
+
+        name: ''.trim(),
+        startIndex: 0,
+        endIndex: 9,
+        previous: false,
+        next: true,
+        range: '10'
+    })
+
     let params = useParams();
     const navigate = useNavigate();
 
@@ -94,6 +104,31 @@ const CreateStateRepView = props =>{
         }
     }
 
+
+
+    const zipCodeSearch = async (e)=>{
+
+        try{
+
+            const zipCodeSearchResponse = await axios.get('http://localhost:8080/zipCode/search/' + search.name,{
+
+                headers:{
+                    Authorization: localStorage.getItem('token')
+                },
+                params:{
+                    startIndex: search.startIndex,
+                    endItem: search.endIndex,
+
+                }
+            })
+
+            setZipCodeList(zipCodeSearchResponse.data);
+
+        }catch(error){
+
+            console.log(error.response);
+        }
+    }
 
 
     useEffect(()=>{
@@ -119,7 +154,9 @@ const CreateStateRepView = props =>{
             }
 
         })()
-
+        
+        return () =>{};
+    
     },[])
 
     useEffect(()=>{
@@ -144,6 +181,8 @@ const CreateStateRepView = props =>{
 
 
         })()
+
+        return ()=>{}
     }, [])
 
     useEffect(()=>{
@@ -169,6 +208,8 @@ const CreateStateRepView = props =>{
 
             }
         })()
+
+        return ()=>{};
 
     },[])
 
@@ -227,6 +268,8 @@ const CreateStateRepView = props =>{
 
         }
 
+        return ()=>{}
+
     }, [repType])
 
 
@@ -283,7 +326,7 @@ const CreateStateRepView = props =>{
 
         }
 
-
+        return ()=>{}
     }
 
     const addPhoneNumber = (e) =>{
@@ -355,9 +398,12 @@ const CreateStateRepView = props =>{
                 <StateRepForm
                     stateRep={stateRep}
                     setStateRep={setStateRep}
+                    zipCodeSearch={zipCodeSearch}
                     cityList={cityList}
                     zipCodeList={zipCodeList}
                     partyList={partyList}
+                    search={search}
+                    setSearch={setSearch}
                     districtList={districtList}
                     handler={createRep}
                     formLabel={repType?  'New State Rep': 'New State Senator'}

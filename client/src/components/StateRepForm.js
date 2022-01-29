@@ -1,8 +1,10 @@
 import React from "react";
+import { RawZoomHelpers } from "victory";
 import '../css/style.css'
+const {next, previous} =require('../helper/paginationFunctions')
 
 
- const clearStateRep ={
+const clearStateRep ={
 
     firstName: ''.trim(),
     lastName: ''.trim(),
@@ -26,16 +28,19 @@ const StateRepForm = props =>{
             districtList,
             partyList,
             zipCodeList,
-           formLabel,
-           formFields,
-           stateRep,
-           setStateRep,
-           handler,
-           fieldLengthErrorMessages,
-           fieldLength,
-           emailValidation,
-           fieldLengthNotRequired,
-           repType
+            formLabel,
+            formFields,
+            search,
+            setSearch,
+            zipCodeSearch,
+            stateRep,
+            setStateRep,
+            handler,
+            fieldLengthErrorMessages,
+            fieldLength,
+            emailValidation,
+            fieldLengthNotRequired,
+            repType
     } = props;
 
 
@@ -49,29 +54,39 @@ const StateRepForm = props =>{
     }
 
 
+    const searchParams = (e) =>{
+
+        let searchObj = {...search};
+        console.log(search);
+        searchObj[e.target.name] = e.target.value;
+        
+        setSearch(searchObj);
+
+    } 
+
 
 
     return(
-        <form className={'w-50 m-auto mt-3 pt-3'} onSubmit={handler}>
+        <div className={'w-50 m-auto mt-3 pt-3'} onSubmit={handler}>
             <h1>{formLabel}</h1>
             <div className={'row'}>
                 <div className={'col form-group'}>
                     <label>First Name</label>
                     <input type="text"
-                           className={'form-control'}
-                           name={'firstName'}
-                           value={stateRep.firstName}
-                           onChange={(e)=>inputChange(e)}
+                        className={'form-control'}
+                        name={'firstName'}
+                        value={stateRep.firstName}
+                        onChange={(e)=>inputChange(e)}
                     />
                     {fieldLength(3, 50, stateRep.firstName)? <span className={'text-danger'}>{fieldLengthErrorMessages(3, 50, 'firstName')}</span>  : null}
                 </div>
                 <div className={'col form-group'}>
                     <label>Last Name</label>
                     <input type="text" className={'form-control'}
-                           name={'lastName'}
-                           value={stateRep.lastName}
-                           onChange={(e)=>inputChange(e)}
-                    />
+                        name={'lastName'}
+                        value={stateRep.lastName}
+                        onChange={(e)=>inputChange(e)}
+                />
                     {fieldLength(3, 50, stateRep.lastName)? <span className={'text-danger'}>{fieldLengthErrorMessages(3, 50, 'lastName')}</span> : null }
                 </div>
             </div>
@@ -79,9 +94,9 @@ const StateRepForm = props =>{
                 <div className={'col form-group'}>
                     <label>Email</label>
                     <input type="email" className={'form-control'}
-                           name={'email'}
-                           value={stateRep.email}
-                           onChange={(e)=>inputChange(e)}
+                        name={'email'}
+                        value={stateRep.email}
+                        onChange={(e)=>inputChange(e)}
                     />
                     {!fieldLengthNotRequired(0, 150, stateRep.email)? <div className={'text-danger'}>{fieldLengthErrorMessages(0, 150, 'email')}</div> : null}
                     {!emailValidation(stateRep.email)? <div className={'text-danger'}>Please enter a valid email</div> : null}
@@ -100,9 +115,9 @@ const StateRepForm = props =>{
                 <div className={' col form-group'}>
                     <label>Address:</label>
                     <input type="text" className={'form-control'}
-                           name={'streetAddress'}
-                           value={stateRep.streetAddress}
-                           onChange={(e)=>inputChange(e)}
+                        name={'streetAddress'}
+                        value={stateRep.streetAddress}
+                        onChange={(e)=>inputChange(e)}
                     />
                     {!fieldLengthNotRequired(5, 150, stateRep.streetAddress)? <span className={'text-danger'}>{fieldLengthErrorMessages(5, 150, 'streetAddress')}</span> : null}
                 </div>
@@ -137,24 +152,35 @@ const StateRepForm = props =>{
                         }
                     </select>
                 </div>
-                <div className={'col form-group'}>
+                <div className={'col form-group border'}>
                     <label>Zip Code</label>
-                    <select className={'form-control'}
-                            name={'zipCode'}
-                            onChange={(e)=>inputChange(e)}
-                    >
-                        <option> Select a Zip Code</option>
+                    <div>
+                        <div className="">
+                            <input name={'name'} className={'form-control w-50 d-inline-block'} onChange={(e)=>searchParams(e)}/>
+                            <select name='range' className="form-control w-25 d-inline-block" onChange={(e)=>searchParams(e)}>
+                                <option value={'10'}>10</option>
+                                <option value={'25'}>25</option>
+                                <option value={'50'}>50</option>
+                            </select>
+                            <button className="btn bg-primary" onClick={(e)=>zipCodeSearch(e)}>Search</button>
+                        </div>
+                    </div>
+                    <div className={'overflow-auto mt-3 mb-3 height200'}>
+                        
                         {
                             zipCodeList?
                             zipCodeList.map((zipCode, index)=>{
 
                                 return(
-                                    <option key={index} value={zipCode.zipCodeId}>{zipCode.name}</option>
+                                    <div key={index}>
+                                        <button value={zipCode.zipCodeId}>{zipCode.name}</button>
+                                    </div>
+                                        
                                 )
                             })
                                 : null
                         }
-                    </select>
+                    </div>
                 </div>
             </div>
             <div className={'row mb-3 pb-2'}>
@@ -165,7 +191,7 @@ const StateRepForm = props =>{
                             onChange={(e)=>inputChange(e)}
                     >
                         <option value="">Choose a party</option>
-                      {
+                    {
                             partyList?
                             partyList.map((party, index)=>{
 
@@ -197,7 +223,7 @@ const StateRepForm = props =>{
                     </select>
                 </div>
             </div>
-        </form>
+        </div>
     )
 }
 

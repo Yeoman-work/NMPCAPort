@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +28,26 @@ public class ZipCodeController {
     	this.zipCodeService = zipCodeService;
     }
     
-
-    @PostMapping(path="/bulk", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XHTML_XML_VALUE},
+    
+    //getMappings start here
+    
+	 @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	    public List<ZipCodeEssentials> allZipCodes(@RequestParam(value="pageNo", defaultValue="0") int pageNo, 
+	    										   @RequestParam(value="limit", defaultValue="10") int limit
+	   ){	
+	    	return this.zipCodeService.getZipcodesForDropDowns(pageNo, limit);
+	
+	    }
+    
+    @GetMapping(path="/search/{name}" ,consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public List<ZipCodeEssentials> zipCodeSearch(@PathVariable("name") String name,@RequestParam(value="startIndex", defaultValue="0") int startIndex,
+    											 @RequestParam(value="endIndex", defaultValue="9") int endIndex
+   ){
+    		return this.zipCodeService.getZipCodeSearch(name, startIndex, endIndex);
+    }
+    
+    //postMapping start here
+    @PostMapping(path="/bulk", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
     			 produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     		)
     public List<ZipCodeEssentials> massZipCodeCreation(@RequestBody ZipCodeRequestList zipCodeRequestList){
@@ -43,11 +62,5 @@ public class ZipCodeController {
     	return this.zipCodeService.createZipCodeEntityFromEndPoint(zipCodeRequestModel);
     }
 
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<ZipCodeEssentials> allZipCodes(@RequestParam(value="pageNo", defaultValue="0") int pageNo, 
-    										   @RequestParam(value="limit", defaultValue="25") int limit
-   ){	
-    	return this.zipCodeService.getZipcodesForDropDowns(pageNo, limit);
-
-    }
+   
 }

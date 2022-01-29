@@ -171,8 +171,18 @@ public class ZipCodeServiceImpl implements ZipCodeService {
 		return returnValue;
 	}
 	
-	//pagination
 	
+	
+	@Override
+	public List<ZipCodeEntity> zipCodeSearchContaining(String name) {
+		
+		if(name == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		return this.zipCodeRepository.findByNameContaining(name);
+	}
+
+	
+//pagination
 	@Override
 	public Page<ZipCodeEntity> getPageInfo(int pageNo, int limit) {
 		
@@ -232,15 +242,8 @@ public class ZipCodeServiceImpl implements ZipCodeService {
 	}
 
 
-	@Override
-	public List<ZipCodeEssentials> getZipcodesForDropDowns(int pageNo, int limit) {
-		
-		Page<ZipCodeEntity> zipCodePage = this.getPageInfo(pageNo, limit);
-		
-		List<ZipCodeEntity> zipCodeEntities = this.getPageOfEntities(zipCodePage);
-		
-		return this.entityToEssentials(zipCodeEntities);
-	}
+	
+	
 
 	
     //end point functions
@@ -251,10 +254,36 @@ public class ZipCodeServiceImpl implements ZipCodeService {
 	
     //path = zipCodes
 
+    @Override
+	public List<ZipCodeEssentials> getZipcodesForDropDowns(int pageNo, int limit) {
+		
+		Page<ZipCodeEntity> zipCodePage = this.getPageInfo(pageNo, limit);
+		
+		List<ZipCodeEntity> zipCodeEntities = this.getPageOfEntities(zipCodePage);
+		
+		return this.entityToEssentials(zipCodeEntities);
+  	}
   
-  
+    @Override
+	public List<ZipCodeEssentials> getZipCodeSearch(String zipCodeName, int StartIndex, int endIndex) {
+		
+    	if(zipCodeName == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+    	
+    	List<ZipCodeEntity> zipCodes = this.zipCodeSearchContaining(zipCodeName);
+    	
+    	List<ZipCodeEssentials> returnValue = new ArrayList<>();
+    	
+    	for(int i = 0; i <= endIndex; i++) {
+    		System.out.println(i);
+    		
+    		returnValue.add(this.entityToEssentials(zipCodes.get(i)));
+    	}
+    	
+		return returnValue;
+	}
+    
+    
   	//postMapping
-
 	@Override
 	public List<ZipCodeEssentials> createZipCodesFromEndPoint(ZipCodeRequestList zipCodeRequestList) {
 		

@@ -21,4 +21,6 @@ public interface ZipCodeRepository extends PagingAndSortingRepository<ZipCodeEnt
     
     //check if public id is taken
     Boolean existsByZipCodeId(String publicId);
+    
+    List<ZipCodeEntity> findByNameContaining(String name);
 }

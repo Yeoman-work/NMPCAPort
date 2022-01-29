@@ -36,6 +36,9 @@ public interface ZipCodeService {
     ZipCodeEntity saveZipCodeEntity(ZipCodeEntity zipCodeEntity);
     List<ZipCodeEntity> saveZipCodeEnitties(List<ZipCodeEntity> zipCodeEntities);
     
+    //zipCode search query
+    List<ZipCodeEntity> zipCodeSearchContaining(String name);
+    
     //pagination
     Page<ZipCodeEntity> getPageInfo(int pageNo, int limit);
     
@@ -61,6 +64,8 @@ public interface ZipCodeService {
     // getMappings 
     
     List<ZipCodeEssentials> getZipcodesForDropDowns(int pageNo, int limit);
+    
+    List<ZipCodeEssentials> getZipCodeSearch(String zipCodeName, int StartIndex, int endIndex);
     
     
     //postMapping
