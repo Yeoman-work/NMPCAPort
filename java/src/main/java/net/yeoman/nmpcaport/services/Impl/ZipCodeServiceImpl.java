@@ -1,24 +1,22 @@
 package net.yeoman.nmpcaport.services.Impl;
 
-import net.yeoman.nmpcaport.errormessages.ErrorMessages;
-import net.yeoman.nmpcaport.exception.ZipCodeServiceException;
-import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentials;
-import net.yeoman.nmpcaport.services.ZipCodeService;
-import net.yeoman.nmpcaport.entities.ZipCodeEntity;
-import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeResponse;
-import net.yeoman.nmpcaport.io.repositories.ZipCodeRepository;
-import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeDetailsRequestModel;
-import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeRequestList;
-import net.yeoman.nmpcaport.shared.dto.ZipCodeDto;
-import net.yeoman.nmpcaport.shared.utils.Utils;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.yeoman.nmpcaport.entities.ZipCodeEntity;
+import net.yeoman.nmpcaport.errormessages.ErrorMessages;
+import net.yeoman.nmpcaport.exception.ZipCodeServiceException;
+import net.yeoman.nmpcaport.io.repositories.ZipCodeRepository;
+import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeDetailsRequestModel;
+import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeRequestList;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentials;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentialsPagination;
+import net.yeoman.nmpcaport.services.ZipCodeService;
+import net.yeoman.nmpcaport.shared.utils.Utils;
 
 @Service
 public class ZipCodeServiceImpl implements ZipCodeService {
@@ -186,11 +184,124 @@ public class ZipCodeServiceImpl implements ZipCodeService {
 	@Override
 	public Page<ZipCodeEntity> getPageInfo(int pageNo, int limit) {
 		
-		if(pageNo > 0) pageNo -= 1;
+		
+		
 		
 		PageRequest pageableRequest = PageRequest.of(pageNo, limit);
 		
 		Page<ZipCodeEntity> zipCodePage = this.zipCodeRepository.findAll(pageableRequest);
+		
+		return zipCodePage;
+	}
+	
+	
+
+
+	@Override
+	public ZipCodeEssentialsPagination getEssentialsPage(int pageNo, int limit) {
+		
+    	Page<ZipCodeEntity> zipCodePageEntities = this.getPageInfo(pageNo, limit);
+    	
+    	ZipCodeEssentialsPagination page = new ZipCodeEssentialsPagination();
+    	
+    	// if query has content transfer to essential data
+    	
+    	if(zipCodePageEntities.hasContent()) {
+    		
+    		page.setZipCodes(this.entityToEssentials(zipCodePageEntities.getContent()));
+    		
+    	}
+    	
+    	//total number of pages
+    	page.setTotalPages(zipCodePageEntities.getTotalPages());
+    	
+    	//total elements
+    	page.setTotalElements(zipCodePageEntities.getTotalElements());
+    	
+    	//size of entities in array
+    	page.setSize(zipCodePageEntities.getSize());
+    	
+    	//num of pages
+    	page.setNumber(zipCodePageEntities.getNumber());
+    	
+    	//is first page
+    	page.setFirstPage(zipCodePageEntities.isFirst());
+    	
+    	//is last page
+    	page.setLastPage(zipCodePageEntities.isLast());
+    	
+    	//checks if array is empty
+    	page.setIsEmpty(zipCodePageEntities.isEmpty());
+    	
+    	//checks if there is another page
+    	page.setNext(zipCodePageEntities.hasNext());
+    	
+    	//checks if there is a previous page
+    	page.setPrevious(zipCodePageEntities.hasPrevious());
+		
+    	//check is content is null
+    	page.setHasContent(zipCodePageEntities.hasContent());
+		
+		return page;
+	}
+	
+	
+
+
+	@Override
+	public ZipCodeEssentialsPagination getEssentialsPageFromSearch(String zipCodeName, int startIndex, int endIndex) {
+		
+		
+		if(zipCodeName == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+			
+    	List<ZipCodeEntity> zipCodes = this.zipCodeSearchContaining(zipCodeName);
+    	
+    	
+    	int limit  = zipCodes.size() - endIndex;
+    	
+    	if(limit <= 0) {
+    		
+    		limit = zipCodes.size() - 1;
+    	}else {
+    		
+    		limit = endIndex;
+    	}
+    	
+    	
+    	ZipCodeEssentialsPagination zipCodePage = new ZipCodeEssentialsPagination();
+    	List<ZipCodeEssentials> zipCodeEssentials = new ArrayList<>();
+    	
+    	for(int i = 0; i <= limit; i++) {
+    	
+    		
+    		if(zipCodes.get(i) == null) break;
+    		zipCodeEssentials.add(this.entityToEssentials(zipCodes.get(i)));
+    	}
+    	
+    	zipCodePage.setZipCodes(zipCodeEssentials);
+    	zipCodePage.setHasContent(zipCodeEssentials.isEmpty());
+    	zipCodePage.setFirstPage(startIndex == 0);
+    	zipCodePage.setLastPage(endIndex >= (zipCodes.size() - 1));
+    	zipCodePage.setPrevious(startIndex > 0);
+    	zipCodePage.setNext(endIndex < (zipCodes.size() - 1));
+    	zipCodePage.setIsEmpty(zipCodeEssentials.isEmpty());
+		zipCodePage.setTotalElements(Long.valueOf(zipCodes.size()));
+		
+		int totalPages = (int) Math.ceil(zipCodes.size() / ((endIndex - startIndex) + 1));
+		
+		if(totalPages > 0) {
+			
+			zipCodePage.setTotalPages(totalPages);
+			
+		}else {
+			
+			zipCodePage.setTotalPages(1);
+		}
+		
+//		zipCodePage.setTotalPages((int) Math.ceil(zipCodes.size() / ((endIndex - startIndex) + 1)));
+		zipCodePage.setSize(zipCodeEssentials.size());
+		zipCodePage.setNumber((endIndex- startIndex) % endIndex);
 		
 		return zipCodePage;
 	}
@@ -201,7 +312,7 @@ public class ZipCodeServiceImpl implements ZipCodeService {
 		
 		if(pageEntity == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
 		
-		
+	
 		return pageEntity.getContent();
 	}
 
@@ -252,6 +363,7 @@ public class ZipCodeServiceImpl implements ZipCodeService {
     // getMappings 
     
 	
+	
     //path = zipCodes
 
     @Override
@@ -265,32 +377,19 @@ public class ZipCodeServiceImpl implements ZipCodeService {
   	}
   
     @Override
-	public List<ZipCodeEssentials> getZipCodeSearch(String zipCodeName, int StartIndex, int endIndex) {
+	public ZipCodeEssentialsPagination getZipCodePage(int pageNo, int limit) {
+		
+    	return this.getEssentialsPage(pageNo, limit);
+	}
+
+
+	@Override
+	public ZipCodeEssentialsPagination getZipCodeSearch(String zipCodeName, int startIndex, int endIndex) {
 		
     	if(zipCodeName == null) throw new ZipCodeServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
     	
-    	List<ZipCodeEntity> zipCodes = this.zipCodeSearchContaining(zipCodeName);
     	
-    	int limit = zipCodes.size() - endIndex;
-    	
-    	if(limit <= 0) {
-    		
-    		limit = zipCodes.size() - 1;
-    	}else {
-    		
-    		limit = endIndex;
-    	}
-    	
-    	List<ZipCodeEssentials> returnValue = new ArrayList<>();
-    	
-    	for(int i = 0; i <= limit; i++) {
-    	
-    		
-    		if(zipCodes.get(i) == null) break;
-    		returnValue.add(this.entityToEssentials(zipCodes.get(i)));
-    	}
-    	
-		return returnValue;
+    	return this.getEssentialsPageFromSearch(zipCodeName, startIndex, endIndex);
 	}
     
     

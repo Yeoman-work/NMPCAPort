@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeRequestList;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentials;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentialsPagination;
 import net.yeoman.nmpcaport.services.Impl.ZipCodeServiceImpl;
 
 @RestController
@@ -32,19 +33,21 @@ public class ZipCodeController {
     //getMappings start here
     
 	 @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	    public List<ZipCodeEssentials> allZipCodes(@RequestParam(value="pageNo", defaultValue="0") int pageNo, 
+	    public ZipCodeEssentialsPagination  allZipCodes(@RequestParam(value="pageNo", defaultValue="0") int pageNo, 
 	    										   @RequestParam(value="limit", defaultValue="10") int limit
 	   ){	
-	    	return this.zipCodeService.getZipcodesForDropDowns(pageNo, limit);
+		    System.out.println("limit " + limit);
+		    System.out.println("pageNo " + pageNo);
+	    	return this.zipCodeService.getZipCodePage(pageNo, limit);
 	
 	    }
     
     @GetMapping(path="/search/{name}", produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public List<ZipCodeEssentials> zipCodeSearch(@PathVariable("name") String name, @RequestParam(value="startIndex", defaultValue="0") int startIndex,
+    public ZipCodeEssentialsPagination zipCodeSearch(@PathVariable("name") String name, @RequestParam(value="startIndex", defaultValue="0") int startIndex,
     											 @RequestParam(value="endIndex", defaultValue="9") int endIndex
    ){
-    	System.out.println("startIndex " + startIndex);
-    	System.out.println("endIndex " + endIndex);
+    	   System.out.println("endIned " +endIndex);
+    	   System.out.println("startIndex " + startIndex);
     		return this.zipCodeService.getZipCodeSearch(name, startIndex, endIndex);
     }
     

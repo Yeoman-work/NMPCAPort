@@ -8,6 +8,7 @@ import net.yeoman.nmpcaport.entities.ZipCodeEntity;
 import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeDetailsRequestModel;
 import net.yeoman.nmpcaport.io.request.zipCode.ZipCodeRequestList;
 import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentials;
+import net.yeoman.nmpcaport.io.response.zipCode.ZipCodeEssentialsPagination;
 
 public interface ZipCodeService {
 
@@ -42,6 +43,11 @@ public interface ZipCodeService {
     //pagination
     Page<ZipCodeEntity> getPageInfo(int pageNo, int limit);
     
+    
+    //zipCode essentials
+    ZipCodeEssentialsPagination getEssentialsPage(int pageNo, int limit);
+    ZipCodeEssentialsPagination getEssentialsPageFromSearch(String zipCodeName, int startIndex, int endIndex);
+    
     //get zipCode entity list
     List<ZipCodeEntity> getPageOfEntities(Page<ZipCodeEntity> pageEntity);
     
@@ -63,9 +69,11 @@ public interface ZipCodeService {
     
     // getMappings 
     
+    ZipCodeEssentialsPagination getZipCodePage(int pageNo, int limit);
+    
     List<ZipCodeEssentials> getZipcodesForDropDowns(int pageNo, int limit);
     
-    List<ZipCodeEssentials> getZipCodeSearch(String zipCodeName, int StartIndex, int endIndex);
+    ZipCodeEssentialsPagination getZipCodeSearch(String zipCodeName, int StartIndex, int endIndex);
     
     
     //postMapping

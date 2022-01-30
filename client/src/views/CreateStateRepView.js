@@ -66,7 +66,7 @@ const CreateStateRepView = props =>{
 
     const [phoneNumberList, setPhoneNumberList] = useState([]);
 
-    const [zipCodeList, setZipCodeList] = useState([]);
+    const [zipCodePage, setZipCodePage] = useState({});
 
     const [cityList, setCityList] = useState([]);
 
@@ -81,9 +81,6 @@ const CreateStateRepView = props =>{
         name: ''.trim(),
         startIndex: 0,
         endIndex: 9,
-        previous: false,
-        next: true,
-        range: '10'
     })
 
     let params = useParams();
@@ -105,10 +102,62 @@ const CreateStateRepView = props =>{
     }
 
 
+    const zipCodePageable = async (e, direction)=>{
+        console.log('in here')
+        e.preventDefault();
+
+        let pageNo = zipCodePage.number;
+        let limit = zipCodePage.size;
+        
+        if(direction === 'next'){
+
+            if(zipCodePage.next){
+                
+                pageNo += 1;
+                
+            }
+        }
+
+        if(direction === 'previous'){
+
+            if(zipCodePage.previous){
+
+                pageNo -= 1
+            }
+        }
+
+        try{
+
+            const zipCodeResponse = await axios.get('http://localhost:8080/zipCodes',{
+
+            headers:{
+
+                Authorization: localStorage.getItem('token')
+            },
+
+            params:{
+
+                pageNo: pageNo,
+                limit: limit
+            }
+
+            })
+
+            console.log(zipCodeResponse.data)
+            setZipCodePage(zipCodeResponse.data);
+
+
+        }catch(error){
+            
+            console.log(error.response);
+
+        }
+
+    }
 
     const zipCodeSearch = async (e)=>{
         e.preventDefault();
-        console.log(typeof(search.endIndex));
+    
         try{
 
             const zipCodeSearchResponse = await axios.get('http://localhost:8080/zipCodes/search/' + search.name,{
@@ -127,7 +176,8 @@ const CreateStateRepView = props =>{
                 }
             })
 
-            setZipCodeList(zipCodeSearchResponse.data);
+            console.log(zipCodeSearchResponse.data);
+            setZipCodePage(zipCodeSearchResponse.data);
 
         }catch(error){
 
@@ -203,9 +253,9 @@ const CreateStateRepView = props =>{
                     }
                 })
 
-
+                console.log('zipCodes')
                 console.log(zipCodeListResponse.data);
-                setZipCodeList(zipCodeListResponse.data);
+                setZipCodePage(zipCodeListResponse.data);
 
             }catch(error){
 
@@ -403,9 +453,11 @@ const CreateStateRepView = props =>{
                 <StateRepForm
                     stateRep={stateRep}
                     setStateRep={setStateRep}
-                    zipCodeSearch zipCodeSearch={zipCodeSearch}
+                    zipCodePageable={zipCodePageable}
+                    zipCodeSearch={zipCodeSearch}
                     cityList={cityList}
-                    zipCodeList={zipCodeList}
+                    zipCodePage={zipCodePage}
+                    setZipCodePage={setZipCodePage}
                     partyList={partyList}
                     search={search}
                     setSearch={setSearch}

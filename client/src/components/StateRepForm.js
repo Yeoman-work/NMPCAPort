@@ -1,4 +1,5 @@
 import React from "react";
+import {IoMdArrowDropright, IoMdArrowDropleft} from 'react-icons/io'
 import { RawZoomHelpers } from "victory";
 import '../css/style.css'
 const {next, previous, setIndex} =require('../helper/paginationFunctions')
@@ -27,7 +28,9 @@ const StateRepForm = props =>{
             cityList,
             districtList,
             partyList,
-            zipCodeList,
+            zipCodePage,
+            setZipCodePage,
+            zipCodePageable,
             formLabel,
             formFields,
             search,
@@ -56,16 +59,29 @@ const StateRepForm = props =>{
 
     const searchParams = (e) =>{
 
+        e.preventDefault();
+
+        console.log(e.target.name);
+        console.log(e.target.value);
         let searchObj = {...search};
-        console.log(search);
 
         searchObj[e.target.name] = e.target.value;
 
-        setIndex(searchObj);
-
         setSearch(searchObj);
 
-    } 
+
+        
+    }
+    
+    const zipCodesPerPage = (e) =>{
+        e.preventDefault();
+
+        let zipCodePageObj = JSON.parse(JSON.stringify(zipCodePage));
+        
+        zipCodePageObj.size = e.target.value;
+
+        setZipCodePage(zipCodePageObj);
+    }
 
 
 
@@ -159,20 +175,16 @@ const StateRepForm = props =>{
                     <label>Zip Code</label>
                     <div>
                         <div className="">
-                            <input name={'name'} className={'form-control w-50 d-inline-block'} onChange={(e)=>searchParams(e)}/>
-                            <select name='range' className="form-control w-25 d-inline-block" onChange={(e)=>searchParams(e)}>
-                                <option value={'10'}>10</option>
-                                <option value={'25'}>25</option>
-                                <option value={'50'}>50</option>
-                            </select>
+                            <input name={'name'} className={'form-control w-50 d-inline-block'} onChange={(e)=>searchParams(e)} />
                             <button className="btn bg-primary" onClick={(e)=>zipCodeSearch(e)}>Search</button>
                         </div>
+                        <div></div>
                     </div>
                     <div className={'overflow-auto mt-3 mb-3 height200'}>
                         
                         {
-                            zipCodeList?
-                            zipCodeList.map((zipCode, index)=>{
+                            zipCodePage.zipCodes?
+                            zipCodePage.zipCodes.map((zipCode, index)=>{
 
                                 return(
                                     <div key={index}>
@@ -183,6 +195,33 @@ const StateRepForm = props =>{
                             })
                                 : null
                         }
+                    </div>
+                    <div className="row">
+                        <div className="col text-start ">
+                            <select name='range' 
+                                    className="form-control w-50"
+                                    onChange={(e)=>zipCodesPerPage(e)}
+                            >
+                                <option value={'10'}>10</option>
+                                <option value={'25'}>25</option>
+                                <option value={'50'}>50</option>
+                            </select>
+                        </div>
+                        <div className="col">
+                            <button disabled={zipCodePage.firstPage}
+                                    name="previous"
+                                    onClick={(e)=>zipCodePageable(e, 'previous')}
+                            >
+                                <IoMdArrowDropleft/>
+
+                            </button>
+                            <p className="d-inline-block">{zipCodePage?`${zipCodePage.number + 1} of ${zipCodePage.totalPages}`: null}</p>
+                            <button disabled={zipCodePage.lastPage}
+                                    onClick={(e)=>zipCodePageable(e, 'next')}
+                            >
+                                <IoMdArrowDropright/>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
