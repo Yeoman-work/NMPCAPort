@@ -68,7 +68,7 @@ const CreateStateRepView = props =>{
 
     const [zipCodePage, setZipCodePage] = useState({});
 
-    const [cityList, setCityList] = useState([]);
+    const [cityPage, setCityPage] = useState({});
 
     const [districtList, setDistrictList] = useState([]);
 
@@ -84,6 +84,16 @@ const CreateStateRepView = props =>{
         endIndex: 9,
         zipCodes: {
             zipCodes: []
+        }
+    })
+    const [citySearch, setCitySearch] = useState({
+
+        city: ''.trim(),
+        size: 10,
+        startIndex: 0,
+        endIndex: 9,
+        cities:{
+            cities: []
         }
     })
     
@@ -239,7 +249,7 @@ const CreateStateRepView = props =>{
                 })
 
                 console.log(cityListResponse.data);
-                setCityList(cityListResponse.data);
+                setCityPage(cityListResponse.data);
 
             }catch(error){
 
@@ -440,26 +450,6 @@ const CreateStateRepView = props =>{
 
     }
 
-    const stateLength = (state, lengthMin, lengthMax, required) =>{
-        let isValid = false;
-
-        if(required){
-
-            if(state.length >= lengthMin && state.length <= lengthMax){
-
-                isValid = true;
-            }
-        }else{
-
-            if((state.length === 0) || (state.length >= lengthMin && state.length <= lengthMax)){
-
-                isValid = true
-            }
-        }
-
-        return isValid;
-    }
-
 
     const canSubmit = (stateRep) =>{
 
@@ -502,7 +492,7 @@ const CreateStateRepView = props =>{
                     toogleSearch={toogleSearch}
                     setToogleSearch={setToogleSearch}
                     zipCodeSearch={zipCodeSearch}
-                    cityList={cityList}
+                    cityPage={cityPage}
                     zipCodePage={zipCodePage}
                     setZipCodePage={setZipCodePage}
                     partyList={partyList}

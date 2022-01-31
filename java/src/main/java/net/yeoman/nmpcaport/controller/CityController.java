@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.yeoman.nmpcaport.io.request.city.CityDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.city.CityEssentials;
+import net.yeoman.nmpcaport.io.response.city.CityEssentialsPagination;
 import net.yeoman.nmpcaport.services.Impl.CityServiceImpl;
 
 @RestController
@@ -29,8 +30,8 @@ public class CityController {
     }
     
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<CityEssentials> getAllCities(@RequestParam(value="pageNo", defaultValue = "0") int pageNo, 
-    										 @RequestParam(value="limit", defaultValue="25") int limit
+    public CityEssentialsPagination getAllCities(@RequestParam(value="pageNo", defaultValue = "0") int pageNo, 
+    										 @RequestParam(value="limit", defaultValue="10") int limit
 	){
 
         return this.cityService.getAllCityEssentials(pageNo, limit);

@@ -14,6 +14,7 @@ import net.yeoman.nmpcaport.exception.CityServiceException;
 import net.yeoman.nmpcaport.io.repositories.CityRepository;
 import net.yeoman.nmpcaport.io.request.city.CityDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.city.CityEssentials;
+import net.yeoman.nmpcaport.io.response.city.CityEssentialsPagination;
 import net.yeoman.nmpcaport.services.CityService;
 import net.yeoman.nmpcaport.shared.utils.Utils;
 
@@ -184,10 +185,8 @@ public class CityServiceImpl implements CityService {
 	
 	//pagination
 	@Override
-	public Page<CityEntity> findByPagination(int pageNo, int size) {
-		
-		if (pageNo > 0) pageNo -= 1;
-		
+	public Page<CityEntity> getCityPageInfo(int pageNo, int size) {
+			
 		PageRequest pageableRequest = PageRequest.of(pageNo, size);
 		
 		Page<CityEntity> cityPage = this.cityRepository.findAll(pageableRequest);
@@ -196,8 +195,42 @@ public class CityServiceImpl implements CityService {
 	}
 	
 	
-	//total pages
+	
+	
+	
 
+	@Override
+	public CityEssentialsPagination getCityPageInfoEssentials(int pageNo, int limit) {
+		
+		Page<CityEntity> cityPage = this.getCityPageInfo(pageNo, limit);
+		
+		CityEssentialsPagination cityEssentialsPage = new CityEssentialsPagination();
+		
+		cityEssentialsPage.setFirstPage(cityPage.isFirst());
+		cityEssentialsPage.setLastPage(cityPage.isLast());
+		cityEssentialsPage.setHasContent(cityPage.hasContent());
+		cityEssentialsPage.setIsEmpty(cityPage.isEmpty());
+		cityEssentialsPage.setNext(cityPage.hasNext());
+		cityEssentialsPage.setPrevious(cityPage.hasPrevious());
+		cityEssentialsPage.setNumber(cityPage.getNumber());
+		cityEssentialsPage.setSize(cityPage.getSize());
+		cityEssentialsPage.setTotalElements(cityPage.getTotalElements());
+		cityEssentialsPage.setTotalPages(cityPage.getTotalPages());
+		
+		List<CityEssentials> cityEssentials = new ArrayList<>();
+		
+		for(CityEntity city: cityPage.getContent()) {
+			
+			cityEssentials.add(this.entityToEssentials(city));
+			
+		}
+		
+		cityEssentialsPage.setCities(cityEssentials);
+		
+		return cityEssentialsPage;
+	}
+
+	//total pages
 	@Override
 	public int getTotalPages(Page<CityEntity> cityPage) {
 	
@@ -245,11 +278,10 @@ public class CityServiceImpl implements CityService {
 
 	//getMappings
 	@Override
-	public List<CityEssentials> getAllCityEssentials(int pageNo, int size) {
+	public CityEssentialsPagination getAllCityEssentials(int pageNo, int size) {
 		
-		List<CityEntity> cityEntites = this.findByPagination(pageNo, size).getContent();
 		
-		return this.entityToEssentials(cityEntites);
+		return this.getCityPageInfoEssentials(pageNo, size);
 	}
 	
 	

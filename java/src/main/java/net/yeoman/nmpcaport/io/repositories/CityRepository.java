@@ -15,6 +15,8 @@ public interface CityRepository extends PagingAndSortingRepository<CityEntity, L
 
     List<CityEntity> findAll();
     
+    List<CityEntity> findByNameContaining(String name);
+    
    
     Boolean existsByCityId(String cityId);
     Boolean existsByName(String name);

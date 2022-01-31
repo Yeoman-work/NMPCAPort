@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import net.yeoman.nmpcaport.entities.CityEntity;
 import net.yeoman.nmpcaport.io.request.city.CityDetailsRequestModel;
 import net.yeoman.nmpcaport.io.response.city.CityEssentials;
+import net.yeoman.nmpcaport.io.response.city.CityEssentialsPagination;
 
 public interface CityService {
 
@@ -33,7 +34,11 @@ public interface CityService {
     //pagination
     
     //get page
-    Page<CityEntity> findByPagination(int pageNo, int size);
+    Page<CityEntity> getCityPageInfo(int pageNo, int size);
+    
+    
+    //Pagination
+    CityEssentialsPagination getCityPageInfoEssentials(int pageNo, int limit);
     
     //get page Number
     int getTotalPages(Page<CityEntity> cityPage);
@@ -60,7 +65,7 @@ public interface CityService {
     //end points
     
     //getMapping
-    List<CityEssentials> getAllCityEssentials(int pageNo, int size);
+    CityEssentialsPagination getAllCityEssentials(int pageNo, int size);
     
     
     //post mapping

@@ -25,7 +25,7 @@ const clearStateRep ={
 const StateRepForm = props =>{
 
     const {
-            cityList,
+            cityPage,
             districtList,
             partyList,
             zipCodePage,
@@ -176,22 +176,33 @@ const StateRepForm = props =>{
             <div className={'row'}>
                 <div className={'col form-group'}>
                     <label>City:</label>
-                    <select className={'form-control'}
-                            name={'city'}
-                            onChange={(e)=>inputChange(e)}
-                    >
-                        <option>Select a City</option>
+                    <div>
+                        <div>
+                            <input name={'city'} className={'form-control w-50 d-inline-block'}/>
+                            <button className="btn bg-primary">Search</button>
+                        </div>
+                    </div>
+                
                         {
-                            cityList?
-                            cityList.map((city, index)=>{
+                            cityPage.cities?
+                            cityPage.cities.map((city, index)=>{
 
                                 return(
-                                    <option key={index} value={city.cityId}>{city.name}</option>
+                                    <div key={index}>
+                                    <button 
+                                        value={city.cityId}
+                                        name={'city'}
+                                        onClick={(e)=>inputChange(e)}
+                                        disabled={stateRep.city === city.cityId}
+                                    >
+                                        {city.name}
+                                    </button>
+                                </div>
                                 )
                             })
                             : null
                         }
-                    </select>
+                
                 </div>
                 <div className={'col form-group border'}>
                     <label>Zip Code</label>
