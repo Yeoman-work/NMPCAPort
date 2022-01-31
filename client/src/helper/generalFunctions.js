@@ -184,9 +184,9 @@ const emailValidation =(email)=>{
 
 const isValidCharacter = (characterInput) =>{
 
-     const isValid = characters.includes(characterInput[characterInput.length - 1])
+    const isValid = characters.includes(characterInput[characterInput.length - 1])
 
-     return isValid;
+    return isValid;
 
 }
 

@@ -33,6 +33,8 @@ const StateRepForm = props =>{
             zipCodePageable,
             formLabel,
             formFields,
+            toogleSearch,
+            setToogleSearch,
             search,
             setSearch,
             zipCodeSearch,
@@ -49,38 +51,58 @@ const StateRepForm = props =>{
 
     const inputChange = (e) =>{
 
+        console.log(e.target.name);
         let stateRepObj = {...stateRep};
 
         stateRepObj[e.target.name] = e.target.value;
+        
+        console.log(stateRepObj);
 
         setStateRep(stateRepObj);
     }
 
 
     const searchParams = (e) =>{
-
         e.preventDefault();
 
-        console.log(e.target.name);
-        console.log(e.target.value);
+        
         let searchObj = {...search};
 
         searchObj[e.target.name] = e.target.value;
+        
+        if(searchObj.name.length === 0){
+
+            if(toogleSearch){
+                
+                setToogleSearch(false);
+
+            }else{
+
+                setToogleSearch(true)
+
+            }
+        }
 
         setSearch(searchObj);
 
 
-        
     }
     
     const zipCodesPerPage = (e) =>{
         e.preventDefault();
-
+        
         let zipCodePageObj = JSON.parse(JSON.stringify(zipCodePage));
+        let searchObj = {...search};
         
         zipCodePageObj.size = e.target.value;
 
+        searchObj.size = e.target.value;
+        
+
+        searchObj.endIndex = (searchObj.startIndex + searchObj.size) - 1; 
+
         setZipCodePage(zipCodePageObj);
+        setSearch(searchObj);
     }
 
 
@@ -183,8 +205,27 @@ const StateRepForm = props =>{
                     <div className={'overflow-auto mt-3 mb-3 height200'}>
                         
                         {
-                            zipCodePage.zipCodes?
+                            zipCodePage.zipCodes && zipCodePage.zipCodes.length > 0?
                             zipCodePage.zipCodes.map((zipCode, index)=>{
+
+                                return(
+                                    <div key={index}>
+                                        <button 
+                                            value={zipCode.zipCodeId}
+                                            name={'zipCode'}
+                                            onClick={(e)=>inputChange(e)}
+                                            disabled={stateRep.zipCode === zipCode.zipCodeId}
+                                        >
+                                            {zipCode.name}
+                                        </button>
+                                    </div>
+                                        
+                                )
+                            })
+
+                            : 
+
+                            search.zipCodes.zipCodes.map((zipCode, index)=>{
 
                                 return(
                                     <div key={index}>
@@ -193,31 +234,38 @@ const StateRepForm = props =>{
                                         
                                 )
                             })
-                                : null
+                        
+                                
                         }
                     </div>
                     <div className="row">
                         <div className="col text-start ">
-                            <select name='range' 
+                            <select name='size' 
                                     className="form-control w-50"
-                                    onChange={(e)=>zipCodesPerPage(e)}
+                                    onChange={search.name.length > 0? (e)=>zipCodeSearch(e) : (e)=>zipCodesPerPage(e)}
                             >
-                                <option value={'10'}>10</option>
-                                <option value={'25'}>25</option>
-                                <option value={'50'}>50</option>
+                                <option value={10}>10</option>
+                                <option value={25}>25</option>
+                                <option value={50}>50</option>
                             </select>
                         </div>
                         <div className="col">
-                            <button disabled={zipCodePage.firstPage}
+                            <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.firstPage :  zipCodePage.firstPage}
                                     name="previous"
-                                    onClick={(e)=>zipCodePageable(e, 'previous')}
+                                    onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'previous') :(e)=>zipCodePageable(e, 'previous')}
                             >
                                 <IoMdArrowDropleft/>
 
                             </button>
-                            <p className="d-inline-block">{zipCodePage?`${zipCodePage.number + 1} of ${zipCodePage.totalPages}`: null}</p>
-                            <button disabled={zipCodePage.lastPage}
-                                    onClick={(e)=>zipCodePageable(e, 'next')}
+                            {
+                                search.name.length > 0?
+                                <p className="d-inline-block">{search.zipCodes?`${search.zipCodes.number + 1} of ${search.zipCodes.totalPages}`: null}</p>
+                                :
+                                <p className="d-inline-block">{zipCodePage?`${zipCodePage.number + 1} of ${zipCodePage.totalPages}`: null}</p>
+                            }
+                            
+                            <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.lastPage : zipCodePage.lastPage}
+                                    onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'next') :(e)=>zipCodePageable(e, 'next')}
                             >
                                 <IoMdArrowDropright/>
                             </button>

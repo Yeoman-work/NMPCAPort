@@ -3,8 +3,8 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header";
 import StateRepForm from "../components/StateRepForm";
-import {number} from "../helper/generalFunctions";
 import PhoneNumberForm from "../components/PhoneNumberForm";
+const {searchNameIsEmpty, clearZipCodeSearch} = require('../helper/paginationFunctions')
 
 const { phoneNumberPattern,
         characters,
@@ -79,9 +79,15 @@ const CreateStateRepView = props =>{
     const [search, setSearch] = useState({
 
         name: ''.trim(),
+        size: 10,
         startIndex: 0,
         endIndex: 9,
+        zipCodes: {
+            zipCodes: []
+        }
     })
+    
+    const [toogleSearch, setToogleSearch ] = useState(false);
 
     let params = useParams();
     const navigate = useNavigate();
@@ -103,7 +109,7 @@ const CreateStateRepView = props =>{
 
 
     const zipCodePageable = async (e, direction)=>{
-        console.log('in here')
+        
         e.preventDefault();
 
         let pageNo = zipCodePage.number;
@@ -143,8 +149,10 @@ const CreateStateRepView = props =>{
 
             })
 
-            console.log(zipCodeResponse.data)
+            console.log(zipCodeResponse.data);
             setZipCodePage(zipCodeResponse.data);
+
+            
 
 
         }catch(error){
@@ -155,12 +163,39 @@ const CreateStateRepView = props =>{
 
     }
 
-    const zipCodeSearch = async (e)=>{
+    const zipCodeSearch = async (e, direction)=>{
         e.preventDefault();
-    
+        
+        let searchObj = {...search};
+        let zipCodePageObj = JSON.parse(JSON.stringify(zipCodePage));
+
+        
+        if(direction === 'previous'){
+            
+            searchObj.endIndex -= searchObj.size;
+            searchObj.startIndex -= searchObj.size;
+            setSearch(searchObj);
+
+        }else if(direction === 'next'){
+
+            searchObj.startIndex = searchObj.endIndex + 1;
+            searchObj.endIndex = searchObj.startIndex + (searchObj.size - 1);
+            setSearch(searchObj);
+
+        }else if(e.target.name === 'size'){
+
+            console.log(typeof(e.target.value))
+            searchObj.size = Number(e.target.value);
+            searchObj.startIndex = 0;
+            searchObj.endIndex = (searchObj.size - 1);
+            setSearch(searchObj);
+        }
+
+        console.log(searchObj);
+
         try{
 
-            const zipCodeSearchResponse = await axios.get('http://localhost:8080/zipCodes/search/' + search.name,{
+            const zipCodeSearchResponse = await axios.get('http://localhost:8080/zipCodes/search/' + searchObj.name,{
 
             
                 headers:{
@@ -171,17 +206,21 @@ const CreateStateRepView = props =>{
 
                 params:{
 
-                    startIndex: search.startIndex,
-                    endIndex: search.endIndex
+                    startIndex: searchObj.startIndex,
+                    endIndex: searchObj.endIndex
                 }
             })
 
-            console.log(zipCodeSearchResponse.data);
-            setZipCodePage(zipCodeSearchResponse.data);
+            console.log(zipCodeSearchResponse.data);  
+            searchObj.zipCodes = {...zipCodeSearchResponse.data};
+            zipCodePageObj.zipCodes = [];
+            setSearch(searchObj);
+            setZipCodePage(zipCodePageObj);
 
         }catch(error){
 
             console.log(error);
+
         }
     }
 
@@ -250,12 +289,18 @@ const CreateStateRepView = props =>{
 
                     headers:{
                         Authorization: localStorage.getItem('token')
+                    },
+
+                    params:{
+                        limit: search.endIndex
                     }
+
                 })
 
                 console.log('zipCodes')
                 console.log(zipCodeListResponse.data);
                 setZipCodePage(zipCodeListResponse.data);
+                setSearch(clearZipCodeSearch(search));
 
             }catch(error){
 
@@ -266,7 +311,7 @@ const CreateStateRepView = props =>{
 
         return ()=>{};
 
-    },[])
+    },[zipCodePage.size, toogleSearch])
 
     useEffect(()=>{
 
@@ -454,6 +499,8 @@ const CreateStateRepView = props =>{
                     stateRep={stateRep}
                     setStateRep={setStateRep}
                     zipCodePageable={zipCodePageable}
+                    toogleSearch={toogleSearch}
+                    setToogleSearch={setToogleSearch}
                     zipCodeSearch={zipCodeSearch}
                     cityList={cityList}
                     zipCodePage={zipCodePage}

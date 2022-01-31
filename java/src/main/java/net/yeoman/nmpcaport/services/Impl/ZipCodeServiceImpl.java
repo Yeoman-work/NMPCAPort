@@ -272,7 +272,7 @@ public class ZipCodeServiceImpl implements ZipCodeService {
     	ZipCodeEssentialsPagination zipCodePage = new ZipCodeEssentialsPagination();
     	List<ZipCodeEssentials> zipCodeEssentials = new ArrayList<>();
     	
-    	for(int i = 0; i <= limit; i++) {
+    	for(int i = startIndex; i <= limit; i++) {
     	
     		
     		if(zipCodes.get(i) == null) break;
@@ -288,20 +288,26 @@ public class ZipCodeServiceImpl implements ZipCodeService {
     	zipCodePage.setIsEmpty(zipCodeEssentials.isEmpty());
 		zipCodePage.setTotalElements(Long.valueOf(zipCodes.size()));
 		
-		int totalPages = (int) Math.ceil(zipCodes.size() / ((endIndex - startIndex) + 1));
-		
+		double totalPages = (double)zipCodes.size() / (double)(endIndex - startIndex + 1);
+		System.out.println(endIndex - startIndex + 1);
+		System.out.println(totalPages);
+		System.out.println(totalPages % 1);
 		if(totalPages > 0) {
 			
-			zipCodePage.setTotalPages(totalPages);
+			if((totalPages % 1) != 0) {
+				
+				totalPages++;
+			}
+		
+			zipCodePage.setTotalPages((int)totalPages);
 			
 		}else {
 			
 			zipCodePage.setTotalPages(1);
 		}
 		
-//		zipCodePage.setTotalPages((int) Math.ceil(zipCodes.size() / ((endIndex - startIndex) + 1)));
 		zipCodePage.setSize(zipCodeEssentials.size());
-		zipCodePage.setNumber((endIndex- startIndex) % endIndex);
+		zipCodePage.setNumber(startIndex / (endIndex-startIndex + 1));
 		
 		return zipCodePage;
 	}

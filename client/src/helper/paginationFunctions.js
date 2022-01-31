@@ -81,8 +81,38 @@ const previous = (searchObj) =>{
 }
 
 
+const searchNameIsEmpty = (searchName) =>{
+
+    let isEmpty = true;
+
+    if(searchName.length > 0){
+        
+        isEmpty = false
+    }
+
+    return isEmpty;
+    
+}
+
+
+const clearZipCodeSearch = (search) =>{
+
+    let searchObj = JSON.parse(JSON.stringify(search));
+    
+    searchObj.name = ''.trim();
+    searchObj.endIndex = 9;
+    searchObj.startIndex = 0;
+    searchObj.size = 10;
+    searchObj.zipCodes.zipCodes = [];
+
+    return searchObj;
+}
+
+
+
 module.exports={
     setIndex,
-    previous
+    previous,
+    clearZipCodeSearch
 }
 
