@@ -110,9 +110,13 @@ const clearZipCodeSearch = (search) =>{
 
 
 
+
+
+
 module.exports={
     setIndex,
     previous,
-    clearZipCodeSearch
+    clearZipCodeSearch,
+    
 }
 

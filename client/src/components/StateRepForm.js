@@ -26,6 +26,8 @@ const StateRepForm = props =>{
 
     const {
             cityPage,
+            citySearch,
+            setCitySearch,
             districtList,
             partyList,
             zipCodePage,
@@ -106,6 +108,21 @@ const StateRepForm = props =>{
     }
 
 
+    const citySearchAction = (e) =>{
+        e.preventDefault();
+
+        let citySearchObj = JSON.parse(JSON.stringify(citySearch));
+
+        citySearchObj[e.target.name] = e.target.value;
+
+
+        console.log(citySearchObj);
+
+        setCitySearch(citySearchObj);
+
+    }
+
+
 
     return(
         <div className={'w-50 m-auto mt-3 pt-3'} onSubmit={handler}>
@@ -178,11 +195,11 @@ const StateRepForm = props =>{
                     <label>City:</label>
                     <div>
                         <div>
-                            <input name={'city'} className={'form-control w-50 d-inline-block'}/>
+                            <input name={'city'} className={'form-control w-50 d-inline-block'} onChange={(e)=>citySearchAction(e)}/>
                             <button className="btn bg-primary">Search</button>
                         </div>
                     </div>
-                
+                    <div>
                         {
                             cityPage.cities?
                             cityPage.cities.map((city, index)=>{
@@ -202,7 +219,7 @@ const StateRepForm = props =>{
                             })
                             : null
                         }
-                
+                    </div>
                 </div>
                 <div className={'col form-group border'}>
                     <label>Zip Code</label>

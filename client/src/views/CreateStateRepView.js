@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header";
 import StateRepForm from "../components/StateRepForm";
 import PhoneNumberForm from "../components/PhoneNumberForm";
-const {searchNameIsEmpty, clearZipCodeSearch} = require('../helper/paginationFunctions')
+const {searchNameIsEmpty, clearZipCodeSearch, zipCodePageable} = require('../helper/paginationFunctions')
 
 const { phoneNumberPattern,
         characters,
@@ -121,56 +121,70 @@ const CreateStateRepView = props =>{
     const zipCodePageable = async (e, direction)=>{
         
         e.preventDefault();
-
+    
         let pageNo = zipCodePage.number;
         let limit = zipCodePage.size;
         
         if(direction === 'next'){
-
+    
             if(zipCodePage.next){
                 
                 pageNo += 1;
                 
             }
         }
-
+    
         if(direction === 'previous'){
-
+    
             if(zipCodePage.previous){
-
+    
                 pageNo -= 1
             }
         }
-
+    
         try{
-
+    
             const zipCodeResponse = await axios.get('http://localhost:8080/zipCodes',{
-
+    
             headers:{
-
+    
                 Authorization: localStorage.getItem('token')
             },
-
+    
             params:{
-
+    
                 pageNo: pageNo,
                 limit: limit
             }
-
+    
             })
-
+    
             console.log(zipCodeResponse.data);
-            setZipCodePage(zipCodeResponse.data);
-
+            return zipCodeResponse.data
+    
             
-
-
+    
+    
         }catch(error){
             
             console.log(error.response);
-
+    
         }
+    
+    }
+    
+    const citySearch = async (e, direction)=>{
+        e.preventDefault()
 
+        let citySearchObj = {...citySearch};
+
+        if(direction === 'previous'){
+
+            citySearchObj.endIndex -= citySearchObj.size;
+            citySearchObj.startIndex -= citySearchObj.size;
+
+            setCitySearch(citySearchObj);
+        }
     }
 
     const zipCodeSearch = async (e, direction)=>{
@@ -492,6 +506,8 @@ const CreateStateRepView = props =>{
                     toogleSearch={toogleSearch}
                     setToogleSearch={setToogleSearch}
                     zipCodeSearch={zipCodeSearch}
+                    citySearch={citySearch}
+                    setCitySearch={setCitySearch}
                     cityPage={cityPage}
                     zipCodePage={zipCodePage}
                     setZipCodePage={setZipCodePage}
