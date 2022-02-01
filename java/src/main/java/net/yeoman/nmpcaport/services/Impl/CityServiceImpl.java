@@ -47,13 +47,21 @@ public class CityServiceImpl implements CityService {
 
         return this.cityRepository.findByCityId(cityId);
     }
+    
+    @Override
+	public List<CityEntity> searchForCityEntity(String name) {
+		
+    	if(name == null) throw new CityServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+    	
+		return this.cityRepository.findByNameContaining(name);
+	}
 
+    
    
     
   //convert entity to essentials
-    
 
-    @Override
+	@Override
     public CityEssentials entityToEssentials(CityEntity cityEntity) {
 
         if(this.entityIsNull(cityEntity))
@@ -229,6 +237,61 @@ public class CityServiceImpl implements CityService {
 		
 		return cityEssentialsPage;
 	}
+	
+	
+
+	@Override
+	public CityEssentialsPagination getCityPageInfoEssentialsSearch(String name, int startIndex, int endIndex) {
+		
+		if(name == null) throw new CityServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		List<CityEntity> cityEntities = this.searchForCityEntity(name);
+		
+		List<CityEssentials> cityEssentials = new ArrayList<>();
+		
+		for(int i = startIndex; i < endIndex; i++) {
+			
+			if(cityEntities.get(i) == null) break;
+			
+				cityEssentials.add(this.entityToEssentials(cityEntities.get(i)));
+			
+			
+		}
+		
+		CityEssentialsPagination cityEssentialsPage = new CityEssentialsPagination();
+		
+		cityEssentialsPage.setCities(cityEssentials);
+		cityEssentialsPage.setFirstPage(startIndex == 0);
+		cityEssentialsPage.setHasContent(cityEssentials.size() > 0);
+		cityEssentialsPage.setIsEmpty(cityEssentials.isEmpty());
+		cityEssentialsPage.setLastPage(endIndex >= (cityEntities.size() - 1));
+		cityEssentialsPage.setNext(endIndex < cityEntities.size() - 1);
+		
+		
+		double totalPages = (double)cityEntities.size() / (double)((endIndex - startIndex) + 1);
+		
+		if(totalPages > 0) {
+			
+			if(totalPages % 1 != 0) {
+				
+				totalPages++;
+				
+				cityEssentialsPage.setTotalPages((int)totalPages);
+			}
+		}else {
+			
+			cityEssentialsPage.setTotalPages(1);
+			
+		}
+		
+		cityEssentialsPage.setNumber(startIndex / (endIndex / (startIndex + 1)));
+		cityEssentialsPage.setPrevious(startIndex > 0);
+		cityEssentialsPage.setSize(cityEssentials.size());
+		cityEssentialsPage.setTotalElements(Long.valueOf(cityEntities.size()));
+		
+		return cityEssentialsPage;
+	}
+
 
 	//total pages
 	@Override
@@ -270,12 +333,6 @@ public class CityServiceImpl implements CityService {
 	
 	//end points
 	
-	
-
-
-	
-
-
 	//getMappings
 	@Override
 	public CityEssentialsPagination getAllCityEssentials(int pageNo, int size) {
@@ -284,9 +341,20 @@ public class CityServiceImpl implements CityService {
 		return this.getCityPageInfoEssentials(pageNo, size);
 	}
 	
+	@Override
+	public CityEssentialsPagination getAllCityEssentialsSearch(String name, int startIndex, int endIndex) {
+		
+		if(name == null) throw new CityServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		return this.getCityPageInfoEssentialsSearch(name, startIndex, endIndex);
+	}
+	
+
+	
 	
 	
 	//postMappings
+
 
 	//create cityNames
 	@Override

@@ -17,6 +17,8 @@ public interface CityService {
     CityEntity findCity(String cityId);
     List<CityEntity> findAllCities();
 
+    //query search by name
+    List<CityEntity> searchForCityEntity(String name);
 
     //convert entity to essentials
     CityEssentials entityToEssentials(CityEntity cityEntity);
@@ -39,6 +41,7 @@ public interface CityService {
     
     //Pagination
     CityEssentialsPagination getCityPageInfoEssentials(int pageNo, int limit);
+    CityEssentialsPagination getCityPageInfoEssentialsSearch(String name, int startIndex, int endIndex);
     
     //get page Number
     int getTotalPages(Page<CityEntity> cityPage);
@@ -66,7 +69,7 @@ public interface CityService {
     
     //getMapping
     CityEssentialsPagination getAllCityEssentials(int pageNo, int size);
-    
+    CityEssentialsPagination getAllCityEssentialsSearch(String name, int startIndex, int endIndex);
     
     //post mapping
     List<CityEssentials> createCitiesProcess(List<String> cityNames);

@@ -26,8 +26,10 @@ const StateRepForm = props =>{
 
     const {
             cityPage,
+            setCityPage,
             citySearch,
-            setCitySearch,
+            citySearchParams,
+            setCitySearchParams,
             districtList,
             partyList,
             zipCodePage,
@@ -96,9 +98,9 @@ const StateRepForm = props =>{
         let zipCodePageObj = JSON.parse(JSON.stringify(zipCodePage));
         let searchObj = {...search};
         
-        zipCodePageObj.size = e.target.value;
+        zipCodePageObj.size = Number(e.target.value);
 
-        searchObj.size = e.target.value;
+        searchObj.size = Number(e.target.value);
         
 
         searchObj.endIndex = (searchObj.startIndex + searchObj.size) - 1; 
@@ -107,18 +109,35 @@ const StateRepForm = props =>{
         setSearch(searchObj);
     }
 
+    const citiesPerPage = (e)=>{
+        e.preventDefault()
+
+
+        let cityPageObj = JSON.parse(JSON.stringify(cityPage));
+        let citySearchParamsObj = JSON.parse(JSON.stringify(citySearchParams));
+
+        cityPageObj.size = Number(e.target.value);
+        citySearchParamsObj.size = Number(e.target.value);
+
+        citySearchParamsObj.endIndex = (Number(citySearchParamsObj.startIndex + citySearchParamsObj.size));
+
+        console.log(citySearchParamsObj);
+        setCitySearchParams(citySearchParamsObj);
+        setCityPage(cityPage);
+
+    }
 
     const citySearchAction = (e) =>{
         e.preventDefault();
 
-        let citySearchObj = JSON.parse(JSON.stringify(citySearch));
+        let citySearchObj = JSON.parse(JSON.stringify(citySearchParams));
 
         citySearchObj[e.target.name] = e.target.value;
 
 
         console.log(citySearchObj);
 
-        setCitySearch(citySearchObj);
+        setCitySearchParams(citySearchObj);
 
     }
 
@@ -189,17 +208,16 @@ const StateRepForm = props =>{
                     {!fieldLengthNotRequired(0, 8, stateRep.capitolRoom)? <span className={'text-danger'}>{fieldLengthErrorMessages(5, 150, stateRep.capitolRoom)}</span> : null}
                 </div>
             </div>
-
             <div className={'row'}>
                 <div className={'col form-group'}>
                     <label>City:</label>
                     <div>
                         <div>
                             <input name={'city'} className={'form-control w-50 d-inline-block'} onChange={(e)=>citySearchAction(e)}/>
-                            <button className="btn bg-primary">Search</button>
+                            <button className="btn bg-primary" onClick={(e)=>citySearch(e)}>Search</button>
                         </div>
                     </div>
-                    <div>
+                    <div className="mt-3 mb-3 overflow-auto height200">
                         {
                             cityPage.cities?
                             cityPage.cities.map((city, index)=>{
@@ -219,6 +237,40 @@ const StateRepForm = props =>{
                             })
                             : null
                         }
+                    </div>
+                        <div className="row">
+                        <div className="col text-start ">
+                            <select name='size' 
+                                    className="form-control w-50"
+                                    onChange={(e)=>citiesPerPage(e)}
+                                    
+                            >
+                                <option value={10}>10</option>
+                                <option value={25}>25</option>
+                                <option value={50}>50</option>
+                            </select>
+                        </div>
+                        <div className="col">
+                            <button disabled={citySearchParams.cities.cities? citySearchParams.cities.lastPage :  cityPage.firstPage}
+                                    name="previous"
+                                
+                            >
+                                <IoMdArrowDropleft/>
+
+                            </button>
+                            {
+                                citySearchParams.city && citySearchParams.city.length > 0?
+                                <p className="d-inline-block">{citySearchParams.cities?`${citySearchParams.cities.number + 1} ${citySearchParams.city}of ${citySearchParams.cities.totalPages}`: null}</p>
+                                :
+                                <p className="d-inline-block">{cityPage?`${cityPage.number + 1}  ${citySearchParams.city} dang of ${cityPage.totalPages}`: null}</p>
+                            }
+                            
+                            <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.lastPage : zipCodePage.lastPage}
+                                    onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'next') :(e)=>zipCodePageable(e, 'next')}
+                            >
+                                <IoMdArrowDropright/>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div className={'col form-group border'}>

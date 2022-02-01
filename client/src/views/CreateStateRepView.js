@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header";
 import StateRepForm from "../components/StateRepForm";
 import PhoneNumberForm from "../components/PhoneNumberForm";
-const {searchNameIsEmpty, clearZipCodeSearch, zipCodePageable} = require('../helper/paginationFunctions')
+const {searchNameIsEmpty, clearZipCodeSearch, zipCodePageable} = require('../helper/paginationFunctions');
 
 const { phoneNumberPattern,
         characters,
@@ -86,7 +86,8 @@ const CreateStateRepView = props =>{
             zipCodes: []
         }
     })
-    const [citySearch, setCitySearch] = useState({
+    
+    const [citySearchParams, setCitySearchParams] = useState({
 
         city: ''.trim(),
         size: 10,
@@ -183,7 +184,53 @@ const CreateStateRepView = props =>{
             citySearchObj.endIndex -= citySearchObj.size;
             citySearchObj.startIndex -= citySearchObj.size;
 
-            setCitySearch(citySearchObj);
+            setCitySearchParams(citySearchObj);
+
+        }else if(direction === 'next'){
+
+            citySearchObj.startIndex = citySearchObj.endIndex + 1;
+            citySearchObj.endIndex = citySearchObj.startIndex + (citySearchObj.size - 1);
+            setSearch(citySearchObj);
+
+        }else if(e.target.name === 'size'){
+
+            console.log(typeof(e.target.value))
+            citySearchObj.size = Number(e.target.value);
+            citySearchObj.startIndex = 0;
+            citySearchObj.endIndex = (citySearchObj.size - 1);
+            setCitySearchParams(citySearchObj);
+        }
+
+
+        try{
+
+            const cityResponse = await axios.get('http://localhost:8080/cities/search/' + citySearchParams.city ,{
+
+        headers:{
+
+            Authorization: localStorage.getItem('token')
+        },
+
+        params:{
+
+            startIndex: citySearchParams.startIndex,
+            endIndex: citySearchParams.endIndex
+        }
+
+    })
+            console.log(cityResponse.data);
+            let cityPageObj = JSON.parse(JSON.stringify(cityPage));
+
+            let citySearchParamsObj = JSON.parse(JSON.stringify(cityPage));
+            cityPageObj.cities = [];
+            setCityPage(cityPageObj);
+            setCitySearchParams(cityResponse.data);
+
+
+        }catch(error){
+
+            console.log(error.response);
+
         }
     }
 
@@ -507,8 +554,10 @@ const CreateStateRepView = props =>{
                     setToogleSearch={setToogleSearch}
                     zipCodeSearch={zipCodeSearch}
                     citySearch={citySearch}
-                    setCitySearch={setCitySearch}
+                    citySearchParams={citySearchParams}
+                    setCitySearchParams={setCitySearchParams}
                     cityPage={cityPage}
+                    setCityPage={setCityPage}
                     zipCodePage={zipCodePage}
                     setZipCodePage={setZipCodePage}
                     partyList={partyList}
