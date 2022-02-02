@@ -1,14 +1,14 @@
 package net.yeoman.nmpcaport.services;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+
 import net.yeoman.nmpcaport.entities.HouseDistrictEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequest;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequestList;
 import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
-import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictNestedResponse;
-import net.yeoman.nmpcaport.shared.dto.NMHouseDistrictDto;
-
-import java.util.List;
 
 public interface HouseDistrictService {
 
@@ -18,6 +18,14 @@ public interface HouseDistrictService {
 
     //update house district
     void updateHouseDistrict(String id, HouseDistrictDetailsRequest houseDistrictDetailsRequest);
+    
+    //search for district
+    List<HouseDistrictEntity> houseDistrictSearch(String name);
+    
+    
+    //pagination
+    Page<HouseDistrictEntity> getDistrictPageInfo(int pageNo, int limit);
+    Page<HouseDistrictEntity> getDistrictPageInfoSearch(String name, int pageNo, int limit);
 
 
     //save house district

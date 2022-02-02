@@ -82,6 +82,7 @@ const CreateStateRepView = props =>{
         size: 10,
         startIndex: 0,
         endIndex: 9,
+        search: false,
         zipCodes: {
             zipCodes: []
         }
@@ -98,9 +99,21 @@ const CreateStateRepView = props =>{
             cities: []
         }
     })
-    
-    const [toogleSearch, setToogleSearch ] = useState(false);
 
+    const [districtSearch, setDistrictSearch] = useState({
+
+        district: ''.trim(),
+        size: 10,
+        startIndex: 0,
+        endIndex: 9,
+        search: false,
+        districts:{
+            districts: []
+        }
+
+    })
+    
+    
     let params = useParams();
     const navigate = useNavigate();
 
@@ -177,7 +190,7 @@ const CreateStateRepView = props =>{
             if(zipCodePage.next){
                 
                 pageNo += 1;
-                limit += 1;
+                
                 
             }
         }
@@ -186,7 +199,7 @@ const CreateStateRepView = props =>{
     
             if(zipCodePage.previous){
                 pageNo -= 1;
-                pageNo -= 1;
+                
             }
         }console.log(limit);
         try{
@@ -435,7 +448,7 @@ const CreateStateRepView = props =>{
 
         return ()=>{};
 
-    },[ toogleSearch])
+    },[zipCodePage.size, zipCodePage.search])
 
     useEffect(()=>{
 
@@ -604,8 +617,6 @@ const CreateStateRepView = props =>{
                     setStateRep={setStateRep}
                     cityPageable={cityPageable}
                     zipCodePageable={zipCodePageable}
-                    toogleSearch={toogleSearch}
-                    setToogleSearch={setToogleSearch}
                     zipCodeSearch={zipCodeSearch}
                     citySearch={citySearch}
                     citySearchParams={citySearchParams}

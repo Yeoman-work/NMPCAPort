@@ -1,15 +1,18 @@
 package net.yeoman.nmpcaport.io.repositories;
 
-import net.yeoman.nmpcaport.entities.HouseDistrictEntity;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
+
+import net.yeoman.nmpcaport.entities.HouseDistrictEntity;
+
 @Repository
-public interface HouseDistrictRepository extends CrudRepository<HouseDistrictEntity, Long> {
+public interface HouseDistrictRepository extends PagingAndSortingRepository<HouseDistrictEntity, Long> {
 
     List<HouseDistrictEntity> findAll();
+    
+    List<HouseDistrictEntity> findByNameContaining(String name);
 
     HouseDistrictEntity findByHouseDistrictId(String houseDistrictId);
 

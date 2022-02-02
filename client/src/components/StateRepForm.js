@@ -79,11 +79,11 @@ const StateRepForm = props =>{
 
             if(toogleSearch){
                 
-                setToogleSearch(false);
+                searchObj.search = false;
 
             }else{
 
-                setToogleSearch(true)
+                searchObj.search = true;
 
             }
         }
@@ -415,22 +415,55 @@ const StateRepForm = props =>{
                 </div>
                 <div className={'col'}>
                     <label>District</label>
-                    <select className={'form-control'}
-                            name={'district'}
-                            onChange={(e)=>inputChange(e)}
-                    >
-                        <option>Select a District</option>
+                    <div>
+                        <div>
+                            <input className="form-control"/>
+                        </div>
+                    </div>
+                    <div className={'height200 mt-2 mb-2 overflow-auto'}>
                         {
                             districtList?
                                 districtList.map((district, index)=>{
 
                                     return(
-                                        <option key={index} value={repType? district.houseDistrictId: district.senateDistrictId}>{district.name}</option>
+                                        <div key={index}>
+                                            <button value={repType? district.houseDistrictId: district.senateDistrictId}>{district.name}</button>
+                                        </div>
                                     )
                                 })
                                 : null
                         }
-                    </select>
+                    </div>
+                    <div className="row">
+                        <div className="col text-start w-25">
+                            <select className="form-control">
+                                <option value={10}>10</option>
+                                <option value={25}>25</option>
+                                <option value={50}>50</option>
+                            </select>
+                        </div>
+                        <div className="col">
+                        <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.firstPage :  zipCodePage.firstPage}
+                                    name="previous"
+                                    onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'previous') :(e)=>zipCodePageable(e, 'previous')}
+                            >
+                                <IoMdArrowDropleft/>
+
+                            </button>
+                            {
+                                search.name.length > 0?
+                                <p className="d-inline-block">{search.zipCodes?`${search.zipCodes.number + 1} of ${search.zipCodes.totalPages}`: null}</p>
+                                :
+                                <p className="d-inline-block">{zipCodePage?`${zipCodePage.number + 1} of ${zipCodePage.totalPages}`: null}</p>
+                            }
+                            
+                            <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.lastPage : zipCodePage.lastPage}
+                                    onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'next') :(e)=>zipCodePageable(e, 'next')}
+                            >
+                                <IoMdArrowDropright/>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
