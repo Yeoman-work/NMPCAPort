@@ -93,6 +93,7 @@ const CreateStateRepView = props =>{
         size: 10,
         startIndex: 0,
         endIndex: 9,
+        search: false,
         cities:{
             cities: []
         }
@@ -118,6 +119,51 @@ const CreateStateRepView = props =>{
         }
     }
 
+    const cityPageable = async(e, direction)=>{
+        e.preventDefault();
+
+        let cityPageObj = JSON.parse(JSON.stringify(cityPage));
+
+        if(direction === 'next'){
+
+            console.log('in there')
+            console.log(cityPageObj.number)
+            cityPageObj.number = Number(cityPageObj.number + 1);
+            console.log(cityPageObj.number)
+        }
+        
+        if(direction === 'previous'){
+
+            cityPageObj.number = Number(cityPageObj.number - 1)
+        }
+
+        
+        try{
+
+            const cityPageResponse = await axios.get('http://localhost:8080/cities',{
+
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    },
+
+                    params:{
+
+                        pageNo:cityPageObj.number,
+                        limit: cityPageObj.size 
+                    }
+
+            })
+
+            console.log(cityPageResponse.data)
+            setCityPage(cityPageResponse.data);
+
+        }catch(error){
+
+            console.log(error.response);
+
+        }
+        
+    }
 
     const zipCodePageable = async (e, direction)=>{
         
@@ -131,6 +177,7 @@ const CreateStateRepView = props =>{
             if(zipCodePage.next){
                 
                 pageNo += 1;
+                limit += 1;
                 
             }
         }
@@ -138,11 +185,10 @@ const CreateStateRepView = props =>{
         if(direction === 'previous'){
     
             if(zipCodePage.previous){
-    
-                pageNo -= 1
+                pageNo -= 1;
+                pageNo -= 1;
             }
-        }
-    
+        }console.log(limit);
         try{
     
             const zipCodeResponse = await axios.get('http://localhost:8080/zipCodes',{
@@ -161,7 +207,7 @@ const CreateStateRepView = props =>{
             })
     
             console.log(zipCodeResponse.data);
-            return zipCodeResponse.data
+            setZipCodePage(zipCodeResponse.data);
     
             
     
@@ -177,34 +223,35 @@ const CreateStateRepView = props =>{
     const citySearch = async (e, direction)=>{
         e.preventDefault()
 
-        let citySearchObj = {...citySearch};
+        let citySearchParamsObj = JSON.parse(JSON.stringify(citySearchParams));
 
         if(direction === 'previous'){
 
-            citySearchObj.endIndex -= citySearchObj.size;
-            citySearchObj.startIndex -= citySearchObj.size;
+            citySearchParamsObj.endIndex -= citySearchParamsObj.size;
+            citySearchParamsObj.startIndex -= citySearchParamsObj.size;
 
-            setCitySearchParams(citySearchObj);
+            
 
         }else if(direction === 'next'){
 
-            citySearchObj.startIndex = citySearchObj.endIndex + 1;
-            citySearchObj.endIndex = citySearchObj.startIndex + (citySearchObj.size - 1);
-            setSearch(citySearchObj);
+            citySearchParamsObj.startIndex = citySearchParamsObj.endIndex + 1;
+            citySearchParamsObj.endIndex = citySearchParamsObj.startIndex + (citySearchParamsObj.size - 1);
+            console.log('check this out ')
+            console.log(citySearchParams);
+        
 
         }else if(e.target.name === 'size'){
 
-            console.log(typeof(e.target.value))
-            citySearchObj.size = Number(e.target.value);
-            citySearchObj.startIndex = 0;
-            citySearchObj.endIndex = (citySearchObj.size - 1);
-            setCitySearchParams(citySearchObj);
+            
+            citySearchParamsObj.size = Number(e.target.value);
+            citySearchParamsObj.startIndex = 0;
+            citySearchParamsObj.endIndex = (citySearchParamsObj.size - 1);
+            
         }
-
 
         try{
 
-            const cityResponse = await axios.get('http://localhost:8080/cities/search/' + citySearchParams.city ,{
+            const cityResponse = await axios.get('http://localhost:8080/cities/search/' + citySearchParamsObj.city ,{
 
         headers:{
 
@@ -213,18 +260,17 @@ const CreateStateRepView = props =>{
 
         params:{
 
-            startIndex: citySearchParams.startIndex,
-            endIndex: citySearchParams.endIndex
+            startIndex: citySearchParamsObj.startIndex,
+            endIndex: citySearchParamsObj.endIndex
         }
 
     })
-            console.log(cityResponse.data);
+            
             let cityPageObj = JSON.parse(JSON.stringify(cityPage));
-
-            let citySearchParamsObj = JSON.parse(JSON.stringify(cityPage));
             cityPageObj.cities = [];
+            citySearchParamsObj.cities = {...cityResponse.data};
             setCityPage(cityPageObj);
-            setCitySearchParams(cityResponse.data);
+            setCitySearchParams(citySearchParamsObj);
 
 
         }catch(error){
@@ -306,9 +352,16 @@ const CreateStateRepView = props =>{
 
                     headers:{
                         Authorization: localStorage.getItem('token')
-                    }
-                })
+                    },
 
+                    params:{
+                        
+                        limit: citySearchParams.size
+                    }
+
+
+                })
+                console.log('trigger')
                 console.log(cityListResponse.data);
                 setCityPage(cityListResponse.data);
 
@@ -322,7 +375,7 @@ const CreateStateRepView = props =>{
         
         return () =>{};
     
-    },[])
+    },[citySearchParams.search, cityPage.size])
 
     useEffect(()=>{
 
@@ -382,7 +435,7 @@ const CreateStateRepView = props =>{
 
         return ()=>{};
 
-    },[zipCodePage.size, toogleSearch])
+    },[ toogleSearch])
 
     useEffect(()=>{
 
@@ -549,6 +602,7 @@ const CreateStateRepView = props =>{
                 <StateRepForm
                     stateRep={stateRep}
                     setStateRep={setStateRep}
+                    cityPageable={cityPageable}
                     zipCodePageable={zipCodePageable}
                     toogleSearch={toogleSearch}
                     setToogleSearch={setToogleSearch}

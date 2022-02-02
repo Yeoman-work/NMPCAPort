@@ -1,30 +1,41 @@
-import axios from "axios"
+import React from "react";
+import axios from "axios";
 
 
 
+const cityPageable = async (e, direction, cityPage ) =>{
+    e.preventDefault();
 
-const getRequestSearchCity = async (citySearchParams) =>{
+    try{
 
-    const cityResponse = await axios.get('http://localhost:8080/cities/search/' + citySearchParams.city ,{
+        const cityResponse = await axios.get('http://localhost:8080/cities', {
 
-        headers:{
+            headers:{
 
-            Authorization: localStorage.getItem('token')
-        },
+                Authorization: localStorage.getItem('token') 
+            },
 
-        params:{
+            params:{
 
-            startIndex: citySearchParams.startIndex,
-            endIndex: citySearchParams.endIndex
-        }
+                pageNo: cityPage.number,
+                limit: cityPage.size
+            }
 
-    })
 
-    return cityResponse.data;
+        })
+
+        console.log('another module')
+        return cityPageable.data;
+
+    }catch(error){
+
+        console.log(error.response);
+        return error.response;
+    }
 
 }
 
-
 module.exports={
-    getRequestSearchCity
+
+    cityPageable
 }

@@ -249,7 +249,14 @@ public class CityServiceImpl implements CityService {
 		
 		List<CityEssentials> cityEssentials = new ArrayList<>();
 		
-		for(int i = startIndex; i < endIndex; i++) {
+		int limit = endIndex;
+		
+		if( limit > (cityEntities.size() - 1)) {
+			
+			limit = cityEntities.size();
+		}
+		
+		for(int i = startIndex; i < limit; i++) {
 			
 			if(cityEntities.get(i) == null) break;
 			
@@ -284,7 +291,7 @@ public class CityServiceImpl implements CityService {
 			
 		}
 		
-		cityEssentialsPage.setNumber(startIndex / (endIndex / (startIndex + 1)));
+		cityEssentialsPage.setNumber(startIndex / (endIndex - startIndex + 1));
 		cityEssentialsPage.setPrevious(startIndex > 0);
 		cityEssentialsPage.setSize(cityEssentials.size());
 		cityEssentialsPage.setTotalElements(Long.valueOf(cityEntities.size()));

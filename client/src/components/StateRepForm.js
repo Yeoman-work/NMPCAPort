@@ -29,6 +29,7 @@ const StateRepForm = props =>{
             setCityPage,
             citySearch,
             citySearchParams,
+            cityPageable,
             setCitySearchParams,
             districtList,
             partyList,
@@ -102,7 +103,6 @@ const StateRepForm = props =>{
 
         searchObj.size = Number(e.target.value);
         
-
         searchObj.endIndex = (searchObj.startIndex + searchObj.size) - 1; 
 
         setZipCodePage(zipCodePageObj);
@@ -115,17 +115,27 @@ const StateRepForm = props =>{
 
         let cityPageObj = JSON.parse(JSON.stringify(cityPage));
         let citySearchParamsObj = JSON.parse(JSON.stringify(citySearchParams));
-
+        
         cityPageObj.size = Number(e.target.value);
         citySearchParamsObj.size = Number(e.target.value);
-
         citySearchParamsObj.endIndex = (Number(citySearchParamsObj.startIndex + citySearchParamsObj.size));
+
+        if(citySearchParams.search){
+            
+            citySearchParams.search = false;
+
+        }else{
+            
+            citySearchParams.search = true;
+        }
 
         console.log(citySearchParamsObj);
         setCitySearchParams(citySearchParamsObj);
-        setCityPage(cityPage);
+        setCityPage(cityPageObj);
 
     }
+
+
 
     const citySearchAction = (e) =>{
         e.preventDefault();
@@ -134,8 +144,20 @@ const StateRepForm = props =>{
 
         citySearchObj[e.target.name] = e.target.value;
 
+        if(citySearchObj.city.length <= 0){
 
-        console.log(citySearchObj);
+            if(citySearchParams.search){
+
+                citySearchObj.search = false;
+
+            }else{
+
+                citySearchObj.search = true;
+            }
+        }
+
+        console.log(e.target.name)
+        console.log(citySearchObj); 
 
         setCitySearchParams(citySearchObj);
 
@@ -219,11 +241,11 @@ const StateRepForm = props =>{
                     </div>
                     <div className="mt-3 mb-3 overflow-auto height200">
                         {
-                            cityPage.cities?
+                            cityPage.cities && cityPage.cities.length > 0?
                             cityPage.cities.map((city, index)=>{
 
                                 return(
-                                    <div key={index}>
+                                <div key={index}>
                                     <button 
                                         value={city.cityId}
                                         name={'city'}
@@ -235,7 +257,24 @@ const StateRepForm = props =>{
                                 </div>
                                 )
                             })
-                            : null
+                            : 
+                            
+                            citySearchParams.cities.cities.map((city, index)=>{
+
+                                return(
+                                    <div key={index}>
+                                        <button 
+                                            value={city.cityId}
+                                            name={'city'}
+                                            onClick={(e)=>inputChange(e)}
+                                            disabled={stateRep.city === city.cityId}
+                                        >
+                                            {city.name}
+                                        </button>
+                                    </div>
+                                )
+
+                            })
                         }
                     </div>
                         <div className="row">
@@ -251,7 +290,8 @@ const StateRepForm = props =>{
                             </select>
                         </div>
                         <div className="col">
-                            <button disabled={citySearchParams.cities.cities? citySearchParams.cities.lastPage :  cityPage.firstPage}
+                            <button disabled={citySearchParams.cities.cities.length > 0? citySearchParams.cities.firstPage :  cityPage.firstPage}
+                                    onClick={citySearchParams.cities.cities.length > 0? (e)=>citySearch(e, 'previous') : (e)=>cityPageable(e, 'previous') }
                                     name="previous"
                                 
                             >
@@ -259,14 +299,14 @@ const StateRepForm = props =>{
 
                             </button>
                             {
-                                citySearchParams.city && citySearchParams.city.length > 0?
-                                <p className="d-inline-block">{citySearchParams.cities?`${citySearchParams.cities.number + 1} ${citySearchParams.city}of ${citySearchParams.cities.totalPages}`: null}</p>
+                                citySearchParams.cities && citySearchParams.cities.cities.length > 0?
+                                <p className="d-inline-block">{citySearchParams.cities?`${citySearchParams.cities.number + 1} of ${citySearchParams.cities.totalPages}`: null}</p>
                                 :
-                                <p className="d-inline-block">{cityPage?`${cityPage.number + 1}  ${citySearchParams.city} dang of ${cityPage.totalPages}`: null}</p>
+                                <p className="d-inline-block">{cityPage?`${cityPage.number + 1}  of ${cityPage.totalPages}`: null}</p>
                             }
                             
-                            <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.lastPage : zipCodePage.lastPage}
-                                    onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'next') :(e)=>zipCodePageable(e, 'next')}
+                            <button disabled={citySearchParams.cities.cities.length > 0? citySearchParams.cities.lastPage : cityPage.lastPage}
+                                    onClick={citySearchParams.cities.cities.length > 0? (e)=>citySearch(e, 'next') : (e)=>cityPageable(e, 'next')}
                             >
                                 <IoMdArrowDropright/>
                             </button>
