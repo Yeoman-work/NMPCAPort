@@ -15,11 +15,17 @@ import java.util.List;
 @Service
 public class NMHouseStatusServiceImpl implements NMHouseStatusService {
 
-    @Autowired
-    private NMHouseStatusRepository nmHouseStatusRepository;
+    
+    private final NMHouseStatusRepository nmHouseStatusRepository;
 
-    @Autowired
-    private Utils utils;
+    private final Utils utils;
+    
+    public NMHouseStatusServiceImpl(NMHouseStatusRepository nmHouseStatusRepository,
+    			                    Utils utils
+	) {
+    	this.nmHouseStatusRepository = nmHouseStatusRepository;
+    	this.utils = utils;
+    }
 
     @Override
     public NMHouseStatusDto getNMHouseStatusDto(String houseStatusId) {

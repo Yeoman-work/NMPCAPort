@@ -2,6 +2,7 @@ import React from "react";
 import {IoMdArrowDropright, IoMdArrowDropleft} from 'react-icons/io'
 import { RawZoomHelpers } from "victory";
 import '../css/style.css'
+const {districtPerPageSearch, districtsPerPage} = require('../helper/DistrictSearch')
 const {next, previous, setIndex} =require('../helper/paginationFunctions')
 
 
@@ -31,7 +32,10 @@ const StateRepForm = props =>{
             citySearchParams,
             cityPageable,
             setCitySearchParams,
-            districtList,
+            districtPage,
+            setDistrictPage,
+            districtSearchParams,
+            setDistrictSearchParams,
             partyList,
             zipCodePage,
             setZipCodePage,
@@ -91,6 +95,17 @@ const StateRepForm = props =>{
         setSearch(searchObj);
 
 
+    }
+
+
+    const districtPagination = (e) =>{
+        e.preventDefault();
+        
+        
+        setDistrictSearchParams(districtPerPageSearch(e, districtSearchParams));
+
+        setDistrictPage(districtsPerPage(e, districtPage));
+        
     }
     
     const zipCodesPerPage = (e) =>{
@@ -422,8 +437,8 @@ const StateRepForm = props =>{
                     </div>
                     <div className={'height200 mt-2 mb-2 overflow-auto'}>
                         {
-                            districtList?
-                                districtList.map((district, index)=>{
+                            districtPage.districts?
+                                districtPage.districts.map((district, index)=>{
 
                                     return(
                                         <div key={index}>
@@ -436,14 +451,16 @@ const StateRepForm = props =>{
                     </div>
                     <div className="row">
                         <div className="col text-start w-25">
-                            <select className="form-control">
+                            <select className="form-control"
+                                    onChange={(e)=>districtPagination(e)}
+                            >
                                 <option value={10}>10</option>
                                 <option value={25}>25</option>
                                 <option value={50}>50</option>
                             </select>
                         </div>
                         <div className="col">
-                        <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.firstPage :  zipCodePage.firstPage}
+                        <button disabled={districtSearchParams.districts.districts.length > 0? districtSearchParams.districts.number + 1 :  zipCodePage.firstPage}
                                     name="previous"
                                     onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'previous') :(e)=>zipCodePageable(e, 'previous')}
                             >
@@ -451,10 +468,10 @@ const StateRepForm = props =>{
 
                             </button>
                             {
-                                search.name.length > 0?
-                                <p className="d-inline-block">{search.zipCodes?`${search.zipCodes.number + 1} of ${search.zipCodes.totalPages}`: null}</p>
+                                districtSearchParams.district.length > 0?
+                                <p className="d-inline-block">{districtSearchParams.districts?`${districtSearchParams.districts.number + 1} of ${districtPage.totalPages}`: null}</p>
                                 :
-                                <p className="d-inline-block">{zipCodePage?`${zipCodePage.number + 1} of ${zipCodePage.totalPages}`: null}</p>
+                                <p className="d-inline-block">{districtPage?`${districtPage.number + 1} of ${districtPage.totalPages}`: null}</p>
                             }
                             
                             <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.lastPage : zipCodePage.lastPage}

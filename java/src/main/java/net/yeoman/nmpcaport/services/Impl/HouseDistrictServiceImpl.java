@@ -1,5 +1,15 @@
 package net.yeoman.nmpcaport.services.Impl;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
 import net.yeoman.nmpcaport.entities.HouseDistrictEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.entities.StateRepEntity;
@@ -12,15 +22,9 @@ import net.yeoman.nmpcaport.io.repositories.HouseDistrictRepository;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequest;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequestList;
 import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictPagination;
 import net.yeoman.nmpcaport.services.HouseDistrictService;
 import net.yeoman.nmpcaport.shared.utils.Utils;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class HouseDistrictServiceImpl implements HouseDistrictService {
@@ -53,9 +57,94 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
 
     }
 
+    
 
 
     @Override
+	public List<HouseDistrictEntity> houseDistrictSearch(String name) {
+		
+		return this.houseDistrictRepository.findByNameContaining(name);
+	}
+
+
+    //pagination
+    //general district pull
+	@Override
+	public HouseDistrictPagination getDistrictPageInfo(int pageNo, int limit) {
+		
+		PageRequest pageRequest = PageRequest.of(pageNo, limit);
+		
+		Page<HouseDistrictEntity> districtPage = this.houseDistrictRepository.findAll(pageRequest);
+		
+		HouseDistrictPagination pageEssentials = new HouseDistrictPagination();
+		
+		pageEssentials.setFirstPage(districtPage.isFirst());
+		pageEssentials.setHasContent(districtPage.hasContent());
+		pageEssentials.setIsEmpty(districtPage.isEmpty());
+		pageEssentials.setLastPage(districtPage.isLast());
+		pageEssentials.setNext(districtPage.hasNext());
+		pageEssentials.setNumber(districtPage.getNumber());
+		pageEssentials.setPrevious(districtPage.getPageable().hasPrevious());
+		pageEssentials.setSize(districtPage.getSize());
+		pageEssentials.setTotalElements(districtPage.getTotalElements());
+		pageEssentials.setTotalPages(districtPage.getTotalPages());
+		pageEssentials.setDistricts(this.entityToEssentials(districtPage.getContent()));
+		
+		return pageEssentials;
+	}
+
+	//pagination search
+	@Override
+	public HouseDistrictPagination getDistrictPageInfoSearch(String name, int startIndex, int endIndex  ) {
+		
+		if(name == null) throw new HouseDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		 
+		List<HouseDistrictEntity> houseDistricts = this.houseDistrictSearch(name);
+		List<HouseDistrictEssentialResponse> houseEssentials = new ArrayList<>(); 
+		
+		int limit = endIndex;
+		
+		if(endIndex > (houseDistricts.size() - 1)) {
+			
+			limit = houseDistricts.size();
+			
+		}
+		
+		 for(int i = startIndex; i < limit; i++) {
+			 
+			 if(houseDistricts.get(i) == null) break;
+			 
+			 houseEssentials.add(this.entityToEssentials(houseDistricts.get(i)));
+		 }
+		 
+		 HouseDistrictPagination housePage = new HouseDistrictPagination();
+		 
+		 housePage.setFirstPage(startIndex == 0);
+		 housePage.setHasContent(houseDistricts.size() > 0);
+		 housePage.setIsEmpty(houseDistricts.size() == 0);
+		 housePage.setLastPage(endIndex >= (houseDistricts.size() - 1));
+		 housePage.setNext(endIndex < (houseDistricts.size() - 1));
+		 
+		 housePage.setNumber(startIndex - ((endIndex - startIndex) + 1));
+		 housePage.setPrevious(startIndex > 0);
+		 housePage.setSize((endIndex - startIndex));
+		 housePage.setTotalElements(Long.valueOf(houseDistricts.size()));
+		 
+		 int totalPages = houseDistricts.size() / ((endIndex - startIndex) - 1);
+		 
+		 if((totalPages % 1) != 0) {
+			 
+			 totalPages++;
+		 }
+		 
+		 housePage.setTotalPages(totalPages);
+		 
+		 return housePage;
+	}
+
+
+
+	@Override
     public HouseDistrictEntity saveHouseDistrict(HouseDistrictEntity houseDistrictEntity) {
 
         return this.houseDistrictRepository.save(houseDistrictEntity);
@@ -212,6 +301,24 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
 
         return houseDistrictDetailsRequest == null;
     }
+    
+    
+    //end points
+    
+    //get request
+    
+    @Override
+	public HouseDistrictPagination getHouseDistrictPageInfoEndPoint(int pageNo, int limit) {
+		
+		return this.getDistrictPageInfo(pageNo, limit);
+	}
+
+
+	@Override
+	public HouseDistrictPagination getHouseDistrictPageInfoSearchEndPoint(String name, int startIndex, int endIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }

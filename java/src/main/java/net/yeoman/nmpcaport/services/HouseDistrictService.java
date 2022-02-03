@@ -9,6 +9,7 @@ import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequest;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequestList;
 import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictPagination;
 
 public interface HouseDistrictService {
 
@@ -24,8 +25,8 @@ public interface HouseDistrictService {
     
     
     //pagination
-    Page<HouseDistrictEntity> getDistrictPageInfo(int pageNo, int limit);
-    Page<HouseDistrictEntity> getDistrictPageInfoSearch(String name, int pageNo, int limit);
+    HouseDistrictPagination getDistrictPageInfo(int pageNo, int limit);
+    HouseDistrictPagination getDistrictPageInfoSearch(String name, int startIndex, int endIndex);
 
 
     //save house district
@@ -58,5 +59,15 @@ public interface HouseDistrictService {
 
      //check if request is null
     Boolean requestIsNull(HouseDistrictDetailsRequest houseDistrictDetailsRequest);
+    
+    
+    //end points
+    
+    //get request
+    HouseDistrictPagination getHouseDistrictPageInfoEndPoint(int pageNo, int limit);
+    HouseDistrictPagination getHouseDistrictPageInfoSearchEndPoint(String name, int startIndex, int endIndex);
+    
+    //post request
+    
 
 }

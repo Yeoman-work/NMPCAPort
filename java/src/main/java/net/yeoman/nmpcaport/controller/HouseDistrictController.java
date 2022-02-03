@@ -1,13 +1,18 @@
 package net.yeoman.nmpcaport.controller;
 
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequest;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequestList;
-import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.HouseDistrict.HouseDistrictPagination;
 import net.yeoman.nmpcaport.services.Impl.HouseDistrictServiceImpl;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/houseDistricts")
@@ -21,11 +26,20 @@ public class HouseDistrictController {
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<HouseDistrictEssentialResponse> getAllHouseCommitteeEssentials(){
+    public HouseDistrictPagination getAllHouseCommitteeEssentials(@RequestParam(value ="pageNo", defaultValue ="0") int pageNo, @RequestParam(value = "limit", defaultValue = "10") int limit){
 
-        return this.houseDistrictService.entityToEssentials(this.houseDistrictService.getAllHouseDistrictEntities());
+        return this.houseDistrictService.getHouseDistrictPageInfoEndPoint(pageNo, limit);
     }
 
+    @GetMapping(path="search/{name}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public HouseDistrictPagination getSearchHouseCommittee(@PathVariable("name") String name, @RequestParam("startIndex") int startIndex, 
+    													   @RequestParam("endIndex") int endIndex
+	
+	){
+    	return this.houseDistrictService.getHouseDistrictPageInfoSearchEndPoint(name, startIndex, endIndex);
+    }
+    
+    
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
                  produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )

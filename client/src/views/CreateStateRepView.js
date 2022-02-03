@@ -70,7 +70,7 @@ const CreateStateRepView = props =>{
 
     const [cityPage, setCityPage] = useState({});
 
-    const [districtList, setDistrictList] = useState([]);
+    const [districtPage, setDistrictPage] = useState({});
 
     const [partyList, setPartyList] = useState([]);
 
@@ -100,7 +100,7 @@ const CreateStateRepView = props =>{
         }
     })
 
-    const [districtSearch, setDistrictSearch] = useState({
+    const [districtSearchParams, setDistrictSearchParams] = useState({
 
         district: ''.trim(),
         size: 10,
@@ -462,13 +462,18 @@ const CreateStateRepView = props =>{
 
                         headers:{
                             Authorization: localStorage.getItem('token')
+                        },
+
+                        params:{
+                            
+                            limit: districtSearchParams.size
                         }
 
                     })
 
                     console.log(houseDistrictResponse.data);
 
-                    setDistrictList(houseDistrictResponse.data);
+                    setDistrictPage(houseDistrictResponse.data);
 
                 }catch(error){
 
@@ -492,7 +497,7 @@ const CreateStateRepView = props =>{
                 })
                 console.log(senateDistrictResponse.data);
 
-                setDistrictList(senateDistrictResponse.data);
+                setDistrictPage(senateDistrictResponse.data);
 
             }catch(error){
 
@@ -628,7 +633,10 @@ const CreateStateRepView = props =>{
                     partyList={partyList}
                     search={search}
                     setSearch={setSearch}
-                    districtList={districtList}
+                    districtPage={districtPage}
+                    setDistrictPage={setDistrictPage}
+                    districtSearchParams={districtSearchParams}
+                    setDistrictSearchParams={setDistrictSearchParams}
                     handler={createRep}
                     formLabel={repType?  'New State Rep': 'New State Senator'}
                     fieldLength={fieldLength}
