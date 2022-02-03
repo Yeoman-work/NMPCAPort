@@ -33,6 +33,7 @@ const StateRepForm = props =>{
             cityPageable,
             setCitySearchParams,
             districtPage,
+            districtPageable,
             setDistrictPage,
             districtSearchParams,
             setDistrictSearchParams,
@@ -460,9 +461,9 @@ const StateRepForm = props =>{
                             </select>
                         </div>
                         <div className="col">
-                        <button disabled={districtSearchParams.districts.districts.length > 0? districtSearchParams.districts.number + 1 :  zipCodePage.firstPage}
+                        <button disabled={districtSearchParams.districts.districts.length > 0? districtSearchParams.districts.number + 1 :  districtPage.firstPage}
                                     name="previous"
-                                    onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'previous') :(e)=>zipCodePageable(e, 'previous')}
+                                    onClick={districtSearchParams.district.length > 0? (e)=>districtPageable(e, 'previous', districtPage) :(e)=>districtPageable(e, 'previous', districtPage)}
                             >
                                 <IoMdArrowDropleft/>
 
@@ -474,8 +475,8 @@ const StateRepForm = props =>{
                                 <p className="d-inline-block">{districtPage?`${districtPage.number + 1} of ${districtPage.totalPages}`: null}</p>
                             }
                             
-                            <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.lastPage : zipCodePage.lastPage}
-                                    onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'next') :(e)=>zipCodePageable(e, 'next')}
+                            <button disabled={districtSearchParams.districts.districts.length > 0? districtSearchParams.districts.lastPage : districtPage.lastPage}
+                                    onClick={search.name.length > 0? (e)=>districtPageable(e, 'next', districtPage) :(e)=>districtPageable(e, 'next', districtPage)}
                             >
                                 <IoMdArrowDropright/>
                             </button>

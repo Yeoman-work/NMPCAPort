@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header";
 import StateRepForm from "../components/StateRepForm";
 import PhoneNumberForm from "../components/PhoneNumberForm";
+const {districtPaging} = require('../helper/DistrictSearch')
 const {searchNameIsEmpty, clearZipCodeSearch, zipCodePageable} = require('../helper/paginationFunctions');
 
 const { phoneNumberPattern,
@@ -130,6 +131,57 @@ const CreateStateRepView = props =>{
 
             setRepType(true);
         }
+    }
+
+    const districtPageable = async (e, direction, districtPage) =>{
+        e.preventDefault()
+
+        console.log('read this');
+        console.log(districtPage);
+        let districtPageObj = districtPaging(e, direction, districtPage);
+        console.log(districtPageObj);
+
+        if(repType){
+
+                try{
+
+                    const districtResponse = await axios.get('http://localhost:8080/houseDistricts',{
+
+                        headers:{
+
+                            Authorization: localStorage.getItem('token')
+                        },
+
+                        params:{
+                            
+                            pageNo:districtPageObj.number,
+                            limit: districtPageObj.size
+                        }
+                    })
+
+                    
+                    setDistrictPage(districtResponse.data)
+
+                }catch(error){
+
+                    console.log(error.response)
+
+                }
+
+        }else{
+
+            try{
+
+                const districtResponse = await axios.get('http://localhost:8080/')
+
+            }catch(error){
+
+                console.log(error.response)
+
+            }
+
+        }
+        
     }
 
     const cityPageable = async(e, direction)=>{
@@ -512,7 +564,7 @@ const CreateStateRepView = props =>{
 
         return ()=>{}
 
-    }, [repType])
+    }, [repType, districtSearchParams.size])
 
 
     const createRep = async (e)=>{
@@ -620,6 +672,7 @@ const CreateStateRepView = props =>{
                 <StateRepForm
                     stateRep={stateRep}
                     setStateRep={setStateRep}
+                    districtPageable={districtPageable}
                     cityPageable={cityPageable}
                     zipCodePageable={zipCodePageable}
                     zipCodeSearch={zipCodeSearch}
