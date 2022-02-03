@@ -2,8 +2,6 @@ package net.yeoman.nmpcaport.services;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-
 import net.yeoman.nmpcaport.entities.HouseDistrictEntity;
 import net.yeoman.nmpcaport.entities.SiteEntity;
 import net.yeoman.nmpcaport.io.request.HouseDistrict.HouseDistrictDetailsRequest;

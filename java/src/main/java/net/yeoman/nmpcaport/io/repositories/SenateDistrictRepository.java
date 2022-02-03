@@ -1,14 +1,17 @@
 package net.yeoman.nmpcaport.io.repositories;
 
-import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
-import org.springframework.data.repository.CrudRepository;
-
 import java.util.List;
 
-public interface SenateDistrictRepository extends CrudRepository<SenateDistrictEntity, Long> {
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
+
+public interface SenateDistrictRepository extends PagingAndSortingRepository<SenateDistrictEntity, Long> {
 
     List<SenateDistrictEntity> findAll();
-
+    
+    List<SenateDistrictEntity> findByNameContaining(String name);
+    
     SenateDistrictEntity findBySenateDistrictId(String senateDistrictId);
 
     Boolean existsByName(String name);

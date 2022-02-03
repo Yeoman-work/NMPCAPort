@@ -1,17 +1,27 @@
 package net.yeoman.nmpcaport.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import net.yeoman.nmpcaport.io.request.senateDistrict.SenateDistrictDetailsRequest;
 import net.yeoman.nmpcaport.io.request.senateDistrict.SenateDistrictDetailsRequestList;
-import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialsPagination;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictResponseModel;
 import net.yeoman.nmpcaport.services.Impl.SenateDistrictServiceImpl;
 import net.yeoman.nmpcaport.shared.dto.SenateDistrictDto;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/senateDistricts")
@@ -29,11 +39,15 @@ public class SenateDistrictController {
         return new ModelMapper().map(senateDistrictDto, SenateDistrictResponseModel.class);
     }
 
-    @GetMapping
-    public List<SenateDistrictEssentialResponse> getAllSenateDistrictResponses(){
+    @GetMapping(produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public SenateDistrictEssentialsPagination getAllSenateDistrictResponses(@RequestParam(value = "pageNo", defaultValue="0") int pageNo,
+    																		@RequestParam(value = "limit", defaultValue="10") int limit
+	){
 
-        return this.senateDistrictService.getAllDistrictEssentials();
+        return this.senateDistrictService.getSenateDistrictPageInfoEndPoint(pageNo, limit);
     }
+    
+    @GetMapping(path="search/{name}")
 
     @PostMapping
     public SenateDistrictResponseModel createSenateDistrict(@RequestBody SenateDistrictDetailsRequest senateDistrict){

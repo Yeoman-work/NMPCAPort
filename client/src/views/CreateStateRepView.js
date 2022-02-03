@@ -140,7 +140,7 @@ const CreateStateRepView = props =>{
         console.log(districtPage);
         let districtPageObj = districtPaging(e, direction, districtPage);
         console.log(districtPageObj);
-
+console.log('read this')
         if(repType){
 
                 try{
@@ -155,7 +155,8 @@ const CreateStateRepView = props =>{
                         params:{
                             
                             pageNo:districtPageObj.number,
-                            limit: districtPageObj.size
+                            limit: districtPageObj.size 
+                            
                         }
                     })
 
@@ -169,10 +170,23 @@ const CreateStateRepView = props =>{
                 }
 
         }else{
-
+            
             try{
 
-                const districtResponse = await axios.get('http://localhost:8080/')
+                const districtResponse = await axios.get('http://localhost:8080/senateDistricts', {
+
+                    headers:{
+                        Authorization : localStorage.getItem('token')
+                    },
+
+                    params:{
+                        pageNo:districtPageObj.number,
+                        limit: districtPageObj.size
+                    }
+                })
+                
+                
+                setDistrictPage(districtResponse.data)
 
             }catch(error){
 
@@ -503,7 +517,7 @@ const CreateStateRepView = props =>{
     },[zipCodePage.size, zipCodePage.search])
 
     useEffect(()=>{
-
+        console.log('here');
         if(repType){
 
             (async ()=>{
@@ -544,6 +558,10 @@ const CreateStateRepView = props =>{
 
                 headers:{
                     Authorization: localStorage.getItem('token')
+                },
+
+                params:{
+                    limit: districtSearchParams.size
                 }
 
                 })

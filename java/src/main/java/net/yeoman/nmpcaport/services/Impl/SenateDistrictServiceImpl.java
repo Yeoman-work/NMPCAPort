@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import net.yeoman.nmpcaport.entities.SenateDistrictEntity;
@@ -15,6 +17,7 @@ import net.yeoman.nmpcaport.exception.SenateDistrictServiceException;
 import net.yeoman.nmpcaport.exception.SiteServiceException;
 import net.yeoman.nmpcaport.io.repositories.SenateDistrictRepository;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialResponse;
+import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictEssentialsPagination;
 import net.yeoman.nmpcaport.io.response.senateDistrict.SenateDistrictNestedResponse;
 import net.yeoman.nmpcaport.io.response.stateSenator.StateSenatorNestedResponse;
 import net.yeoman.nmpcaport.services.SenateDistrictService;
@@ -155,8 +158,78 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
         		.sorted(Comparator.comparing(district ->Integer.parseInt(district.getName())))
         		.collect(Collectors.toList());
     }
+    
+    
+    
 
     @Override
+	public SenateDistrictEssentialsPagination getSenateDistrictPageInfo(int pageNo, int limit) {
+		
+    	PageRequest pageRequest = PageRequest.of(pageNo, limit);
+    	
+    	Page<SenateDistrictEntity> pageEntity = this.senateDistrictRepository.findAll(pageRequest);
+    	
+    	SenateDistrictEssentialsPagination pageEssentials = new SenateDistrictEssentialsPagination();
+    	
+    	pageEssentials.setFirstPage(pageEntity.isFirst());
+    	pageEssentials.setHasContent(pageEntity.isLast());
+    	pageEssentials.setIsEmpty(pageEntity.isEmpty());
+    	pageEssentials.setLastPage(pageEntity.isLast());
+    	pageEssentials.setNext(pageEntity.hasNext());
+    	pageEssentials.setNumber(pageEntity.getNumber());
+    	pageEssentials.setPrevious(pageEntity.hasPrevious());
+    	pageEssentials.setSize(pageEntity.getSize());
+    	pageEssentials.setTotalElements(pageEntity.getTotalElements());
+    	pageEssentials.setTotalPages(pageEntity.getTotalPages());
+    	pageEssentials.setDistricts(this.entitiesToEssentials(pageEntity.getContent()));
+    	
+		return pageEssentials;
+	}
+
+	@Override
+	public SenateDistrictEssentialsPagination getSenateDistrictpageInfoSearch(String name, int startIndex, int endIndex){
+		
+		if(name == null) throw new SenateDistrictServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+		
+		List<SenateDistrictEntity> senateDistrictEntity = this.senateDistrictRepository.findByNameContaining(name);
+		
+		int limit = endIndex;
+		
+		if(endIndex > (senateDistrictEntity.size() - 1)){
+			
+			limit = senateDistrictEntity.size();
+		}
+		
+		SenateDistrictEssentialsPagination senateDistrictEssentialsPagination = new SenateDistrictEssentialsPagination();
+		
+		List<SenateDistrictEssentialResponse> senateEssentials = new ArrayList<>();
+		
+		for(int i = startIndex; i < limit; i++ ) {
+			
+			if(senateDistrictEntity.get(i) == null) break;
+			
+			senateEssentials.add(this.entityToEssentials(senateDistrictEntity.get(i)));
+		
+		}
+		
+		senateDistrictEssentialsPagination.setDistricts(senateEssentials);
+		senateDistrictEssentialsPagination.setFirstPage(startIndex == 0);
+		senateDistrictEssentialsPagination.setHasContent(senateEssentials.size() > 0);
+		senateDistrictEssentialsPagination.setIsEmpty(senateEssentials.size() == 0);
+		senateDistrictEssentialsPagination.setLastPage(endIndex > senateEssentials.size() - 1);
+		senateDistrictEssentialsPagination.setNext(endIndex < senateEssentials.size() - 1);
+		senateDistrictEssentialsPagination.setNumber(startIndex - ((endIndex - startIndex) - 1));
+		senateDistrictEssentialsPagination.setPrevious(startIndex > 0);
+		senateDistrictEssentialsPagination.setSize(endIndex - startIndex);
+		senateDistrictEssentialsPagination.setTotalElements(Long.valueOf(senateDistrictEntity.size()));
+		senateDistrictEssentialsPagination.setTotalPages(senateDistrictEntity.size() / (endIndex - startIndex));
+		
+		
+		return senateDistrictEssentialsPagination;
+		
+	}
+
+	@Override
     public SenateDistrictEntity getSenateDistrictEntitiesFromSites(SiteEntity siteEntity) {
 
         if(siteEntity == null)
@@ -253,4 +326,23 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
     public Boolean dtoIsNull(List<SenateDistrictDto> senateDistrictDtoList) {
         return senateDistrictDtoList == null;
     }
+    
+    //end points
+    // getMapping
+	
+    @Override
+	public SenateDistrictEssentialsPagination getSenateDistrictPageInfoEndPoint(int pageNo, int limit) {
+		
+		return this.getSenateDistrictPageInfo(pageNo, limit);
+	}
+
+	@Override
+	public SenateDistrictEssentialsPagination getSenateDistrictPageInfoSearchEndPoint(String name, int pageNo,
+			int limit) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    
+    
+    
 }
