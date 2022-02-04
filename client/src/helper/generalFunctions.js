@@ -263,6 +263,18 @@ const characterCount = (characters) =>{
     return count;
 }
 
+const toogleSwitch = (state) =>{
+    let returnValue;
+
+    if(state){
+        returnValue = false;
+    }else{
+        returnValue = true
+    }
+
+    return returnValue;
+}
+
 module.exports={
     phoneNumberBuilder,
     inputChangeField,
@@ -282,5 +294,6 @@ module.exports={
     characters,
     InList,
     phoneNumberPattern,
-    staffMemberValidation
+    staffMemberValidation,
+    toogleSwitch
 }

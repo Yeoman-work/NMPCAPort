@@ -5,6 +5,8 @@ import Header from "../components/Header";
 import StateRepForm from "../components/StateRepForm";
 import PhoneNumberForm from "../components/PhoneNumberForm";
 const {districtPaging} = require('../helper/DistrictSearch')
+const {canSubmit} = require('../helper/StateRepValidation')
+const {zipCodeSearchParams, zipCodeSearchFieldTransfer, zipCodePaging} = require('../helper/zipCodeSearch')
 const {cityPageableRequest, cityPageableCityRequestSearch, citySearchListTransfer} = require('../helper/CitySearchSearch')
 const {zipCodePagable} =require('../helper/zipCodeSearch')
 const {searchNameIsEmpty, clearZipCodeSearch, zipCodePageable} = require('../helper/paginationFunctions');
@@ -15,6 +17,7 @@ const { phoneNumberPattern,
         fieldLength,
         emailValidation,
         fieldLengthNotRequired,
+        toogleSwitch
     } = require('../helper/generalFunctions')
 
 
@@ -124,14 +127,7 @@ const CreateStateRepView = props =>{
 
     const changeRepType = (e) =>{
 
-        if(repType){
-
-            setRepType(false);
-
-        }else{
-
-            setRepType(true);
-        }
+        setRepType(toogleSwitch(repType));
     }
 
     //paging through district
@@ -231,8 +227,9 @@ const CreateStateRepView = props =>{
 
     const zipCodePageable = async (e, direction)=>{
         
-        e.preventDefault();
-        const zipCodeObj = zipCodePageable(zipCodePage, direction);
+        e.preventDefault()
+
+        const zipCodeObj = zipCodePaging(zipCodePage, direction);
 
         try{
     
@@ -295,32 +292,7 @@ const CreateStateRepView = props =>{
     const zipCodeSearch = async (e, direction)=>{
         e.preventDefault();
         
-        let searchObj = {...search};
-        let zipCodePageObj = JSON.parse(JSON.stringify(zipCodePage));
-
-        
-        if(direction === 'previous'){
-            
-            searchObj.endIndex -= searchObj.size;
-            searchObj.startIndex -= searchObj.size;
-            setSearch(searchObj);
-
-        }else if(direction === 'next'){
-
-            searchObj.startIndex = searchObj.endIndex + 1;
-            searchObj.endIndex = searchObj.startIndex + (searchObj.size - 1);
-            setSearch(searchObj);
-
-        }else if(e.target.name === 'size'){
-
-            console.log(typeof(e.target.value))
-            searchObj.size = Number(e.target.value);
-            searchObj.startIndex = 0;
-            searchObj.endIndex = (searchObj.size - 1);
-            setSearch(searchObj);
-        }
-
-        console.log(searchObj);
+        const searchObj = zipCodeSearchParams(e, direction, search);
 
         try{
 
@@ -340,11 +312,10 @@ const CreateStateRepView = props =>{
                 }
             })
 
-            console.log(zipCodeSearchResponse.data);  
+            
             searchObj.zipCodes = {...zipCodeSearchResponse.data};
-            zipCodePageObj.zipCodes = [];
             setSearch(searchObj);
-            setZipCodePage(zipCodePageObj);
+            setZipCodePage(zipCodeSearchFieldTransfer(zipCodePagable));
 
         }catch(error){
 
@@ -373,9 +344,7 @@ const CreateStateRepView = props =>{
 
 
                 })
-                console.log('trigger')
-                console.log(citySearchParams);
-                console.log(cityListResponse.data);
+                
                 setCityPage(cityListResponse.data);
 
             }catch(error){
@@ -434,8 +403,7 @@ const CreateStateRepView = props =>{
 
                 })
 
-                console.log('zipCodes')
-                console.log(zipCodeListResponse.data);
+                
                 setZipCodePage(zipCodeListResponse.data);
                 setSearch(clearZipCodeSearch(search));
 
@@ -587,29 +555,8 @@ const CreateStateRepView = props =>{
     }
 
 
-    const canSubmit = (stateRep) =>{
-
-        let isDisabled = true;
-
-        if(!fieldLength(3, 50, stateRep.firstName)){
-            if(!fieldLength(3, 50, stateRep.lastName)){
-                if(emailValidation(stateRep.email)){
-                    if(fieldLengthNotRequired(0, 150, stateRep.email)){
-                        if(fieldLengthNotRequired(5, 250, stateRep.picture)){
-                            if(fieldLengthNotRequired(5, 150, stateRep.streetAddress)){
-                                if(fieldLengthNotRequired(0, 8, stateRep.capitolRoom)){
-                                    isDisabled = false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
-
-        console.log(isDisabled)
-        return isDisabled;
+    const submitCheck = (stateRep) =>{
+        return canSubmit(stateRep)
     }
 
 

@@ -46,7 +46,7 @@ const zipCodeSearchField =(e, search)=>{
 
 }
 
-const zipCodePagable = (zipCodePage, direction)=>{
+const zipCodePaging = (zipCodePage, direction)=>{
 
 
     let zipCodeObj = JSON.parse(JSON.stringify(zipCodePage));
@@ -66,7 +66,7 @@ const zipCodePagable = (zipCodePage, direction)=>{
 
         if(zipCodePage.previous){
             
-            zipCodeObj.number = Number(zipCodeObj.number) + 1;
+            zipCodeObj.number = Number(zipCodeObj.number) - 1;
             
         }
     }
@@ -74,10 +74,58 @@ const zipCodePagable = (zipCodePage, direction)=>{
     return zipCodeObj;
 }
 
+
+const zipCodeSearchParams = (e, direction, searchParams)=>{
+    
+    
+        let searchObj= JSON.parse(JSON.stringify(searchParams));
+
+        
+        if(direction === 'previous'){
+            
+            searchObj.endIndex -= searchObj.size;
+            searchObj.startIndex -= searchObj.size;
+            
+
+        }else if(direction === 'next'){
+
+            searchObj.startIndex = searchObj.endIndex + 1;
+            searchObj.endIndex = searchObj.startIndex + (searchObj.size - 1);
+            
+
+        }else if(e.target.name === 'size'){
+
+            
+            searchObj.size = Number(e.target.value);
+            searchObj.startIndex = 0;
+            searchObj.endIndex = (searchObj.size - 1);
+        
+        }
+
+        return searchObj
+
+        
+}
+
+const zipCodeSearchFieldTransfer = (zipCodePage) =>{
+
+    let zipCodePageObj = JSON.parse(JSON.stringify(zipCodePage));
+
+    zipCodePageObj.zipCodes = [];
+
+    return zipCodePageObj;
+
+}
+
+
+
+
 module.exports={
 
     adjustZipCodesPerSearchPage,
     adjustZipCodesPerPage,
     zipCodeSearchField,
-    zipCodePagable
+    zipCodePaging,
+    zipCodeSearchParams,
+    zipCodeSearchFieldTransfer,
 }
