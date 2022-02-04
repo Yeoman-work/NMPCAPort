@@ -14,6 +14,15 @@ const dateAndTime = (time) =>{
 }
 
 
+const inputChangeField = (e, state) =>{
+
+    let stateObj = {...state};
+
+    stateObj[e.target.name] = e.target.value;
+        
+    return stateObj;
+}
+
 
 
 const characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
@@ -256,6 +265,7 @@ const characterCount = (characters) =>{
 
 module.exports={
     phoneNumberBuilder,
+    inputChangeField,
     characterCount,
     fieldLength,
     fieldLengthRequired,

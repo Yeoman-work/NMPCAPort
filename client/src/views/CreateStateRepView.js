@@ -5,6 +5,8 @@ import Header from "../components/Header";
 import StateRepForm from "../components/StateRepForm";
 import PhoneNumberForm from "../components/PhoneNumberForm";
 const {districtPaging} = require('../helper/DistrictSearch')
+const {cityPageableRequest, cityPageableCityRequestSearch, citySearchListTransfer} = require('../helper/CitySearchSearch')
+const {zipCodePagable} =require('../helper/zipCodeSearch')
 const {searchNameIsEmpty, clearZipCodeSearch, zipCodePageable} = require('../helper/paginationFunctions');
 
 const { phoneNumberPattern,
@@ -120,7 +122,6 @@ const CreateStateRepView = props =>{
 
 
 
-
     const changeRepType = (e) =>{
 
         if(repType){
@@ -133,14 +134,12 @@ const CreateStateRepView = props =>{
         }
     }
 
+    //paging through district
     const districtPageable = async (e, direction, districtPage) =>{
         e.preventDefault()
 
-        console.log('read this');
-        console.log(districtPage);
         let districtPageObj = districtPaging(e, direction, districtPage);
-        console.log(districtPageObj);
-console.log('read this')
+        
         if(repType){
 
                 try{
@@ -201,21 +200,7 @@ console.log('read this')
     const cityPageable = async(e, direction)=>{
         e.preventDefault();
 
-        let cityPageObj = JSON.parse(JSON.stringify(cityPage));
-
-        if(direction === 'next'){
-
-            console.log('in there')
-            console.log(cityPageObj.number)
-            cityPageObj.number = Number(cityPageObj.number + 1);
-            console.log(cityPageObj.number)
-        }
-        
-        if(direction === 'previous'){
-
-            cityPageObj.number = Number(cityPageObj.number - 1)
-        }
-
+        const cityPageObj = cityPageableRequest(cityPage, direction);
         
         try{
 
@@ -233,7 +218,7 @@ console.log('read this')
 
             })
 
-            console.log(cityPageResponse.data)
+            
             setCityPage(cityPageResponse.data);
 
         }catch(error){
@@ -247,27 +232,8 @@ console.log('read this')
     const zipCodePageable = async (e, direction)=>{
         
         e.preventDefault();
-    
-        let pageNo = zipCodePage.number;
-        let limit = zipCodePage.size;
-        
-        if(direction === 'next'){
-    
-            if(zipCodePage.next){
-                
-                pageNo += 1;
-                
-                
-            }
-        }
-    
-        if(direction === 'previous'){
-    
-            if(zipCodePage.previous){
-                pageNo -= 1;
-                
-            }
-        }console.log(limit);
+        const zipCodeObj = zipCodePageable(zipCodePage, direction);
+
         try{
     
             const zipCodeResponse = await axios.get('http://localhost:8080/zipCodes',{
@@ -279,17 +245,13 @@ console.log('read this')
     
             params:{
     
-                pageNo: pageNo,
-                limit: limit
+                pageNo: zipCodeObj.number,
+                limit: zipCodeObj.size
             }
     
             })
     
-            console.log(zipCodeResponse.data);
             setZipCodePage(zipCodeResponse.data);
-    
-            
-    
     
         }catch(error){
             
@@ -301,32 +263,7 @@ console.log('read this')
     
     const citySearch = async (e, direction)=>{
         e.preventDefault()
-
-        let citySearchParamsObj = JSON.parse(JSON.stringify(citySearchParams));
-
-        if(direction === 'previous'){
-
-            citySearchParamsObj.endIndex -= citySearchParamsObj.size;
-            citySearchParamsObj.startIndex -= citySearchParamsObj.size;
-
-            
-
-        }else if(direction === 'next'){
-
-            citySearchParamsObj.startIndex = citySearchParamsObj.endIndex + 1;
-            citySearchParamsObj.endIndex = citySearchParamsObj.startIndex + (citySearchParamsObj.size - 1);
-            console.log('check this out ')
-            console.log(citySearchParams);
-        
-
-        }else if(e.target.name === 'size'){
-
-            
-            citySearchParamsObj.size = Number(e.target.value);
-            citySearchParamsObj.startIndex = 0;
-            citySearchParamsObj.endIndex = (citySearchParamsObj.size - 1);
-            
-        }
+        let citySearchParamsObj = cityPageableCityRequestSearch(e, citySearchParams, direction);
 
         try{
 
@@ -343,14 +280,10 @@ console.log('read this')
             endIndex: citySearchParamsObj.endIndex
         }
 
-    })
-            
-            let cityPageObj = JSON.parse(JSON.stringify(cityPage));
-            cityPageObj.cities = [];
-            citySearchParamsObj.cities = {...cityResponse.data};
-            setCityPage(cityPageObj);
-            setCitySearchParams(citySearchParamsObj);
-
+    })  
+        citySearchParamsObj.cities = {...cityResponse.data}
+        setCitySearchParams(citySearchParamsObj);
+        setCityPage(citySearchListTransfer(cityPage));
 
         }catch(error){
 
@@ -441,6 +374,7 @@ console.log('read this')
 
                 })
                 console.log('trigger')
+                console.log(citySearchParams);
                 console.log(cityListResponse.data);
                 setCityPage(cityListResponse.data);
 

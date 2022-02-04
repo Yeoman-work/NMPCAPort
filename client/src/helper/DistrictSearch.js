@@ -1,4 +1,4 @@
-
+const {number} = require('./generalFunctions')
 
 
 
@@ -52,11 +52,28 @@ const districtPaging = (e, direction, districtPage) =>{
 }
 
 
+const districtSearchText = (e, state) =>{
+    e.preventDefault();
+
+    let returnValue = state;
+
+    if(number.includes(e.target.value)){
+
+        returnValue = e.target.value;
+        
+    }
+
+    return returnValue;
+    
+}
+
+
 
 
 module.exports={
 
     districtPerPageSearch,
     districtsPerPage,
-    districtPaging
+    districtPaging,
+    districtSearchText
 }

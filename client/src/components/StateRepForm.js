@@ -2,7 +2,11 @@ import React from "react";
 import {IoMdArrowDropright, IoMdArrowDropleft} from 'react-icons/io'
 import { RawZoomHelpers } from "victory";
 import '../css/style.css'
-const {districtPerPageSearch, districtsPerPage} = require('../helper/DistrictSearch')
+const {districtPerPageSearch, districtsPerPage, districtSearchText} = require('../helper/DistrictSearch')
+const {adjustZipCodesPerPage, adjustZipCodesPerSearchPage} = require('../helper/zipCodeSearch')
+const {zipCodeSearchField} = require('../helper/zipCodeSearch')
+const {inputChangeField} = require('../helper/generalFunctions')
+const {citiesPerPage, citiesPerPageSearch, citySearchField} = require('../helper/CitySearchSearch')
 const {next, previous, setIndex} =require('../helper/paginationFunctions')
 
 
@@ -59,126 +63,44 @@ const StateRepForm = props =>{
     } = props;
 
 
+    //form input change updates form state
     const inputChange = (e) =>{
-
-        console.log(e.target.name);
-        let stateRepObj = {...stateRep};
-
-        stateRepObj[e.target.name] = e.target.value;
-        
-        console.log(stateRepObj);
-
-        setStateRep(stateRepObj);
+        setStateRep(inputChangeField(e, stateRep));
     }
 
-
+    //change zip code search parameters
     const searchParams = (e) =>{
         e.preventDefault();
-
-        
-        let searchObj = {...search};
-
-        searchObj[e.target.name] = e.target.value;
-        
-        if(searchObj.name.length === 0){
-
-            if(toogleSearch){
-                
-                searchObj.search = false;
-
-            }else{
-
-                searchObj.search = true;
-
-            }
-        }
-
-        setSearch(searchObj);
-
-
+        setSearch(zipCodeSearchField(e, search));
     }
 
-
+    //changes the number of districts per look up
     const districtPagination = (e) =>{
         e.preventDefault();
-        
-        
         setDistrictSearchParams(districtPerPageSearch(e, districtSearchParams));
-
         setDistrictPage(districtsPerPage(e, districtPage));
         
     }
-    
+
+    //changes the number of districts per lookup
     const zipCodesPerPage = (e) =>{
         e.preventDefault();
-        
-        let zipCodePageObj = JSON.parse(JSON.stringify(zipCodePage));
-        let searchObj = {...search};
-        
-        zipCodePageObj.size = Number(e.target.value);
-
-        searchObj.size = Number(e.target.value);
-        
-        searchObj.endIndex = (searchObj.startIndex + searchObj.size) - 1; 
-
-        setZipCodePage(zipCodePageObj);
-        setSearch(searchObj);
+        setZipCodePage(adjustZipCodesPerPage(e, zipCodePage));
+        setSearch(adjustZipCodesPerSearchPage(e, search));
     }
 
-    const citiesPerPage = (e)=>{
-        e.preventDefault()
-
-
-        let cityPageObj = JSON.parse(JSON.stringify(cityPage));
-        let citySearchParamsObj = JSON.parse(JSON.stringify(citySearchParams));
-        
-        cityPageObj.size = Number(e.target.value);
-        citySearchParamsObj.size = Number(e.target.value);
-        citySearchParamsObj.endIndex = (Number(citySearchParamsObj.startIndex + citySearchParamsObj.size));
-
-        if(citySearchParams.search){
-            
-            citySearchParams.search = false;
-
-        }else{
-            
-            citySearchParams.search = true;
-        }
-
-        console.log(citySearchParamsObj);
-        setCitySearchParams(citySearchParamsObj);
-        setCityPage(cityPageObj);
-
+    //changes cities per look-up
+    const cityPerPage = (e)=>{
+        e.preventDefault();
+        setCitySearchParams(citiesPerPageSearch(e, citySearchParams));
+        setCityPage(citiesPerPage(e, cityPage));
     }
 
-
-
+    //change city search params
     const citySearchAction = (e) =>{
         e.preventDefault();
-
-        let citySearchObj = JSON.parse(JSON.stringify(citySearchParams));
-
-        citySearchObj[e.target.name] = e.target.value;
-
-        if(citySearchObj.city.length <= 0){
-
-            if(citySearchParams.search){
-
-                citySearchObj.search = false;
-
-            }else{
-
-                citySearchObj.search = true;
-            }
-        }
-
-        console.log(e.target.name)
-        console.log(citySearchObj); 
-
-        setCitySearchParams(citySearchObj);
-
+        setCitySearchParams(citySearchField(e, citySearchParams));
     }
-
 
 
     return(
@@ -297,7 +219,7 @@ const StateRepForm = props =>{
                         <div className="col text-start ">
                             <select name='size' 
                                     className="form-control w-50"
-                                    onChange={(e)=>citiesPerPage(e)}
+                                    onChange={(e)=>cityPerPage(e)}
                                     
                             >
                                 <option value={10}>10</option>
@@ -433,7 +355,7 @@ const StateRepForm = props =>{
                     <label>District</label>
                     <div>
                         <div>
-                            <input className="form-control"/>
+                            <input className="form-control" onChange={(e)=>districtSearchText(e)}/>
                         </div>
                     </div>
                     <div className={'height200 mt-2 mb-2 overflow-auto'}>
