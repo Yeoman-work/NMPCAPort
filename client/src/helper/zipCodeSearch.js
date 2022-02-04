@@ -1,10 +1,8 @@
-
+const {numberValidation} = require('../helper/generalFunctions')
 
 
 
 const adjustZipCodesPerSearchPage = (e, zipCodeSearch) =>{
-
-
 
         let searchObj = JSON.parse(JSON.stringify(zipCodeSearch));
         
@@ -29,12 +27,28 @@ const zipCodeSearchField =(e, search)=>{
 
     let searchObj = JSON.parse(JSON.stringify(search));
 
-    searchObj[e.target.name] = e.target.value;
-    
-    if(searchObj.name.length === 0){
+    let returnValue;
 
-        if(search.search){
+    if(numberValidation(e.target.value)){
+        
+        if(e.target.value.length <= 5){
+
             
+            searchObj[e.target.name] = e.target.value;
+            returnValue = searchObj;
+        
+        }else{
+
+            returnValue = searchObj;
+        }
+        
+
+    }else if (e.target.value.length === 0){
+
+        searchObj.name = ''.trim();
+        
+        if(search.search){
+                
             searchObj.search = false;
 
         }else{
@@ -42,7 +56,17 @@ const zipCodeSearchField =(e, search)=>{
             searchObj.search = true;
 
         }
+
+        returnValue = searchObj;
+
+    }else{
+        
+        
+        returnValue = searchObj;
     }
+
+
+    return returnValue;
 
 }
 
@@ -116,6 +140,7 @@ const zipCodeSearchFieldTransfer = (zipCodePage) =>{
     return zipCodePageObj;
 
 }
+
 
 
 

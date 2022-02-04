@@ -24,6 +24,10 @@ const inputChangeField = (e, state) =>{
 }
 
 
+const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'W', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+'w', 'x', 'y', 'z']
 
 const characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
     'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'W', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
@@ -263,6 +267,21 @@ const characterCount = (characters) =>{
     return count;
 }
 
+
+const numberValidation = (numberString) =>{
+
+    let isValid = false;
+
+    
+    if(number.includes(numberString[numberString.length - 1])){
+        
+        isValid = true;
+    }
+
+
+    return isValid;
+}
+
 const toogleSwitch = (state) =>{
     let returnValue;
 
@@ -277,6 +296,7 @@ const toogleSwitch = (state) =>{
 
 module.exports={
     phoneNumberBuilder,
+    numberValidation,
     inputChangeField,
     characterCount,
     fieldLength,
@@ -295,5 +315,6 @@ module.exports={
     InList,
     phoneNumberPattern,
     staffMemberValidation,
-    toogleSwitch
+    toogleSwitch,
+    letters
 }

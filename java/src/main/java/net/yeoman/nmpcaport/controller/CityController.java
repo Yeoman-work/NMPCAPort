@@ -40,8 +40,7 @@ public class CityController {
     @GetMapping(path="/search/{name}", produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public CityEssentialsPagination citySearch(@PathVariable("name") String name, @RequestParam(value="startIndex", defaultValue="0") int startIndex,
     										   @RequestParam(value="endIndex", defaultValue="9") int endIndex){
-    	System.out.println("start index " + startIndex);
-    	System.out.println("endIndex " + endIndex);
+    	
     	return this.cityService.getAllCityEssentialsSearch(name, startIndex, endIndex);
     }
 

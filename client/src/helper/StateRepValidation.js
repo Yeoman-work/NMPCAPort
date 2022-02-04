@@ -22,7 +22,7 @@ const canSubmit = (stateRep) =>{
 
     }
 
-    console.log(isDisabled)
+    
     return isDisabled;
 }
 

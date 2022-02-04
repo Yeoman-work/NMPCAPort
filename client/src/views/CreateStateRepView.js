@@ -229,6 +229,7 @@ const CreateStateRepView = props =>{
         
         e.preventDefault()
 
+        
         const zipCodeObj = zipCodePaging(zipCodePage, direction);
 
         try{
@@ -257,9 +258,12 @@ const CreateStateRepView = props =>{
         }
     
     }
+
+
     
     const citySearch = async (e, direction)=>{
         e.preventDefault()
+
         let citySearchParamsObj = cityPageableCityRequestSearch(e, citySearchParams, direction);
 
         try{
@@ -315,7 +319,7 @@ const CreateStateRepView = props =>{
             
             searchObj.zipCodes = {...zipCodeSearchResponse.data};
             setSearch(searchObj);
-            setZipCodePage(zipCodeSearchFieldTransfer(zipCodePagable));
+            setZipCodePage(zipCodeSearchFieldTransfer(zipCodePage));
 
         }catch(error){
 
@@ -324,6 +328,92 @@ const CreateStateRepView = props =>{
         }
     }
 
+
+    useEffect(()=>{
+        
+        
+        if(search.name && search.name.length > 0){
+
+        let zipCodeTimer = setTimeout(async()=>{
+                
+                let zipCodeSearchObj = JSON.parse(JSON.stringify(search));
+                
+                try{
+
+                    const zipCodeSearchResponse = await axios.get('http://localhost:8080/zipCodes/search/' + zipCodeSearchObj.name, {
+
+                        headers:{
+                        
+                            Authorization: localStorage.getItem('token'),
+                            
+                        },
+        
+                        params:{
+        
+                            startIndex: zipCodeSearchObj.startIndex,
+                            endIndex: zipCodeSearchObj.endIndex
+                        }
+
+                    })
+                    
+                    zipCodeSearchObj.zipCodes = {...zipCodeSearchResponse.data};
+                    setSearch(zipCodeSearchObj);
+                    setZipCodePage(zipCodeSearchFieldTransfer(zipCodePage));
+                    
+                }catch(error){
+
+                    console.log(error.response);
+
+                }
+
+            }, 500)
+
+            return ()=>{clearTimeout(zipCodeTimer)}
+        }
+        
+
+    }, [search.name])
+
+    useEffect(()=>{
+
+        if(citySearchParams.city.length > 0){
+
+            const cityTimer = setTimeout((async()=>{
+
+                try{
+
+                    const citySearchResponse = await axios.get('http://locahost:8080/cities/search/' + citySearchParams.city,{
+
+                        headers:{
+                            
+                            Authorization: localStorage.getItem('token')
+                        },
+
+                        params:{
+
+                            startIndex: citySearchParams.startIndex,
+                            endIndex: citySearchParams.endIndex
+                        }
+
+                    })
+
+                    let citySearchParamsObj = JSON.parse(JSON.stringify(citySearchParams));
+                    citySearchParamsObj.cities = {...citySearchResponse};
+                    setCitySearchParams(citySearchParamsObj);
+                    setCityPage(citySearchListTransfer(cityPage));
+
+
+                }catch(error){
+
+                    console.log(error.response);
+                }
+
+            }), 500)
+
+            return ()=>{clearTimeout(cityTimer)}
+        }
+
+    }, [citySearchParams.name])
 
     useEffect(()=>{
 
@@ -416,7 +506,7 @@ const CreateStateRepView = props =>{
 
         return ()=>{};
 
-    },[zipCodePage.size, zipCodePage.search])
+    },[zipCodePage.size, search.search])
 
     useEffect(()=>{
         console.log('here');
@@ -438,8 +528,6 @@ const CreateStateRepView = props =>{
                         }
 
                     })
-
-                    console.log(houseDistrictResponse.data);
 
                     setDistrictPage(houseDistrictResponse.data);
 

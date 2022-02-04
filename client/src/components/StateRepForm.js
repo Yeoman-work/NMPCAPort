@@ -173,8 +173,7 @@ const StateRepForm = props =>{
                     <label>City:</label>
                     <div>
                         <div>
-                            <input name={'city'} className={'form-control w-50 d-inline-block'} onChange={(e)=>citySearchAction(e)}/>
-                            <button className="btn bg-primary" onClick={(e)=>citySearch(e)}>Search</button>
+                            <input name={'city'} value={citySearchParams.city} className={'form-control'} onChange={(e)=>citySearchAction(e)}/>
                         </div>
                     </div>
                     <div className="mt-3 mb-3 overflow-auto height200">
@@ -255,8 +254,7 @@ const StateRepForm = props =>{
                     <label>Zip Code</label>
                     <div>
                         <div className="">
-                            <input name={'name'} className={'form-control w-50 d-inline-block'} onChange={(e)=>searchParams(e)} />
-                            <button className="btn bg-primary" onClick={(e)=>zipCodeSearch(e)}>Search</button>
+                            <input name={'name'} value={search.name} placeholder={'search zipcode'} className={'form-control'} onChange={(e)=>searchParams(e)} />
                         </div>
                         <div></div>
                     </div>
