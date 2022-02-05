@@ -232,20 +232,22 @@ const CreateStateRepView = props =>{
 
             try{
 
-                const districtResponse = await axios.get('http://localhost:8080/senateDistricts', {
+                const districtResponse = await axios.get('http://localhost:8080/senateDistricts/search/'  + districtSearchObj.district , {
 
                     headers:{
                         Authorization : localStorage.getItem('token')
                     },
 
                     params:{
-                        pageNo:districtSearchObj.number,
-                        limit: districtSearchObj.size
+                        startIndex: Number(districtSearchObj.startIndex),
+                        endIndex: Number(districtSearchObj.endIndex) 
                     }
                 })
                 
-                
-                setDistrictPage(districtResponse.data)
+                console.log('senate district')
+                districtSearchObj.districts = {...districtResponse.data};
+                console.log(districtSearchObj);
+                setDistrictSearchParams(districtSearchObj);
 
             }catch(error){
 
@@ -639,7 +641,7 @@ const CreateStateRepView = props =>{
 
         return ()=>{}
 
-    }, [repType, districtSearchParams.search, districtPage.size])
+    }, [repType, districtSearchParams.search])
 
     useEffect(()=>{
 
@@ -669,7 +671,6 @@ const CreateStateRepView = props =>{
 
                         
                         districtObj.districts = {...districtResponse.data};
-                        console.log(districtObj);
                         setDistrictSearchParams(districtObj);
                         setDistrictPage(districtTransferList(districtPage));
 
@@ -691,7 +692,7 @@ const CreateStateRepView = props =>{
 
                         const districtResponse = await axios.get('http://localhost:8080/senateDistricts/search/' + districtObj.district,{
 
-                                header:{
+                                headers:{
 
                                     Authorization: localStorage.getItem('token')
                                 },
@@ -704,8 +705,9 @@ const CreateStateRepView = props =>{
                                 }
                         })
 
-
+                    
                         districtObj.districts ={...districtResponse.data};
+                    
                         setDistrictSearchParams(districtObj);
                         setDistrictPage(districtTransferList(districtPage));
 

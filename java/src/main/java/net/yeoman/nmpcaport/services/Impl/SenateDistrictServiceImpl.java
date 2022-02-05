@@ -216,13 +216,27 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
 		senateDistrictEssentialsPagination.setFirstPage(startIndex == 0);
 		senateDistrictEssentialsPagination.setHasContent(senateEssentials.size() > 0);
 		senateDistrictEssentialsPagination.setIsEmpty(senateEssentials.size() == 0);
-		senateDistrictEssentialsPagination.setLastPage(endIndex > senateEssentials.size() - 1);
-		senateDistrictEssentialsPagination.setNext(endIndex < senateEssentials.size() - 1);
-		senateDistrictEssentialsPagination.setNumber(startIndex - ((endIndex - startIndex) - 1));
+		senateDistrictEssentialsPagination.setLastPage(endIndex >= senateDistrictEntity.size() - 1);
+		senateDistrictEssentialsPagination.setNext(endIndex < senateDistrictEntity.size() - 1);
+		senateDistrictEssentialsPagination.setNumber(startIndex / ((endIndex - startIndex) - 1));
 		senateDistrictEssentialsPagination.setPrevious(startIndex > 0);
 		senateDistrictEssentialsPagination.setSize(endIndex - startIndex);
 		senateDistrictEssentialsPagination.setTotalElements(Long.valueOf(senateDistrictEntity.size()));
-		senateDistrictEssentialsPagination.setTotalPages(senateDistrictEntity.size() / (endIndex - startIndex));
+		
+		double totalPages = (double) senateDistrictEntity.size() / (double)(endIndex - startIndex);
+		if(totalPages > 0) {
+			
+			if((totalPages % 1) != 0) {
+				
+				totalPages++;
+			}
+			
+		}else {
+			
+			totalPages = 1;
+		}
+		
+		senateDistrictEssentialsPagination.setTotalPages((int)totalPages);
 		
 		
 		return senateDistrictEssentialsPagination;
@@ -337,10 +351,9 @@ public class SenateDistrictServiceImpl implements SenateDistrictService {
 	}
 
 	@Override
-	public SenateDistrictEssentialsPagination getSenateDistrictPageInfoSearchEndPoint(String name, int pageNo,
-			int limit) {
-		// TODO Auto-generated method stub
-		return null;
+	public SenateDistrictEssentialsPagination getSenateDistrictPageInfoSearchEndPoint(String name, int pageNo, int limit) {
+		
+		return this.getSenateDistrictpageInfoSearch(name, pageNo, limit);
 	}
     
     

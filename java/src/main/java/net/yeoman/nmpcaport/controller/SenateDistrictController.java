@@ -47,7 +47,15 @@ public class SenateDistrictController {
         return this.senateDistrictService.getSenateDistrictPageInfoEndPoint(pageNo, limit);
     }
     
-    @GetMapping(path="/search/{name}")
+    @GetMapping(path="/search/{name}", produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public SenateDistrictEssentialsPagination getAllSenateDistrictSearch(@PathVariable("name") String name, 
+    																	 @RequestParam(value ="startIndex", defaultValue="0") int startIndex,
+																		 @RequestParam(value="endIndex", defaultValue="10") int endIndex 									
+	){
+    	System.out.println("start index " + startIndex);
+    	System.out.println("end Index " + endIndex);
+    	return this.senateDistrictService.getSenateDistrictPageInfoSearchEndPoint(name, startIndex, endIndex);
+    }
 
     @PostMapping
     public SenateDistrictResponseModel createSenateDistrict(@RequestBody SenateDistrictDetailsRequest senateDistrict){

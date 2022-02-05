@@ -5,7 +5,7 @@ import '../css/style.css'
 const {districtPerPageSearch, districtsPerPage, districtSearchText} = require('../helper/DistrictSearch')
 const {adjustZipCodesPerPage, adjustZipCodesPerSearchPage} = require('../helper/zipCodeSearch')
 const {zipCodeSearchField} = require('../helper/zipCodeSearch')
-const {inputChangeField} = require('../helper/generalFunctions')
+const {inputChangeField, toogleSwitch} = require('../helper/generalFunctions')
 const {citiesPerPage, citiesPerPageSearch, citySearchField} = require('../helper/CitySearchSearch')
 const {next, previous, setIndex} =require('../helper/paginationFunctions')
 
@@ -70,11 +70,9 @@ const StateRepForm = props =>{
     }
 
     //changes the number of districts per look up
-    const districtPagination = (e) =>{
+    const districtsPerPage = (e) =>{
         e.preventDefault();
         setDistrictSearchParams(districtPerPageSearch(e, districtSearchParams));
-        setDistrictPage(districtsPerPage(e, districtPage));
-        
     }
 
     //search for district
@@ -361,7 +359,7 @@ const StateRepForm = props =>{
                     <label>District</label>
                     <div>
                         <div>
-                            <input className="form-control" value={districtSearchParams.district} onChange={(e)=>districtSearchAction(e)}/>
+                            <input className="form-control" placeholder={'search districts'} value={districtSearchParams.district} onChange={(e)=>districtSearchAction(e)}/>
                         </div>
                     </div>
                     <div className={'height200 mt-2 mb-2 overflow-auto'}>
@@ -390,7 +388,7 @@ const StateRepForm = props =>{
                     <div className="row">
                         <div className="col text-start w-25">
                             <select className="form-control"
-                                    onChange={(e)=>districtPagination(e)}
+                                    onChange={(e)=>districtsPerPage(e)}
                             >
                                 <option value={10}>10</option>
                                 <option value={25}>25</option>

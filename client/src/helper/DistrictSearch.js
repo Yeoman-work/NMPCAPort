@@ -11,6 +11,17 @@ const districtPerPageSearch = (e, districtParams) =>{
     districtParamsObj.startIndex = 0;
     districtParamsObj.endIndex = districtParamsObj.size;
 
+
+    if(districtParams.search){
+
+        districtParamsObj.search = false;
+    
+    }else{
+
+        districtParamsObj.search = true;
+
+    }
+
     
     
     return districtParamsObj;
@@ -23,11 +34,6 @@ const districtsPerPage = (e, districtPage) =>{
     let districtPageObj = JSON.parse(JSON.stringify(districtPage));
 
     districtPageObj.size = Number(e.target.value);
-
-
-    console.log('check this');
-    console.log(districtPageObj);
-    
 
     return districtPageObj;
 
@@ -49,7 +55,7 @@ const districtPaging = (e, direction, districtPage) =>{
     }
 
 
-    console.log(districtPageObj.size)
+    
     return districtPageObj
 
 }
@@ -122,6 +128,15 @@ const districtTransferList = (districtPage) =>{
 
     return districtObj;
 
+}
+
+const districtTransferListSearch = (districtSearchParams)=>{
+
+    let districtObj = JSON.parse(JSON.stringify(districtSearchParams));
+
+    districtObj.districts.districts = []
+
+    return districtObj;
 }
 
 
