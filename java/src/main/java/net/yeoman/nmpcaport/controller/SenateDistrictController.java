@@ -47,7 +47,7 @@ public class SenateDistrictController {
         return this.senateDistrictService.getSenateDistrictPageInfoEndPoint(pageNo, limit);
     }
     
-    @GetMapping(path="search/{name}")
+    @GetMapping(path="/search/{name}")
 
     @PostMapping
     public SenateDistrictResponseModel createSenateDistrict(@RequestBody SenateDistrictDetailsRequest senateDistrict){

@@ -104,7 +104,7 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
 		
 		int limit = endIndex;
 		
-		if(endIndex > (houseDistricts.size() - 1)) {
+		if(endIndex > (houseDistricts.size())) {
 			
 			limit = houseDistricts.size();
 			
@@ -118,26 +118,35 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
 		 }
 		 
 		 HouseDistrictPagination housePage = new HouseDistrictPagination();
-		 
+		 housePage.setDistricts(houseEssentials);
 		 housePage.setFirstPage(startIndex == 0);
 		 housePage.setHasContent(houseDistricts.size() > 0);
 		 housePage.setIsEmpty(houseDistricts.size() == 0);
 		 housePage.setLastPage(endIndex >= (houseDistricts.size() - 1));
 		 housePage.setNext(endIndex < (houseDistricts.size() - 1));
 		 
-		 housePage.setNumber(startIndex - ((endIndex - startIndex) + 1));
+		 housePage.setNumber(startIndex / ((endIndex - startIndex) + 1));
 		 housePage.setPrevious(startIndex > 0);
 		 housePage.setSize((endIndex - startIndex));
 		 housePage.setTotalElements(Long.valueOf(houseDistricts.size()));
 		 
-		 int totalPages = houseDistricts.size() / ((endIndex - startIndex) - 1);
+		 double totalPages = (double)houseDistricts.size() / (double)((endIndex - startIndex) + 1);
 		 
-		 if((totalPages % 1) != 0) {
+		 if(totalPages > 0) {
+			 
+			 if((totalPages % 1) != 0) {
 			 
 			 totalPages++;
+			 
+			 }
+			 
+			 housePage.setTotalPages((int)totalPages);
+		
+		 }else {
+			 
+			 housePage.setTotalPages(1);
 		 }
 		 
-		 housePage.setTotalPages(totalPages);
 		 
 		 return housePage;
 	}
@@ -316,8 +325,8 @@ public class HouseDistrictServiceImpl implements HouseDistrictService {
 
 	@Override
 	public HouseDistrictPagination getHouseDistrictPageInfoSearchEndPoint(String name, int startIndex, int endIndex) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return this.getDistrictPageInfoSearch(name, startIndex, endIndex);
 	}
 
 

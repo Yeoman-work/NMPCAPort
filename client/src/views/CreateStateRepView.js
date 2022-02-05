@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header";
 import StateRepForm from "../components/StateRepForm";
 import PhoneNumberForm from "../components/PhoneNumberForm";
-const {districtPaging} = require('../helper/DistrictSearch')
+const {districtPaging, districtTransferList, districtPagingSearch} = require('../helper/DistrictSearch')
 const {canSubmit} = require('../helper/StateRepValidation')
 const {zipCodeSearchParams, zipCodeSearchFieldTransfer, zipCodePaging} = require('../helper/zipCodeSearch')
 const {cityPageableRequest, cityPageableCityRequestSearch, citySearchListTransfer} = require('../helper/CitySearchSearch')
@@ -111,7 +111,7 @@ const CreateStateRepView = props =>{
         district: ''.trim(),
         size: 10,
         startIndex: 0,
-        endIndex: 9,
+        endIndex: 10,
         search: false,
         districts:{
             districts: []
@@ -134,7 +134,7 @@ const CreateStateRepView = props =>{
     const districtPageable = async (e, direction, districtPage) =>{
         e.preventDefault()
 
-        let districtPageObj = districtPaging(e, direction, districtPage);
+        const districtPageObj = districtPaging(e, direction, districtPage);
         
         if(repType){
 
@@ -191,6 +191,69 @@ const CreateStateRepView = props =>{
 
         }
         
+    }
+
+    const districtPageableSearch = async(e, direction, districtSearchParams)=>{
+        e.preventDefault();
+
+        let districtSearchObj = districtPagingSearch(e, direction, districtSearchParams);
+        console.log("page")
+        console.log(districtSearchObj)
+        if(repType){
+            try{
+
+                const districtResponse = await axios.get('http://localhost:8080/houseDistricts/search/' + districtSearchObj.district,{
+
+                    headers:{
+
+                        Authorization: localStorage.getItem('token')
+                    },
+
+                    params:{
+                        
+                        startIndex: Number(districtSearchObj.startIndex),
+                        endIndex: Number(districtSearchObj.endIndex) 
+                        
+                    }
+                })
+
+                console.log('search');
+                //console.log(districtResponse.data);
+                districtSearchObj.districts = {...districtResponse.data};
+                console.log(districtSearchObj);
+                setDistrictSearchParams(districtSearchObj);
+
+            }catch(error){
+
+                console.log(error.response)
+
+            }
+        }else{
+
+            try{
+
+                const districtResponse = await axios.get('http://localhost:8080/senateDistricts', {
+
+                    headers:{
+                        Authorization : localStorage.getItem('token')
+                    },
+
+                    params:{
+                        pageNo:districtSearchObj.number,
+                        limit: districtSearchObj.size
+                    }
+                })
+                
+                
+                setDistrictPage(districtResponse.data)
+
+            }catch(error){
+
+                console.log(error.response)
+
+            }
+
+        }
     }
 
     const cityPageable = async(e, direction)=>{
@@ -375,14 +438,16 @@ const CreateStateRepView = props =>{
     }, [search.name])
 
     useEffect(()=>{
-
-        if(citySearchParams.city.length > 0){
-
-            const cityTimer = setTimeout((async()=>{
+        
+        if(citySearchParams.city && citySearchParams.city.length > 0){
+            
+            const cityTimer = setTimeout(async()=>{
+                
+                const citySearchParamsObj = JSON.parse(JSON.stringify(citySearchParams));
 
                 try{
-
-                    const citySearchResponse = await axios.get('http://locahost:8080/cities/search/' + citySearchParams.city,{
+                    
+                    const citySearchResponse = await axios.get('http://localhost:8080/cities/search/' + citySearchParamsObj.city,{
 
                         headers:{
                             
@@ -391,34 +456,35 @@ const CreateStateRepView = props =>{
 
                         params:{
 
-                            startIndex: citySearchParams.startIndex,
-                            endIndex: citySearchParams.endIndex
+                            startIndex: Number(citySearchParamsObj.startIndex),
+                            endIndex: Number(citySearchParamsObj.endIndex)
                         }
 
                     })
 
-                    let citySearchParamsObj = JSON.parse(JSON.stringify(citySearchParams));
-                    citySearchParamsObj.cities = {...citySearchResponse};
+                    citySearchParamsObj.cities = {...citySearchResponse.data}
                     setCitySearchParams(citySearchParamsObj);
                     setCityPage(citySearchListTransfer(cityPage));
 
-
                 }catch(error){
 
-                    console.log(error.response);
+                    console.log(error.response)
+
                 }
 
-            }), 500)
+                
+            }, 500)
 
             return ()=>{clearTimeout(cityTimer)}
         }
 
-    }, [citySearchParams.name])
+        
+    }, [citySearchParams.city])
 
     useEffect(()=>{
-
+        
         (async ()=>{
-
+            
             try{
 
                 const cityListResponse = await axios.get('http://localhost:8080/cities', {
@@ -434,6 +500,7 @@ const CreateStateRepView = props =>{
 
 
                 })
+                
                 
                 setCityPage(cityListResponse.data);
 
@@ -509,7 +576,7 @@ const CreateStateRepView = props =>{
     },[zipCodePage.size, search.search])
 
     useEffect(()=>{
-        console.log('here');
+        
         if(repType){
 
             (async ()=>{
@@ -546,15 +613,15 @@ const CreateStateRepView = props =>{
 
                 const senateDistrictResponse = await axios.get('http://localhost:8080/senateDistricts', {
 
-                headers:{
-                    Authorization: localStorage.getItem('token')
-                },
+                    headers:{
+                        Authorization: localStorage.getItem('token')
+                    },
 
-                params:{
-                    limit: districtSearchParams.size
-                }
+                    params:{
+                        limit: districtSearchParams.size
+                    }
 
-                })
+                    })
                 console.log(senateDistrictResponse.data);
 
                 setDistrictPage(senateDistrictResponse.data);
@@ -572,8 +639,92 @@ const CreateStateRepView = props =>{
 
         return ()=>{}
 
-    }, [repType, districtSearchParams.size])
+    }, [repType, districtSearchParams.search, districtPage.size])
 
+    useEffect(()=>{
+
+        let districtObj = JSON.parse(JSON.stringify(districtSearchParams));
+        
+        if(districtSearchParams.district.length > 0){
+                if(repType){
+
+                const districtTimmer = setTimeout(async()=>{
+
+                    try{
+
+                        const districtResponse = await axios.get('http://localhost:8080/houseDistricts/search/' + districtObj.district,{
+
+                                headers:{
+
+                                    Authorization: localStorage.getItem('token')
+                                },
+
+                                params:{
+
+                                    startIndex: Number(districtObj.startIndex),
+                                    endIndex: Number(districtObj.endIndex)
+
+                                }
+                        })
+
+                        
+                        districtObj.districts = {...districtResponse.data};
+                        console.log(districtObj);
+                        setDistrictSearchParams(districtObj);
+                        setDistrictPage(districtTransferList(districtPage));
+
+                    }catch(error){
+
+                        console.log(error.response);
+
+                    }
+                }, 500)
+
+                return ()=>{clearTimeout(districtTimmer)}
+
+
+            }else{
+
+                const districtTimer = setTimeout(async()=>{
+
+                    try{
+
+                        const districtResponse = await axios.get('http://localhost:8080/senateDistricts/search/' + districtObj.district,{
+
+                                header:{
+
+                                    Authorization: localStorage.getItem('token')
+                                },
+
+                                params:{
+                                    
+                                    startIndex: Number(districtObj.startIndex),
+                                    endIndex: Number(districtObj.endIndex)
+
+                                }
+                        })
+
+
+                        districtObj.districts ={...districtResponse.data};
+                        setDistrictSearchParams(districtObj);
+                        setDistrictPage(districtTransferList(districtPage));
+
+                    }catch(error){
+
+                        console.log(error.response);
+
+                    }
+
+                }, 500)
+
+                return ()=>{clearTimeout(districtTimer)}
+
+            }
+        }
+        
+
+
+    }, [districtSearchParams.district, districtSearchParams.size])
 
     const createRep = async (e)=>{
         e.preventDefault()
@@ -599,6 +750,8 @@ const CreateStateRepView = props =>{
                 console.log(error)
 
             }
+
+            
 
         }else{
 
@@ -660,6 +813,7 @@ const CreateStateRepView = props =>{
                     stateRep={stateRep}
                     setStateRep={setStateRep}
                     districtPageable={districtPageable}
+                    districtPageableSearch={districtPageableSearch}
                     cityPageable={cityPageable}
                     zipCodePageable={zipCodePageable}
                     zipCodeSearch={zipCodeSearch}

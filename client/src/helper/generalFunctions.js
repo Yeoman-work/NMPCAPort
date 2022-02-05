@@ -267,7 +267,7 @@ const characterCount = (characters) =>{
     return count;
 }
 
-
+//check string characters for numeric characters
 const numberValidation = (numberString) =>{
 
     let isValid = false;
@@ -278,6 +278,19 @@ const numberValidation = (numberString) =>{
         isValid = true;
     }
 
+
+    return isValid;
+}
+
+//check string for letter only
+const letterValidation = (letter) =>{
+
+    let isValid = false;
+
+    if(letters.includes(letter[letter.length - 1])){
+        
+        isValid = true;
+    }
 
     return isValid;
 }
@@ -316,5 +329,5 @@ module.exports={
     phoneNumberPattern,
     staffMemberValidation,
     toogleSwitch,
-    letters
+    letterValidation
 }

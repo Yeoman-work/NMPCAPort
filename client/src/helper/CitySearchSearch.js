@@ -1,7 +1,4 @@
-
-
-
-
+const {letterValidation} = require('../helper/generalFunctions')
 
 const citiesPerPage = (e, cityPerPage)=>{
 
@@ -35,27 +32,33 @@ const citiesPerPageSearch = (e, citySearchParams) =>{
 }
 
 const citySearchField = (e, citySearchParams) =>{
-
+    
     let citySearchObj = JSON.parse(JSON.stringify(citySearchParams));
+    
+    if(letterValidation(e.target.value)){
 
-        citySearchObj[e.target.name] = e.target.value;
+        if(e.target.value.length <= 20){
 
-        if(citySearchObj.city.length <= 0){
+            citySearchObj[e.target.name] = e.target.value;
 
-            citySearchObj.cities.cities = [];
-            
-            if(citySearchParams.search){
-
-                citySearchObj.search = false;
-
-            }else{
-
-                citySearchObj.search = true;
-            }
         }
 
+    }else if(e.target.value.length === 0){
 
-        return citySearchObj;
+        citySearchObj.city = ''.trim();
+        citySearchObj.cities.cities = [];
+
+        if(citySearchParams.search){
+
+            citySearchObj.search = false;
+
+        }else{
+
+            citySearchObj.search = true;
+        }
+    }
+    console.log(citySearchObj);
+    return citySearchObj;
 
 }
 
@@ -127,5 +130,6 @@ module.exports={
     citiesPerPageSearch,
     citySearchField,
     cityPageableCityRequestSearch,
-    citySearchListTransfer
+    citySearchListTransfer,
+
 }

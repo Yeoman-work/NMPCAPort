@@ -38,6 +38,7 @@ const StateRepForm = props =>{
             setCitySearchParams,
             districtPage,
             districtPageable,
+            districtPageableSearch,
             setDistrictPage,
             districtSearchParams,
             setDistrictSearchParams,
@@ -68,12 +69,6 @@ const StateRepForm = props =>{
         setStateRep(inputChangeField(e, stateRep));
     }
 
-    //change zip code search parameters
-    const searchParams = (e) =>{
-        e.preventDefault();
-        setSearch(zipCodeSearchField(e, search));
-    }
-
     //changes the number of districts per look up
     const districtPagination = (e) =>{
         e.preventDefault();
@@ -82,7 +77,20 @@ const StateRepForm = props =>{
         
     }
 
-    //changes the number of districts per lookup
+    //search for district
+    const districtSearchAction = (e) =>{
+        e.preventDefault()
+        setDistrictSearchParams(districtSearchText(e, districtSearchParams));
+    }
+
+    //change zip code search parameters
+    const searchParams = (e) =>{
+        e.preventDefault();
+        setSearch(zipCodeSearchField(e, search));
+    }
+
+
+    //changes the number of zip codes per lookup
     const zipCodesPerPage = (e) =>{
         e.preventDefault();
         setZipCodePage(adjustZipCodesPerPage(e, zipCodePage));
@@ -173,7 +181,7 @@ const StateRepForm = props =>{
                     <label>City:</label>
                     <div>
                         <div>
-                            <input name={'city'} value={citySearchParams.city} className={'form-control'} onChange={(e)=>citySearchAction(e)}/>
+                            <input name={'city'} value={citySearchParams.city} placeholder={'search city'} className={'form-control'} onChange={(e)=>citySearchAction(e)}/>
                         </div>
                     </div>
                     <div className="mt-3 mb-3 overflow-auto height200">
@@ -227,7 +235,7 @@ const StateRepForm = props =>{
                             </select>
                         </div>
                         <div className="col">
-                            <button disabled={citySearchParams.cities.cities.length > 0? citySearchParams.cities.firstPage :  cityPage.firstPage}
+                            <button disabled={citySearchParams.city.length > 0? citySearchParams.cities.firstPage :  cityPage.firstPage}
                                     onClick={citySearchParams.cities.cities.length > 0? (e)=>citySearch(e, 'previous') : (e)=>cityPageable(e, 'previous') }
                                     name="previous"
                                 
@@ -236,13 +244,13 @@ const StateRepForm = props =>{
 
                             </button>
                             {
-                                citySearchParams.cities && citySearchParams.cities.cities.length > 0?
+                                citySearchParams.city.length > 0?
                                 <p className="d-inline-block">{citySearchParams.cities?`${citySearchParams.cities.number + 1} of ${citySearchParams.cities.totalPages}`: null}</p>
                                 :
                                 <p className="d-inline-block">{cityPage?`${cityPage.number + 1}  of ${cityPage.totalPages}`: null}</p>
                             }
                             
-                            <button disabled={citySearchParams.cities.cities.length > 0? citySearchParams.cities.lastPage : cityPage.lastPage}
+                            <button disabled={citySearchParams.city.length > 0? citySearchParams.cities.lastPage : cityPage.lastPage}
                                     onClick={citySearchParams.cities.cities.length > 0? (e)=>citySearch(e, 'next') : (e)=>cityPageable(e, 'next')}
                             >
                                 <IoMdArrowDropright/>
@@ -306,7 +314,7 @@ const StateRepForm = props =>{
                             </select>
                         </div>
                         <div className="col">
-                            <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.firstPage :  zipCodePage.firstPage}
+                            <button disabled={search.name.length > 0? search.zipCodes.firstPage :  zipCodePage.firstPage}
                                     name="previous"
                                     onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'previous') :(e)=>zipCodePageable(e, 'previous')}
                             >
@@ -320,7 +328,7 @@ const StateRepForm = props =>{
                                 <p className="d-inline-block">{zipCodePage?`${zipCodePage.number + 1} of ${zipCodePage.totalPages}`: null}</p>
                             }
                             
-                            <button disabled={search.zipCodes.zipCodes.length > 0? search.zipCodes.lastPage : zipCodePage.lastPage}
+                            <button disabled={search.name > 0? search.zipCodes.lastPage : zipCodePage.lastPage}
                                     onClick={search.name.length > 0? (e)=>zipCodeSearch(e, 'next') :(e)=>zipCodePageable(e, 'next')}
                             >
                                 <IoMdArrowDropright/>
@@ -353,12 +361,12 @@ const StateRepForm = props =>{
                     <label>District</label>
                     <div>
                         <div>
-                            <input className="form-control" onChange={(e)=>districtSearchText(e)}/>
+                            <input className="form-control" value={districtSearchParams.district} onChange={(e)=>districtSearchAction(e)}/>
                         </div>
                     </div>
                     <div className={'height200 mt-2 mb-2 overflow-auto'}>
                         {
-                            districtPage.districts?
+                            districtPage.districts && districtPage.districts.length > 0?
                                 districtPage.districts.map((district, index)=>{
 
                                     return(
@@ -367,7 +375,16 @@ const StateRepForm = props =>{
                                         </div>
                                     )
                                 })
-                                : null
+                                : 
+                            
+                            districtSearchParams.districts.districts.map((district, index)=>{
+
+                                return(
+                                    <div key={index}>
+                                        <button value={repType? district.houseDistrictId: district.senateDistrictId}>{district.name}</button>
+                                    </div>
+                                )
+                            })
                         }
                     </div>
                     <div className="row">
@@ -381,22 +398,22 @@ const StateRepForm = props =>{
                             </select>
                         </div>
                         <div className="col">
-                        <button disabled={districtSearchParams.districts.districts.length > 0? districtSearchParams.districts.number + 1 :  districtPage.firstPage}
+                        <button disabled={districtSearchParams.district.length > 0? districtSearchParams.districts.firstPage :  districtPage.firstPage}
                                     name="previous"
-                                    onClick={districtSearchParams.district.length > 0? (e)=>districtPageable(e, 'previous', districtPage) :(e)=>districtPageable(e, 'previous', districtPage)}
+                                    onClick={districtSearchParams.district.length > 0? (e)=>districtPageableSearch(e, 'previous', districtSearchParams) :(e)=>districtPageable(e, 'previous', districtPage)}
                             >
                                 <IoMdArrowDropleft/>
 
                             </button>
                             {
                                 districtSearchParams.district.length > 0?
-                                <p className="d-inline-block">{districtSearchParams.districts?`${districtSearchParams.districts.number + 1} of ${districtPage.totalPages}`: null}</p>
+                                <p className="d-inline-block">{`${districtSearchParams.districts.number + 1} of ${districtSearchParams.districts.totalPages}`}</p>
                                 :
-                                <p className="d-inline-block">{districtPage?`${districtPage.number + 1} of ${districtPage.totalPages}`: null}</p>
+                                <p className="d-inline-block">{`${districtPage.number + 1} of ${districtPage.totalPages}`}</p>
                             }
                             
-                            <button disabled={districtSearchParams.districts.districts.length > 0? districtSearchParams.districts.lastPage : districtPage.lastPage}
-                                    onClick={search.name.length > 0? (e)=>districtPageable(e, 'next', districtPage) :(e)=>districtPageable(e, 'next', districtPage)}
+                            <button disabled={districtSearchParams.district.length > 0? districtSearchParams.districts.lastPage : districtPage.lastPage}
+                                    onClick={districtSearchParams.district.length > 0? (e)=>districtPageableSearch(e, 'next', districtSearchParams) :(e)=>districtPageable(e, 'next', districtPage)}
                             >
                                 <IoMdArrowDropright/>
                             </button>

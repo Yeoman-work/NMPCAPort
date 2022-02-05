@@ -282,9 +282,10 @@ public class CityServiceImpl implements CityService {
 			if(totalPages % 1 != 0) {
 				
 				totalPages++;
-				
-				cityEssentialsPage.setTotalPages((int)totalPages);
 			}
+			
+			cityEssentialsPage.setTotalPages((int)totalPages);
+		
 		}else {
 			
 			cityEssentialsPage.setTotalPages(1);
