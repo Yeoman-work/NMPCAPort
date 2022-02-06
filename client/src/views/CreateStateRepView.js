@@ -624,7 +624,7 @@ const CreateStateRepView = props =>{
                     }
 
                     })
-                console.log(senateDistrictResponse.data);
+                
 
                 setDistrictPage(senateDistrictResponse.data);
 

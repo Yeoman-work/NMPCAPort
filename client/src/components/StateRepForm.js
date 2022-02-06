@@ -386,8 +386,8 @@ const StateRepForm = props =>{
                         }
                     </div>
                     <div className="row">
-                        <div className="col text-start w-25">
-                            <select className="form-control"
+                        <div className="col text-start ">
+                            <select className="form-control w-50"
                                     onChange={(e)=>districtsPerPage(e)}
                             >
                                 <option value={10}>10</option>
