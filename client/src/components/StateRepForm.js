@@ -2,12 +2,13 @@ import React from "react";
 import {IoMdArrowDropright, IoMdArrowDropleft} from 'react-icons/io'
 import { RawZoomHelpers } from "victory";
 import '../css/style.css'
-const {districtPerPageSearch, districtsPerPage, districtSearchText} = require('../helper/DistrictSearch')
-const {adjustZipCodesPerPage, adjustZipCodesPerSearchPage} = require('../helper/zipCodeSearch')
-const {zipCodeSearchField} = require('../helper/zipCodeSearch')
-const {inputChangeField, toogleSwitch} = require('../helper/generalFunctions')
-const {citiesPerPage, citiesPerPageSearch, citySearchField} = require('../helper/CitySearchSearch')
-const {next, previous, setIndex} =require('../helper/paginationFunctions')
+const {canSubmit, stateRepInput} = require('../helper/StateRepValidation')
+const {districtPerPageSearch, districtsPerPage, districtSearchText} = require('../helper/DistrictSearch');
+const {adjustZipCodesPerPage, adjustZipCodesPerSearchPage} = require('../helper/zipCodeSearch');
+const {zipCodeSearchField} = require('../helper/zipCodeSearch');
+const {inputChangeField, toogleSwitch} = require('../helper/generalFunctions');
+const {citiesPerPage, citiesPerPageSearch, citySearchField} = require('../helper/CitySearchSearch');
+const {next, previous, setIndex} =require('../helper/paginationFunctions');
 
 
 const clearStateRep ={
@@ -66,7 +67,7 @@ const StateRepForm = props =>{
 
     //form input change updates form state
     const inputChange = (e) =>{
-        setStateRep(inputChangeField(e, stateRep));
+        setStateRep(stateRepInput(e, stateRep));
     }
 
     //changes the number of districts per look up
@@ -171,7 +172,7 @@ const StateRepForm = props =>{
                     value={stateRep.capitolRoom}
                     onChange={(e)=> inputChange(e)}
                     />
-                    {!fieldLengthNotRequired(0, 8, stateRep.capitolRoom)? <span className={'text-danger'}>{fieldLengthErrorMessages(5, 150, stateRep.capitolRoom)}</span> : null}
+                    {!fieldLengthNotRequired(0, 8, stateRep.capitolRoom)? <span className={'text-danger'}>{fieldLengthErrorMessages(0, 150, stateRep.capitolRoom)}</span> : null}
                 </div>
             </div>
             <div className={'row'}>
@@ -291,7 +292,11 @@ const StateRepForm = props =>{
 
                                 return(
                                     <div key={index}>
-                                        <button value={zipCode.zipCodeId}>{zipCode.name}</button>
+                                        <button value={zipCode.zipCodeId}
+                                            name={'zipCode'}
+                                            onClick={(e)=>inputChange(e)}
+                                            disabled={stateRep.zipCode === zipCode.zipCodeId}
+                                        >{zipCode.name}</button>
                                     </div>
                                         
                                 )
@@ -369,7 +374,14 @@ const StateRepForm = props =>{
 
                                     return(
                                         <div key={index}>
-                                            <button value={repType? district.houseDistrictId: district.senateDistrictId}>{district.name}</button>
+                                            <button 
+                                                value={repType? district.houseDistrictId: district.senateDistrictId}
+                                                name={repType?'houseDistrict': 'senateDistrict'}
+                                                onClick={(e)=>inputChange(e)}
+                                                disabled={repType? stateRep.houseDistrict === district.houseDistrictId: stateRep.senateDistrict === district.senateDistrictId}
+                                            >
+                                                {district.name}
+                                            </button>
                                         </div>
                                     )
                                 })
@@ -379,7 +391,13 @@ const StateRepForm = props =>{
 
                                 return(
                                     <div key={index}>
-                                        <button value={repType? district.houseDistrictId: district.senateDistrictId}>{district.name}</button>
+                                        <button value={repType? district.houseDistrictId: district.senateDistrictId}
+                                            name={repType?'houseDistrict': 'senateDistrict'}
+                                            onClick={(e)=>inputChange(e)}
+                                            disabled={repType? stateRep.districtId === district.houseDistrictId: stateRep.districtId === district.senateDistrictId}
+                                        >
+                                            {district.name}
+                                        </button>
                                     </div>
                                 )
                             })

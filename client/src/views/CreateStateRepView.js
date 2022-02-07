@@ -59,7 +59,8 @@ const CreateStateRepView = props =>{
         picture: ''.trim(),
         houseDistrict: ''.trim(),
         senateDistrict: ''.trim(),
-        party: ''.trim()
+        party: ''.trim(),
+        phoneNumbers: []
 
     });
 
@@ -125,9 +126,21 @@ const CreateStateRepView = props =>{
 
 
 
-    const changeRepType = (e) =>{
+    const changeRepType = (e, stateRep, repType) =>{
 
         setRepType(toogleSwitch(repType));
+        let stateRepObj = JSON.parse(JSON.stringify(stateRep));
+
+        if(stateRepObj.houseDistrict.length > 0){
+
+            stateRepObj.houseDistrict = ''.trim();
+
+        }else{
+
+            stateRepObj.senateDistrict = ''.trim();
+        }
+
+        setStateRep(stateRepObj);
     }
 
     //paging through district
@@ -808,8 +821,8 @@ const CreateStateRepView = props =>{
             <Header/>
             <div className={''}>
                 <div className={'mt-5 pt-5'}>
-                    <button disabled={repType} onClick={(e)=>changeRepType(e)} className={'p-2'}>Representative</button>
-                    <button disabled={!repType} className={'p-2'} onClick={(e)=>changeRepType(e)}>Senator</button>
+                    <button disabled={repType} onClick={(e)=>changeRepType(e, stateRep, repType)} className={'p-2'}>Representative</button>
+                    <button disabled={!repType} className={'p-2'} onClick={(e)=>changeRepType(e, stateRep, repType)}>Senator</button>
                 </div>
                 <StateRepForm
                     stateRep={stateRep}
@@ -842,10 +855,11 @@ const CreateStateRepView = props =>{
                     repType={repType}
                 />
                 <PhoneNumberForm
+                    divClass={'w-50 m-auto'}
                     phoneNumber={phoneNumber}
-                    phoneNumberList={phoneNumberList}
+                    stateWithPhoneNumber={stateRep}
                     setPhoneNumber={setPhoneNumber}
-                    setPhoneNumberList={setPhoneNumberList}
+                    setStateWithPhoneNumber={setStateRep}
                 />
             </div>
             <button disabled={stateRep?canSubmit(stateRep) : true} onClick={(e)=>createRep(e)}>Save State</button>

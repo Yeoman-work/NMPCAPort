@@ -1,4 +1,4 @@
-const {number, isValidCharacter} = require('../helper/generalFunctions');
+const {number, isValidCharacter, fieldLengthRequired} = require('../helper/generalFunctions');
 
 const clearPhoneNumber = {
         number: ''.trim(),
@@ -66,7 +66,7 @@ const phoneNumberValidation = (phoneNumber) =>{
 }
 
 const addPhoneNumberToList = (phoneNumber, phoneNumberList) =>{
-
+    console.log('phone number ' + phoneNumber)
     let phoneNumbers = [...phoneNumberList, phoneNumber];
 
     return phoneNumbers;
@@ -101,30 +101,56 @@ const phoneNumberPattern = (number) =>{
 
 const inputPhoneNumber = (e, phoneNumberState) =>{
 
-    console.log('name ' + e.target.name);
-    console.log('value ' + e.target.value);
+    
     let phoneNumberStateObj = JSON.parse(JSON.stringify(phoneNumberState));
 
-    if(e.target.name === 'number'){
+    if(e.target.value.length === 0){
 
-        if(e.target.value.length <= 12){
+        phoneNumberStateObj[e.target.name] = e.target.value;
+
+    }else if(e.target.name === 'number'){
+
+        if(phoneNumberBuilder(e.target.value)){
+
+            if(e.target.value.length <= 12){
 
             phoneNumberStateObj.number = phoneNumberBuilder(e.target.value, phoneNumberState)
-        }
-        
-    }else{
 
-        if(isValidCharacter(e.target.value)){
-
-            if(e.target.value.length <= 25){
-                phoneNumberStateObj[e.target.name] = e.target.value;
             }
         }
         
+        
+    }else if (e.target.name === 'description'){
+
+        if(isValidCharacter(e.target.value)){
+            
+            if(e.target.value.length <= 25){
+
+                    phoneNumberStateObj[e.target.name] = e.target.value;
+            }
+
+        }
     }
 
     return phoneNumberStateObj;
-} 
+}
+
+
+const submitPhoneNumber = (phoneNumberState) =>{
+
+    let canSubmit = false;
+
+    if(phoneNumberValidation(phoneNumberState.number)){
+        if(fieldLengthRequired(5, 25, phoneNumberState.description)){
+
+            canSubmit = true;
+        }
+    }
+
+    return canSubmit;
+}
+
+
 
 
 
@@ -137,5 +163,7 @@ module.exports={
     phoneNumberCheck,
     clearPhoneNumber,
     addPhoneNumberToList,
-    inputPhoneNumber
+    inputPhoneNumber,
+    submitPhoneNumber,
+    clearPhoneNumber
 }

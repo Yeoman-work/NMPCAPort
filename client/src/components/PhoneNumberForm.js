@@ -3,14 +3,14 @@ const {
     fieldLength,
     fieldLengthErrorMessage
         } = require('../helper/generalFunctions')
-const {addPhoneNumberToList, inputPhoneNumber} = require('../helper/PhoneNumberFunctions')
+const {addPhoneNumberToList, inputPhoneNumber, submitPhoneNumber, clearPhoneNumber} = require('../helper/PhoneNumberFunctions')
 
 
 const PhoneNumberForm = props =>{
         const {
             phoneNumber,
-            phoneNumberList,
-            setPhoneNumberList,
+            stateWithPhoneNumber,
+            setStateWithPhoneNumber,
             setPhoneNumber,
             divClass,
             } = props
@@ -21,10 +21,20 @@ const PhoneNumberForm = props =>{
             description: ''.trim()
         })
 
+        const addPhoneNumberToList = (e, phoneNumberState, stateWithPhoneNumber) =>{
+            e.preventDefault()
+            let phoneNumberObj = JSON.parse(JSON.stringify(stateWithPhoneNumber));
+            phoneNumberObj.phoneNumbers = [...stateWithPhoneNumber.phoneNumbers, phoneNumberState];
+            setStateWithPhoneNumber(phoneNumberObj);
+            setPhoneNumberState(clearPhoneNumber);
+        }
 
     
         const inputChange = (e) =>{
-
+            console.log(stateWithPhoneNumber);
+            console.log('check phone number')
+            console.log(inputPhoneNumber(e, phoneNumberState));
+            console.log('check from above')
             setPhoneNumberState(inputPhoneNumber(e, phoneNumberState));
         }
 
@@ -58,16 +68,21 @@ const PhoneNumberForm = props =>{
                                 onChange={(e)=>inputChange(e)}
                             />
 
-                            { phoneNumber.number.length && fieldLength(5, 25, phoneNumber.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, 'description')}</div> : null}
+                            { phoneNumber.number.length && fieldLength(5, 25, phoneNumberState.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, 'description')}</div> : null}
                         </div>
-                        <button>Add Phone Number</button>
+                        <button 
+                            disabled={!submitPhoneNumber(phoneNumberState)}
+                            onClick={(e)=>addPhoneNumberToList(e, phoneNumberState, stateWithPhoneNumber)}
+                        >
+                            Add Phone Number
+                        </button>
                     </div>
                     <div className={'col'}>
                         <label>Added Phone Number</label>
                         <div className={'pt-2 height200 overflow-auto'}>
                             {
-                            phoneNumber?
-                            phoneNumberList.map((number, index)=>{
+                            stateWithPhoneNumber?
+                            stateWithPhoneNumber.phoneNumbers.map((number, index)=>{
 
                                 return(
                                     <div key={index} className={'mt-2 border w-50 m-auto'}>
