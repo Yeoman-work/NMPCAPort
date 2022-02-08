@@ -4,13 +4,16 @@ import React from "react";
 
 
 const FederalRepForm = props =>{
-   const {
-           formLabel,
-           federalRepInfo,
-           dispatchFederalRep,
-           formFields,
-           repType
-             } = props;
+    const {
+            formLabel,
+            federalRepInfo,
+            setFederalRepInfo,
+            dispatchFederalRep,
+            congressionalDistrictList,
+            partiesList,
+            formFields,
+            repType
+            } = props;
 
 
     return(
@@ -19,19 +22,19 @@ const FederalRepForm = props =>{
                 <div className={'col form-group'}>
                     <label>First Name</label>
                     <input type="text"
-                           className={'form-control'}
-                           name={formFields.FEDERAL_REP_FIRST_NAME}
-                           value={federalRepInfo.repType? federalRepInfo.rep.firstName : federalRepInfo.sen.firstName}
-                           onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                            className={'form-control'}
+                            name={formFields.FEDERAL_REP_FIRST_NAME}
+                            value={federalRepInfo.repType? federalRepInfo.firstName : federalRepInfo.firstName}
+                            onChange={}
                     />
                 </div>
                 <div className={'col form-group'}>
                     <label>Last Name</label>
                     <input type="text"
-                           className={'form-control'}
-                           name={formFields.FEDERAL_REP_LAST_NAME}
-                           value={federalRepInfo.repType? federalRepInfo.rep.lastName : federalRepInfo.sen.lastName}
-                           onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                            className={'form-control'}
+                            name={formFields.FEDERAL_REP_LAST_NAME}
+                            value={federalRepInfo.repType? federalRepInfo.lastName : federalRepInfo.lastName}
+                            onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
                     />
                 </div>
             </div>
@@ -39,19 +42,19 @@ const FederalRepForm = props =>{
                 <div className={'col form-group'}>
                     <label>Email</label>
                     <input type="email"
-                           className={'form-control'}
-                           name={formFields.FEDERAL_REP_EMAIL}
-                           value={federalRepInfo.repType? federalRepInfo.rep.email : federalRepInfo.sen.email}
-                           onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                        className={'form-control'}
+                        name={formFields.FEDERAL_REP_EMAIL}
+                        value={federalRepInfo.repType? federalRepInfo.email : federalRepInfo.email}
+                        onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
                     />
                 </div>
                 <div className={'col form-group'}>
                     <label>Picture</label>
                     <input type="text"
-                           className={'form-control'}
-                           name={formFields.FEDERAL_REP_PICTURE}
-                           value={federalRepInfo.repType? federalRepInfo.rep.picture : federalRepInfo.sen.picture}
-                           onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                        className={'form-control'}
+                        name={formFields.FEDERAL_REP_PICTURE}
+                        value={federalRepInfo.repType? federalRepInfo.picture : federalRepInfo.picture}
+                        onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
                     />
                 </div>
             </div>
@@ -59,25 +62,25 @@ const FederalRepForm = props =>{
                 <div className={'col form-group'}>
                     <label>Website</label>
                     <input type="text"
-                           className={'form-control'}
-                           name={formFields.FEDERAL_REP_WEBSITE}
-                           value={ federalRepInfo.repType? federalRepInfo.rep.website : federalRepInfo.sen.website}
-                           onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                        className={'form-control'}
+                        name={formFields.FEDERAL_REP_WEBSITE}
+                        value={ federalRepInfo.repType? federalRepInfo.website : federalRepInfo.website}
+                        onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
                     />
                 </div>
                 <div className={'col form-group'}>
-                    <label hidden={!federalRepInfo.repType}>District</label>
+                    <label hidden={!repType}>District</label>
                     <select className={'form-control'}
-                            hidden={!federalRepInfo.repType}
-                            disabled={!federalRepInfo.repType}
+                            hidden={!repType}
+                            disabled={!repType}
                             name={formFields.FEDERAL_REP_DISTRICT}
-                            onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                            
                     >
-                        {federalRepInfo.repType?  <option value="">Choose a District</option> : <option value="">Not Applicable!!</option>}
+                        {repType?  <option value="">Choose a District</option> : <option value="">Not Applicable!!</option>}
 
                         {
-                            federalRepInfo?
-                                federalRepInfo.formData.districtList.map((district, index)=>{
+                            congressionalDistrictList?
+                                congressionalDistrictList.map((district, index)=>{
 
                                     return(
                                         <option key={index} value={district.congressionalDistrictId}>{district.name}</option>
@@ -90,12 +93,11 @@ const FederalRepForm = props =>{
                         <div className={'col form-group'}>
                             <label hidden={federalRepInfo.repType}>Elected</label>
                             <input type="date"
-                                   hidden={federalRepInfo.repType}
-                                   className={'form-control'}
-                                   name={formFields.FEDERAL_REP_ELECTED}
-                                   value={federalRepInfo.sen.elected}
-                                   pattern={'yyyy-MM-dd'}
-                                   onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                                hidden={repType}
+                                className={'form-control'}
+                                name={formFields.FEDERAL_REP_ELECTED}
+                                value={federalRepInfo.elected}
+                                pattern={'yyyy-MM-dd'}
                             />
                         </div>
 
@@ -106,12 +108,12 @@ const FederalRepForm = props =>{
                 <label>Party</label>
                 <select className={'form-control w-50 m-auto'}
                         name={formFields.PARTY_AFFILIATION}
-                        onChange={(e)=>dispatchFederalRep({type: e.target.name, payload: e.target.value})}
+                        
                 >
                     <option value="">Choose a Party</option>
                     {
-                        federalRepInfo?
-                            federalRepInfo.formData.partiesList.map((party, index)=>{
+                        partiesList?
+                            partiesList.map((party, index)=>{
 
                                 return(
                                     <option key={index} value={party.partyId}>{party.name}</option>

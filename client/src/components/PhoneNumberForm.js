@@ -7,11 +7,9 @@ const {addPhoneNumberToList, inputPhoneNumber, submitPhoneNumber, clearPhoneNumb
 
 
 const PhoneNumberForm = props =>{
-        const {
-            phoneNumber,
+        const { 
             stateWithPhoneNumber,
             setStateWithPhoneNumber,
-            setPhoneNumber,
             divClass,
             } = props
         
@@ -68,7 +66,7 @@ const PhoneNumberForm = props =>{
                                 onChange={(e)=>inputChange(e)}
                             />
 
-                            { phoneNumber.number.length && fieldLength(5, 25, phoneNumberState.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, 'description')}</div> : null}
+                            { phoneNumberState.number.length && fieldLength(5, 25, phoneNumberState.description)? <div className={'text-danger'}>{fieldLengthErrorMessage(5, 25, 'description')}</div> : null}
                         </div>
                         <button 
                             disabled={!submitPhoneNumber(phoneNumberState)}
