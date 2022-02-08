@@ -6,6 +6,9 @@ const {
     isValidCharacter
 } = require('../helper/generalFunctions')
 
+
+
+//validate congressional rep. enables/disables submit button based inputs
 const submitRep = (repState) =>{
 
     let isValid = false;
@@ -17,8 +20,12 @@ const submitRep = (repState) =>{
                     if(emailValidation(repState.email)){
                         if(fieldLengthNotRequired(0, 250, repState.picture)){
                             if(fieldLengthNotRequired(0, 300, repState.website)){
-
-                                isValid = true;
+                                if(repState.district.length > 0){
+                                    if(repState.party.length > 0){
+                                        
+                                        isValid = true;
+                                    }
+                                }
                             }
                         }
                     }
@@ -26,11 +33,14 @@ const submitRep = (repState) =>{
 
                     if(fieldLengthNotRequired(0, 250, repState.picture)){
                         if(fieldLengthNotRequired(0, 300, repState.website)){
+                            if(repState.district.length > 0){
+                                if(repState.party.length){
 
-                            isValid = true;
+                                    isValid = true;    
+                                }
+                            }
                         }
                     }
-
                 }
             }
         }
@@ -40,6 +50,7 @@ const submitRep = (repState) =>{
 }
 
 
+//validate US senate. enables/disables submit button based inputs
 const submitSen = (senator) =>{
 
     let isValid = false;
@@ -51,8 +62,13 @@ const submitSen = (senator) =>{
                     if(emailValidation(senator.email)){
                         if(fieldLengthNotRequired(0, 250, senator.picture)){
                             if(fieldLengthNotRequired(0, 300, senator.website)){
+                                if(senator.party.length > 0){
+                                    if(senator.elected.length > 0){
 
-                                isValid = true;
+                                        isValid = true;
+                                    }
+                                }
+                                
                             }
                         }
                     }
@@ -60,8 +76,12 @@ const submitSen = (senator) =>{
 
                     if(fieldLengthNotRequired(0, 250, senator.picture)){
                         if(fieldLengthNotRequired(0, 300, senator.website)){
-
-                            isValid = true;
+                            if(senator.party.length > 0){
+                                if(senator.elected.length > 0){
+                                    
+                                    isValid = true;
+                                }
+                            }
                         }
                     }
                 }
@@ -73,7 +93,7 @@ const submitSen = (senator) =>{
     return isValid;
 }
 
-
+//validates inputs for US senator and congressional rep
 const federalValidation =(e, repState)=>{
 
     let repStateObj = JSON.parse(JSON.stringify(repState));
@@ -85,7 +105,8 @@ const federalValidation =(e, repState)=>{
     }else if (e.target.name === 'firstName'){
 
         if(isValidCharacter(e.target.value)){
-            if(e.target.value.length <= 50){
+
+            if(e.target.value.length <= 25){
 
                 repStateObj[e.target.name] = e.target.value;
             }
@@ -94,21 +115,70 @@ const federalValidation =(e, repState)=>{
         
     }else if(e.target.name === 'lastName'){
 
+        if(isValidCharacter(e.target.value)){
+
+            if(e.target.value.length <= 25){
+
+                repStateObj[e.target.name] = e.target.value;
+            }
+        }
     }else if(e.target.name === 'email'){
+
+        if(e.target.value.length <= 150){
+
+            repStateObj[e.target.name] = e.target.value;
+        }
 
     }else if(e.target.name === 'picture'){
 
+        if(e.target.value.length <= 250){
+
+            repStateObj[e.target.name] = e.target.value;
+        }
+
     }else if(e.target.name === 'website'){
 
-    }else if(e.target.name === 'politicalParty'){
+        if(e.target.value.length <=250){
 
-    }else if(e.target.name === 'elected'){
+            repStateObj[e.target.name] = e.target.value;
+        }
 
+    }else{
+
+        
+        repStateObj[e.target.name] = e.target.value;
     }
+
+    return repStateObj;
+}
+
+//clear US Senator data on forms
+const clearUsSenator={
+        firstName: ''.toLowerCase().trim(),
+        lastName: ''.toLowerCase().trim(),
+        email: ''.trim(),
+        picture: ''.trim(),
+        website: ''.trim(),
+        party: ''.trim(),
+        elected: ''.trim(),
+        locations: [],
+}
+
+const clearCongresionalRep={
+        firstName: ''.toLowerCase().trim(),
+        lastName: ''.toLowerCase().trim(),
+        email: ''.trim(),
+        picture: ''.trim(),
+        website: ''.trim(),
+        party: ''.trim(),
+        district: ''.trim(),
+        locations: [],
 }
 
 module.exports={
-
+    clearCongresionalRep,
+    clearUsSenator,
+    federalValidation,
     submitRep,
     submitSen
 }

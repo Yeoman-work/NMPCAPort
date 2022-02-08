@@ -38,7 +38,7 @@ public class CongressionalRepEntity implements Serializable {
     @Size(max = 250)
     private String picture;
 
-    @Size(max = 300, message = "Must be 300 characters or less")
+    @Size(max = 250, message = "Must be 250 characters or less")
     private String website;
 
     @Column(updatable = false)

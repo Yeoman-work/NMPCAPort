@@ -9,54 +9,8 @@ import PhoneNumberForm from "../components/PhoneNumberForm";
 import CongressionalRepElement from "../components/CongressionalRepElement";
 import SiteForm from "../components/SiteForm";
 import OfficeLocationForm from "../components/OfficeLocationForm";
-const {submitRep, submitSen} = require('../helper/FederalRepFunctions')
+const {submitRep, submitSen, clearCongresionalRep, clearUsSenator} = require('../helper/FederalRepFunctions')
 const {toogleSwitch} = require('../helper/generalFunctions')
-
-const {
-        emailValidation,
-        isValidCharacter,
-        fieldLengthRequired,
-        fieldLengthNotRequired,
-
-} = require('../helper/generalFunctions')
-
-
-
-
-const FEDERAL_REP_FIELDS ={
-
-    FEDERAL_REP_FIRST_NAME: 'first name',
-    FEDERAL_REP_LAST_NAME: 'last name',
-    FEDERAL_REP_EMAIL: 'email',
-    FEDERAL_REP_PICTURE: 'picture',
-    FEDERAL_REP_WEBSITE: 'website',
-    FEDERAL_REP_DISTRICT: 'district',
-    FEDERAL_REP_ELECTED: 'elected',
-    FEDERAL_REP_NEXT_ELECTION: 'next election',
-    PHONE_NUMBER: 'Phone Number',
-    PHONE_DESCRIPTION: 'Description',
-    REP_SELECTOR: 'rep selector',
-    PARTY_AFFILIATION: 'party affiliation',
-    LOCATION_NAME: 'location name',
-    LOCATION_DESCRIPTION: 'location description',
-    LOCATION_CITY: 'location city',
-    LOCATION_COUNTY: 'location county',
-    LOCATION_ZIP_CODE: 'location zip code',
-    LOCATION_STREET_ADDRESS: 'location street address',
-    CITY_LIST: 'cityList',
-    COUNTY_LIST: 'countyList',
-    ZIP_CODE_LIST: 'zipCodeList',
-    PARTY_LIST: 'party list',
-    LOCATION_LIST: 'location list',
-    DISTRICT_LIST: 'district list',
-    REP_RESPONSE: 'rep response',
-    SENATOR_RESPONSE: 'senator response',
-    FINISHED: 'finished',
-    REP_TYPE: 'repType'
-
-
-}
-
 
 const CreateFederalRepView = props =>{
 
@@ -70,9 +24,8 @@ const CreateFederalRepView = props =>{
             email: ''.trim(),
             picture: ''.trim(),
             website: ''.trim(),
-            politicalParty: ''.trim(),
+            party: ''.trim(),
             elected: ''.trim(),
-            nextElection: ''.trim(),
             locations: [],
             
     })
@@ -83,8 +36,8 @@ const CreateFederalRepView = props =>{
             email: ''.trim(),
             picture: ''.trim(),
             website: ''.trim(),
-            politicalParty: ''.trim(),
-            congressionalDistrict: ''.trim(),
+            party: ''.trim(),
+            district: ''.trim(),
             locations: [],
     });
 
@@ -96,13 +49,6 @@ const CreateFederalRepView = props =>{
     const [cityList, setCityList] = useState([]);
     const [zipCodeList, setZipCodeList] = useState([]);
     
-
-
-    
-
-
-
-
 
     useEffect(()=>{
 
@@ -118,6 +64,9 @@ const CreateFederalRepView = props =>{
                             Authorization: localStorage.getItem('token')
                         }
                     })
+
+                    console.log(districtResponse.data);
+                    setDistrictList(districtResponse.data);
     
                 }catch(error){
 
@@ -129,7 +78,7 @@ const CreateFederalRepView = props =>{
 
         return ()=>{}
 
-    }, [])
+    }, [repType])
 
     useEffect(()=>{
 
@@ -145,6 +94,8 @@ const CreateFederalRepView = props =>{
 
                 })
 
+                console.log('party')
+                console.log(partyResponse.data);
                 setPartyList(partyResponse.data)
 
             }catch(error){
@@ -170,9 +121,18 @@ const CreateFederalRepView = props =>{
 
     //toogle the rep type
     const toogleRepType = (e, repType) =>{
-        e.preventDefault()
+        e.preventDefault();
+        
+        if(repType){
 
-        console.log(repType)
+            setCongressionalRep(clearCongresionalRep);
+
+        }else{
+
+            setSenator(clearUsSenator);
+
+        }
+
         setRepType(toogleSwitch(repType));
 
     }
@@ -242,9 +202,10 @@ const CreateFederalRepView = props =>{
                     formLabel={repType? 'New Representative' : 'New Senator'}
                     federalRepInfo={repType? congressionalRep : senator}
                     setFederalRepInfo={repType? setCongressionalRep : setSenator }
-                    politicalParties ={partyList}
+                    partyList={partyList}
+                    districtList={districtList}
                     repType={repType}
-                    formFields={FEDERAL_REP_FIELDS}
+                    
                 />
                 {/* <OfficeLocationForm
                     cities={cityList}
@@ -253,8 +214,8 @@ const CreateFederalRepView = props =>{
                     setStateWithLocation={repType? setCongressionalRep : setSenator}
 
                 /> */}
-                <button disabled={!canSubmitRep(congressionalRep)} onClick={(e)=>submitHandler(e)}>{'Create Congress Person'}</button>
-                <button disabled={!canSubmitSen(senator)} onClick={(e)=>submitHandler(e)}>{'Create Senator'}</button>
+                <button hidden={!repType} disabled={!canSubmitRep(congressionalRep)} onClick={(e)=>submitHandler(e)}>{'Create Congress Person'}</button>
+                <button hidden={repType} disabled={!canSubmitSen(senator)} onClick={(e)=>submitHandler(e)}>{'Create Senator'}</button>
             </div>
         </div>
     )
