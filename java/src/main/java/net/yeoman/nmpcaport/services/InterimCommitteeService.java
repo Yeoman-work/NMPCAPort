@@ -1,11 +1,12 @@
 package net.yeoman.nmpcaport.services;
 
+import java.util.List;
+
 import net.yeoman.nmpcaport.entities.InterimCommitteeEntity;
 import net.yeoman.nmpcaport.io.request.interimCommittee.InterimCommitteeRequest;
 import net.yeoman.nmpcaport.io.response.interimCommittee.InterimCommitteeEssentials;
+import net.yeoman.nmpcaport.io.response.interimCommittee.InterimCommitteeEssentialsWithMembers;
 import net.yeoman.nmpcaport.io.response.interimCommittee.InterimCommitteeResponse;
-
-import java.util.List;
 
 public interface InterimCommitteeService {
 
@@ -20,6 +21,7 @@ public interface InterimCommitteeService {
 
     //get interim committee
     public InterimCommitteeEssentials getInterimCommitteeEssentials(InterimCommitteeEntity interimCommitteeEntity);
+    public InterimCommitteeEssentialsWithMembers getInterimCommitteeEssentialsWithMembers(InterimCommitteeEntity interCommitteeEntity);
     public List<InterimCommitteeEssentials> getInterimCommitteeEssentials(List<InterimCommitteeEntity> interimCommitteeEntities);
 
     //get interim response
@@ -38,6 +40,10 @@ public interface InterimCommitteeService {
 
     //check if request is null
     public Boolean requestIsNull(InterimCommitteeRequest interimCommitteeRequest);
+    
+    
+    //end points
+    
 
 
 }

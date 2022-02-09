@@ -50,6 +50,19 @@ const CreateFederalRepView = props =>{
     const [zipCodeList, setZipCodeList] = useState([]);
     
 
+
+    useEffect(()=>{
+
+        if(params.type === 'senator'){
+
+            setRepType(false);
+        }else{
+
+            setRepType(true);
+        }
+
+    }, [params])
+
     useEffect(()=>{
 
         (async ()=>{
@@ -94,8 +107,7 @@ const CreateFederalRepView = props =>{
 
                 })
 
-                console.log('party')
-                console.log(partyResponse.data);
+            
                 setPartyList(partyResponse.data)
 
             }catch(error){

@@ -1,15 +1,25 @@
 import React from "react";
+import { changeMemberShip } from "../helper/GeneralCommitteeFunctions";
 
 
 
 
 const StateRepSelectionForm = props =>{
-    const {reps,
-        formFields,
-        memberIds,
-        inputChange,
+    const {
+        reps,
+        committee,
+        setCommittee,
         divProps
     } = props
+
+    const inputChange = (e) =>{
+
+        setCommittee(changeMemberShip(e, committee));
+
+        console.log(committee);
+    }
+
+
     
     return(
         <div className={divProps}>
@@ -20,16 +30,17 @@ const StateRepSelectionForm = props =>{
                         reps.map((member, index)=>{
                             
                             return(
-                                !memberIds.includes(member.stateRepId)?
+                                !committee.repIds.hasOwnProperty(member.stateRepId)?
                                 <div className={'text-start'}
-                                     key={index}
+                                    key={index}
                                 >
                                     <input type="checkbox"
-                                           checked={memberIds.includes(member.stateRepId)}
-                                           name={formFields.REP_IDS}
-                                           className={'form-check-input'}
-                                           value={ member.stateRepId }
-                                           onChange={(e)=>inputChange(e)}
+                                        checked={committee.repIds.includes(member.stateRepId)}
+                                        name={'repIds'}
+                                        className={'form-check-input'}
+                                        value={ member.stateRepId }
+                                        onChange={(e)=>inputChange(e)}
+                                        
 
                                     /><label className={'ms-1'}>{` ${member.firstName} ${member.lastName}`}</label>
                                 </div>
@@ -47,22 +58,21 @@ const StateRepSelectionForm = props =>{
                         reps.map((member, index)=>{
 
                             return(
-
-                                memberIds.includes(member.stateRepId)?
+                                committee.repIds.hasOwnProperty(member.stateRepId)?
                                 <div className={'text-start'}
-                                     key={index}
+                                    key={index}
                                 >
                                     <input type="checkbox"
-                                           checked={memberIds.includes(member.stateRepId)}
-                                           name={formFields.REP_IDS}
-                                           className={'form-check-input'}
-                                           value={ member.stateRepId }
-                                           onChange={(e)=>inputChange(e)}
+                                        checked={committee.repIds.includes(member.stateRepId)}
+                                        name={'repIds'}
+                                        className={'form-check-input'}
+                                        value={ member.stateRepId }
+                                        onChange={(e)=>inputChange(e)}
+                                        
 
                                     /><label className={'ms-1'}>{` ${member.firstName} ${member.lastName}`}</label>
                                 </div>
                             : null
-
                             )
                         })
                         : null

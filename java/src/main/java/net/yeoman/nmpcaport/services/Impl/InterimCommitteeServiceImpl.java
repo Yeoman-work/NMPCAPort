@@ -7,6 +7,7 @@ import net.yeoman.nmpcaport.exception.InterimCommitteeServiceException;
 import net.yeoman.nmpcaport.io.repositories.InterimCommitteeRepository;
 import net.yeoman.nmpcaport.io.request.interimCommittee.InterimCommitteeRequest;
 import net.yeoman.nmpcaport.io.response.interimCommittee.InterimCommitteeEssentials;
+import net.yeoman.nmpcaport.io.response.interimCommittee.InterimCommitteeEssentialsWithMembers;
 import net.yeoman.nmpcaport.io.response.interimCommittee.InterimCommitteeResponse;
 import net.yeoman.nmpcaport.services.InterimCommitteeService;
 import net.yeoman.nmpcaport.shared.utils.Utils;
@@ -163,8 +164,18 @@ public class InterimCommitteeServiceImpl implements InterimCommitteeService {
 
         return returnValue;
     }
+    
+    
 
     @Override
+	public InterimCommitteeEssentialsWithMembers getInterimCommitteeEssentialsWithMembers(
+			InterimCommitteeEntity interCommitteeEntity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
     public InterimCommitteeEntity generateUniqueId(InterimCommitteeEntity interimCommittee) {
 
         if(this.entityIsNull(interimCommittee))
