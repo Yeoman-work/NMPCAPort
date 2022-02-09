@@ -1,74 +1,86 @@
 import React from "react";
 import axios from "axios";
 import TextInputField from "./TextInputField";
+const {contactInputValidation} = require('../helper/contactValidation')
 
 
 
 const ContactForm = props =>{
-  const {formFields,
-         dispatchFunction,
-         contactData,
-         divProps,
-         label
-  } = props;
+    const {
+        formFields,
+        healthCenters,
+        networkingGroups,
+        contact,
+        setContact,
+        divProps,
+        label
+    } = props;
+
+    const inputChange = (e, contact) =>{
+        setContact(contactInputValidation(e, contact));
+
+        console.log(contact)
+    
+    }
 
     return(
         <div className={divProps}>
             <h1>{label}</h1>
-            <TextInputField
-                label={'Title'}
-                type={'text'}
-                name={formFields.TITLE}
-                fieldClass={'form-control'}
-                divClass={'form-group m-auto w-25'}
-                fieldValue={contactData? contactData.contact.title : null}
-                onChange={dispatchFunction}
-            />
-            <div className={'row'}>
-                <TextInputField
-                    label={'First Name'}
-                    type={'text'}
-                    name={formFields.FIRST_NAME}
-                    fieldClass={"form-control"}
-                    divClass={'form-group col'}
-                    fieldValue={contactData? contactData.contact.firstName : null}
-                    onChange={dispatchFunction}
-                />
-                <TextInputField
-                    label={'Last Name'}
-                    type={'text'}
-                    name={formFields.LAST_NAME}
-                    fieldClass={'form-control'}
-                    divClass={'form-group col'}
-                    fieldValue={contactData? contactData.contact.lastName : null}
-                    onChange={dispatchFunction}
-                />
+            <div className={"form-group m-auto w-25"}>
+                    <label>Title</label>
+                    <input
+                        name={'title'}
+                        className={'form-control'}
+                        value={contact.title}
+                        onChange={(e)=>inputChange(e, contact)}
+                    />
             </div>
             <div className={'row'}>
-                <TextInputField
-                    label={'Email'}
-                    type={'email'}
-                    name={formFields.EMAIL}
-                    fieldClass={'form-control'}
-                    divClass={'form-group col'}
-                    fieldValue={contactData? contactData.contact.email : null}
-                    onChange={dispatchFunction}
-                />
+                <div className={"col form-group"}>
+                    <label>First Name</label>
+                    <input
+                        name={'firstName'}
+                        className={'form-control'}
+                        value={contact.firstName}
+                        onChange={(e)=>inputChange(e, contact)}
+                    />
+                </div>
+                <div className={"col form-group"}>
+                    <label>Last Name</label>
+                    <input
+                        name={'lastName'}
+                        className={'form-control'}
+                        value={contact.lastName}
+                        onChange={(e)=>inputChange(e, contact)}
+                    />
+                </div>
+            </div>
+            <div className={'row'}>
+            <div className={"col form-group"}>
+                    <label>Email</label>
+                    <input
+                        name={'email'}
+                        className={'form-control'}
+                        value={contact.email}
+                        onChange={(e)=>inputChange(e, contact)}
+                    />
+                </div>
                 <div className={'col'}>
                     <label>HealthCenter</label>
                     <select className={'form-control'}
-                            name={formFields.HEALTH_CENTER}
-                            onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target.value})}
+                            name={'healthCenter'}
+                            value={contact.healthCenter}
+                            onChange={(e)=>inputChange(e, contact)}
                     >
-                        <option>Choose a HealthCenter</option>
+                        <option value={''}>Choose a HealthCenter</option>
                         {
-                        contactData?
-                         contactData.healthCenters.map((healthCenter, index)=>{
+                        healthCenters?
+                            healthCenters.map((healthCenter, index)=>{
 
-                             return(
-                                 <option key={index} value={healthCenter.healthCenterId}>{healthCenter.name}</option>
-                             )
-                         })
+                                return(
+                                    <option key={index} value={healthCenter.healthCenterId}>{healthCenter.name}</option>
+                                )
+                            })
                             : null
                         }
                     </select>
@@ -79,20 +91,20 @@ const ContactForm = props =>{
                 <div className={'col'}>
                     <label>Select Networking groups</label>
                     {
-                        contactData?
-                        contactData.networkingGroupsList.map((group, index)=>{
+                        networkingGroups?
+                        networkingGroups.map((group, index)=>{
 
-                            if(!contactData.contact.networkingGroups.includes(group.networkingGroupId)){
+                            if(!contact.networkingGroups.hasOwnProperty(group.networkingGroupId)){
                                 return(
 
                                     <div key={index} className={'border text-start ps-3 m-auto w-75'}>
                                         <label className={'form-check-label'}></label>
                                         <input type="checkbox"
-                                               name={formFields.NETWORK_GRP}
-                                               checked={contactData.contact.networkingGroups.includes(group.networkingGroupId)}
-                                               className={'form-check-input'}
-                                               value={group.networkingGroupId}
-                                               onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target})}
+                                            name={'networkingGroups'}
+                                            checked={contact.networkingGroups.hasOwnProperty(group.networkingGroupId)}
+                                            className={'form-check-input'}
+                                            value={group.networkingGroupId}
+                                            onChange={(e)=>inputChange(e, contact)}
                                         />{group.name}</div>
                                 )
                             }
@@ -103,20 +115,20 @@ const ContactForm = props =>{
                 <div className={'col'}>
                     <label>Added Groups</label>
                     {
-                        contactData?
-                        contactData.networkingGroupsList.map((group, index)=>{
+                        networkingGroups?
+                        networkingGroups.map((group, index)=>{
 
-                            if(contactData.contact.networkingGroups.includes(group.networkingGroupId)){
+                            if(contact.networkingGroups.hasOwnProperty(group.networkingGroupId)){
                                 return(
 
                                     <div key={index} className={'border text-start ps-3 m-auto w-75'}>
                                         <label className={'form-check-label'}></label>
                                         <input type="checkbox"
-                                               className={'form-check-input'}
-                                               checked={contactData.contact.networkingGroups.includes(group.networkingGroupId)}
-                                               name={formFields.NETWORK_GRP}
-                                               value={group.networkingGroupId}
-                                               onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target})}
+                                            className={'form-check-input'}
+                                            checked={contact.networkingGroups.hasOwnProperty(group.networkingGroupId)}
+                                            name={'networkingGroups'}
+                                            value={group.networkingGroupId}
+                                            onChange={(e)=>inputChange(e, contact)}
                                         />{group.name}</div>
 
                                 )

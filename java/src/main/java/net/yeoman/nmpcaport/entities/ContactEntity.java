@@ -26,11 +26,11 @@ public class ContactEntity implements Serializable {
     private String title;
 
     @NotBlank(message = "required")
-    @Size(min=3, max=25, message = "must be between 3 and 25 characters")
+    @Size(min=3, max=50, message = "must be between 3 and 25 characters")
     private String firstName;
 
     @NotBlank(message = "required")
-    @Size(min=3, max=25, message = "must be between 3 and 25 characters")
+    @Size(min=3, max=50, message = "must be between 3 and 25 characters")
     private String lastName;
 
     @NotBlank(message = "required")
