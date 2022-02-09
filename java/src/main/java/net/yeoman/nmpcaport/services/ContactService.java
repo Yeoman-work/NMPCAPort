@@ -1,11 +1,14 @@
 package net.yeoman.nmpcaport.services;
 
+import java.util.HashMap;
+import java.util.List;
+
 import net.yeoman.nmpcaport.entities.ContactEntity;
 import net.yeoman.nmpcaport.io.request.contact.ContactDetailsRequestModel;
-import net.yeoman.nmpcaport.io.response.contact.*;
+import net.yeoman.nmpcaport.io.response.contact.ContactDashBoard;
+import net.yeoman.nmpcaport.io.response.contact.ContactEssentials;
+import net.yeoman.nmpcaport.io.response.contact.ContactResponseModel;
 import net.yeoman.nmpcaport.shared.dto.ContactDto;
-
-import java.util.List;
 
 public interface ContactService {
 
@@ -27,6 +30,7 @@ public interface ContactService {
     //contactsNetworkingGroupForm
     String peelOffContactIds(ContactEntity contactEntity);
     List<String> peelOffContactIds(List<ContactEntity> contactEntities);
+    HashMap<String, String> peelOffContactIdsToHashMap(List<ContactEntity> contactEntities);
 
 
     //contact entity

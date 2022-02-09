@@ -42,7 +42,7 @@ public class NetworkingGroupController {
     @GetMapping(path = "/{networkingGrpId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public NetworkingGroupFormResponseModel getNetworkingGroup(@PathVariable("networkingGrpId") String networkingGrpId){
 
-
+    	System.out.println("Here we go");
         return this.networkingGroupService.getFormResponseModel(networkingGrpId);
     }
 

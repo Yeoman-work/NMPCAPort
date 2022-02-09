@@ -165,7 +165,7 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
 
             //get entities from relationships
             networkingGroupFormResponseModel.setMemberIds(
-                    this.contactService.peelOffContactIds(
+                    this.contactService.peelOffContactIdsToHashMap(
                             this.assignedNetworkingGroupService.getContactEntities(
                                     networkingGroupEntity.getAssignedNetworkingGroupEntities()
                             )
@@ -275,7 +275,7 @@ public class NetworkingGroupServiceImpl implements NetworkingGroupService {
         NetworkingGroupFormResponseModel networkingGroupFormResponseModel = new NetworkingGroupFormResponseModel();
 
         networkingGroupFormResponseModel.setMemberIds(
-                this.contactService.peelOffContactIds(
+                this.contactService.peelOffContactIdsToHashMap(
                         this.assignedNetworkingGroupService.getContactEntities(
                                 networkingGroupEntity.getAssignedNetworkingGroupEntities())
                 )

@@ -1,158 +1,30 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router";
 import NetworkingGroupForm from "../components/NetworkingGroupForm";
 import Header from "../components/Header";
-import produce from "immer";
 import NetworkingGroupWithContacts from "../components/NetworkingGroupWithContacts";
 import Button from "../components/Button";
-const {isValidCharacter} = require('../helper/generalFunctions')
 
 
-const networkGroupReducer = (netGrp, action) =>{
-
-    switch(action.type){
-
-        case FORM_FIELDS.NAME:
-
-            if(isValidCharacter(action.payload)){
-
-                if(action.payload.length <= 50){
-
-                    return produce(netGrp, draft=>{
-
-                        console.log(netGrp)
-
-                        draft.group.name = action.payload;
-                    })
-
-                }else{
-
-                    return netGrp;
-
-                }
-
-            }else if(action.payload.length < 1){
-
-                return produce(netGrp, draft=>{
-
-                    draft.group.name = action.payload;
-                })
-
-            }else{
-
-                return netGrp
-            }
-
-        case FORM_FIELDS.GRP_DESCRIPTION:
-
-            if(isValidCharacter(action.payload)){
-                console.log(netGrp)
-                if(action.payload.length <= 250){
-
-                    return produce(netGrp, draft=>{
-
-                        draft.group.description = action.payload;
-                    })
-                }else{
-
-                    return netGrp;
-                }
-
-            }else if(action.payload.length < 1){
-
-                return produce(netGrp, draft=>{
-
-                    draft.group.description = action.payload;
-                })
-
-            }else{
-
-                return netGrp;
-
-            }
-
-        case FORM_FIELDS.CONTACTS:
-            const {value, checked} = action.payload;
-
-            if(checked){
-
-                return produce(netGrp, draft=>{
-
-                    draft.group.memberIds = [...netGrp.group.memberIds, value];
-
-                })
-
-            }else{
-
-                return produce(netGrp, draft=>{
-
-                    let memberIds = [...netGrp.group.memberIds]
-
-                    memberIds.splice(memberIds.indexOf(memberIds), 1);
-
-                    draft.group.memberIds = [...memberIds]
-
-                })
-
-            }
-
-
-        case FORM_FIELDS.POPULATE_CONTACTS:
-
-
-            return produce(netGrp, draft=>{
-
-                draft.contacts = [...action.payload];
-
-            })
-
-
-        case FORM_FIELDS.EDIT_GROUP:
-
-            return produce(netGrp, draft=>{
-
-                draft.group = {...action.payload}
-            })
-
-    }
-
-
-}
-
-const FORM_FIELDS={
-
-    NAME: 'name',
-    GRP_DESCRIPTION: 'description',
-    CONTACTS: 'contacts',
-    MEMBER_IDS: 'member ids',
-    POPULATE_CONTACTS: 'populate contacts',
-    EDIT_GROUP: ''
-
-
-}
 
 
 const CreateNetworkingGroupView = props =>{
     const { id } = useParams();
     const navigate = useNavigate();
-    const [netGrp, dispatchNetGrp] = useReducer(networkGroupReducer, {
 
-        group:{
-            name: ''.trim(),
-            description: ''.trim(),
-            memberIds: [],
-        },
-
-        contacts: [],
-
-    })
+    const [networkingGroup, setNetworkingGroup] = useState({
+        name: ''.trim(),
+        description: ''.trim(),
+        memberIds: [],
+    });
+    const [contacts , setContacts] = useState([]);
+    
 
 
 
 
     useEffect(()=>{
-
 
 
             (async () => {
@@ -169,7 +41,7 @@ const CreateNetworkingGroupView = props =>{
 
 
                     console.log(contactResponse.data);
-                    dispatchNetGrp({type: FORM_FIELDS.POPULATE_CONTACTS, payload: [...contactResponse.data]})
+                    setContacts(contactResponse.data);
 
 
                 } catch(error) {
@@ -203,7 +75,7 @@ const CreateNetworkingGroupView = props =>{
 
                     console.log(networkingGroupResponse.data)
 
-                    dispatchNetGrp({type: FORM_FIELDS.EDIT_GROUP, payload: {...networkingGroupResponse.data}})
+                    setNetworkingGroup(networkingGroupResponse.data);
 
 
 
@@ -229,7 +101,7 @@ const CreateNetworkingGroupView = props =>{
         console.log('submitted')
         try {
 
-            const createNetworkingGroupResponse = await axios.post('http://localhost:8080/networkingGroups/', netGrp.group, {
+            const createNetworkingGroupResponse = await axios.post('http://localhost:8080/networkingGroups/', networkingGroup, {
 
                 headers:{
                     Authorization: localStorage.getItem('token')
@@ -252,25 +124,22 @@ const CreateNetworkingGroupView = props =>{
     return(
 
 
-            netGrp.group?
+            networkingGroup?
                 <div>
                     <Header/>
                     <div className={'m-auto mt-5 w-50'}>
                         <NetworkingGroupForm
                             label={id? 'Update Group' : 'New Group'}
-                            grp={netGrp.group}
+                            networkingGroup={networkingGroup}
+                            setNetworkingGroup={setNetworkingGroup}
                             id={id}
-                            onChange={dispatchNetGrp}
-                            handler={submitHandler}
-                            fields={FORM_FIELDS}
                         />
                     </div>
                     <div>
                         <NetworkingGroupWithContacts
-                            contacts={netGrp.contacts}
-                            memberIds={netGrp.group.memberIds}
-                            formField={FORM_FIELDS}
-                            dispatchFunction={dispatchNetGrp}
+                            contacts={contacts}
+                            networkingGroup={networkingGroup}
+                            setNetworkingGroup={setNetworkingGroup}
                             divProps={'m-auto w-50 border'}
                         />
                     </div>

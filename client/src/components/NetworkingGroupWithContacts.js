@@ -1,17 +1,23 @@
 import React from "react";
+const {changeMembership} = require('../helper/NetworkingGroupFunctions')
 
 
 
 
 const NetworkingGroupWithContacts = props =>{
-    const { divProps,
+    const { 
+        divProps,
         contacts,
-        nonMemberIds,
-        memberIds,
-        formField,
-        dispatchFunction
+        networkingGroup,
+        setNetworkingGroup
     } = props
 
+
+    const inputChange = (e, networkingGroupState) =>{
+
+        setNetworkingGroup(changeMembership(e, networkingGroupState));
+        console.log(networkingGroup);
+    }
 
     return(
         <div className={'row ' + divProps}>
@@ -23,17 +29,18 @@ const NetworkingGroupWithContacts = props =>{
                         contacts.map((contact, index)=>{
 
                             return(
-                                memberIds?
-                                !memberIds.includes(contact.contactId)?
+                                networkingGroup?
+                                !networkingGroup.memberIds.hasOwnProperty(contact.contactId)?
 
                                     <div key={index} className={'border ps-3 m-auto w-75'}>
                                         <label className={'form-check-label'}></label>
                                         <input type="checkbox"
-                                               className={'form-check-input'}
-                                               checked={memberIds.includes(contact.contactId)}
-                                               name={formField.CONTACTS? formField.CONTACTS: null}
-                                               value={contact.contactId}
-                                               onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target})}
+                                            className={'form-check-input'}
+                                            checked={networkingGroup.memberIds.hasOwnProperty(contact.contactId)}
+                                            name={'contact'}
+                                            value={contact.contactId}
+                                            onChange={(e)=>inputChange(e, networkingGroup)}
+                                            
                                         />{`${contact.firstName} ${contact.lastName}`}</div>
 
                                     : null
@@ -55,16 +62,16 @@ const NetworkingGroupWithContacts = props =>{
                             contacts.map((contact, index)=>{
 
                                 return(
-                                    memberIds?
-                                    memberIds.includes(contact.contactId)?
+                                    networkingGroup?
+                                    networkingGroup.memberIds.hasOwnProperty(contact.contactId)?
                                     <div key={index} className={'border text-start ps-3 m-auto w-75'}>
                                         <label className={'form-check-label'}></label>
                                         <input type="checkbox"
-                                               className={'form-check-input'}
-                                               checked={memberIds.includes(contact.contactId)}
-                                               name={formField.CONTACTS? formField.CONTACTS: null}
-                                               value={contact.contactId}
-                                               onChange={(e)=>dispatchFunction({type: e.target.name, payload: e.target})}
+                                            className={'form-check-input'}
+                                            checked={networkingGroup.memberIds.hasOwnProperty(contact.contactId)}
+                                            name={'contact'}
+                                            value={contact.contactId}
+                                            onChange={(e)=>inputChange(e, networkingGroup)}
                                         />{`${contact.firstName} ${contact.lastName}`}</div>
 
                                         : null

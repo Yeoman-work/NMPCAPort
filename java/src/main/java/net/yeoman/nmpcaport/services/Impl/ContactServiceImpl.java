@@ -12,6 +12,7 @@ import net.yeoman.nmpcaport.shared.utils.Utils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -218,8 +219,26 @@ public class ContactServiceImpl implements ContactService {
 
         return returnValue;
     }
+    
+    
 
     @Override
+	public HashMap<String, String> peelOffContactIdsToHashMap(List<ContactEntity> contactEntities) {
+		
+    	if(this.entityIsNull(contactEntities)) throw new ContactServiceException(ErrorMessages.RECORD_IS_NULL.getErrorMessage());
+    	
+    	HashMap<String, String> peelOffContactHashMap = new HashMap<String, String>();
+    	
+    	for(ContactEntity contact: contactEntities) {
+    		
+    		peelOffContactHashMap.put(contact.getContactId(), contact.getContactId());
+    	}
+    	
+		return peelOffContactHashMap;
+	}
+
+
+	@Override
     public void saveContact(ContactEntity contact) {
          this.contactRepository.save(contact);
     }

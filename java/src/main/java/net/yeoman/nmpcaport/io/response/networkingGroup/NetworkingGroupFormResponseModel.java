@@ -1,15 +1,12 @@
 package net.yeoman.nmpcaport.io.response.networkingGroup;
 
-import net.yeoman.nmpcaport.io.response.contact.ContactNestedResponseModel;
-import net.yeoman.nmpcaport.io.response.user.UserDetailsResponseModel;
-
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 
 public class NetworkingGroupFormResponseModel {
     private String name;
     private String description;
-    private List<String> memberIds;
+    private HashMap<String, String> memberIds;
     private Date createdAt;
     private Date updatedAt;
 
@@ -47,13 +44,14 @@ public class NetworkingGroupFormResponseModel {
         this.updatedAt = updatedAt;
     }
 
-    public List<String> getMemberIds() {
-        return memberIds;
-    }
+	public HashMap<String, String> getMemberIds() {
+		return memberIds;
+	}
 
-    public void setMemberIds(List<String> memberIds) {
-        this.memberIds = memberIds;
-    }
+	public void setMemberIds(HashMap<String, String> memberIds) {
+		this.memberIds = memberIds;
+	}
 
+  
 
 }
