@@ -1,15 +1,21 @@
 import React from "react";
+const {changeMembership} = require('../helper/SenateCommittee')
 
 
 
 const StateSenatorSelectionForm = props =>{
     const {
-        formFields,
-        inputChange,
+        committee,
+        setCommitee,
         senators,
-         memberIds,
-         divProps
+        divProps
         } = props;
+
+    const inputChange = (e, committeeState) =>{
+
+        setCommitee(changeMembership(e, committeeState));
+        console.log(committee);
+    }
 
     return(
         <div className={divProps}>
@@ -17,24 +23,24 @@ const StateSenatorSelectionForm = props =>{
                 <h6>Add Members</h6>
                 {
                     senators?
-                        senators.map((member, index)=>{
+                        senators.map((senator, index)=>{
 
                             return(
 
-                                !memberIds.includes(member.stateSenatorId)?
+                                !committee.senatorIds.hasOwnProperty(senator.stateSenatorId)?
 
                                     <div className={'text-start'}
-                                         key={index}>
+                                        key={index}>
                                         <input type="checkbox"
 
-                                               className={'form-check-input'}
-                                               name={formFields.SENATOR_IDS}
-                                               checked={memberIds.includes(member.stateSenatorId)}
-                                               value={ member.stateSenatorId }
-                                               onChange={(e)=>inputChange(e)}
+                                            className={'form-check-input'}
+                                            name={'senatorId'}
+                                            checked={committee.senatorIds.hasOwnProperty(senator.stateSenatorId)}
+                                            value={senator.stateSenatorId }
+                                            onChange={(e)=>inputChange(e, committee)}
 
                                         />
-                                        <label className={'ms-1'}>{`${member.firstName} ${member.lastName}`}</label>
+                                        <label className={'ms-1'}>{`${senator.firstName} ${senator.lastName}`}</label>
                                     </div>
 
                                     : null
@@ -47,24 +53,23 @@ const StateSenatorSelectionForm = props =>{
                 <h6>Members</h6>
                 {
                     senators?
-                        senators.map((member, index)=>{
+                        senators.map((senator, index)=>{
 
                             return(
-
-                                memberIds.includes(member.stateSenatorId)?
-
+                                
+                                committee.senatorIds.hasOwnProperty(senator.stateSenatorId)?
                                     <div className={'text-start'}
-                                         key={index}
+                                        key={index}
                                     >
-                                        <input type="checkbox"
-                                               className={'form-check-input'}
-                                               name={formFields.SENATOR_IDS}
-                                               checked={memberIds.includes(member.stateSenatorId)}
-                                               value={ member.stateSenatorId }
-                                               onChange={(e)=>inputChange(e)}
+                                    <input type="checkbox"
+                                            className={'form-check-input'}
+                                            name={'senatorIds'}
+                                            checked={committee.senatorIds.hasOwnProperty(senator.stateSenatorId)}
+                                            value={ senator.stateSenatorId }
+                                            onChange={(e)=>inputChange(e, committee)}
 
                                         />
-                                        <label className={'ms-1'}>{`${member.firstName} ${member.lastName}`}</label>
+                                        <label className={'ms-1'}>{`${senator.firstName} ${senator.lastName}`}</label>
                                     </div>
 
                                     : null

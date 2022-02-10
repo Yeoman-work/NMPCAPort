@@ -20,9 +20,10 @@ import CongressionalRepStaff from "./views/CongressionalRepStaff";
 import CreateNetworkingGroupView from "./views/CreateNetworkingGroupView";
 import NetworkingGroupDashboard from "./views/NetworkingGroupDashboard";
 import CreateContactsView from "./views/CreateContactsView";
-import ContactElement from "./components/ContactElement";
 import ContactDashboardView from "./views/ContactDashboardView";
 import CreateInterimCommittee from "./views/CreateInterimCommittee";
+import CreateHouseCommittee from './views/CreateHouseCommittee';
+import CreateSeanteCommittee from './views/CreateSenateCommittee';
 
 function App() {
     return (
@@ -47,6 +48,10 @@ function App() {
                                 <Route path={'interimCommittees'} element={<CreateInterimCommittee/>}/>
                                 <Route path={'addStateRep'}>
                                     <Route path={':type'} element={<CreateStateRepView/>}/>
+                                </Route>
+                                <Route path={'committees'}>
+                                    <Route path={'house'} element={<CreateHouseCommittee/>}/>
+                                    <Route path={'senate'} element={<CreateSeanteCommittee/>}/>
                                 </Route>
                             </Route>
                             <Route path={'usGovernment'}>

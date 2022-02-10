@@ -32,13 +32,11 @@ public class HouseDistrictController {
     }
 
     @GetMapping(path="/search/{name}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public HouseDistrictPagination getSearchHouseCommittee(@PathVariable("name") String name, @RequestParam(value ="startIndex", defaultValue="0") int startIndex, 
+    public HouseDistrictPagination getSearchHouseDistrict(@PathVariable("name") String name, @RequestParam(value ="startIndex", defaultValue="0") int startIndex, 
     													   @RequestParam(value="endIndex" , defaultValue ="10") int endIndex
 	
 	){
     	
-    	System.out.println("start " + startIndex);
-    	System.out.println("end " + endIndex);
     	return this.houseDistrictService.getHouseDistrictPageInfoSearchEndPoint(name, startIndex, endIndex);
     }
     

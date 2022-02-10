@@ -10,9 +10,7 @@ const NetworkingGroupForm = props =>{
     const {
         networkingGroup,
         setNetworkingGroup,
-        label, 
-        onChange, 
-        fields, 
+        label,
         id
     } = props;
 

@@ -7,15 +7,16 @@ const {committeeInputValidation} = require('../helper/GeneralCommitteeFunctions'
 const CommitteeForm = props =>{
     const {
         divProps,
-        reps,
         committee,
         setCommittee,
     } = props;
 
 
-    const inputChange = (e) =>{
+    const inputChange = (e, committeeState) =>{
 
-        setCommittee(committeeInputValidation(e, committee));
+        setCommittee(committeeInputValidation(e, committeeState));
+        console.log(committee);
+        
     }
 
     return(
@@ -26,15 +27,15 @@ const CommitteeForm = props =>{
                     className={'form-control'}
                     name={'name'}
                     value={committee.name}
-                    onChange={(e)=>inputChange(e)}
+                    onChange={(e)=>inputChange(e, committee)}
                 />
             </div>
             <div className={'form-group'}>
-                <textarea name={'description'}
-                        className={'form-control'}
+                <textarea 
                         name={'description'}
+                        className={'form-control'}
                         value={committee.description}
-                        onChange={(e)=>inputChange(e)}
+                        onChange={(e)=>inputChange(e, committee)}
                         rows="10"
                 ></textarea>
             </div>
