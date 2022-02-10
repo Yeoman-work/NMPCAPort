@@ -24,6 +24,7 @@ import ContactDashboardView from "./views/ContactDashboardView";
 import CreateInterimCommittee from "./views/CreateInterimCommittee";
 import CreateHouseCommittee from './views/CreateHouseCommittee';
 import CreateSeanteCommittee from './views/CreateSenateCommittee';
+import SenateCommitteeDashboard from './views/SenateCommiteeDashBoard';
 
 function App() {
     return (
@@ -50,8 +51,13 @@ function App() {
                                     <Route path={':type'} element={<CreateStateRepView/>}/>
                                 </Route>
                                 <Route path={'committees'}>
-                                    <Route path={'house'} element={<CreateHouseCommittee/>}/>
-                                    <Route path={'senate'} element={<CreateSeanteCommittee/>}/>
+                                    <Route path={'house'} element={<CreateHouseCommittee/>}>
+                                        <Route path={'newHouseCommittee'} element={<CreateHouseCommittee/>}/>
+                                    </Route>
+                                    <Route path={'senate'} element={<SenateCommitteeDashboard/>}>
+                                        <Route path={'newSenateCommittee'} element={<CreateSeanteCommittee/>}/>
+                                    </Route>
+                                    
                                 </Route>
                             </Route>
                             <Route path={'usGovernment'}>

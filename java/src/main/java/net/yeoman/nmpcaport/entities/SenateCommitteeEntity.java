@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "nmSenateCommittees")
+@Table(name = "senateCommittees")
 public class SenateCommitteeEntity implements Serializable {
 
     private static final long serialVersionUID = -6206693048907184517L;
